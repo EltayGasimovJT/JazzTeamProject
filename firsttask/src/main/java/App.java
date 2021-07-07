@@ -11,7 +11,7 @@ public class App {
 
     public static void main(String[] args) {
         int i = 0;
-        
+
         try {
             i = NumberService.countSum(PATH);
         } catch (IOException e) {
@@ -19,7 +19,6 @@ public class App {
         } catch (NumberCustomException e){
             LOGGER.error(e.getMessage());
         }
-
         LOGGER.info(i);
     }
 }
