@@ -9,7 +9,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class NumberServiceTest extends TestCase {
-    private static final String PATH = "src\\main\\resources\\data\\data.txt";
+    private static final String PATH = "data\\data.txt";
     private static final int WRONG_NUMBER = 1245125;
     private static final int CORRECT_NUMBER = 1245;
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
