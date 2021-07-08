@@ -4,12 +4,13 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class NumberServiceTest extends TestCase {
-    private static final String PATH = ".\\src\\main\\resources\\data\\data.txt";
+    private static final String PATH = new File("src\\test\\resources\\dataToTest.txt").getAbsolutePath();
     private static final int WRONG_NUMBER = 1245125;
     private static final int CORRECT_NUMBER = 1245;
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
@@ -39,7 +40,7 @@ public class NumberServiceTest extends TestCase {
         int numberFromFileAsString = FileService.getNumberFromFileAsString(path);
         int actual = NumberService.countSum(numberFromFileAsString);
 
-        int expected = 2;
+        int expected = 11;
 
         Assert.assertEquals(expected, actual, 0.001);
     }
