@@ -10,9 +10,9 @@ public class TreeTest {
         int expected = 2;
 
         Tree tree = new Tree();
-        tree.setRoot(10);
-        tree.getRoot().add(9);
-        tree.getRoot().add(11);
+        tree.add(10);
+        tree.add(9);
+        tree.add(11);
 
 
         int actual = tree.getRoot().getCountOfLeaf();
