@@ -14,9 +14,7 @@ public class TreeTest {
         tree.add(9);
         tree.add(11);
 
-
         int actual = tree.getRoot().getCountOfLeaf();
-
 
         Assert.assertEquals(expected, actual, 0.001);
     }

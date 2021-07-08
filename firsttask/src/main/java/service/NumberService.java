@@ -1,7 +1,5 @@
 package service;
 
-import exception.NumberCustomException;
-
 import java.io.IOException;
 
 public class NumberService {
@@ -14,12 +12,12 @@ public class NumberService {
         }
 
         int result = 0;
-        result = getResult(number, result);
+        result = getDifferenceBetweenOddsAndEventsInNumber(number, result);
 
         return result;
     }
 
-    private static int getResult(int number, int result) {
+    private static int getDifferenceBetweenOddsAndEventsInNumber(int number, int result) {
         int currentNumber;
         while (number != 0) {
             currentNumber = number % 10;
