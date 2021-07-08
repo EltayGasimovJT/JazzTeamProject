@@ -6,10 +6,9 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FileService {
-    public static int getNumberFromFileAsString(String pathName) throws IOException {
-        Path path = Paths.get(pathName);
+    public static int getNumberFromFileAsString(Path pathName) throws IOException {
         StringBuilder result = new StringBuilder();
-        Scanner scanner = new Scanner(path);
+        Scanner scanner = new Scanner(pathName);
         scanner.useDelimiter(System.getProperty("line.separator"));
         while(scanner.hasNext()){
             result.append(scanner.next());
