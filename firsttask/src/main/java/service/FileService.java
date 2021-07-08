@@ -2,7 +2,6 @@ package service;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FileService {
@@ -10,7 +9,7 @@ public class FileService {
         StringBuilder result = new StringBuilder();
         Scanner scanner = new Scanner(pathName);
         scanner.useDelimiter(System.getProperty("line.separator"));
-        while(scanner.hasNext()){
+        while (scanner.hasNext()) {
             result.append(scanner.next());
         }
         scanner.close();

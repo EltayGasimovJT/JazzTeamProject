@@ -5,16 +5,19 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class NumberServiceTest extends TestCase {
     private static final String PATH = "src\\test\\resources\\dataToTest.txt";
-    private static final String WRONG_NUM_PATH = "firsttask\\src\\test\\resources\\wrongTestData.txt";
+    private static final int WRONG_NUMBER = 1245125;
+    private static final int CORRECT_NUMBER = 1245;
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
 
     @Test()
     public void testCustomException() {
         try {
-            NumberService.countSum(WRONG_NUM_PATH);
+            NumberService.countSum(WRONG_NUMBER);
             Assert.fail(ILLEGAL_ARGUMENT_EXCEPTION);
         } catch (IOException | IllegalArgumentException thrown) {
             Assert.assertNotEquals("", thrown.getMessage());
@@ -23,9 +26,20 @@ public class NumberServiceTest extends TestCase {
 
     @Test
     public void testCorrectCountSum() throws IOException {
-        int actual;
+
+        int actual = NumberService.countSum(CORRECT_NUMBER);
+        int expected = 0;
+
+        Assert.assertEquals(expected, actual, 0.001);
+    }
+
+    @Test
+    public void testFileService() throws IOException {
+        Path path = Paths.get(PATH);
+        int numberFromFileAsString = FileService.getNumberFromFileAsString(path);
+        int actual = NumberService.countSum(numberFromFileAsString);
+
         int expected = 11;
-        actual = NumberService.countSum(PATH);
 
         Assert.assertEquals(expected, actual, 0.001);
     }
