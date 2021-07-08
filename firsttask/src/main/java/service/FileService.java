@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import java.util.Scanner;
 
 public class FileService {
-    public static String getNumberFromFileAsString(String pathName) throws IOException {
+    public static int getNumberFromFileAsString(String pathName) throws IOException {
         Path path = Paths.get(pathName);
         StringBuilder result = new StringBuilder();
         Scanner scanner = new Scanner(path);
@@ -15,6 +15,6 @@ public class FileService {
             result.append(scanner.next());
         }
         scanner.close();
-        return result.toString();
+        return Integer.parseInt(result.toString());
     }
 }

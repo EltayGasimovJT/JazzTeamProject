@@ -7,15 +7,20 @@ import java.io.IOException;
 public class NumberService {
 
 
-    public static int countSum(String path) throws NumberCustomException, IOException {
-        String getString = FileService.getNumberFromFileAsString(path);
-        int number = Integer.parseInt(getString);
+    public static int countSum(String path) throws IOException, IllegalArgumentException {
+        int number = FileService.getNumberFromFileAsString(path);
         if (number < 999 || number > 9999) {
-            throw new NumberCustomException("Wrong input number " + number + " number must be more than 999 or less then 9999!!!");
+            throw new IllegalArgumentException("Wrong input number " + number + " number must be more than 999 or less then 9999!!!");
         }
 
-        int currentNumber;
         int result = 0;
+        result = getResult(number, result);
+
+        return result;
+    }
+
+    private static int getResult(int number, int result) {
+        int currentNumber;
         while (number != 0) {
             currentNumber = number % 10;
             if (currentNumber % 2 == 0) {
@@ -25,7 +30,6 @@ public class NumberService {
             }
             number /= 10;
         }
-
         return result;
     }
 }
