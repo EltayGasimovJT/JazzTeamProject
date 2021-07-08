@@ -7,8 +7,8 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class NumberServiceTest extends TestCase {
-    private static final String PATH = "src\\test\\resources\\data.txt";
-    private static final String WRONG_NUM_PATH = "src\\test\\resources\\wrongTestData.txt";
+    private static final String PATH = "firsttask\\src\\test\\resources\\data.txt";
+    private static final String WRONG_NUM_PATH = "firsttask\\src\\test\\resources\\wrongTestData.txt";
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
 
     @Test()
