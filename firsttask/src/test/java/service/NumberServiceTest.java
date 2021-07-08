@@ -7,7 +7,7 @@ import org.junit.Test;
 import java.io.IOException;
 
 public class NumberServiceTest extends TestCase {
-    private static final String PATH = "resources\\data.txt";
+    private static final String PATH = "src\\test\\resources\\data.txt";
     private static final String WRONG_NUM_PATH = "firsttask\\src\\test\\resources\\wrongTestData.txt";
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
 
@@ -22,9 +22,9 @@ public class NumberServiceTest extends TestCase {
     }
 
     @Test
-    public void testCountSum() throws IOException {
+    public void testCorrectCountSum() throws IOException {
         int actual;
-        int expected = 2;
+        int expected = 8;
 
         actual = NumberService.countSum(PATH);
 
