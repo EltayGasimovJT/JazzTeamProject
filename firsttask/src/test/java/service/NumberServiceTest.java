@@ -25,7 +25,6 @@ public class NumberServiceTest extends TestCase {
     public void testCorrectCountSum() throws IOException {
         int actual;
         int expected = 8;
-
         actual = NumberService.countSum(PATH);
 
         Assert.assertEquals(expected, actual, 0.001);
