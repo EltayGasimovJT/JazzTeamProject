@@ -12,13 +12,14 @@ public class NumberService {
         }
 
         int result = 0;
-        result = getDifferenceBetweenOddsAndEventsInNumber(number, result);
+        result += getDifferenceBetweenOddsAndEventsInNumber(number);
 
         return result;
     }
 
-    private static int getDifferenceBetweenOddsAndEventsInNumber(int number, int result) {
+    private static int getDifferenceBetweenOddsAndEventsInNumber(int number) {
         int currentNumber;
+        int result = 0;
         while (number != 0) {
             currentNumber = number % 10;
             if (currentNumber % 2 == 0) {
