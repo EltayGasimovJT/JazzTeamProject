@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -34,9 +35,10 @@ public class NumberServiceTest extends TestCase {
 
     @Test
     public void testFileService() throws IOException {
-        String pathName = new File("src\\test\\resources\\dataToTest.txt").getCanonicalPath();
-        Path path = Paths.get(pathName);
-        int numberFromFileAsString = FileService.getNumberFromFileAsString(path);
+        String strNum = Files.readAllLines(Paths.get("src\\test\\resources\\dataToTest.txt")).get(0);
+        //String pathName = new File("src\\test\\resources\\dataToTest.txt").getCanonicalPath();
+        //Path path = Paths.get(pathName);
+        int numberFromFileAsString = Integer.parseInt(strNum);//FileService.getNumberFromFileAsString(path);
         int actual = NumberService.countSum(numberFromFileAsString);
 
         int expected = 11;
