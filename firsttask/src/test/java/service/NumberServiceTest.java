@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class NumberServiceTest extends TestCase {
-    private static final String PATH = new File("src\\test\\resources\\dataToTest.txt").getAbsolutePath();
     private static final int WRONG_NUMBER = 1245125;
     private static final int CORRECT_NUMBER = 1245;
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
@@ -27,7 +26,6 @@ public class NumberServiceTest extends TestCase {
 
     @Test
     public void testCorrectCountSum() throws IOException {
-
         int actual = NumberService.countSum(CORRECT_NUMBER);
         int expected = 0;
 
@@ -36,7 +34,8 @@ public class NumberServiceTest extends TestCase {
 
     @Test
     public void testFileService() throws IOException {
-        Path path = Paths.get(PATH);
+        String pathName = new File("src\\test\\resources\\dataToTest.txt").getCanonicalPath();
+        Path path = Paths.get(pathName);
         int numberFromFileAsString = FileService.getNumberFromFileAsString(path);
         int actual = NumberService.countSum(numberFromFileAsString);
 
