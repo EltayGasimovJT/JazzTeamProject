@@ -35,7 +35,7 @@ public class NumberServiceTest extends TestCase {
 
     @Test
     public void testFileService() throws IOException {
-        String strNum = Files.readAllLines(Paths.get("src\\test\\resources\\dataToTest.txt")).get(0);
+        String strNum = Files.readAllLines(Paths.get("src/test/resources/dataToTest.txt")).get(0);
         //String pathName = new File("src\\test\\resources\\dataToTest.txt").getCanonicalPath();
         //Path path = Paths.get(pathName);
         int numberFromFileAsString = Integer.parseInt(strNum);//FileService.getNumberFromFileAsString(path);
