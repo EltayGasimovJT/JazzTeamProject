@@ -15,7 +15,6 @@ public class FileService {
         while (scanner.hasNext()) {
             result.append(scanner.next());
         }
-
         scanner.close();
         return Integer.parseInt(result.toString());
     }
