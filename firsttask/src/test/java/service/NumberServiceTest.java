@@ -19,7 +19,7 @@ public class NumberServiceTest extends TestCase {
         try {
             NumberService.countSum(WRONG_NUMBER);
             Assert.fail(ILLEGAL_ARGUMENT_EXCEPTION);
-        } catch (IOException | IllegalArgumentException thrown) {
+        } catch (IllegalArgumentException thrown) {
             Assert.assertNotEquals("", thrown.getMessage());
         }
     }
