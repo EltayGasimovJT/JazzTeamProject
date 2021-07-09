@@ -5,7 +5,6 @@ public class NumberService {
     }
 
     public static int countSum(int number) throws IllegalArgumentException {
-
         if (number < 999 || number > 9999) {
             throw new IllegalArgumentException("Wrong input number " + number + " number must be more than 999 or less then 9999!!!");
         }

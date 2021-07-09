@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,6 +12,7 @@ import java.nio.file.Paths;
 public class NumberServiceTest extends TestCase {
     private static final int WRONG_NUMBER = 1245125;
     private static final int CORRECT_NUMBER = 1245;
+    private static final String PATH = "src\\test\\resources\\dataToTest.txt";
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
 
     @Test()
@@ -26,7 +26,7 @@ public class NumberServiceTest extends TestCase {
     }
 
     @Test
-    public void testCorrectCountSum() throws IOException {
+    public void testCorrectCountSum() {
         int actual = NumberService.countSum(CORRECT_NUMBER);
         int expected = 0;
 
@@ -35,10 +35,9 @@ public class NumberServiceTest extends TestCase {
 
     @Test
     public void testFileService() throws IOException {
-        String strNum = Files.readAllLines(Paths.get("src/test/resources/dataToTest.txt")).get(0);
-        //String pathName = new File("src\\test\\resources\\dataToTest.txt").getCanonicalPath();
-        //Path path = Paths.get(pathName);
-        int numberFromFileAsString = Integer.parseInt(strNum);//FileService.getNumberFromFileAsString(path);
+        Path path = Paths.get(PATH);
+        String strNum = Files.readAllLines(path).get(0);
+        int numberFromFileAsString = Integer.parseInt(strNum);
         int actual = NumberService.countSum(numberFromFileAsString);
 
         int expected = 11;
