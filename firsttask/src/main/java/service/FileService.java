@@ -9,7 +9,7 @@ public class FileService {
     private FileService() {
     }
 
-    public static String getNumberFromFileAsString(String pathName) throws IOException {
+    public static String getStringFromFile(String pathName) throws IOException {
         Path path = Paths.get(pathName);
         return Files.readAllLines(path).get(0);
     }

@@ -10,7 +10,12 @@ public class NumberServiceTest extends TestCase {
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
 
     public static int[] wrongTestData() {
-        return new int[]{21522, 0, 62, -125, -125126};
+        return new int[]{
+                21522,
+                0,
+                62,
+                -125,
+                -125126};
     }
 
     public static int[][] correctTestData() {

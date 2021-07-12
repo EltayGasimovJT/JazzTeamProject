@@ -10,7 +10,7 @@ public class FileServiceTest {
 
     @Test
     public void testFileService() throws IOException {
-        String actual = FileService.getNumberFromFileAsString(PATH);
+        String actual = FileService.getStringFromFile(PATH);
 
         String expected = "1246";
 
