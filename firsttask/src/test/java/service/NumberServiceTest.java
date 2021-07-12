@@ -10,11 +10,14 @@ public class NumberServiceTest extends TestCase {
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
 
     public static int[] wrongTestData() {
-        return new int[]{21522, 0, 62};
+        return new int[]{21522, 0, 62, -125, -125126};
     }
 
     public static int[][] correctTestData() {
-        return new int[][]{{8151, 1}, {4251, 0}, {1160, 4}};
+        return new int[][]{
+                {8151, 1},
+                {4251, 0},
+                {1160, 4}};
     }
 
     @ParameterizedTest
