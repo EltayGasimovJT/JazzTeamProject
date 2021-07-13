@@ -39,6 +39,7 @@ public class NumberServiceTest {
         } catch (IllegalArgumentException | NumberCustomException thrown) {
             Assert.assertNotEquals("", thrown.getMessage());
         }
+
     }
 
     @ParameterizedTest
