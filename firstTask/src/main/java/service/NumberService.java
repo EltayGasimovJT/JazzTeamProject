@@ -34,13 +34,17 @@ public class NumberService {
     }
 
     private static void validateString(String stringToValidate) throws NumberCustomException {
+        if (stringToValidate == null) {
+            throw new IllegalArgumentException("entered String cannot be null!!! " + stringToValidate);
+        }
+
         if (stringToValidate.isEmpty()) {
             throw new IllegalArgumentException("entered String cannot be empty!!! " + stringToValidate);
         }
 
         try {
             Integer.parseInt(stringToValidate);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             throw new NumberCustomException("You entered not number value!!! " + stringToValidate);
         }
     }

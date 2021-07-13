@@ -1,15 +1,15 @@
 package service;
 
 import exception.NumberCustomException;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-public class NumberServiceTest extends TestCase {
+public class NumberServiceTest {
     public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
 
     public static int[] wrongTestData() {
@@ -26,8 +26,8 @@ public class NumberServiceTest extends TestCase {
                 Arguments.of(8151, 1),
                 Arguments.of(4251, 0),
                 Arguments.of(1160, 4),
-                Arguments.of(-1060, 5)
-
+                Arguments.of(-1060, 5),
+                Arguments.of(999, -27)
         );
     }
 
@@ -44,7 +44,7 @@ public class NumberServiceTest extends TestCase {
 
     @ParameterizedTest
     @MethodSource("numbersToTest")
-    public void testCorrectCountSum(int number, int result) throws NumberCustomException {
+    public void testCountDifferenceBetweenSumOfOddsAndSumOfEvens(int number, int result) throws NumberCustomException {
         int actual = NumberService
                 .countDifferenceBetweenSumOfOddsAndSumOfEvens(Integer.toString(number));
         int expected = result;
