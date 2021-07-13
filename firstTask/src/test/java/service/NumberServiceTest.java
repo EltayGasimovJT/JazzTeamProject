@@ -25,7 +25,9 @@ public class NumberServiceTest extends TestCase {
         return Stream.of(
                 Arguments.of(8151, 1),
                 Arguments.of(4251, 0),
-                Arguments.of(1160, 4)
+                Arguments.of(1160, 4),
+                Arguments.of(-1060, 5)
+
         );
     }
 

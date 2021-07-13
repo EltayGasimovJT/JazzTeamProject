@@ -9,10 +9,11 @@ public class NumberService {
 
     public static int countDifferenceBetweenSumOfOddsAndSumOfEvens(String numberStringFromFile) throws IllegalArgumentException, NumberCustomException {
         validateString(numberStringFromFile);
+        System.out.println(numberStringFromFile);
         int numberFromTextFile = Integer.parseInt(numberStringFromFile);
         NumberValidator.validateNumber(numberFromTextFile);
         int result = 0;
-        result += getDifferenceBetweenOddsAndEventsInNumber(numberFromTextFile);
+        result += getDifferenceBetweenOddsAndEventsInNumber(Math.abs(numberFromTextFile));
 
         return result;
     }
