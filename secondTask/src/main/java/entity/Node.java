@@ -1,7 +1,6 @@
 package entity;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Objects;
 
 public class Node {
     private int height;
@@ -66,6 +65,22 @@ public class Node {
             result += right.getCountOfLeaves();
         return result;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return height == node.height &&
+                value == node.value &&
+                Objects.equals(left, node.left) &&
+                Objects.equals(right, node.right);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(height, value, left, right);
     }
 
 }
