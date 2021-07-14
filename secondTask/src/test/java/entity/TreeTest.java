@@ -20,7 +20,6 @@ public class TreeTest {
     @ParameterizedTest
     @MethodSource("correctDataForTreeTest")
     public void getCountOfLeafTest(int[] testArraysForTreeCreation, int expected) {
-
         Tree tree = new Tree(new Node(testArraysForTreeCreation[0]));
 
         for (int i = 1; i < testArraysForTreeCreation.length; i++) {
