@@ -5,10 +5,9 @@ public class NumberValidator {
     }
 
     public static void validateNumber(int numberToValidate) throws IllegalArgumentException {
-        if (Math.abs(numberToValidate) < 999 || Math.abs(numberToValidate) > 9999) {
+        int numberToCheck = Math.abs(numberToValidate);
+        if (numberToCheck < 1000 || numberToCheck > 9999) {
             throw new IllegalArgumentException("Wrong input number " + numberToValidate + " number must be more than 999 or less then 9999!!!");
         }
     }
-
-
 }
