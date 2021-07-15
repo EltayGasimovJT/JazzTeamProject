@@ -17,7 +17,10 @@ public class NumberServiceTest {
                 0,
                 62,
                 -125,
-                -125126};
+                -125126,
+                999,
+                10000
+        };
     }
 
     private static Stream<Arguments> numbersToTest() {
@@ -26,7 +29,8 @@ public class NumberServiceTest {
                 Arguments.of(4251, 0),
                 Arguments.of(1160, 4),
                 Arguments.of(-1060, 5),
-                Arguments.of(1000, -1)
+                Arguments.of(1000, -1),
+                Arguments.of(9999, -36)
         );
     }
 
