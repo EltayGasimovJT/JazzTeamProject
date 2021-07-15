@@ -13,32 +13,21 @@ public class TriangleService {
     private TriangleService() {
     }
 
-    public static boolean isTriangle(Point firstPoint, Point secondPoint, Point thirdPoint) {
-        if (firstPoint == null || secondPoint == null || thirdPoint == null) {
-            LOGGER.log(Level.ERROR, "Point cannot be null, " +
-                    " first = " + firstPoint +
-                    " second = " + secondPoint +
-                    " third = " + thirdPoint);
-            return false;
-        }
-
-        boolean validateOnTriangle = isValidateOnTriangle(firstPoint, secondPoint, thirdPoint);
-        return validateOnTriangle;
+    public static boolean isTriangle(Triangle triangle) {
+        return isTriangle(triangle.getFirstPoint(), triangle.getSecondPoint(), triangle.getThirdPoint());
     }
 
-    public static boolean isTriangle(Triangle triangle) {
-        if (triangle.getFirstPoint() == null || triangle.getSecondPoint() == null
-                || triangle.getThirdPoint() == null) {
-            LOGGER.log(Level.ERROR, "Point cannot be null, " +
-                    " first = " + triangle.getFirstPoint() +
-                    " second = " + triangle.getSecondPoint() +
-                    " third = " + triangle.getThirdPoint());
-            return false;
+    public static boolean isTriangle(Point firstPoint, Point secondPoint, Point thirdPoint) throws IllegalArgumentException {
+        if (firstPoint == null || secondPoint == null || thirdPoint == null) {
+            String message = "Point cannot be null, " +
+                    " first = " + firstPoint +
+                    " second = " + secondPoint +
+                    " third = " + thirdPoint;
+            LOGGER.log(Level.ERROR, message);
+            throw new IllegalArgumentException(message);
         }
 
-        boolean validateOnTriangle = isValidateOnTriangle(triangle.getFirstPoint(),
-                triangle.getSecondPoint(), triangle.getThirdPoint());
-        return validateOnTriangle;
+        return isValidateOnTriangle(firstPoint, secondPoint, thirdPoint);
     }
 
     public static boolean isBelongsToTriangle(Point point, Triangle triangle) {
