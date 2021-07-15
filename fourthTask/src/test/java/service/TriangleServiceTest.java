@@ -62,7 +62,6 @@ public class TriangleServiceTest {
         );
     }
 
-
     @ParameterizedTest
     @MethodSource("isTriangleTestData")
     public void isTriangleTest(Triangle triangle, boolean expected) {
