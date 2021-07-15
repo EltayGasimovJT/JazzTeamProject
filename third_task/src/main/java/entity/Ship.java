@@ -1,0 +1,73 @@
+package entity;
+
+public class Ship extends Thread {
+    private int currentContainersQty;
+    private int containersToTake;
+    private int containersToUpload;
+    private Port port;
+
+    public Ship(String name, int containersToTake, int containersToLeave, Port port) {
+        super(name);
+        this.containersToTake = containersToTake;
+        this.containersToUpload = containersToLeave;
+        this.port = port;
+        this.currentContainersQty = containersToLeave;
+        start();
+    }
+
+    @Override
+    public void run() {
+        boolean isChanged = false;
+
+        try {
+
+            while (true) {
+                if (!isChanged) {
+                    port.askPermission();
+                }
+
+                isChanged = false;
+
+                if (containersToUpload != 0 && containersToTake != 0) {
+                    containersToTake--;
+                    containersToUpload--;
+                    isChanged = true;
+                } else {
+                    if (containersToUpload != 0) {
+                        synchronized (port) {
+                            if (port.getContainersCapacity() > port.getCurrentContainersQty()) {
+                                port.takeContainer();
+                                containersToUpload--;
+                                isChanged = true;
+                            }
+                        }
+                    } else {
+                        if (containersToTake != 0) {
+                            synchronized (port) {
+                                if (port.getCurrentContainersQty() > 0) {
+                                    port.uploadContainer();
+                                    containersToTake--;
+                                    isChanged = true;
+                                }
+                            }
+                        } else {
+                            System.out.println(Thread.currentThread().getName() + " has finished his task");
+                            port.returnPermission();
+                            port.increment();
+                            break;
+                        }
+                    }
+                }
+
+                if (isChanged) {
+                    Thread.sleep(10);
+                } else {
+                    port.returnPermission();
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+    }
+}
