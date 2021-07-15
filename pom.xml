@@ -23,6 +23,11 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <sonar.projectKey>JazzTeamProject</sonar.projectKey>
+    <sonar.moduleKey>firstTask</sonar.moduleKey>
+    <sonar.moduleKey>secondTask</sonar.moduleKey>
+    <sonar.moduleKey>fourthTask</sonar.moduleKey>
+    <sonar.moduleKey>third_Task</sonar.moduleKey>
   </properties>
 
   <dependencies>
@@ -68,6 +73,11 @@
               </goals>
             </execution>
           </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.4.0.905</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
