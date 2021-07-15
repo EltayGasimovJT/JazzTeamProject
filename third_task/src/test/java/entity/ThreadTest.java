@@ -17,12 +17,6 @@ public class ThreadTest {
 
         ships.add(new Ship("Ship " + 1, 260, 0, port));
 
-        try {
-            Thread.sleep(3500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         ships.add(new Ship("Ship " + 2, 0, 300, port));
 
         for (Ship ship : ships) {
