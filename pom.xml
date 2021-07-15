@@ -24,10 +24,6 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <sonar.projectKey>JazzTeamProject</sonar.projectKey>
-    <sonar.moduleKey>firstTask</sonar.moduleKey>
-    <sonar.moduleKey>secondTask</sonar.moduleKey>
-    <sonar.moduleKey>fourthTask</sonar.moduleKey>
-    <sonar.moduleKey>third_Task</sonar.moduleKey>
   </properties>
 
   <dependencies>
