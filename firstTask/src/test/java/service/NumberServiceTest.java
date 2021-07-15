@@ -26,7 +26,7 @@ public class NumberServiceTest {
                 Arguments.of(4251, 0),
                 Arguments.of(1160, 4),
                 Arguments.of(-1060, 5),
-                Arguments.of(999, -27)
+                Arguments.of(1000, -1)
         );
     }
 
@@ -39,6 +39,7 @@ public class NumberServiceTest {
         } catch (IllegalArgumentException | NumberCustomException thrown) {
             Assert.assertNotEquals("", thrown.getMessage());
         }
+
     }
 
     @ParameterizedTest
