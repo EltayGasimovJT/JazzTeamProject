@@ -6,7 +6,11 @@
 
   <groupId>org.jazzteam.eltay.gasimov</groupId>
   <artifactId>JazzTeamProject</artifactId>
+  <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
+  <modules>
+    <module>third_task</module>
+  </modules>
 
   <name>JazzTeamProject</name>
   <!-- FIXME change it to the project's website -->
