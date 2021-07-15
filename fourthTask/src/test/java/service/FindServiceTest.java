@@ -2,8 +2,12 @@ package service;
 
 import entity.Point;
 import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.FindTriangleParametersServiceImpl;
+
+import java.util.stream.Stream;
 
 public class FindServiceTest {
     private static final Point[] TEST_POINTS = new Point[]{
@@ -11,7 +15,8 @@ public class FindServiceTest {
             new Point(1, 8)
     };
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("pointsToTest")
     public void findSide() {
         double expected = 7;
         FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
