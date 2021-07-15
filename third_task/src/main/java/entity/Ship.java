@@ -19,16 +19,12 @@ public class Ship extends Thread {
     @Override
     public void run() {
         boolean isChanged = false;
-
         try {
-
             while (true) {
                 if (!isChanged) {
                     port.askPermissionForTheShip();
                 }
-
                 isChanged = false;
-
                 if (containersToUpload != 0 && containersToTake != 0) {
                     containersToTake--;
                     containersToUpload--;
