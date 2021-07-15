@@ -8,8 +8,9 @@ public class Tree {
     }
 
     public Tree(int[] arrayForTreeCreate) {
-        for (int i = 0; i < arrayForTreeCreate.length; i++) {
-            this.add(new Node(), arrayForTreeCreate[i]);
+        this.root = new Node(arrayForTreeCreate[0]);
+        for (int i = 1; i < arrayForTreeCreate.length; i++) {
+            this.insert(arrayForTreeCreate[i]);
         }
     }
 
@@ -109,5 +110,18 @@ public class Tree {
         }
         return node;
 
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Tree tree = (Tree) o;
+        return this.root.getValue() == tree.getRoot().getValue() &&
+                this.root.getHeight() == tree.getRoot().getHeight();
     }
 }
