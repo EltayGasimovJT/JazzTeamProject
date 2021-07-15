@@ -1,17 +1,19 @@
 package entity;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class ThreadTest {
     private static final int EXPECTED_COUNTER = 2;
 
     @Test
     public void testCorrectThreadsProcessing() {
-        Port port = new Port(4, 5000, 1000);
+        Port port = new Port(2, 5000, 1000);
 
         List<Ship> ships = new ArrayList<>();
 
@@ -23,7 +25,7 @@ public class ThreadTest {
             try {
                 ship.join();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
 

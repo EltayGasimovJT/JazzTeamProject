@@ -1,9 +1,12 @@
 package entity;
 
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class Port {
     private int dockQty;
     private int containersCapacity;
@@ -34,17 +37,18 @@ public class Port {
         currentContainersQty--;
     }
 
-    public synchronized void askPermission() {
+    public synchronized void askPermissionForTheShip() {
         while (dockQty == 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
             }
         }
         ships.add(Thread.currentThread());
 
-        System.out.println(Thread.currentThread().getName() + " has received permission");
+        log.info(Thread.currentThread().getName() + " has received permission");
+
         dockQty--;
     }
 
@@ -52,7 +56,7 @@ public class Port {
         return counter;
     }
 
-    public void increment(){
+    public void increment() {
         this.counter++;
     }
 
@@ -61,12 +65,12 @@ public class Port {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
-        System.out.println(Thread.currentThread().getName() + " is leaving dock");
+        log.info(Thread.currentThread().getName() + " is leaving dock");
 
-        System.out.println("Current containers Qty in Port: " + currentContainersQty);
+        log.info("Current containers Qty in Port: " + currentContainersQty);
 
         if (ships.contains(Thread.currentThread())) {
             dockQty++;

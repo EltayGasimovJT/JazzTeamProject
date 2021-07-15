@@ -1,7 +1,9 @@
 package entity;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class Ship extends Thread {
-    private int currentContainersQty;
     private int containersToTake;
     private int containersToUpload;
     private Port port;
@@ -11,7 +13,6 @@ public class Ship extends Thread {
         this.containersToTake = containersToTake;
         this.containersToUpload = containersToLeave;
         this.port = port;
-        this.currentContainersQty = containersToLeave;
         start();
     }
 
@@ -23,7 +24,7 @@ public class Ship extends Thread {
 
             while (true) {
                 if (!isChanged) {
-                    port.askPermission();
+                    port.askPermissionForTheShip();
                 }
 
                 isChanged = false;
@@ -51,7 +52,7 @@ public class Ship extends Thread {
                                 }
                             }
                         } else {
-                            System.out.println(Thread.currentThread().getName() + " has finished his task");
+                            log.info(Thread.currentThread().getName() + " has finished his task");
                             port.returnPermission();
                             port.increment();
                             break;
@@ -66,7 +67,7 @@ public class Ship extends Thread {
                 }
             }
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
 
     }
