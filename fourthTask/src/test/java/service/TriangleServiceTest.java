@@ -15,15 +15,15 @@ public class TriangleServiceTest {
                 Arguments.of(new Triangle(
                         new Point(1, 1),
                         new Point(1, 8),
-                        new Point(7, 1)), true),
+                        new Point(7, 1))),
                 Arguments.of(new Triangle(
                         new Point(0, 0),
                         new Point(0, 0),
-                        new Point(0, 0)), false),
+                        new Point(0, 0))),
                 Arguments.of(new Triangle(
                         new Point(-5, -1),
                         new Point(-2, 1),
-                        new Point(4, -2)), true)
+                        new Point(4, -2)))
         );
     }
 
@@ -53,11 +53,10 @@ public class TriangleServiceTest {
         );
     }
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "expected = IllegalArgumentException.class")
     @MethodSource("isTriangleTestData")
-    public void isTriangleTest(Triangle triangle, boolean expected) {
-        boolean actual = TriangleService.isTriangle(triangle);
-        Assert.assertEquals(expected, actual);
+    public void isTriangleTest(Triangle triangle) {
+        TriangleService.isTriangle(triangle);
     }
 
     @ParameterizedTest

@@ -2,32 +2,40 @@ package service;
 
 import entity.Point;
 import entity.Triangle;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import service.impl.FindTriangleParametersServiceImpl;
 
+@Slf4j
 public class TriangleService {
-    private static final Logger LOGGER = LogManager.getLogger();
-
     private TriangleService() {
     }
 
-    public static boolean isTriangle(Triangle triangle) {
-        return isTriangle(triangle.getFirstPoint(), triangle.getSecondPoint(), triangle.getThirdPoint());
+    public static void isTriangle(Triangle triangle) {
+        String message = "Point cannot be null, " +
+                " first = " + triangle.getFirstPoint() +
+                " second = " + triangle.getSecondPoint() +
+                " third = " + triangle.getThirdPoint();
+        try {
+            isTriangle(triangle.getFirstPoint(), triangle.getSecondPoint(), triangle.getThirdPoint());
+        } catch (IllegalArgumentException e) {
+            log.error(message);
+        }
     }
 
-    public static boolean isTriangle(Point firstPoint, Point secondPoint, Point thirdPoint) throws IllegalArgumentException {
+    public static void isTriangle(Point firstPoint, Point secondPoint, Point thirdPoint) throws IllegalArgumentException {
         if (firstPoint == null || secondPoint == null || thirdPoint == null) {
             String message = "Point cannot be null, " +
                     " first = " + firstPoint +
                     " second = " + secondPoint +
                     " third = " + thirdPoint;
-            LOGGER.log(Level.ERROR, message);
+            log.error(message);
             throw new IllegalArgumentException(message);
         }
 
-        return isValidateOnTriangle(firstPoint, secondPoint, thirdPoint);
+        validateIsTriangle(firstPoint, secondPoint, thirdPoint);
     }
 
     public static boolean isBelongsToTriangle(Point point, Triangle triangle) {
@@ -51,21 +59,19 @@ public class TriangleService {
                 * (point1.getY() - point.getY()));
     }
 
-    private static boolean isValidateOnTriangle(Point x, Point y, Point z) {
+    private static void validateIsTriangle(Point x, Point y, Point z) throws IllegalArgumentException {
         FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
 
         double firstSide = findService.findSide(x, y);
         double secondSide = findService.findSide(y, z);
         double thirdSide = findService.findSide(z, x);
 
-        if (firstSide + secondSide > thirdSide) {
-            if (secondSide + thirdSide > firstSide) {
-                if (thirdSide + firstSide > secondSide) {
-                    return true;
+        if (!(firstSide + secondSide > thirdSide)) {
+            if (!(secondSide + thirdSide > firstSide)) {
+                if (!(thirdSide + firstSide > secondSide)) {
+                    throw new IllegalArgumentException("This points, don't can be used to create triangle");
                 }
             }
         }
-
-        return false;
     }
 }

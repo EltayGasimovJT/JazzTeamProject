@@ -1,21 +1,30 @@
 package service;
 
 import entity.Point;
+import entity.Triangle;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.FindTriangleParametersServiceImpl;
 
-public class FindServiceTest {
-    private static final Point[] TEST_POINTS = new Point[]{
-            new Point(1, 1),
-            new Point(1, 8)
-    };
+import java.util.stream.Stream;
 
-    @Test
-    public void findSide() {
-        double expected = 7;
+public class FindServiceTest {
+    private static Stream<Arguments> pointsToTest() {
+
+        return Stream.of(
+                Arguments.of( new Point(1, 1), new Point(1, 8), 7),
+                Arguments.of(new Point(6, 1), new Point(6, 4), 3)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("pointsToTest")
+    public void findSide(Point firstPoint, Point secondPoint, double expected) {
         FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
-        double actual = findService.findSide(TEST_POINTS[0], TEST_POINTS[1]);
+        double actual = findService.findSide(firstPoint, secondPoint);
 
         Assert.assertEquals(expected, actual, 0.001);
     }
