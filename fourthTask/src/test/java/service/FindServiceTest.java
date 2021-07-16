@@ -16,8 +16,11 @@ public class FindServiceTest {
     private static Stream<Arguments> pointsToTest() {
 
         return Stream.of(
-                Arguments.of( new Point(1, 1), new Point(1, 8), 7),
-                Arguments.of(new Point(6, 1), new Point(6, 4), 3)
+                Arguments.of(new Point(1, 1), new Point(1, 8), 7),
+                Arguments.of(new Point(6, 1), new Point(6, 4), 3),
+                Arguments.of(new Point(0, 0), new Point(0, 0), 0),
+                Arguments.of(new Point(6, -5), new Point(6, -1), 4)
+
         );
     }
 
