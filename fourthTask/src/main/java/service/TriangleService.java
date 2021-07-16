@@ -32,9 +32,9 @@ public class TriangleService {
     public static boolean isBelongsToTriangle(Point point, Triangle triangle) {
         boolean isBelongs = false;
 
-        int firstSideVector = getVector(point, triangle.getFirstPoint(), triangle.getSecondPoint());
-        int secondSideVector = getVector(point, triangle.getSecondPoint(), triangle.getThirdPoint());
-        int thirdSideVector = getVector(point, triangle.getThirdPoint(), triangle.getFirstPoint());
+        double firstSideVector = getVector(point, triangle.getFirstPoint(), triangle.getSecondPoint());
+        double secondSideVector = getVector(point, triangle.getSecondPoint(), triangle.getThirdPoint());
+        double thirdSideVector = getVector(point, triangle.getThirdPoint(), triangle.getFirstPoint());
 
         if ((firstSideVector <= 0 && secondSideVector <= 0 && thirdSideVector <= 0)
                 || (firstSideVector >= 0 && secondSideVector >= 0 && thirdSideVector >= 0)) {
@@ -43,7 +43,7 @@ public class TriangleService {
         return isBelongs;
     }
 
-    private static int getVector(Point point, Point point1, Point point2) {
+    private static double getVector(Point point, Point point1, Point point2) {
         return ((point1.getX() - point.getX())
                 * (point2.getY() - point1.getY()))
                 - ((point2.getX() - point1.getX())
