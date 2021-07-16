@@ -55,10 +55,14 @@ public class TriangleService {
         double secondSide = findService.findSide(y, z);
         double thirdSide = findService.findSide(z, x);
 
-        if (!(firstSide + secondSide > thirdSide) &&
-                !(secondSide + thirdSide > firstSide) &&
-                !(thirdSide + firstSide > secondSide)) {
+        if (isCreatesTriangle(firstSide, secondSide, thirdSide)) {
             throw new IllegalArgumentException("This points, don't can be used to create triangle");
         }
+    }
+
+    private static boolean isCreatesTriangle(double firstSide, double secondSide, double thirdSide) {
+        return !(firstSide + secondSide > thirdSide) &&
+                !(secondSide + thirdSide > firstSide) &&
+                !(thirdSide + firstSide > secondSide);
     }
 }
