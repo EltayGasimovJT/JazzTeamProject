@@ -3,9 +3,6 @@ package service;
 import entity.Point;
 import entity.Triangle;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import service.impl.FindTriangleParametersServiceImpl;
 
 @Slf4j
@@ -13,16 +10,8 @@ public class TriangleService {
     private TriangleService() {
     }
 
-    public static void isTriangle(Triangle triangle) {
-        String message = "Point cannot be null, " +
-                " first = " + triangle.getFirstPoint() +
-                " second = " + triangle.getSecondPoint() +
-                " third = " + triangle.getThirdPoint();
-        try {
-            isTriangle(triangle.getFirstPoint(), triangle.getSecondPoint(), triangle.getThirdPoint());
-        } catch (IllegalArgumentException e) {
-            log.error(message);
-        }
+    public static void isTriangle(Triangle triangle) throws IllegalArgumentException {
+        isTriangle(triangle.getFirstPoint(), triangle.getSecondPoint(), triangle.getThirdPoint());
     }
 
     public static void isTriangle(Point firstPoint, Point secondPoint, Point thirdPoint) throws IllegalArgumentException {
@@ -66,12 +55,10 @@ public class TriangleService {
         double secondSide = findService.findSide(y, z);
         double thirdSide = findService.findSide(z, x);
 
-        if (!(firstSide + secondSide > thirdSide)) {
-            if (!(secondSide + thirdSide > firstSide)) {
-                if (!(thirdSide + firstSide > secondSide)) {
-                    throw new IllegalArgumentException("This points, don't can be used to create triangle");
-                }
-            }
+        if (!(firstSide + secondSide > thirdSide) &&
+                !(secondSide + thirdSide > firstSide) &&
+                !(thirdSide + firstSide > secondSide)) {
+            throw new IllegalArgumentException("This points, don't can be used to create triangle");
         }
     }
 }

@@ -12,6 +12,7 @@ import service.impl.FindTriangleParametersServiceImpl;
 import java.util.stream.Stream;
 
 public class FindServiceTest {
+    private static final FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
     private static Stream<Arguments> pointsToTest() {
 
         return Stream.of(
@@ -23,7 +24,6 @@ public class FindServiceTest {
     @ParameterizedTest
     @MethodSource("pointsToTest")
     public void findSide(Point firstPoint, Point secondPoint, double expected) {
-        FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
         double actual = findService.findSide(firstPoint, secondPoint);
 
         Assert.assertEquals(expected, actual, 0.001);

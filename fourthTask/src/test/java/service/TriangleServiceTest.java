@@ -53,7 +53,7 @@ public class TriangleServiceTest {
         );
     }
 
-    @ParameterizedTest(name = "expected = IllegalArgumentException.class")
+    @ParameterizedTest(name = "expected = IllegalArgumentException")
     @MethodSource("isTriangleTestData")
     public void isTriangleTest(Triangle triangle) {
         TriangleService.isTriangle(triangle);
