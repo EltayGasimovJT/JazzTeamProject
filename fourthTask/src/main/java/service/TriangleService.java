@@ -7,6 +7,8 @@ import service.impl.FindTriangleParametersServiceImpl;
 
 @Slf4j
 public class TriangleService {
+    private static final FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
+
     private TriangleService() {
     }
 
@@ -49,8 +51,6 @@ public class TriangleService {
     }
 
     private static void validateIsTriangle(Point x, Point y, Point z) throws IllegalArgumentException {
-        FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
-
         double firstSide = findService.findSide(x, y);
         double secondSide = findService.findSide(y, z);
         double thirdSide = findService.findSide(z, x);

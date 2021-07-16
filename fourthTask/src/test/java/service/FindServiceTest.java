@@ -14,7 +14,6 @@ import java.util.stream.Stream;
 public class FindServiceTest {
     private static final FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
     private static Stream<Arguments> pointsToTest() {
-
         return Stream.of(
                 Arguments.of(new Point(1, 1), new Point(1, 8), 7),
                 Arguments.of(new Point(6, 1), new Point(6, 4), 3),
