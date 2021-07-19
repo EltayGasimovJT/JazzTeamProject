@@ -18,6 +18,8 @@ public class Ship extends Thread {
 
     @Override
     public void run() {
+        port.incrementCountOfCurrentShips();
+        port.increment();
         boolean isChanged = false;
         try {
             while (true) {
@@ -26,31 +28,20 @@ public class Ship extends Thread {
                 }
                 isChanged = false;
                 if (containersToUpload != 0 && containersToTake != 0) {
-                    containersToTake--;
-                    containersToUpload--;
-                    isChanged = true;
+                    isChanged = uploadAndTakeContainers();
                 } else {
                     if (containersToUpload != 0) {
                         synchronized (port) {
-                            if (port.getContainersCapacity() > port.getCurrentContainersQty()) {
-                                port.takeContainer();
-                                containersToUpload--;
-                                isChanged = true;
-                            }
+                            isChanged = uploadContainerIfThereAreContainersNotExceedingCapacity(isChanged);
                         }
                     } else {
                         if (containersToTake != 0) {
                             synchronized (port) {
-                                if (port.getCurrentContainersQty() > 0) {
-                                    port.uploadContainer();
-                                    containersToTake--;
-                                    isChanged = true;
-                                }
+                                isChanged = takeContainersIfThereAreContainersQtyNotZero(isChanged);
                             }
                         } else {
                             log.info(Thread.currentThread().getName() + " has finished his task");
                             port.returnPermission();
-                            port.increment();
                             break;
                         }
                     }
@@ -59,12 +50,39 @@ public class Ship extends Thread {
                 if (isChanged) {
                     Thread.sleep(10);
                 } else {
+                    Thread.sleep(200);
                     port.returnPermission();
                 }
             }
+
         } catch (InterruptedException e) {
             log.error(e.getMessage());
         }
+    }
 
+    private boolean uploadAndTakeContainers() {
+        boolean isChanged;
+        containersToTake--;
+        containersToUpload--;
+        isChanged = true;
+        return isChanged;
+    }
+
+    private boolean uploadContainerIfThereAreContainersNotExceedingCapacity(boolean isChanged) {
+        if (port.getContainersCapacity() > port.getCurrentContainersQty()) {
+            port.takeContainer();
+            containersToUpload--;
+            isChanged = true;
+        }
+        return isChanged;
+    }
+
+    private boolean takeContainersIfThereAreContainersQtyNotZero(boolean isChanged) {
+        if (port.getCurrentContainersQty() > 0) {
+            port.uploadContainer();
+            containersToTake--;
+            isChanged = true;
+        }
+        return isChanged;
     }
 }

@@ -8,12 +8,16 @@ import java.util.List;
 
 @Slf4j
 public class Port {
+    private int currentShipsInDock;
     private int dockQty;
     private int containersCapacity;
     private int currentContainersQty;
     private int counter;
-
     List<Thread> ships = new ArrayList<>();
+
+    {
+        currentShipsInDock = 0;
+    }
 
     public Port(int dockQty, int containersCapacity, int currentContainersQty) {
         this.dockQty = dockQty;
@@ -23,6 +27,10 @@ public class Port {
 
     public int getContainersCapacity() {
         return containersCapacity;
+    }
+
+    public int getCurrentShipsInDock() {
+        return currentShipsInDock;
     }
 
     public int getCurrentContainersQty() {
@@ -45,10 +53,10 @@ public class Port {
                 log.error(e.getMessage());
             }
         }
+
         ships.add(Thread.currentThread());
 
         log.info(Thread.currentThread().getName() + " has received permission");
-
         dockQty--;
     }
 
@@ -56,27 +64,28 @@ public class Port {
         return counter;
     }
 
+    public void incrementCountOfCurrentShips() {
+        currentShipsInDock++;
+    }
+
     public void increment() {
-        this.counter++;
+        counter++;
+    }
+
+    public void decrementCountOfCurrentShips() {
+        currentShipsInDock--;
     }
 
     public synchronized void returnPermission() {
-
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            log.error(e.getMessage());
-        }
-
-        log.info(Thread.currentThread().getName() + " is leaving dock");
-
-        log.info("Current containers Qty in Port: " + currentContainersQty);
+        log.info(Thread.currentThread().getName() +
+                " is leaving dock. Current containers Qty in Port: "
+                + currentContainersQty);
 
         if (ships.contains(Thread.currentThread())) {
             dockQty++;
         }
         ships.remove(Thread.currentThread());
-
+        currentShipsInDock--;
         notifyAll();
     }
 }
