@@ -9,8 +9,7 @@ import java.util.List;
 
 @Slf4j
 public class ThreadTest {
-    private static final int EXPECTED_CONTAINERS = 1080;
-    private static final int EXPECTED_COUNT_OF_SHIPS = 2;
+    private static final int EXPECTED_COUNT_OF_SHIPS = 0;
 
     @Test
     public void testCorrectThreadsProcessing() throws InterruptedException {
@@ -24,12 +23,17 @@ public class ThreadTest {
                         new Ship("Ship " + 4, 0, 300, port)
                 );
 
+
         for (Ship ship : ships) {
-            if (port.getCounter() == 2) {
-                Assert.assertEquals(EXPECTED_COUNT_OF_SHIPS, port.getCurrentShipsInDock());
-            }
+            ship.start();
+        }
+
+        Assert.assertEquals(2, port.getCurrentShipsInDock());
+
+        for (Ship ship : ships) {
             ship.join();
         }
-        Assert.assertEquals(EXPECTED_CONTAINERS, port.getCurrentContainersQty());
+
+        Assert.assertEquals(EXPECTED_COUNT_OF_SHIPS, port.getCurrentShipsInDock());
     }
 }

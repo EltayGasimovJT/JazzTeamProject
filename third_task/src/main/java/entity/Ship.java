@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Ship extends Thread {
     private int containersToTake;
     private int containersToUpload;
-    private Port port;
+    private final Port port;
 
     public Ship(String name, int containersToTake, int containersToLeave, Port port) {
         super(name);
@@ -18,8 +18,8 @@ public class Ship extends Thread {
 
     @Override
     public void run() {
-        port.incrementCountOfCurrentShips();
         port.increment();
+        port.incrementCountOfCurrentShips();
         boolean isChanged = false;
         try {
             while (true) {
@@ -27,48 +27,42 @@ public class Ship extends Thread {
                     port.askPermissionForTheShip();
                 }
                 isChanged = false;
-                if (containersToUpload != 0 && containersToTake != 0) {
-                    isChanged = uploadAndTakeContainers();
-                } else {
-                    if (containersToUpload != 0) {
-                        synchronized (port) {
-                            isChanged = uploadContainerIfThereAreContainersNotExceedingCapacity(isChanged);
-                        }
-                    } else {
-                        if (containersToTake != 0) {
-                            synchronized (port) {
-                                isChanged = takeContainersIfThereAreContainersQtyNotZero(isChanged);
-                            }
-                        } else {
-                            log.info(Thread.currentThread().getName() + " has finished his task");
-                            port.returnPermission();
-                            break;
-                        }
-                    }
+                isChanged = uploadOrTakeContainers(isChanged);
+                if (containersToTake == 0 && containersToUpload == 0) {
+                    log.info(Thread.currentThread().getName() + " has finished his task");
+                    port.returnPermission();
+                    break;
                 }
-
                 if (isChanged) {
                     Thread.sleep(10);
                 } else {
-                    Thread.sleep(200);
                     port.returnPermission();
                 }
             }
-
         } catch (InterruptedException e) {
             log.error(e.getMessage());
+            Thread.currentThread().interrupt();
         }
     }
 
-    private boolean uploadAndTakeContainers() {
-        boolean isChanged;
-        containersToTake--;
-        containersToUpload--;
-        isChanged = true;
+    private synchronized boolean uploadOrTakeContainers(boolean isChanged) throws InterruptedException {
+        if (containersToUpload != 0) {
+            synchronized (port) {
+                isChanged = uploadContainerToThePort(isChanged);
+                Thread.sleep(10);
+            }
+        } else {
+            if (containersToTake != 0) {
+                synchronized (port) {
+                    isChanged = takeContainersFromThePort(isChanged);
+                    Thread.sleep(10);
+                }
+            }
+        }
         return isChanged;
     }
 
-    private boolean uploadContainerIfThereAreContainersNotExceedingCapacity(boolean isChanged) {
+    private boolean uploadContainerToThePort(boolean isChanged) {
         if (port.getContainersCapacity() > port.getCurrentContainersQty()) {
             port.takeContainer();
             containersToUpload--;
@@ -77,7 +71,7 @@ public class Ship extends Thread {
         return isChanged;
     }
 
-    private boolean takeContainersIfThereAreContainersQtyNotZero(boolean isChanged) {
+    private boolean takeContainersFromThePort(boolean isChanged) {
         if (port.getCurrentContainersQty() > 0) {
             port.uploadContainer();
             containersToTake--;

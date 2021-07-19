@@ -8,9 +8,9 @@ import java.util.List;
 
 @Slf4j
 public class Port {
+    private final int containersCapacity;
     private int currentShipsInDock;
     private int dockQty;
-    private int containersCapacity;
     private int currentContainersQty;
     private int counter;
     List<Thread> ships = new ArrayList<>();
@@ -51,6 +51,7 @@ public class Port {
                 wait();
             } catch (InterruptedException e) {
                 log.error(e.getMessage());
+                Thread.currentThread().interrupt();
             }
         }
 
