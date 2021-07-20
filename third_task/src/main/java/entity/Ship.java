@@ -4,14 +4,20 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Ship extends Thread {
+    private final int shipCapacity;
     private int containersToTake;
     private int containersToUpload;
     private final Port port;
 
-    public Ship(String name, int containersToTake, int containersToLeave, Port port) {
+    public int getShipCapacity() {
+        return shipCapacity;
+    }
+
+    public Ship(String name, int containersToTake, int containersToLeave, int shipCapacity, Port port) {
         super(name);
         this.containersToTake = containersToTake;
         this.containersToUpload = containersToLeave;
+        this.shipCapacity = shipCapacity;
         this.port = port;
     }
 

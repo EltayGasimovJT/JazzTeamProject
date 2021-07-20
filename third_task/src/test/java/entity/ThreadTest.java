@@ -19,10 +19,10 @@ public class ThreadTest {
 
         List<Ship> ships = Arrays
                 .asList(
-                        new Ship("Ship " + 1, 20, 0, port),
-                        new Ship("Ship " + 2, 0, 30, port),
-                        new Ship("Ship " + 3, 20, 0, port),
-                        new Ship("Ship " + 4, 0, 30, port)
+                        new Ship("Ship " + 1, 20, 0,500, port),
+                        new Ship("Ship " + 2, 0, 30,500, port),
+                        new Ship("Ship " + 3, 20, 0,500, port),
+                        new Ship("Ship " + 4, 0, 30,500, port)
                 );
 
         ships.get(0).start();
@@ -32,12 +32,12 @@ public class ThreadTest {
 
         Assert.assertSame(Thread.State.RUNNABLE, ships.get(0).getState());
         Assert.assertSame(Thread.State.RUNNABLE, ships.get(1).getState());
-        Assert.assertSame(Thread.State.WAITING, ships.get(2).getState());
-        Assert.assertSame(Thread.State.WAITING, ships.get(3).getState());
 
         Assert.assertEquals(100, port.getCurrentContainersQty());
         Assert.assertEquals(20, ships.get(0).getContainersToTake());
+        Assert.assertEquals(0, ships.get(0).getContainersToUpload());
         Assert.assertEquals(30, ships.get(1).getContainersToUpload());
+        Assert.assertEquals(0, ships.get(1).getContainersToTake());
 
         try {
             Thread.sleep(700);

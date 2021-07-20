@@ -19,6 +19,10 @@ public class Port {
         currentShipsInDock = 0;
     }
 
+    public Port() {
+        containersCapacity = 0;
+    }
+
     public Port(int dockQty, int containersCapacity, int currentContainersQty) {
         this.dockQty = dockQty;
         this.containersCapacity = containersCapacity;
