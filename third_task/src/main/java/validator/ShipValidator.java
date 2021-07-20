@@ -1,5 +1,6 @@
 package validator;
 
+
 import entity.Ship;
 
 public class ShipValidator {

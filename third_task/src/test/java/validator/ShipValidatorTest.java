@@ -2,14 +2,16 @@ package validator;
 
 import entity.Port;
 import entity.Ship;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ShipValidatorTest {
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testValidateShipParametersNotNegative() {
-        ShipValidator.validateShipParametersNotNegative(new Ship("ship",
-                -12, -52, -65, new Port()));
+    @Test
+    void validateShipParametersNotNegative() {
+        assertThrows(IllegalArgumentException.class,
+                () -> ShipValidator.validateShipParametersNotNegative(new Ship("ship",
+                        -2, -52, -65, new Port())));
     }
-
 }
