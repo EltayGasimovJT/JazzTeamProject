@@ -11,4 +11,5 @@ class ShipValidatorTest {
         ShipValidator.validateShipParametersNotNegative(new Ship("ship",
                 -12, -52, -65, new Port()));
     }
+
 }

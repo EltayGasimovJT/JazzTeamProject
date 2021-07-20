@@ -9,55 +9,56 @@ import java.util.List;
 
 @Slf4j
 public class ThreadTest {
-    private static final int EXPECTED_COUNT_OF_SHIPS = 4;
-    private static final int EXPECTED_CURRENT_SHIPS_IN_DOCK_AT_THE_BEGINNING = 2;
-    private static final int EXPECTED_CURRENT_SHIPS_IN_DOCK_IN_THE_END = 1;
 
     @Test
-    public void testCorrectThreadsProcessing() {
+    public void testCorrectThreadsProcessing() throws InterruptedException {
         Port port = new Port(2, 500, 100);
 
         List<Ship> ships = Arrays
                 .asList(
                         new Ship("Ship " + 1, 20, 0,500, port),
-                        new Ship("Ship " + 2, 0, 30,500, port),
-                        new Ship("Ship " + 3, 20, 0,500, port),
+                        new Ship("Ship " + 2, 20, 0,500, port),
+                        new Ship("Ship " + 3, 0, 30,500, port),
                         new Ship("Ship " + 4, 0, 30,500, port)
                 );
 
         ships.get(0).start();
         ships.get(1).start();
-        ships.get(2).start();
-        ships.get(3).start();
 
         Assert.assertSame(Thread.State.RUNNABLE, ships.get(0).getState());
         Assert.assertSame(Thread.State.RUNNABLE, ships.get(1).getState());
+        Assert.assertSame(Thread.State.NEW, ships.get(2).getState());
+        Assert.assertSame(Thread.State.NEW, ships.get(3).getState());
 
         Assert.assertEquals(100, port.getCurrentContainersQty());
         Assert.assertEquals(20, ships.get(0).getContainersToTake());
         Assert.assertEquals(0, ships.get(0).getContainersToUpload());
-        Assert.assertEquals(30, ships.get(1).getContainersToUpload());
-        Assert.assertEquals(0, ships.get(1).getContainersToTake());
+        Assert.assertEquals(0, ships.get(1).getContainersToUpload());
+        Assert.assertEquals(20, ships.get(1).getContainersToTake());
+
+        ships.get(2).start();
 
         try {
-            Thread.sleep(700);
+            Thread.sleep(900);
         } catch (InterruptedException e) {
             log.error(e.getMessage());
             Thread.currentThread().interrupt();
         }
 
-        Assert.assertEquals(110, port.getCurrentContainersQty());
+
+        ships.get(3).start();
+
+        Assert.assertEquals(90, port.getCurrentContainersQty());
         Assert.assertEquals(0, ships.get(0).getContainersToTake());
-        Assert.assertEquals(0, ships.get(1).getContainersToUpload());
+        Assert.assertEquals(0, ships.get(1).getContainersToTake());
 
         Assert.assertSame(Thread.State.TERMINATED, ships.get(0).getState());
         Assert.assertSame(Thread.State.TERMINATED, ships.get(1).getState());
-
-        Assert.assertSame(Thread.State.RUNNABLE, ships.get(2).getState());
+        Assert.assertSame(Thread.State.TERMINATED, ships.get(2).getState());
         Assert.assertSame(Thread.State.RUNNABLE, ships.get(3).getState());
 
-        Assert.assertEquals(100, port.getCurrentContainersQty());
-        Assert.assertEquals(20, ships.get(2).getContainersToTake());
+        Assert.assertEquals(90, port.getCurrentContainersQty());
+        Assert.assertEquals(0, ships.get(2).getContainersToTake());
         Assert.assertEquals(30, ships.get(3).getContainersToUpload());
 
         try {
@@ -67,7 +68,7 @@ public class ThreadTest {
             Thread.currentThread().interrupt();
         }
 
-        Assert.assertEquals(110, port.getCurrentContainersQty());
+        Assert.assertEquals(120, port.getCurrentContainersQty());
         Assert.assertEquals(0, ships.get(2).getContainersToTake());
         Assert.assertEquals(0, ships.get(3).getContainersToUpload());
 
