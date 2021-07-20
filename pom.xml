@@ -10,6 +10,7 @@
   <version>1.0-SNAPSHOT</version>
   <modules>
     <module>third_task</module>
+    <module>mainproject</module>
   </modules>
 
   <name>JazzTeamProject</name>

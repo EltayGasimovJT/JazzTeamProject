@@ -85,8 +85,8 @@ public class Port {
         if (ships.contains(Thread.currentThread())) {
             dockQty++;
         }
-        ships.remove(Thread.currentThread());
         currentShipsInDock--;
+        ships.remove(Thread.currentThread());
         notifyAll();
     }
 }

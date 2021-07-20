@@ -13,14 +13,13 @@ public class Ship extends Thread {
         this.containersToTake = containersToTake;
         this.containersToUpload = containersToLeave;
         this.port = port;
-        start();
     }
 
     @Override
     public void run() {
+        boolean isChanged = false;
         port.increment();
         port.incrementCountOfCurrentShips();
-        boolean isChanged = false;
         try {
             while (true) {
                 if (!isChanged) {
