@@ -27,7 +27,7 @@ public class ThreadTest {
         ships.get(1).start();
 
         if (port.getCounter() == 2) {
-            Assert.assertEquals(1, port.getCurrentShipsInDock());
+            Assert.assertEquals(2, port.getCurrentShipsInDock());
         }
 
         ships.get(2).start();
