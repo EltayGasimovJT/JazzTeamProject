@@ -45,19 +45,19 @@ public class Port {
         currentContainersQty--;
     }
 
-    public synchronized void askPermissionForTheShip() {
+    public synchronized void askPermissionForTheShip(Ship ship) {
         while (dockQty == 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
                 log.error(e.getMessage());
-                Thread.currentThread().interrupt();
+                ship.interrupt();
             }
         }
 
-        ships.add(Thread.currentThread());
+        ships.add(ship);
 
-        log.info(Thread.currentThread().getName() + " has received permission");
+        log.info(ship.getName() + " has received permission");
         dockQty--;
     }
 
@@ -77,16 +77,17 @@ public class Port {
         currentShipsInDock--;
     }
 
-    public synchronized void returnPermission() {
+    public synchronized void returnPermission(Ship ship) {
         log.info(Thread.currentThread().getName() +
                 " is leaving dock. Current containers Qty in Port: "
                 + currentContainersQty);
 
-        if (ships.contains(Thread.currentThread())) {
+        if (ships.contains(ship)) {
             dockQty++;
         }
         currentShipsInDock--;
-        ships.remove(Thread.currentThread());
+        ships.remove(ship);
+        ship.interrupt();
         notifyAll();
     }
 }

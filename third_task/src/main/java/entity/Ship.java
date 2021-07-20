@@ -15,6 +15,22 @@ public class Ship extends Thread {
         this.port = port;
     }
 
+    public int getContainersToTake() {
+        return containersToTake;
+    }
+
+    public void setContainersToTake(int containersToTake) {
+        this.containersToTake = containersToTake;
+    }
+
+    public int getContainersToUpload() {
+        return containersToUpload;
+    }
+
+    public void setContainersToUpload(int containersToUpload) {
+        this.containersToUpload = containersToUpload;
+    }
+
     @Override
     public void run() {
         boolean isChanged = false;
@@ -23,19 +39,19 @@ public class Ship extends Thread {
         try {
             while (true) {
                 if (!isChanged) {
-                    port.askPermissionForTheShip();
+                    port.askPermissionForTheShip(this);
                 }
                 isChanged = false;
                 isChanged = uploadOrTakeContainers(isChanged);
                 if (containersToTake == 0 && containersToUpload == 0) {
                     log.info(Thread.currentThread().getName() + " has finished his task");
-                    port.returnPermission();
+                    port.returnPermission(this);
                     break;
                 }
                 if (isChanged) {
                     Thread.sleep(10);
                 } else {
-                    port.returnPermission();
+                    port.returnPermission(this);
                 }
             }
         } catch (InterruptedException e) {
@@ -48,13 +64,13 @@ public class Ship extends Thread {
         if (containersToUpload != 0) {
             synchronized (port) {
                 isChanged = uploadContainerToThePort(isChanged);
-                Thread.sleep(10);
+                Thread.sleep(1);
             }
         } else {
             if (containersToTake != 0) {
                 synchronized (port) {
                     isChanged = takeContainersFromThePort(isChanged);
-                    Thread.sleep(10);
+                    Thread.sleep(1);
                 }
             }
         }
