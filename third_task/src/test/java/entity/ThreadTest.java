@@ -45,7 +45,6 @@ public class ThreadTest {
             Thread.currentThread().interrupt();
         }
 
-
         ships.get(3).start();
 
         Assert.assertEquals(90, port.getCurrentContainersQty());

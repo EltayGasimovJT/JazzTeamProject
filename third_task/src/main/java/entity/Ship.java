@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Ship extends Thread {
-    private final int shipCapacity;
     private int containersToTake;
     private int containersToUpload;
+    private final int shipCapacity;
     private final Port port;
 
     public int getShipCapacity() {
