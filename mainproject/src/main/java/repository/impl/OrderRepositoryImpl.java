@@ -20,6 +20,7 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Client.Order save(Client.Order order) {
+        orders.add(order);
         return order;
     }
 
