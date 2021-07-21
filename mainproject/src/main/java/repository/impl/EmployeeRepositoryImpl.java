@@ -9,7 +9,6 @@ import java.util.List;
 public class EmployeeRepositoryImpl implements EmployeeRepository {
     private final List<Employee> employees = new ArrayList<>();
 
-
     @Override
     public Employee save(Employee employee) {
         employees.add(employee);
@@ -27,7 +26,10 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
     }
 
     @Override
-    public Employee findOne(int num) {
-        return null;
+    public Employee findOne(String string) {
+        return employees.stream()
+                .filter(client -> client.getEmployeeRole().toString().equals(string))
+                .findFirst()
+                .orElse(null);
     }
 }

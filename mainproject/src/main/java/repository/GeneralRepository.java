@@ -9,5 +9,5 @@ public interface GeneralRepository<T> {
 
     List<T> findAll();
 
-    T findOne(int num);
+    T findOne(String string);
 }

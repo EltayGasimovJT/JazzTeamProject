@@ -26,16 +26,18 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Client findOne(int num) {
-        return null;
+    public Client findOne(String string) {
+        return clients.stream()
+                .filter(client -> client.getName().equals(string))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override
-    public Client findByOrderNumber(int passportNum) {
-        Client resultClient = clients.stream()
+    public Client findByOrderNumber(String passportNum) {
+        return clients.stream()
                 .filter(client -> client.getPassportId().equals(passportNum))
                 .findFirst()
-                .get();
-        return resultClient;
+                .orElse(null);
     }
 }
