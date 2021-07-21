@@ -59,6 +59,6 @@ public class TriangleServiceTest {
 
         boolean actual = TriangleService.isBelongsToTriangle(point, triangle);
 
-        Assert.assertEquals(actual, true);
+        Assert.assertTrue(actual);
     }
 }
