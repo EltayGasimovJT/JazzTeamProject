@@ -1,6 +1,7 @@
 package validator;
 
 import entity.Port;
+import entity.Ship;
 
 public class PortValidator {
     private PortValidator() {
@@ -23,6 +24,14 @@ public class PortValidator {
     public static void validateDockQty(Port port) {
         if (port.getDockQty() <= 0) {
             throw new IllegalArgumentException("Dock qty cannot be less or equals to zero!! " + port.getDockQty());
+        }
+    }
+
+    public static void isShipsContainersMoreThanPortCapacity(Port port, Ship ship) {
+        if (ship.getContainersToTake() > port.getContainersCapacity()
+                || ship.getContainersToUpload() > port.getContainersCapacity()
+                || ship.getContainersToUpload() + ship.getContainersToTake()> port.getContainersCapacity()){
+            throw new IllegalArgumentException("The port cannot upload or take container, because out of capacity");
         }
     }
 }

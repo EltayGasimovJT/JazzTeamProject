@@ -37,6 +37,10 @@ public class Ship extends Thread {
         this.containersToUpload = containersToUpload;
     }
 
+    public Port getPort() {
+        return port;
+    }
+
     @Override
     public void run() {
         boolean isChanged = false;

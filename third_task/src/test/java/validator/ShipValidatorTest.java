@@ -2,7 +2,6 @@ package validator;
 
 import entity.Port;
 import entity.Ship;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,8 +20,9 @@ class ShipValidatorTest {
                 Arguments.of(new Ship("ship",
                         2, -52, 65, new Port())),
                 Arguments.of(new Ship("ship",
-                        -2, -52, -65, new Port())
-                ));
+                        -2, -52, -65, new Port())),
+                Arguments.of(new Ship("ship",
+                        0, 0, 0, new Port())));
     }
 
     private static Stream<Arguments> wrongShipCapacityDataToTest() {
@@ -35,7 +35,7 @@ class ShipValidatorTest {
                         76, 25, 50, new Port())),
                 Arguments.of(new Ship("ship",
                         2, 0, 0, new Port()))
-               );
+        );
     }
 
     @ParameterizedTest
