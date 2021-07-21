@@ -23,6 +23,14 @@ public class Port {
         containersCapacity = 0;
     }
 
+    public int getDockQty() {
+        return dockQty;
+    }
+
+    public void setDockQty(int dockQty) {
+        this.dockQty = dockQty;
+    }
+
     public Port(int dockQty, int containersCapacity, int currentContainersQty) {
         this.dockQty = dockQty;
         this.containersCapacity = containersCapacity;
@@ -49,7 +57,7 @@ public class Port {
         currentContainersQty--;
     }
 
-    public synchronized void askPermissionForTheShip(Ship ship) {
+    public synchronized void askPermissionForTheShip(Ship ship) throws IllegalArgumentException {
         while (dockQty == 0) {
             try {
                 wait();
@@ -59,6 +67,10 @@ public class Port {
             }
         }
 
+        if (ship.getContainersToUpload() > containersCapacity || ship.getContainersToTake() > containersCapacity) {
+            ship.interrupt();
+            throw new IllegalArgumentException("Out of port capacity!!!");
+        }
         ships.add(ship);
 
         log.info(ship.getName() + " has received permission");
