@@ -57,20 +57,27 @@ public class Node {
 
     public int getCountOfLeaves() {
         int result = 0;
-        if (this.left == null && this.right == null)
+        if (this.left == null && this.right == null) {
             result += 1;
-        if (this.left != null)
+        }
+        if (this.left != null) {
             result += left.getCountOfLeaves();
-        if (this.right != null)
+        }
+        if (this.right != null) {
             result += right.getCountOfLeaves();
+        }
         return result;
 
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Node node = (Node) o;
         return height == node.height &&
                 value == node.value &&
