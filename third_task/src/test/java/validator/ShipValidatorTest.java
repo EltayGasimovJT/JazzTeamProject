@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ShipValidatorTest {
     private static Stream<Arguments> wrongShipsDataToTest() {
         return Stream.of(Arguments.of("ship1", 0, 0, 0, new Port()),
-                Arguments.of("ship2", 5, 7, 0, new Port()),
+                Arguments.of("ship2", 5, 1, 0, new Port()),
                 Arguments.of("ship3", -5, 0, 0, new Port()),
                 Arguments.of("ship4", -12, 20, -31, new Port()),
                 Arguments.of("ship5", 1, 0, -612, new Port()));

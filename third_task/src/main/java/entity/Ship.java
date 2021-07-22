@@ -14,7 +14,7 @@ public class Ship extends Thread {
         return shipCapacity;
     }
 
-    public Ship(String name, int containersToTake, int containersToLeave, int shipCapacity, Port port) {
+    public Ship(String name, int shipCapacity, int containersToTake, int containersToLeave, Port port) {
         super(name);
         ShipValidator.isShipCanBeCreated(shipCapacity, containersToTake, containersToLeave);
         this.containersToTake = containersToTake;
