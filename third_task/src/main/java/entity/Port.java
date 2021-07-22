@@ -2,6 +2,7 @@ package entity;
 
 
 import lombok.extern.slf4j.Slf4j;
+import validator.PortValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class Port {
     }
 
     public Port(int dockQty, int containersCapacity, int currentContainersQty) {
+        PortValidator.isPortCanBeCreated(dockQty, containersCapacity, currentContainersQty);
         this.dockQty = dockQty;
         this.containersCapacity = containersCapacity;
         this.currentContainersQty = currentContainersQty;
@@ -58,6 +60,7 @@ public class Port {
     }
 
     public synchronized void askPermissionForTheShip(Ship ship) throws IllegalArgumentException {
+        PortValidator.isShipsContainersMoreThanPortCapacity(this, ship);
         while (dockQty == 0) {
             try {
                 wait();

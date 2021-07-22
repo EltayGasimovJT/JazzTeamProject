@@ -11,72 +11,20 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PortValidatorTest {
-    private static Stream<Arguments> wrongPortCapacityToTest() {
+    private static Stream<Arguments> testWrongDataForPortCreation() {
         return Stream.of(
-                Arguments.of(new Port(2, -125, 0)),
-                Arguments.of(new Port(2, 0, -125)),
-                Arguments.of(new Port(2, 0, 1)),
-                Arguments.of(new Port(2, -1, -2))
-
-        );
-    }
-
-    private static Stream<Arguments> wrongPortOutCapacityToTest() {
-        return Stream.of(
-                Arguments.of(new Port(2, 0, 1)),
-                Arguments.of(new Port(2, 1, 5)),
-                Arguments.of(new Port(2, 50, 51))
-        );
-    }
-
-    private static Stream<Arguments> wrongDockQtyDataToTest() {
-        return Stream.of(
-                Arguments.of(new Port(0, 21, 2)),
-                Arguments.of(new Port(-1, 21, 0)),
-                Arguments.of(new Port(0, 0, 0))
-        );
-    }
-
-    private static Stream<Arguments> wrongShipsAndPortDataToTest() {
-        return Stream.of(
-                Arguments.of(
-                        new Ship("ship1", 22, 0, 50,
-                                new Port(1, 21, 0))),
-                Arguments.of(
-                        new Ship("ship1", 0, 22, 50,
-                                new Port(1, 21, 0))),
-                Arguments.of(
-                        new Ship("ship1", 12, 10, 50,
-                                new Port(1, 21, 0)))
+                Arguments.of(-5, 21, 0),
+                Arguments.of(1, 21, 22),
+                Arguments.of(0, 0, 0),
+                Arguments.of(0, -22, 0),
+                Arguments.of(1, 0, -41)
         );
     }
 
     @ParameterizedTest
-    @MethodSource("wrongPortCapacityToTest")
-    void validatePortParametersNotNegative(Port port) {
+    @MethodSource("testWrongDataForPortCreation")
+    void isPortCanBeCreated(int dockQty, int capacity, int currentContainers) {
         assertThrows(IllegalArgumentException.class,
-                () -> PortValidator.validatePortParametersNotNegative(port));
-    }
-
-    @ParameterizedTest
-    @MethodSource("wrongPortOutCapacityToTest")
-    void validateOutOfCapacity(Port port) {
-        assertThrows(IllegalArgumentException.class,
-                () -> PortValidator.validateIsNotOutOfCapacity(port));
-    }
-
-
-    @ParameterizedTest
-    @MethodSource("wrongDockQtyDataToTest")
-    void validateDockQty(Port port) {
-        assertThrows(IllegalArgumentException.class,
-                () -> PortValidator.validateDockQty(port));
-    }
-
-    @ParameterizedTest
-    @MethodSource("wrongShipsAndPortDataToTest")
-    void isShipsContainersMoreThanPortCapacity(Ship ship) {
-        assertThrows(IllegalArgumentException.class,
-                () -> PortValidator.isShipsContainersMoreThanPortCapacity(ship.getPort(), ship));
+                () -> new Port(dockQty, capacity, currentContainers));
     }
 }

@@ -12,43 +12,18 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class ShipValidatorTest {
     private static Stream<Arguments> wrongShipsDataToTest() {
-        return Stream.of(
-                Arguments.of(new Ship("ship",
-                        -2, 52, 65, new Port())),
-                Arguments.of(new Ship("ship",
-                        2, 52, -65, new Port())),
-                Arguments.of(new Ship("ship",
-                        2, -52, 65, new Port())),
-                Arguments.of(new Ship("ship",
-                        -2, -52, -65, new Port())),
-                Arguments.of(new Ship("ship",
-                        0, 0, 0, new Port())));
-    }
-
-    private static Stream<Arguments> wrongShipCapacityDataToTest() {
-        return Stream.of(
-                Arguments.of(new Ship("ship",
-                        0, 70, 50, new Port())),
-                Arguments.of(new Ship("ship",
-                        80, 0, 50, new Port())),
-                Arguments.of(new Ship("ship",
-                        76, 25, 50, new Port())),
-                Arguments.of(new Ship("ship",
-                        2, 0, 0, new Port()))
-        );
+        return Stream.of(Arguments.of("ship1", 0, 0, 0, new Port()),
+                Arguments.of("ship2", 5, 7, 0, new Port()),
+                Arguments.of("ship3", -5, 0, 0, new Port()),
+                Arguments.of("ship4", -12, 20, -31, new Port()),
+                Arguments.of("ship5", 1, 0, -612, new Port()));
     }
 
     @ParameterizedTest
     @MethodSource("wrongShipsDataToTest")
-    void validateShipParametersNotNegative(Ship ship) {
+    void validateShipParametersNotNegative(String shipName, int shipCapacity,
+                                           int containersToTake, int containersToUpload, Port port) {
         assertThrows(IllegalArgumentException.class,
-                () -> ShipValidator.validateShipParametersNotNegative(ship));
-    }
-
-    @ParameterizedTest
-    @MethodSource("wrongShipCapacityDataToTest")
-    void testValidateShipParametersNotNegative(Ship ship) {
-        assertThrows(IllegalArgumentException.class,
-                () -> ShipValidator.validateIsNotOutOfCapacity(ship));
+                () -> new Ship(shipName, shipCapacity, containersToTake, containersToUpload, port));
     }
 }

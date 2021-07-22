@@ -1,6 +1,7 @@
 package entity;
 
 import lombok.extern.slf4j.Slf4j;
+import validator.ShipValidator;
 
 @Slf4j
 public class Ship extends Thread {
@@ -15,6 +16,7 @@ public class Ship extends Thread {
 
     public Ship(String name, int containersToTake, int containersToLeave, int shipCapacity, Port port) {
         super(name);
+        ShipValidator.isShipCanBeCreated(shipCapacity, containersToTake, containersToLeave);
         this.containersToTake = containersToTake;
         this.containersToUpload = containersToLeave;
         this.shipCapacity = shipCapacity;
