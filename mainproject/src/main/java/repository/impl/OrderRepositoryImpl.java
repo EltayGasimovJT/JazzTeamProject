@@ -13,7 +13,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public List<Client.Order> findAllByClientId(Client.Order order) {
         return orders.stream()
-                .filter(order1 -> order1.getClient().getPassportId().equals(order.getClient().getPassportId()))
+                .filter(order1 -> order1.getSender().getPassportId().equals(order.getSender().getPassportId()))
                 .collect(Collectors.toList());
     }
 
@@ -34,9 +34,9 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Client.Order findOne(String string) {
+    public Client.Order findOne(long id) {
         return orders.stream()
-                .filter(order -> order.getOrderState().equals(string))
+                .filter(order -> order.getId() == id)
                 .findFirst()
                 .orElse(null);
     }

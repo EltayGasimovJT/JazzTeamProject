@@ -2,7 +2,7 @@ package entity;
 
 import java.util.List;
 
-public class Warehouse extends AbstractBuilding{
+public class Warehouse extends AbstractBuilding {
     private List<OrderProcessingPoint> orderProcessingPoints;
     private List<RouteBetweenWarehouses> connectedWarehouses;
 

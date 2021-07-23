@@ -26,17 +26,17 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Client findOne(String string) {
+    public Client findOne(long id) {
         return clients.stream()
-                .filter(client -> client.getName().equals(string))
+                .filter(client -> client.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public Client findByOrderNumber(String passportNum) {
+    public Client findByPassportId(String passportId) {
         return clients.stream()
-                .filter(client -> client.getPassportId().equals(passportNum))
+                .filter(client -> client.getPassportId().equals(passportId))
                 .findFirst()
                 .orElse(null);
     }

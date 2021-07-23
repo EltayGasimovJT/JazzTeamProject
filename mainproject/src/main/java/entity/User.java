@@ -1,12 +1,17 @@
 package entity;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.StringJoiner;
 
 public class User {
     private long id;
     private String name;
     private String surname;
     private List<String> roles;
+
+    public User(){
+    }
 
     public User(long id, String name, String surname, List<String> roles) {
         this.id = id;
@@ -61,5 +66,31 @@ public class User {
 
     public void removeAllRoles(List<String> roles) {
         this.roles.removeAll(roles);
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("name='" + name + "'")
+                .add("surname='" + surname + "'")
+                .add("roles=" + roles)
+                .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(surname, user.surname) &&
+                Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, roles);
     }
 }
