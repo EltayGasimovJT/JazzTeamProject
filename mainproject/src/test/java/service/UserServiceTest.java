@@ -18,8 +18,17 @@ class UserServiceTest {
         user.setName("Igor");
         user.setSurname("Igor");
         user.setRoles(Arrays.asList("Admin, User"));
+        User user1 = User
+                .builder()
+                .id(1)
+                .name("Igor")
+                .surname("Igor")
+                .roles(Arrays.asList("Client, User"))
+                .build();
 
         userService.addUser(user);
+        userService.addUser(user1);
+
 
         userService.showUsers();
     }

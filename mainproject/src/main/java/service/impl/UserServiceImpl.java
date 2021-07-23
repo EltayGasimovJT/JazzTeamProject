@@ -1,12 +1,14 @@
 package service.impl;
 
 import entity.User;
+import lombok.extern.slf4j.Slf4j;
 import repository.UserRepository;
 import repository.impl.UserRepositoryImpl;
 import service.UserService;
 
 import java.util.List;
 
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
 
@@ -18,13 +20,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(User user) {
-
+        userRepository.delete(user);
     }
 
     @Override
     public List<User> showUsers() {
         for (User user : userRepository.findAll()) {
-            System.out.println(user);
+            log.info(user.toString());
         }
         return userRepository.findAll();
     }

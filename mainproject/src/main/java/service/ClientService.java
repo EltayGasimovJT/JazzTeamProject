@@ -5,15 +5,15 @@ import entity.Client;
 import java.util.List;
 
 public interface ClientService {
-    Client addClient(Client Client);
+    Client addClient(Client client);
 
-    void deleteClient(Client Client);
+    void deleteClient(Client client);
 
     List<Client> showClients();
 
     Client getClient(long id);
 
-    Client update(Client Client);
+    Client update(Client client);
 
     Client getByPassportId(String passportId);
 }

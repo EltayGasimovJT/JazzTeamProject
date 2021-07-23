@@ -1,8 +1,15 @@
 package entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.util.List;
 
+@Builder
+@Getter @Setter @NoArgsConstructor
 public class Client {
     private long id;
     private String name;
@@ -24,50 +31,6 @@ public class Client {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurName() {
-        return surName;
-    }
-
-    public void setSurName(String surName) {
-        this.surName = surName;
-    }
-
-    public String getPassportId() {
-        return passportId;
-    }
-
-    public void setPassportId(String passportId) {
-        this.passportId = passportId;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
-    }
-
     public void addOrder(Client.Order order) {
         orders.add(order);
     }
@@ -84,6 +47,7 @@ public class Client {
         orders.removeAll(orders);
     }
 
+    @Getter @Setter @NoArgsConstructor
     public class Order {
         private int id;
         private OrderState state;
@@ -120,76 +84,5 @@ public class Client {
             this.route = route;
         }
 
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public OrderState getState() {
-            return state;
-        }
-
-        public void setState(OrderState state) {
-            this.state = state;
-        }
-
-        public ParcelParameters getParcelParameters() {
-            return parcelParameters;
-        }
-
-        public void setParcelParameters(ParcelParameters parcelParameters) {
-            this.parcelParameters = parcelParameters;
-        }
-
-        public Client getSender() {
-            return sender;
-        }
-
-        public void setSender(Client sender) {
-            this.sender = sender;
-        }
-
-        public Client getRecipient() {
-            return recipient;
-        }
-
-        public void setRecipient(Client recipient) {
-            this.recipient = recipient;
-        }
-
-        public BigDecimal getPrise() {
-            return prise;
-        }
-
-        public void setPrise(BigDecimal prise) {
-            this.prise = prise;
-        }
-
-        public AbstractBuilding getDestinationPlace() {
-            return destinationPlace;
-        }
-
-        public void setDestinationPlace(AbstractBuilding destinationPlace) {
-            this.destinationPlace = destinationPlace;
-        }
-
-        public AbstractLocation getCurrentLocation() {
-            return currentLocation;
-        }
-
-        public void setCurrentLocation(AbstractLocation currentLocation) {
-            this.currentLocation = currentLocation;
-        }
-
-        public OrderHistory getHistory() {
-            return history;
-        }
-
-        public void setHistory(OrderHistory history) {
-            this.history = history;
-        }
     }
 }
