@@ -1,29 +1,31 @@
 package service;
 
+import entity.AbstractLocation;
 import entity.Client;
+import entity.Voyage;
+
+import java.util.List;
 
 public interface OrderService {
-    void saveClient(Client client);
+    Client.Order findById(long id);
 
-    double findCost(Client client);
+    Client.Order create(Client.Order order);
 
-    String updateOrderState(Client client);
+    List<Client.Order> findByRecipient(Client client);
 
-    Client.Order findOrder(Client client);
+    List<Client.Order> findBySender(Client client);
 
-    boolean isMatches(Client.Order actualOrder, Client.Order expectedOrder);
+    Client.Order cancelOrder(long id);
 
-    Client.Order measureOrderParameters(Client client);
+    AbstractLocation getCurrentOrderLocation(long id);
 
-    Client.Order createNewOrder(Client client);
+    List<AbstractLocation> getRoute(long sendingPointId, long acceptingPointId);
 
-    void sendOrder(Client.Order order);
+    void send(Voyage voyage);
 
-    boolean acceptTheOrder(Client.Order order);
+    void accept(Voyage voyage);
 
-    Client.Order giveOrderToTheClient(Client client);
+    String getState(long id);
 
-    String checkTheOrderState(Client.Order order);
-
-    boolean checkOrderParameters(Client.Order order);
+    Client.Order compareOrders(List<Client.Order> actualOrders, List<Client.Order> expectedOrders);
 }

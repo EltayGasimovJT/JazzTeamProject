@@ -1,30 +1,31 @@
 package entity;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
 public class Client {
-    private List<Order> orders;
+    private long id;
     private String name;
     private String surName;
     private String passportId;
     private String phoneNumber;
+    private List<Order> orders;
 
-    public Client() {
-        orders = new ArrayList<>();
+    public Client(long id, String name, String surName, String passportId, String phoneNumber, List<Order> orders) {
+        this.id = id;
+        this.name = name;
+        this.surName = surName;
+        this.passportId = passportId;
+        this.phoneNumber = phoneNumber;
+        this.orders = orders;
     }
 
-    public void addOrder(Order order){
-        orders.add(order);
+    public long getId() {
+        return id;
     }
 
-    public void removeOrder(Order order){
-        orders.remove(order);
-    }
-
-    public void clear(){
-        orders.clear();
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -59,133 +60,136 @@ public class Client {
         this.phoneNumber = phoneNumber;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
+    public void addOrder(Client.Order order) {
+        orders.add(order);
+    }
+
+    public void addAllOrders(List<Client.Order> orders) {
+        orders.addAll(orders);
+    }
+
+    public void removeOrder(Client.Order order) {
+        orders.remove(order);
+    }
+
+    public void removeAllOrders(List<Client.Order> orders) {
+        orders.removeAll(orders);
+    }
+
     public class Order {
-        private int orderId;
-        private String parcelWeight;
-        private String parcelSize;
-        private String parcelDescription;
-        private String orderState;
-        private String departureDate;
-        private String recipientAddress;
+        private int id;
+        private OrderState state;
+        private ParcelParameters parcelParameters;
+        private Client sender;
+        private Client recipient;
+        private BigDecimal prise;
+        private AbstractBuilding destinationPlace;
+        private AbstractLocation currentLocation;
+        private OrderHistory history;
+        private List<AbstractLocation> route;
 
-        private Client client;
-
-        public Client getClient() {
-            return client;
+        public Order(
+                int id,
+                OrderState state,
+                ParcelParameters parcelParameters,
+                Client sender,
+                Client recipient,
+                BigDecimal prise,
+                AbstractBuilding destinationPlace,
+                AbstractLocation currentLocation,
+                OrderHistory history,
+                List<AbstractLocation> route
+        ) {
+            this.id = id;
+            this.state = state;
+            this.parcelParameters = parcelParameters;
+            this.sender = sender;
+            this.recipient = recipient;
+            this.prise = prise;
+            this.destinationPlace = destinationPlace;
+            this.currentLocation = currentLocation;
+            this.history = history;
+            this.route = route;
         }
 
-        public void setClient(Client client) {
-            this.client = client;
+        public int getId() {
+            return id;
         }
 
-        public Order getOrder() {
-            return order;
+        public void setId(int id) {
+            this.id = id;
         }
 
-        public void setOrder(Order order) {
-            this.order = order;
+        public OrderState getState() {
+            return state;
         }
 
-        private Order order;
-
-        public int getOrderId() {
-            return orderId;
+        public void setState(OrderState state) {
+            this.state = state;
         }
 
-        public void setOrderId(int orderId) {
-            this.orderId = orderId;
+        public ParcelParameters getParcelParameters() {
+            return parcelParameters;
         }
 
-        public String getParcelWeight() {
-            return parcelWeight;
+        public void setParcelParameters(ParcelParameters parcelParameters) {
+            this.parcelParameters = parcelParameters;
         }
 
-        public void setParcelWeight(String parcelWeight) {
-            this.parcelWeight = parcelWeight;
+        public Client getSender() {
+            return sender;
         }
 
-        public String getParcelSize() {
-            return parcelSize;
+        public void setSender(Client sender) {
+            this.sender = sender;
         }
 
-        public void setParcelSize(String parcelSize) {
-            this.parcelSize = parcelSize;
+        public Client getRecipient() {
+            return recipient;
         }
 
-        public String getParcelDescription() {
-            return parcelDescription;
+        public void setRecipient(Client recipient) {
+            this.recipient = recipient;
         }
 
-        public void setParcelDescription(String parcelDescription) {
-            this.parcelDescription = parcelDescription;
+        public BigDecimal getPrise() {
+            return prise;
         }
 
-        public String getOrderState() {
-            return orderState;
+        public void setPrise(BigDecimal prise) {
+            this.prise = prise;
         }
 
-        public void setOrderState(String orderState) {
-            this.orderState = orderState;
+        public AbstractBuilding getDestinationPlace() {
+            return destinationPlace;
         }
 
-        public String getDepartureDate() {
-            return departureDate;
+        public void setDestinationPlace(AbstractBuilding destinationPlace) {
+            this.destinationPlace = destinationPlace;
         }
 
-        public void setDepartureDate(String departureDate) {
-            this.departureDate = departureDate;
+        public AbstractLocation getCurrentLocation() {
+            return currentLocation;
         }
 
-        public String getRecipientAddress() {
-            return recipientAddress;
+        public void setCurrentLocation(AbstractLocation currentLocation) {
+            this.currentLocation = currentLocation;
         }
 
-        public void setRecipientAddress(String recipientAddress) {
-            this.recipientAddress = recipientAddress;
+        public OrderHistory getHistory() {
+            return history;
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Order order1 = (Order) o;
-            return orderId == order1.orderId &&
-                    Objects.equals(parcelWeight, order1.parcelWeight) &&
-                    Objects.equals(parcelSize, order1.parcelSize) &&
-                    Objects.equals(parcelDescription, order1.parcelDescription) &&
-                    Objects.equals(orderState, order1.orderState) &&
-                    Objects.equals(departureDate, order1.departureDate) &&
-                    Objects.equals(recipientAddress, order1.recipientAddress) &&
-                    Objects.equals(client, order1.client) &&
-                    Objects.equals(order, order1.order);
+        public void setHistory(OrderHistory history) {
+            this.history = history;
         }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(orderId,
-                    parcelWeight,
-                    parcelSize,
-                    parcelDescription,
-                    orderState,
-                    departureDate,
-                    recipientAddress, client, order);
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Client client = (Client) o;
-        return Objects.equals(orders, client.orders) &&
-                Objects.equals(name, client.name) &&
-                Objects.equals(surName, client.surName) &&
-                Objects.equals(passportId, client.passportId) &&
-                Objects.equals(phoneNumber, client.phoneNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(orders, name, surName, passportId, phoneNumber);
     }
 }

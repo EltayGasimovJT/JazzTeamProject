@@ -1,6 +1,6 @@
 package repository;
 
-import entity.Employee;
+import entity.User;
 
-public interface EmployeeRepository extends GeneralRepository<Employee>{
+public interface EmployeeRepository extends GeneralRepository<User>{
 }

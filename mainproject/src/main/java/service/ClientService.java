@@ -2,18 +2,18 @@ package service;
 
 import entity.Client;
 
+import java.util.List;
+
 public interface ClientService {
-    void remindClient();
+    Client addClient(Client Client);
 
-    void getPersonalDataFromClient(Client client);
+    void deleteClient(Client Client);
 
-    Client addClient(Client client);
+    List<Client> showClients();
 
-    Client deleteClient(Client client);
+    Client getClient(long id);
 
-    Client findByName(String name);
+    Client update(Client Client);
 
-    Client findBySurName(String name);
-
-    Client findByPassportId(String name);
+    Client getByPassportId(String passportId);
 }
