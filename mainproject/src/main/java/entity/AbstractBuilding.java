@@ -1,17 +1,15 @@
 package entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
+
 public abstract class AbstractBuilding extends AbstractLocation {
+    @Getter
+    @Setter
     private String location;
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
 
     public AbstractBuilding(long id, String location) {
         super(id);

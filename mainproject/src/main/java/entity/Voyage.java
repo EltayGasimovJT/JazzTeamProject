@@ -1,7 +1,16 @@
 package entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 
+
+@Builder
+@Setter @Getter
+@NoArgsConstructor
 public class Voyage extends AbstractLocation {
     private String departurePoint;
     private String destinationPoint;
@@ -20,29 +29,4 @@ public class Voyage extends AbstractLocation {
         this.destinationPoint = destinationPoint;
         this.sendingTime = sendingTime;
     }
-
-    public String getDeparturePoint() {
-        return departurePoint;
-    }
-
-    public void setDeparturePoint(String departurePoint) {
-        this.departurePoint = departurePoint;
-    }
-
-    public String getDestinationPoint() {
-        return destinationPoint;
-    }
-
-    public void setDestinationPoint(String destinationPoint) {
-        this.destinationPoint = destinationPoint;
-    }
-
-    public String getSendingTime() {
-        return sendingTime;
-    }
-
-    public void setSendingTime(String sendingTime) {
-        this.sendingTime = sendingTime;
-    }
-
 }

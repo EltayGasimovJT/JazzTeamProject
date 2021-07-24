@@ -58,8 +58,11 @@ public class Client {
         private AbstractBuilding destinationPlace;
         private AbstractLocation currentLocation;
         private OrderHistory history;
+
+
         private List<AbstractLocation> route;
 
+        @Builder
         public Order(
                 int id,
                 OrderState state,

@@ -1,9 +1,19 @@
 package entity;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.Singular;
+
 import java.util.List;
 
+
+@Builder
+@Getter @Setter
 public class Warehouse extends AbstractBuilding {
+    @Singular
     private List<OrderProcessingPoint> orderProcessingPoints;
+    @Singular
     private List<RouteBetweenWarehouses> connectedWarehouses;
 
     public Warehouse(long id, String location, List<OrderProcessingPoint> orderProcessingPoints, List<RouteBetweenWarehouses> connectedWarehouses) {
@@ -23,7 +33,7 @@ public class Warehouse extends AbstractBuilding {
     }
 
     public void addAllOrderProcessingPoints(List<OrderProcessingPoint> orderProcessingPoints) {
-        orderProcessingPoints.addAll(orderProcessingPoints);
+        this.orderProcessingPoints.addAll(orderProcessingPoints);
     }
 
     public void removeOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint) {
@@ -31,7 +41,7 @@ public class Warehouse extends AbstractBuilding {
     }
 
     public void removeAllOrderProcessingPoints(List<OrderProcessingPoint> orderProcessingPoints) {
-        orderProcessingPoints.removeAll(orderProcessingPoints);
+        this.orderProcessingPoints.removeAll(orderProcessingPoints);
     }
 
     public void addRouteBetweenWarehouses(RouteBetweenWarehouses routeBetweenWarehouses) {

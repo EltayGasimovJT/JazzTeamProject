@@ -1,10 +1,19 @@
 package entity;
 
+import lombok.*;
+
 import java.util.List;
 
+
+@Builder
+@Setter
+@Getter
+@NoArgsConstructor
 public abstract class AbstractLocation {
     private long id;
+    @Singular
     private List<Client.Order> expectedOrders;
+    @Singular
     private List<Client.Order> dispatchedOrders;
 
     public AbstractLocation(long id) {
@@ -23,22 +32,6 @@ public abstract class AbstractLocation {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public List<Client.Order> getExpectedOrders() {
-        return expectedOrders;
-    }
-
-    public void setExpectedOrders(List<Client.Order> expectedOrders) {
-        this.expectedOrders = expectedOrders;
-    }
-
-    public List<Client.Order> getDispatchedOrders() {
-        return dispatchedOrders;
-    }
-
-    public void setDispatchedOrders(List<Client.Order> dispatchedOrders) {
-        this.dispatchedOrders = dispatchedOrders;
     }
 
     public void addExpectedOrder(Client.Order order) {
