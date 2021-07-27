@@ -1,15 +1,12 @@
 package entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Singular;
+import lombok.*;
 
 import java.util.List;
 
 @Builder
 @Getter
-@Setter
+@Setter @NoArgsConstructor
 public class OrderState {
     private long id;
     private String state;

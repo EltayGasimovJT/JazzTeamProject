@@ -9,29 +9,35 @@ import repository.impl.WareHouseRepositoryImpl;
 import service.OrderService;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository = new OrderRepositoryImpl();
     private final WareHouseRepository wareHouseRepository = new WareHouseRepositoryImpl();
-
+    private final String ROLE_ADMIN = "Admin";
 
     @Override
     public Client.Order UpdateOrderCurrentLocation(long id, AbstractLocation newLocation) {
-        //Client.Order order = new Client.Order();
-        return null;
+        Client.Order order = orderRepository.findOne(id);
+        order.setCurrentLocation(newLocation);
+        return orderRepository.update(order);
     }
 
     @Override
     public void updateOrderHistory(long id, OrderHistory newHistory) {
-
+        Client.Order order = orderRepository.findOne(id);
+        order.setHistory(newHistory);
+        orderRepository.update(order);
     }
 
     @Override
     public Client.Order create(Client.Order order) {
+        OrderState orderState = updateState("ReadyToSend");
         BigDecimal price = calculatePrice(order);
         order.setPrise(price);
+        order.setState(orderState);
         return orderRepository.save(order);
     }
 
@@ -59,23 +65,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void send(List<Client.Order> orders, Voyage voyage) {
         for (Client.Order order : orders) {
-            freeSpace(order);
             order.setCurrentLocation(voyage);
         }
         orderRepository.saveSentOrders(orders);
-    }
-
-    private void freeSpace(Client.Order order) {
-        wareHouseRepository.findOne(order.getCurrentLocation().getId())
-                .getStillages()
-                .get()
     }
 
     @Override
     public void accept(List<Client.Order> orders) {
         List<Client.Order> orders1 = orderRepository.acceptOrders(orders);
         for (Client.Order order : orders1) {
-            findPlaceForOrder(order);
             log.info(order.toString());
         }
     }
@@ -95,29 +93,9 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private Client.Order findPlaceForOrder(Client.Order order) {
-        Warehouse warehouse = wareHouseRepository.findOne(order.getCurrentLocation().getId());
-        List<Stillage> stillages = warehouse.getStillages();
-        for (Stillage stillage : stillages) {
-            if (stillage.getCountOfFreeSpaces() != 0) {
-                takeSpace(order, stillage);
-            }
-        }
-        return order;
-    }
-
-    private void takeSpace(Client.Order order, Stillage stillage) {
-        order.setStillageSpaceId(stillage.getId());
-    }
-
     @Override
     public boolean isFinalWarehouse(Client.Order order) {
-        return false;
-    }
-
-    @Override
-    public long getTracker(Client.Order order) {
-        return 0;
+        return order.getDestinationPlace().equals(order.getCurrentLocation());
     }
 
     private BigDecimal calculatePrice(Client.Order order) throws IllegalArgumentException {
@@ -141,5 +119,36 @@ public class OrderServiceImpl implements OrderService {
                 throw new IllegalArgumentException("Country is not supported Yet!!!");
             }
         }
+    }
+
+    private OrderState updateState(String state) {
+        List<String> newRolesAllowedPutToState = new ArrayList<>();
+        List<String> newRolesAllowedToWithdrawFromState = new ArrayList<>();
+        OrderState orderState = new OrderState();
+        orderState.setState(state);
+        if (state.equals("Ready To Send")) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add("PickUp Worker");
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add("Pickup Worker");
+        }
+        if (state.equals("On the way to the warehouse")) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add("PickUp Worker");
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add("Warehouse Worker");
+        }
+        if (state.equals("On the way to the warehouse")) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add("PickUp Worker");
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add("Warehouse Worker");
+        }
+        orderState.setRolesAllowedPutToState(newRolesAllowedPutToState);
+        orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
+        return orderState;
     }
 }

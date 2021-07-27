@@ -58,8 +58,6 @@ public class Client {
         private AbstractBuilding destinationPlace;
         private AbstractLocation currentLocation;
         private OrderHistory history;
-        private long stillageSpaceId;
-
 
         private List<AbstractLocation> route;
 
@@ -73,8 +71,7 @@ public class Client {
                 AbstractBuilding destinationPlace,
                 AbstractLocation currentLocation,
                 OrderHistory history,
-                List<AbstractLocation> route,
-                long stillageSpaceId
+                List<AbstractLocation> route
         ) {
             this.id = id;
             this.state = state;
@@ -86,8 +83,6 @@ public class Client {
             this.currentLocation = currentLocation;
             this.history = history;
             this.route = route;
-            this.stillageSpaceId = stillageSpaceId;
         }
-
     }
 }

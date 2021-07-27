@@ -28,6 +28,4 @@ public interface OrderService {
    void compareOrders(List<Client.Order> expectedOrders, List<Client.Order> acceptedOrders) throws IllegalArgumentException;
 
    boolean isFinalWarehouse(Client.Order order);
-
-   long getTracker(Client.Order order);
 }
