@@ -10,7 +10,7 @@ public interface WarehouseService {
 
     void deleteWarehouse(Warehouse warehouse);
 
-    List<Warehouse> showWarehouses();
+    List<Warehouse> findAllWarehouses();
 
     Warehouse getWarehouse(long id);
 

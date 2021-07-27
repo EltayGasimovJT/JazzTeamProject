@@ -12,7 +12,7 @@ class ClientServiceTest {
     @Test
     void addClient() {
         ClientService clientService = new ClientServiceImpl();
-        Client.Order order = Client.Order
+        /*Client.Order order = Client.Order
                 .builder()
                 .currentLocation(null)
                 .destinationPlace(null)
@@ -24,19 +24,19 @@ class ClientServiceTest {
                 .route(null)
                 .sender(null)
                 .state(null)
-                .build();
+                .build();*/
 
         Client client = Client
                 .builder()
                 .id(1)
                 .name("Client")
                 .surName("client")
-                .orders(Arrays.asList(order))
+                .orders(Arrays.asList())
                 .passportId("152536")
                 .phoneNumber("+375447567535")
                 .build();
 
         clientService.addClient(client);
-        clientService.showClients();
+        clientService.findAllClients();
     }
 }

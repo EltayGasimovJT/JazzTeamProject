@@ -1,6 +1,5 @@
 package repository.impl;
 
-import entity.Voyage;
 import entity.Warehouse;
 import repository.WareHouseRepository;
 
@@ -32,5 +31,19 @@ public class WareHouseRepositoryImpl implements WareHouseRepository {
                 .filter(warehouse -> warehouse.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public Warehouse update(Warehouse update) {
+        for (Warehouse warehouse : warehouses) {
+            if (warehouse.getId() == update.getId()) {
+                warehouse.setLocation(update.getLocation());
+                warehouse.setConnectedWarehouses(update.getConnectedWarehouses());
+                warehouse.setOrderProcessingPoints(update.getOrderProcessingPoints());
+                warehouse.setDispatchedOrders(update.getDispatchedOrders());
+                warehouse.setExpectedOrders(update.getExpectedOrders());
+            }
+        }
+        return update;
     }
 }

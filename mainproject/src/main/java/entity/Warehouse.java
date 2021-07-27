@@ -1,28 +1,28 @@
 package entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Singular;
+import lombok.*;
 
 import java.util.List;
 
 
-@Builder
+
 @Getter @Setter
+@NoArgsConstructor
 public class Warehouse extends AbstractBuilding {
     @Singular
     private List<OrderProcessingPoint> orderProcessingPoints;
     @Singular
-    private List<RouteBetweenWarehouses> connectedWarehouses;
+    private List<Warehouse> connectedWarehouses;
+    @Singular
+    private List<Stillage> stillages;
 
-    public Warehouse(long id, String location, List<OrderProcessingPoint> orderProcessingPoints, List<RouteBetweenWarehouses> connectedWarehouses) {
+    public Warehouse(long id, String location, List<OrderProcessingPoint> orderProcessingPoints, List<Warehouse> connectedWarehouses) {
         super(id, location);
         this.orderProcessingPoints = orderProcessingPoints;
         this.connectedWarehouses = connectedWarehouses;
     }
 
-    public Warehouse(long id, List<Client.Order> expectedOrders, List<Client.Order> dispatchedOrders, String location, List<OrderProcessingPoint> orderProcessingPoints, List<RouteBetweenWarehouses> connectedWarehouses) {
+    public Warehouse(long id, List<Client.Order> expectedOrders, List<Client.Order> dispatchedOrders, String location, List<OrderProcessingPoint> orderProcessingPoints, List<Warehouse> connectedWarehouses) {
         super(id, expectedOrders, dispatchedOrders, location);
         this.orderProcessingPoints = orderProcessingPoints;
         this.connectedWarehouses = connectedWarehouses;
@@ -44,19 +44,19 @@ public class Warehouse extends AbstractBuilding {
         this.orderProcessingPoints.removeAll(orderProcessingPoints);
     }
 
-    public void addRouteBetweenWarehouses(RouteBetweenWarehouses routeBetweenWarehouses) {
+    public void addRouteBetweenWarehouses(Warehouse routeBetweenWarehouses) {
         connectedWarehouses.add(routeBetweenWarehouses);
     }
 
-    public void addAllRoutesBetweenWarehouses(List<RouteBetweenWarehouses> routeBetweenWarehouses) {
+    public void addAllRoutesBetweenWarehouses(List<Warehouse> routeBetweenWarehouses) {
         connectedWarehouses.addAll(routeBetweenWarehouses);
     }
 
-    public void removeRouteBetweenWarehouses(RouteBetweenWarehouses routeBetweenWarehouses) {
+    public void removeRouteBetweenWarehouses(Warehouse routeBetweenWarehouses) {
         connectedWarehouses.remove(routeBetweenWarehouses);
     }
 
-    public void removeAllRoutesBetweenWarehouses(List<RouteBetweenWarehouses> routeBetweenWarehouses) {
+    public void removeAllRoutesBetweenWarehouses(List<Warehouse> routeBetweenWarehouses) {
         connectedWarehouses.removeAll(routeBetweenWarehouses);
     }
 }

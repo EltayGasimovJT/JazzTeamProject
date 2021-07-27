@@ -1,12 +1,11 @@
 package service;
 
 import entity.User;
+import entity.Warehouse;
 import org.junit.jupiter.api.Test;
 import service.impl.UserServiceImpl;
 
 import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest {
 
@@ -23,14 +22,15 @@ class UserServiceTest {
                 .id(1)
                 .name("Igor")
                 .surname("Igor")
-                .roles(Arrays.asList("Client, User"))
+                .workingPlace(new Warehouse())
+                .roles(Arrays.asList("User", "Client"))
                 .build();
 
         userService.addUser(user);
         userService.addUser(user1);
 
 
-        userService.showUsers();
+        userService.findAllUsers();
     }
 
     @Test

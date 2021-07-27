@@ -10,4 +10,6 @@ public interface GeneralRepository<T> {
     List<T> findAll();
 
     T findOne(long string);
+
+    T update(T update);
 }

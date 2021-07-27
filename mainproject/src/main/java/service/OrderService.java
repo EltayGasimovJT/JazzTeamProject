@@ -1,31 +1,33 @@
 package service;
 
-import entity.AbstractLocation;
-import entity.Client;
-import entity.Voyage;
+import entity.*;
 
 import java.util.List;
 
 public interface OrderService {
-    Client.Order findById(long id);
+   Client.Order UpdateOrderCurrentLocation(long id, AbstractLocation newLocation);
 
-    Client.Order create(Client.Order order);
+   void updateOrderHistory(long id, OrderHistory newHistory);
 
-    List<Client.Order> findByRecipient(Client client);
+   Client.Order create(Client.Order order);
 
-    List<Client.Order> findBySender(Client client);
+   Client.Order findById(long id);
 
-    Client.Order cancelOrder(long id);
+   Client.Order findByRecipient(Client recipient);
 
-    AbstractLocation getCurrentOrderLocation(long id);
+   Client.Order findBySender(Client sender);
 
-    List<AbstractLocation> getRoute(long sendingPointId, long acceptingPointId);
+   AbstractLocation getCurrentOrderLocation(long id);
 
-    void send(Voyage voyage);
+   void send(List<Client.Order> orders, Voyage voyage);
 
-    void accept(Voyage voyage);
+   void accept(List<Client.Order> orders);
 
-    String getState(long id);
+   String getState(long id);
 
-    Client.Order compareOrders(List<Client.Order> actualOrders, List<Client.Order> expectedOrders);
+   void compareOrders(List<Client.Order> expectedOrders, List<Client.Order> acceptedOrders) throws IllegalArgumentException;
+
+   boolean isFinalWarehouse(Client.Order order);
+
+   long getTracker(Client.Order order);
 }

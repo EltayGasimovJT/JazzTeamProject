@@ -5,16 +5,34 @@ import repository.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class OrderRepositoryImpl implements OrderRepository {
     private final List<Client.Order> orders = new ArrayList<>();
+    private final List<List<Client.Order>> ordersOnTheWay = new ArrayList<>();
 
     @Override
-    public List<Client.Order> findAllByClientId(Client.Order order) {
+    public Client.Order findByRecipient(Client recipient) {
         return orders.stream()
-                .filter(order1 -> order1.getSender().getPassportId().equals(order.getSender().getPassportId()))
-                .collect(Collectors.toList());
+                .filter(order1 -> order1.getRecipient().getId() == recipient.getId())
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public Client.Order findBySender(Client sender) {
+        return null;
+    }
+
+    @Override
+    public List<Client.Order> saveSentOrders(List<Client.Order> orders) {
+        this.ordersOnTheWay.add(orders);
+        return orders;
+    }
+
+    @Override
+    public List<Client.Order> acceptOrders(List<Client.Order> orders) {
+        this.ordersOnTheWay.remove(orders);
+        return orders;
     }
 
     @Override
@@ -39,5 +57,10 @@ public class OrderRepositoryImpl implements OrderRepository {
                 .filter(order -> order.getId() == id)
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public Client.Order update(Client.Order update) {
+        return null;
     }
 }

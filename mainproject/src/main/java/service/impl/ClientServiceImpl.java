@@ -1,7 +1,6 @@
 package service.impl;
 
 import entity.Client;
-import entity.User;
 import lombok.extern.slf4j.Slf4j;
 import repository.ClientRepository;
 import repository.impl.ClientRepositoryImpl;
@@ -26,7 +25,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> showClients() {
+    public List<Client> findAllClients() {
         for (Client client : clientRepository.findAll()) {
             log.info(client.toString());
         }
@@ -34,17 +33,17 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client getClient(long id) {
-        return null;
+    public Client findById(long id) {
+        return clientRepository.findOne(id);
     }
 
     @Override
-    public Client update(Client Client) {
-        return null;
+    public Client update(Client client) {
+        return clientRepository.update(client);
     }
 
     @Override
-    public Client getByPassportId(String passportId) {
-        return null;
+    public Client findByPassportId(String passportId) {
+        return clientRepository.findByPassportId(passportId);
     }
 }

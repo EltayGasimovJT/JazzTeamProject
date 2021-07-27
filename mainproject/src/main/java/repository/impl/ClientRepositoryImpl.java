@@ -34,6 +34,20 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
+    public Client update(Client update) {
+        for (Client client : clients) {
+            if (client.getId() == update.getId()){
+                client.setName(update.getName());
+                client.setSurName(update.getSurName());
+                client.setPhoneNumber(update.getPhoneNumber());
+                client.setPassportId(update.getPassportId());
+                client.setOrders(update.getOrders());
+            }
+        }
+        return update;
+    }
+
+    @Override
     public Client findByPassportId(String passportId) {
         return clients.stream()
                 .filter(client -> client.getPassportId().equals(passportId))

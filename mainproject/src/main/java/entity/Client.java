@@ -1,21 +1,20 @@
 package entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
 @Getter @Setter @NoArgsConstructor
+@EqualsAndHashCode @ToString
 public class Client {
     private long id;
     private String name;
     private String surName;
     private String passportId;
     private String phoneNumber;
+    @Singular
     private List<Order> orders;
 
     public Client(long id, String name, String surName, String passportId, String phoneNumber, List<Order> orders) {
@@ -48,6 +47,7 @@ public class Client {
     }
 
     @Getter @Setter @NoArgsConstructor
+    @ToString @EqualsAndHashCode
     public class Order {
         private int id;
         private OrderState state;
@@ -58,11 +58,11 @@ public class Client {
         private AbstractBuilding destinationPlace;
         private AbstractLocation currentLocation;
         private OrderHistory history;
+        private long stillageSpaceId;
 
 
         private List<AbstractLocation> route;
 
-        @Builder
         public Order(
                 int id,
                 OrderState state,
@@ -73,7 +73,8 @@ public class Client {
                 AbstractBuilding destinationPlace,
                 AbstractLocation currentLocation,
                 OrderHistory history,
-                List<AbstractLocation> route
+                List<AbstractLocation> route,
+                long stillageSpaceId
         ) {
             this.id = id;
             this.state = state;
@@ -85,6 +86,7 @@ public class Client {
             this.currentLocation = currentLocation;
             this.history = history;
             this.route = route;
+            this.stillageSpaceId = stillageSpaceId;
         }
 
     }

@@ -32,4 +32,17 @@ public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointR
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public OrderProcessingPoint update(OrderProcessingPoint update) {
+        for (OrderProcessingPoint processingPoint : processingPoints) {
+            if (processingPoint.getId() == update.getId()){
+                processingPoint.setWarehouse(update.getWarehouse());
+                processingPoint.setDispatchedOrders(update.getDispatchedOrders());
+                processingPoint.setLocation(update.getLocation());
+                processingPoint.setExpectedOrders(update.getExpectedOrders());
+            }
+        }
+        return update;
+    }
 }

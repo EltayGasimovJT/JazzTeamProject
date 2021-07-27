@@ -5,7 +5,6 @@ import lombok.*;
 import java.util.List;
 
 
-@Builder
 @Setter
 @Getter
 @NoArgsConstructor
@@ -16,11 +15,11 @@ public abstract class AbstractLocation {
     @Singular
     private List<Client.Order> dispatchedOrders;
 
-    public AbstractLocation(long id) {
+    protected AbstractLocation(long id) {
         this.id = id;
     }
 
-    public AbstractLocation(long id, List<Client.Order> expectedOrders, List<Client.Order> dispatchedOrders) {
+    protected AbstractLocation(long id, List<Client.Order> expectedOrders, List<Client.Order> dispatchedOrders) {
         this.id = id;
         this.expectedOrders = expectedOrders;
         this.dispatchedOrders = dispatchedOrders;

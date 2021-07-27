@@ -8,20 +8,13 @@ import lombok.Setter;
 import java.util.List;
 
 
-@Builder
+
 @Setter @Getter
 @NoArgsConstructor
 public class Voyage extends AbstractLocation {
     private String departurePoint;
     private String destinationPoint;
     private String sendingTime;
-
-    public Voyage(long id, String departurePoint, String destinationPoint, String sendingTime) {
-        super(id);
-        this.departurePoint = departurePoint;
-        this.destinationPoint = destinationPoint;
-        this.sendingTime = sendingTime;
-    }
 
     public Voyage(long id, List<Client.Order> expectedOrders, List<Client.Order> dispatchedOrders, String departurePoint, String destinationPoint, String sendingTime) {
         super(id, expectedOrders, dispatchedOrders);

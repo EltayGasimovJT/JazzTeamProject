@@ -9,7 +9,7 @@ public interface VoyageService {
 
     void deleteUser(Voyage voyage);
 
-    List<Voyage> showUsers();
+    List<Voyage> findAllUsers();
 
     Voyage getUser(long id);
 

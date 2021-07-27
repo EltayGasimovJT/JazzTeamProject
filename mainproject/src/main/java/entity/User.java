@@ -1,26 +1,25 @@
 package entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
 
 @Builder
 @Getter @Setter @NoArgsConstructor
+@EqualsAndHashCode @ToString
 public class User {
     private long id;
     private String name;
     private String surname;
+    private AbstractBuilding workingPlace;
+    @Singular
     private List<String> roles;
 
-    public User(long id, String name, String surname, List<String> roles) {
+    public User(long id, String name, String surname, AbstractBuilding workingPlace, List<String> roles) {
         this.id = id;
         this.name = name;
         this.surname = surname;
+        this.workingPlace = workingPlace;
         this.roles = roles;
     }
 
@@ -38,31 +37,5 @@ public class User {
 
     public void removeAllRoles(List<String> roles) {
         this.roles.removeAll(roles);
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
-                .add("id=" + id)
-                .add("name='" + name + "'")
-                .add("surname='" + surname + "'")
-                .add("roles=" + roles)
-                .toString();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return id == user.id &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(surname, user.surname) &&
-                Objects.equals(roles, user.roles);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, surname, roles);
     }
 }

@@ -32,4 +32,17 @@ public class UserRepositoryImpl implements UserRepository {
                 .findFirst()
                 .orElse(null);
     }
+
+    @Override
+    public User update(User update) {
+        for (User user : users) {
+            if (user.getId() == update.getId()) {
+                user.setName(update.getName());
+                user.setSurname(update.getSurname());
+                user.setWorkingPlace(update.getWorkingPlace());
+                user.setRoles(update.getRoles());
+            }
+        }
+        return update;
+    }
 }

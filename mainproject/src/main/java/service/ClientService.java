@@ -9,11 +9,11 @@ public interface ClientService {
 
     void deleteClient(Client client);
 
-    List<Client> showClients();
+    List<Client> findAllClients();
 
-    Client getClient(long id);
+    Client findById(long id);
 
     Client update(Client client);
 
-    Client getByPassportId(String passportId);
+    Client findByPassportId(String passportId);
 }

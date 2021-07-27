@@ -1,5 +1,6 @@
 package service.impl;
 
+import entity.AbstractBuilding;
 import entity.User;
 import lombok.extern.slf4j.Slf4j;
 import repository.UserRepository;
@@ -14,8 +15,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User addUser(User user) {
-        userRepository.save(user);
-        return null;
+        return userRepository.save(user);
     }
 
     @Override
@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> showUsers() {
+    public List<User> findAllUsers() {
         for (User user : userRepository.findAll()) {
             log.info(user.toString());
         }
@@ -33,11 +33,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(long id) {
-        return null;
+        return userRepository.findOne(id);
     }
 
     @Override
     public User update(User user) {
-        return null;
+        return userRepository.update(user);
+    }
+
+    @Override
+    public User changeWorkingPlace(User userToUpdate, AbstractBuilding newWorkingPlace) {
+        User user = User.builder()
+                .id(userToUpdate.getId())
+                .name(userToUpdate.getName())
+                .surname(userToUpdate.getSurname())
+                .roles(userToUpdate.getRoles())
+                .build();
+        return userRepository.update(user);
     }
 }

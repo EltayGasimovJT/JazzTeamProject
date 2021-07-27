@@ -9,7 +9,7 @@ public interface OrderProcessingPointService {
 
     void deleteUser(OrderProcessingPoint orderProcessingPoint);
 
-    List<OrderProcessingPoint> showUsers();
+    List<OrderProcessingPoint> findAllUsers();
 
     OrderProcessingPoint getUser(long id);
 
