@@ -15,8 +15,9 @@ import java.util.List;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository = new OrderRepositoryImpl();
-    private final WareHouseRepository wareHouseRepository = new WareHouseRepositoryImpl();
-    private final String ROLE_ADMIN = "Admin";
+    private static final String ROLE_ADMIN = "Admin";
+    private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
+    private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
 
     @Override
     public Client.Order UpdateOrderCurrentLocation(long id, AbstractLocation newLocation) {
@@ -135,17 +136,49 @@ public class OrderServiceImpl implements OrderService {
         }
         if (state.equals("On the way to the warehouse")) {
             newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add("PickUp Worker");
+            newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
 
             newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add("Warehouse Worker");
+            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
         }
-        if (state.equals("On the way to the warehouse")) {
+        if (state.equals("On the warehouse")) {
             newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add("PickUp Worker");
+            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
 
             newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add("Warehouse Worker");
+            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+        }
+        if (state.equals("On the way to the final warehouse")) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+        }
+        if (state.equals("On the final warehouse")) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+        }
+        if (state.equals("On the way to the pick up/reception")) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
+        }
+        if (state.equals("Order completed")) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
+        }
+        if (state.equals("Order locked")) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
         }
         orderState.setRolesAllowedPutToState(newRolesAllowedPutToState);
         orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
