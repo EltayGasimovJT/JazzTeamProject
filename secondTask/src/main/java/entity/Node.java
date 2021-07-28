@@ -19,6 +19,7 @@ public class Node {
     public Node() {
     }
 
+
     public Node(int value) {
         this.left = null;
         this.right = null;

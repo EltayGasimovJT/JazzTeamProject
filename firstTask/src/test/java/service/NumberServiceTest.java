@@ -51,6 +51,7 @@ public class NumberServiceTest {
     public void testCountDifferenceBetweenSumOfOddsAndSumOfEvens(int number, int result) throws NumberCustomException {
         int actual = NumberService
                 .countDifferenceBetweenSumOfOddsAndSumOfEvens(Integer.toString(number));
+
         int expected = result;
 
         Assert.assertEquals(expected, actual, 0.001);
