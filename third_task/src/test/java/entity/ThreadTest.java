@@ -22,6 +22,7 @@ public class ThreadTest {
                         new Ship("Ship " + 4, 0, 30,500, port)
                 );
 
+
         ships.get(0).start();
         ships.get(1).start();
 
