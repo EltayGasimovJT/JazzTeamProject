@@ -13,8 +13,6 @@ public class Warehouse extends AbstractBuilding {
     private List<OrderProcessingPoint> orderProcessingPoints;
     @Singular
     private List<Warehouse> connectedWarehouses;
-    @Singular
-    private List<Stillage> stillages;
 
     public Warehouse(long id, String location, List<OrderProcessingPoint> orderProcessingPoints, List<Warehouse> connectedWarehouses) {
         super(id, location);

@@ -41,8 +41,9 @@ public class UserRepositoryImpl implements UserRepository {
                 user.setSurname(update.getSurname());
                 user.setWorkingPlace(update.getWorkingPlace());
                 user.setRoles(update.getRoles());
+                return user;
             }
         }
-        return update;
+        return null;
     }
 }
