@@ -25,6 +25,7 @@ public class ThreadTest {
         ships.get(0).start();
         ships.get(1).start();
 
+
         Assert.assertSame(Thread.State.RUNNABLE, ships.get(0).getState());
         Assert.assertSame(Thread.State.RUNNABLE, ships.get(1).getState());
         Assert.assertSame(Thread.State.NEW, ships.get(2).getState());
