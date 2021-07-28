@@ -18,7 +18,7 @@ public abstract class AbstractBuilding extends AbstractLocation {
         this.location = location;
     }
 
-    protected AbstractBuilding(long id, List<Client.Order> expectedOrders, List<Client.Order> dispatchedOrders, String location) {
+    protected AbstractBuilding(long id, List<Order> expectedOrders, List<Order> dispatchedOrders, String location) {
         super(id, expectedOrders, dispatchedOrders);
         this.location = location;
     }

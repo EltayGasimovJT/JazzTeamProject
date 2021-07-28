@@ -5,13 +5,13 @@ import entity.OrderProcessingPoint;
 import java.util.List;
 
 public interface OrderProcessingPointService {
-    OrderProcessingPoint addUser(OrderProcessingPoint orderProcessingPoint);
+    OrderProcessingPoint addOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint);
 
-    void deleteUser(OrderProcessingPoint orderProcessingPoint);
+    void deleteOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint);
 
-    List<OrderProcessingPoint> findAllUsers();
+    List<OrderProcessingPoint> findAllOrderProcessingPoints();
 
-    OrderProcessingPoint getUser(long id);
+    OrderProcessingPoint getOrderProcessingPoint(long id);
 
     OrderProcessingPoint update(OrderProcessingPoint orderProcessingPoint);
 }

@@ -11,15 +11,15 @@ import java.util.List;
 public abstract class AbstractLocation {
     private long id;
     @Singular
-    private List<Client.Order> expectedOrders;
+    private List<Order> expectedOrders;
     @Singular
-    private List<Client.Order> dispatchedOrders;
+    private List<Order> dispatchedOrders;
 
     protected AbstractLocation(long id) {
         this.id = id;
     }
 
-    protected AbstractLocation(long id, List<Client.Order> expectedOrders, List<Client.Order> dispatchedOrders) {
+    protected AbstractLocation(long id, List<Order> expectedOrders, List<Order> dispatchedOrders) {
         this.id = id;
         this.expectedOrders = expectedOrders;
         this.dispatchedOrders = dispatchedOrders;
@@ -33,35 +33,35 @@ public abstract class AbstractLocation {
         this.id = id;
     }
 
-    public void addExpectedOrder(Client.Order order) {
+    public void addExpectedOrder(Order order) {
         expectedOrders.add(order);
     }
 
-    public void addAllExpectedOrders(List<Client.Order> orders) {
+    public void addAllExpectedOrders(List<Order> orders) {
         expectedOrders.addAll(orders);
     }
 
-    public void removeExpectedOrder(Client.Order order) {
+    public void removeExpectedOrder(Order order) {
         expectedOrders.remove(order);
     }
 
-    public void removeAllExpectedOrders(List<Client.Order> orders) {
+    public void removeAllExpectedOrders(List<Order> orders) {
         expectedOrders.removeAll(orders);
     }
 
-    public void addDispatchedOrder(Client.Order order) {
+    public void addDispatchedOrder(Order order) {
         dispatchedOrders.add(order);
     }
 
-    public void addAllDispatchedOrders(List<Client.Order> orders) {
+    public void addAllDispatchedOrders(List<Order> orders) {
         dispatchedOrders.addAll(orders);
     }
 
-    public void removeDispatchedOrder(Client.Order order) {
+    public void removeDispatchedOrder(Order order) {
         dispatchedOrders.remove(order);
     }
 
-    public void removeAllDispatchedOrders(List<Client.Order> orders) {
+    public void removeAllDispatchedOrders(List<Order> orders) {
         dispatchedOrders.removeAll(orders);
     }
 }

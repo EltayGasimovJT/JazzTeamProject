@@ -68,6 +68,10 @@ class UserServiceTest {
                 .id(3)
                 .build();
 
+        userService.addUser(user1);
+        userService.addUser(user2);
+        userService.addUser(user3);
+
         List<User> allUsers = userService.findAllUsers();
 
         Assert.assertEquals(3, allUsers.size());

@@ -20,21 +20,21 @@ public class OrderServiceImpl implements OrderService {
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
 
     @Override
-    public Client.Order UpdateOrderCurrentLocation(long id, AbstractLocation newLocation) {
-        Client.Order order = orderRepository.findOne(id);
+    public Order UpdateOrderCurrentLocation(long id, AbstractLocation newLocation) {
+        Order order = orderRepository.findOne(id);
         order.setCurrentLocation(newLocation);
         return orderRepository.update(order);
     }
 
     @Override
     public void updateOrderHistory(long id, OrderHistory newHistory) {
-        Client.Order order = orderRepository.findOne(id);
+        Order order = orderRepository.findOne(id);
         order.setHistory(newHistory);
         orderRepository.update(order);
     }
 
     @Override
-    public Client.Order create(Client.Order order) {
+    public Order create(Order order) {
         OrderState orderState = updateState("ReadyToSend");
         BigDecimal price = calculatePrice(order);
         order.setPrise(price);
@@ -43,51 +43,51 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Client.Order findById(long id) {
+    public Order findById(long id) {
         return orderRepository.findOne(id);
     }
 
     @Override
-    public Client.Order findByRecipient(Client recipient) {
+    public Order findByRecipient(Client recipient) {
         return orderRepository.findByRecipient(recipient);
     }
 
     @Override
-    public Client.Order findBySender(Client sender) {
+    public Order findBySender(Client sender) {
         return orderRepository.findBySender(sender);
     }
 
     @Override
     public AbstractLocation getCurrentOrderLocation(long id) {
-        Client.Order order = orderRepository.findOne(id);
+        Order order = orderRepository.findOne(id);
         return order.getCurrentLocation();
     }
 
     @Override
-    public void send(List<Client.Order> orders, Voyage voyage) {
-        for (Client.Order order : orders) {
+    public void send(List<Order> orders, Voyage voyage) {
+        for (Order order : orders) {
             order.setCurrentLocation(voyage);
         }
         orderRepository.saveSentOrders(orders);
     }
 
     @Override
-    public void accept(List<Client.Order> orders) {
-        List<Client.Order> orders1 = orderRepository.acceptOrders(orders);
-        for (Client.Order order : orders1) {
+    public void accept(List<Order> orders) {
+        List<Order> orders1 = orderRepository.acceptOrders(orders);
+        for (Order order : orders1) {
             log.info(order.toString());
         }
     }
 
     @Override
     public String getState(long id) {
-        Client.Order order = orderRepository.findOne(id);
+        Order order = orderRepository.findOne(id);
         return order.getState().getState();
     }
 
     @Override
-    public void compareOrders(List<Client.Order> expectedOrders, List<Client.Order> acceptedOrders) throws IllegalArgumentException {
-        for (Client.Order expectedOrder : expectedOrders) {
+    public void compareOrders(List<Order> expectedOrders, List<Order> acceptedOrders) throws IllegalArgumentException {
+        for (Order expectedOrder : expectedOrders) {
             if (!expectedOrder.equals(acceptedOrders)) {
                 throw new IllegalArgumentException("Expected List is not equal to actual!!!");
             }
@@ -95,11 +95,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean isFinalWarehouse(Client.Order order) {
+    public boolean isFinalWarehouse(Order order) {
         return order.getDestinationPlace().equals(order.getCurrentLocation());
     }
 
-    private BigDecimal calculatePrice(Client.Order order) throws IllegalArgumentException {
+    private BigDecimal calculatePrice(Order order) throws IllegalArgumentException {
         BigDecimal decimal = BigDecimal.valueOf(1);
         BigDecimal resultPrice;
         String location = order.getDestinationPlace().getLocation();

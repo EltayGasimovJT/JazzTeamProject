@@ -1,15 +1,16 @@
 package repository;
 
 import entity.Client;
+import entity.Order;
 
 import java.util.List;
 
-public interface OrderRepository extends GeneralRepository<Client.Order> {
-    Client.Order findByRecipient(Client recipient);
+public interface OrderRepository extends GeneralRepository<Order> {
+    Order findByRecipient(Client recipient);
 
-    Client.Order findBySender(Client sender);
+    Order findBySender(Client sender);
 
-    List<Client.Order> saveSentOrders(List<Client.Order> orders);
+    List<Order> saveSentOrders(List<Order> orders);
 
-    List<Client.Order> acceptOrders(List<Client.Order> orders);
+    List<Order> acceptOrders(List<Order> orders);
 }

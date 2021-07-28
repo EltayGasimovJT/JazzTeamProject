@@ -20,7 +20,7 @@ public class Warehouse extends AbstractBuilding {
         this.connectedWarehouses = connectedWarehouses;
     }
 
-    public Warehouse(long id, List<Client.Order> expectedOrders, List<Client.Order> dispatchedOrders, String location, List<OrderProcessingPoint> orderProcessingPoints, List<Warehouse> connectedWarehouses) {
+    public Warehouse(long id, List<Order> expectedOrders, List<Order> dispatchedOrders, String location, List<OrderProcessingPoint> orderProcessingPoints, List<Warehouse> connectedWarehouses) {
         super(id, expectedOrders, dispatchedOrders, location);
         this.orderProcessingPoints = orderProcessingPoints;
         this.connectedWarehouses = connectedWarehouses;

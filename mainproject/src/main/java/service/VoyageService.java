@@ -5,13 +5,13 @@ import entity.Voyage;
 import java.util.List;
 
 public interface VoyageService {
-    Voyage addUser(Voyage voyage);
+    Voyage addVoyage(Voyage voyage);
 
-    void deleteUser(Voyage voyage);
+    void deleteVoyage(Voyage voyage);
 
-    List<Voyage> findAllUsers();
+    List<Voyage> findAllVoyages();
 
-    Voyage getUser(long id);
+    Voyage getVoyage(long id);
 
     Voyage update(Voyage voyage);
 }

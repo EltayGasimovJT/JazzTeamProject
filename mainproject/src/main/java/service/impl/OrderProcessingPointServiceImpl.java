@@ -11,22 +11,22 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     private final OrderProcessingPointRepository orderProcessingPointRepository = new OrderProcessingPointRepositoryImpl();
 
     @Override
-    public OrderProcessingPoint addUser(OrderProcessingPoint orderProcessingPoint) {
+    public OrderProcessingPoint addOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint) {
         return orderProcessingPointRepository.save(orderProcessingPoint);
     }
 
     @Override
-    public void deleteUser(OrderProcessingPoint orderProcessingPoint) {
+    public void deleteOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint) {
         orderProcessingPointRepository.delete(orderProcessingPoint);
     }
 
     @Override
-    public List<OrderProcessingPoint> findAllUsers() {
+    public List<OrderProcessingPoint> findAllOrderProcessingPoints() {
         return orderProcessingPointRepository.findAll();
     }
 
     @Override
-    public OrderProcessingPoint getUser(long id) {
+    public OrderProcessingPoint getOrderProcessingPoint(long id) {
         return orderProcessingPointRepository.findOne(id);
     }
 

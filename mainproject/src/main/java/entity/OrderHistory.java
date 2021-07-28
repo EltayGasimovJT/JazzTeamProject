@@ -12,8 +12,8 @@ public class OrderHistory {
     private long orderId;
     private long userId;
     private String comment;
-    private Client.Order previousState;
-    private Client.Order currentState;
+    private Order previousState;
+    private Order currentState;
     private String changingTime;
     private ChangedTypeEnum changedTypeEnum;
 
@@ -21,8 +21,8 @@ public class OrderHistory {
             long orderId,
             long userId,
             String comment,
-            Client.Order previousState,
-            Client.Order currentState,
+            Order previousState,
+            Order currentState,
             String changingTime,
             ChangedTypeEnum changedTypeEnum
     ) {

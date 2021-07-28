@@ -11,22 +11,22 @@ public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 
     @Override
-    public Voyage addUser(Voyage voyage) {
+    public Voyage addVoyage(Voyage voyage) {
         return voyageRepository.save(voyage);
     }
 
     @Override
-    public void deleteUser(Voyage voyage) {
+    public void deleteVoyage(Voyage voyage) {
         voyageRepository.delete(voyage);
     }
 
     @Override
-    public List<Voyage> findAllUsers() {
+    public List<Voyage> findAllVoyages() {
         return voyageRepository.findAll();
     }
 
     @Override
-    public Voyage getUser(long id) {
+    public Voyage getVoyage(long id) {
         return voyageRepository.findOne(id);
     }
 
