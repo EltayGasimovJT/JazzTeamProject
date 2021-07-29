@@ -70,13 +70,8 @@ class OrderProcessingPointServiceTest {
     @Test
     void findAllOrderProcessingPoints() {
         OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
-        orderProcessingPoint1.setId(1);
-
         OrderProcessingPoint orderProcessingPoint2 = new OrderProcessingPoint();
-        orderProcessingPoint2.setId(2);
-
         OrderProcessingPoint orderProcessingPoint3 = new OrderProcessingPoint();
-        orderProcessingPoint3.setId(3);
 
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint1);
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint2);

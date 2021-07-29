@@ -46,11 +46,8 @@ class VoyageServiceTest {
     @Test
     void findAllVoyages() {
         Voyage voyage1 = new Voyage();
-        voyage1.setId(1);
         Voyage voyage2 = new Voyage();
-        voyage2.setId(2);
         Voyage voyage3 = new Voyage();
-        voyage3.setId(3);
 
         voyageService.addVoyage(voyage1);
         voyageService.addVoyage(voyage2);

@@ -41,11 +41,8 @@ class WarehouseServiceTest {
     @Test
     void findAllWarehouses() {
         Warehouse warehouse1 = new Warehouse();
-        warehouse1.setId(1);
         Warehouse warehouse2 = new Warehouse();
-        warehouse2.setId(2);
         Warehouse warehouse3 = new Warehouse();
-        warehouse3.setId(3);
 
         warehouseService.addWarehouse(warehouse1);
         warehouseService.addWarehouse(warehouse2);
