@@ -39,4 +39,28 @@ class ClientServiceTest {
         clientService.addClient(client);
         clientService.findAllClients();
     }
+
+    @Test
+    void testAddClient() {
+    }
+
+    @Test
+    void deleteClient() {
+    }
+
+    @Test
+    void findAllClients() {
+    }
+
+    @Test
+    void findById() {
+    }
+
+    @Test
+    void update() {
+    }
+
+    @Test
+    void findByPassportId() {
+    }
 }

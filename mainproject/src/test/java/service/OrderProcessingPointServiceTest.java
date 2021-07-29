@@ -110,6 +110,12 @@ class OrderProcessingPointServiceTest {
         orderProcessingPoint.setId(1);
         orderProcessingPoint.setLocation("Minsk");
 
+        orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
 
+        orderProcessingPoint.setLocation("Gomel");
+
+        OrderProcessingPoint processingPoint = orderProcessingPointService.getOrderProcessingPoint(1);
+
+        Assert.assertEquals("Gomel", processingPoint.getLocation());
     }
 }
