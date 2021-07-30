@@ -34,7 +34,6 @@ class PriceCalculationRuleServiceTest {
         PriceCalculationRule priceCalculationRule1 = PriceCalculationRule
                 .builder()
                 .id(1)
-                .initialParcelPrice(40)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
@@ -56,7 +55,6 @@ class PriceCalculationRuleServiceTest {
         PriceCalculationRule priceCalculationRule2 = PriceCalculationRule
                 .builder()
                 .id(2)
-                .initialParcelPrice(40)
                 .countryCoefficient(1.8)
                 .country("Poland")
                 .parcelSizeLimit(40)
@@ -75,7 +73,6 @@ class PriceCalculationRuleServiceTest {
 
         PriceCalculationRule priceCalculationRule3 = PriceCalculationRule
                 .builder()
-                .initialParcelPrice(40)
                 .countryCoefficient(1.5)
                 .country("Ukraine")
                 .parcelSizeLimit(60)
@@ -94,7 +91,6 @@ class PriceCalculationRuleServiceTest {
         PriceCalculationRule priceCalculationRule = PriceCalculationRule
                 .builder()
                 .id(1)
-                .initialParcelPrice(40)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
@@ -110,7 +106,6 @@ class PriceCalculationRuleServiceTest {
         PriceCalculationRule priceCalculationRule = PriceCalculationRule
                 .builder()
                 .id(1)
-                .initialParcelPrice(40)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
@@ -127,7 +122,6 @@ class PriceCalculationRuleServiceTest {
         PriceCalculationRule priceCalculationRule = PriceCalculationRule
                 .builder()
                 .id(1)
-                .initialParcelPrice(40)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
@@ -142,7 +136,6 @@ class PriceCalculationRuleServiceTest {
         PriceCalculationRule priceCalculationRule = PriceCalculationRule
                 .builder()
                 .id(1)
-                .initialParcelPrice(40)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
@@ -159,18 +152,17 @@ class PriceCalculationRuleServiceTest {
         PriceCalculationRule priceCalculationRule = PriceCalculationRule
                 .builder()
                 .id(1)
-                .initialParcelPrice(40)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
         priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule);
 
-        priceCalculationRule.setInitialParcelPrice(52);
+        priceCalculationRule.setParcelSizeLimit(52);
 
         PriceCalculationRule update = priceCalculationRuleService.update(priceCalculationRule);
 
-        Assert.assertEquals(52, update.getInitialParcelPrice(), 0.001);
+        Assert.assertEquals(52, update.getParcelSizeLimit(), 0.001);
     }
 
     @ParameterizedTest

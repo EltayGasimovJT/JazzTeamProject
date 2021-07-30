@@ -11,6 +11,7 @@ import java.util.List;
 
 public class PriceCalculationRuleServiceImpl implements PriceCalculationRuleService {
     private final PriceCalculationRuleRepository priceCalculationRuleRepository = new PriceCalculationRuleRepositoryImpl();
+    private static final int INITIAL_PRISE = 40;
 
     @Override
     public PriceCalculationRule addPriceCalculationRule(PriceCalculationRule priceCalculationRule) {
@@ -46,12 +47,12 @@ public class PriceCalculationRuleServiceImpl implements PriceCalculationRuleServ
             resultPrice =
                     resultPrice
                             .multiply(BigDecimal.valueOf(priceCalculationRule.getCountryCoefficient())
-                                    .multiply(BigDecimal.valueOf(priceCalculationRule.getInitialParcelPrice())
+                                    .multiply(BigDecimal.valueOf(INITIAL_PRISE)
                                             .multiply((size.divide(parcelSizeLimit,1))))
                             );
         } else {
             resultPrice = resultPrice.multiply(BigDecimal.valueOf(
-                    priceCalculationRule.getCountryCoefficient() * priceCalculationRule.getInitialParcelPrice()));
+                    priceCalculationRule.getCountryCoefficient() * INITIAL_PRISE));
         }
 
         return resultPrice;

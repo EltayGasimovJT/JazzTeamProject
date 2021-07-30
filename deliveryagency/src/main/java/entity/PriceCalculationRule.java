@@ -10,5 +10,4 @@ public class PriceCalculationRule {
     private int parcelSizeLimit;
     private String country;
     private double countryCoefficient;
-    private double initialParcelPrice;
 }
