@@ -1,5 +1,7 @@
 package service;
 
+import entity.AbstractBuilding;
+import entity.OrderProcessingPoint;
 import entity.User;
 import entity.Warehouse;
 import org.junit.Assert;
@@ -109,5 +111,31 @@ class UserServiceTest {
         User update = userService.update(newUser);
 
         Assert.assertEquals("Victor", update.getName());
+    }
+
+    @Test
+    void changeWorkingPlace() {
+        AbstractBuilding workingPlace = new OrderProcessingPoint();
+        workingPlace.setLocation("Minsk");
+        User user = User
+                .builder()
+                .id(1)
+                .workingPlace(workingPlace)
+                .name("Vlad")
+                .build();
+
+        userService.addUser(user);
+
+        AbstractBuilding newWorkingPlace = new OrderProcessingPoint();
+        newWorkingPlace.setLocation("Vitebsk");
+
+        userService.changeWorkingPlace(userService.getUser(user.getId()), newWorkingPlace);
+
+        Assert.assertNotEquals(workingPlace.getLocation(),
+                userService
+                        .getUser(user
+                                .getId())
+                        .getWorkingPlace()
+                        .getLocation());
     }
 }
