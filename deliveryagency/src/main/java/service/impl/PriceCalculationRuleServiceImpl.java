@@ -28,11 +28,6 @@ public class PriceCalculationRuleServiceImpl implements PriceCalculationRuleServ
     }
 
     @Override
-    public PriceCalculationRule getOPriceCalculationRule(long id) {
-        return priceCalculationRuleRepository.findOne(id);
-    }
-
-    @Override
     public PriceCalculationRule update(PriceCalculationRule priceCalculationRule) {
         return priceCalculationRuleRepository.update(priceCalculationRule);
     }

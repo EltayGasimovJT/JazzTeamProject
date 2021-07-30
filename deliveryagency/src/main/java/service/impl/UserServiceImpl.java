@@ -48,6 +48,7 @@ public class UserServiceImpl implements UserService {
                 .name(userToUpdate.getName())
                 .surname(userToUpdate.getSurname())
                 .roles(userToUpdate.getRoles())
+                .workingPlace(newWorkingPlace)
                 .build();
         return userRepository.update(user);
     }

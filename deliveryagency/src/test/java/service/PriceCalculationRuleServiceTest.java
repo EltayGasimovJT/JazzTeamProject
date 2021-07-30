@@ -91,38 +91,93 @@ class PriceCalculationRuleServiceTest {
 
     @Test
     void addPriceCalculationRule() {
+        PriceCalculationRule priceCalculationRule = PriceCalculationRule
+                .builder()
+                .id(1)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
 
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule);
+
+        Assert.assertEquals(1, priceCalculationRuleService.getRule(1).getId());
     }
 
     @Test
     void deletePriceCalculationRule() {
+        PriceCalculationRule priceCalculationRule = PriceCalculationRule
+                .builder()
+                .id(1)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
 
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule);
+
+        priceCalculationRuleService.deletePriceCalculationRule(priceCalculationRule);
+
+        Assert.assertEquals(0, priceCalculationRuleService.findAllPriceCalculationRules().size());
     }
 
     @Test
     void findAllPriceCalculationRules() {
+        PriceCalculationRule priceCalculationRule = PriceCalculationRule
+                .builder()
+                .id(1)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule);
 
-    }
-
-    @Test
-    void getOPriceCalculationRule() {
-
-    }
-
-    @Test
-    void update() {
-
+        Assert.assertEquals(1, priceCalculationRuleService.findAllPriceCalculationRules().size());
     }
 
     @Test
     void getRule() {
+        PriceCalculationRule priceCalculationRule = PriceCalculationRule
+                .builder()
+                .id(1)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule);
 
+        PriceCalculationRule rule = priceCalculationRuleService.getRule(1);
+
+        Assert.assertEquals(priceCalculationRule, rule);
+    }
+
+    @Test
+    void update() {
+        PriceCalculationRule priceCalculationRule = PriceCalculationRule
+                .builder()
+                .id(1)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule);
+
+        priceCalculationRule.setInitialParcelPrice(52);
+
+        PriceCalculationRule update = priceCalculationRuleService.update(priceCalculationRule);
+
+        Assert.assertEquals(52, update.getInitialParcelPrice(), 0.001);
     }
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
     void calculatePrice(Order order, PriceCalculationRule rule, BigDecimal actual) {
         BigDecimal bigDecimal = priceCalculationRuleService.calculatePrice(order, rule);
-        Assert.assertEquals(actual.doubleValue(), bigDecimal.doubleValue(),0.001);
+        Assert.assertEquals(actual.doubleValue(), bigDecimal.doubleValue(), 0.001);
     }
 }

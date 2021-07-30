@@ -14,8 +14,6 @@ public interface PriceCalculationRuleService {
 
     List<PriceCalculationRule> findAllPriceCalculationRules();
 
-    PriceCalculationRule getOPriceCalculationRule(long id);
-
     PriceCalculationRule update(PriceCalculationRule priceCalculationRule);
 
     PriceCalculationRule getRule(long id);

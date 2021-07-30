@@ -68,6 +68,14 @@ public class OrderServiceImpl implements OrderService {
     public void send(List<Order> orders, Voyage voyage) {
         for (Order order : orders) {
             order.setCurrentLocation(voyage);
+            if (isFinalWarehouse(order)) {
+                updateState("On the way to the final warehouse");
+            } else {
+                updateState("On the way to the warehouse");
+            }
+            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint){
+                updateState("On the way to the pick up/reception");
+            }
         }
         orderRepository.saveSentOrders(orders);
     }
@@ -77,6 +85,14 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders1 = orderRepository.acceptOrders(orders);
         for (Order order : orders1) {
             log.info(order.toString());
+            if (isFinalWarehouse(order)) {
+                updateState("On final warehouse");
+            } else {
+                updateState("On the warehouse");
+            }
+            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint){
+                updateState("Order completed");
+            }
         }
 
         return orders1;
@@ -213,8 +229,7 @@ public class OrderServiceImpl implements OrderService {
 
         if (abstractBuilding.getLocation().equals("Russia")) {
             priceCalculationRule = priceCalculationRuleService.findByCountry("Russia");
-        }
-        else if (abstractBuilding.getLocation().equals("Poland")) {
+        } else if (abstractBuilding.getLocation().equals("Poland")) {
             priceCalculationRule = priceCalculationRuleService.findByCountry("Poland");
         } else {
             throw new IllegalArgumentException("This country is not supported yet!!!" + abstractBuilding.getLocation());
