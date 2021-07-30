@@ -45,17 +45,26 @@ public class PriceCalculationRuleServiceImpl implements PriceCalculationRuleServ
     @Override
     public BigDecimal calculatePrice(Order order, PriceCalculationRule priceCalculationRule) throws IllegalArgumentException {
         BigDecimal resultPrice = new BigDecimal(1);
-        double size = getSize(order);
-        if (size > priceCalculationRule.getParcelSizeLimit()) {
-            resultPrice = resultPrice.multiply(BigDecimal.valueOf(
-                    priceCalculationRule.getCountryCoefficient() * priceCalculationRule.getInitialParcelPrice()
-                            * size / priceCalculationRule.getParcelSizeLimit()));
+        BigDecimal size = BigDecimal.valueOf(getSize(order));
+        BigDecimal parcelSizeLimit = BigDecimal.valueOf(priceCalculationRule.getParcelSizeLimit());
+        if (size.doubleValue() > parcelSizeLimit.doubleValue()) {
+            resultPrice =
+                    resultPrice
+                            .multiply(BigDecimal.valueOf(priceCalculationRule.getCountryCoefficient())
+                                    .multiply(BigDecimal.valueOf(priceCalculationRule.getInitialParcelPrice())
+                                            .multiply((size.divide(parcelSizeLimit,1))))
+                            );
         } else {
             resultPrice = resultPrice.multiply(BigDecimal.valueOf(
                     priceCalculationRule.getCountryCoefficient() * priceCalculationRule.getInitialParcelPrice()));
         }
 
         return resultPrice;
+    }
+
+    @Override
+    public PriceCalculationRule findByCountry(String country) {
+        return priceCalculationRuleRepository.findByCountry(country);
     }
 
     private double getSize(Order order) {

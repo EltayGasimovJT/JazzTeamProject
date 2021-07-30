@@ -18,8 +18,6 @@ public class OrderServiceImpl implements OrderService {
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
-    private static final int INITIAL_ORDER_PRICE = 30;
-    private static final int LIMIT_FOR_THE_PARCEL_SIZE = 40;
 
 
     @Override
@@ -39,25 +37,6 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order create(Order order) {
         OrderState orderState = updateState("Ready To Send");
-
-        PriceCalculationRule priceCalculationRule1 = PriceCalculationRule
-                .builder()
-                .id(1)
-                .country("Russia")
-                .parcelSizeLimit(40)
-                .countryCoefficient(2.6)
-                .build();
-        PriceCalculationRule priceCalculationRule2 = PriceCalculationRule
-                .builder()
-                .id(2)
-                .country("Poland")
-                .parcelSizeLimit(50)
-                .countryCoefficient(2.8)
-                .build();
-
-        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule1);
-        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule2);
-
         BigDecimal price = calculatePrice(order);
         order.setPrise(price);
         order.setState(orderState);
@@ -209,13 +188,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private PriceCalculationRule getRule(AbstractBuilding abstractBuilding) {
-        PriceCalculationRule priceCalculationRule = new PriceCalculationRule();
+        PriceCalculationRule priceCalculationRule;
 
         if (abstractBuilding.getLocation().equals("Russia")) {
-            priceCalculationRule = priceCalculationRuleService.getRule(1);
+            priceCalculationRule = priceCalculationRuleService.findByCountry("Russia");
         }
-        if (abstractBuilding.getLocation().equals("Poland")) {
-            priceCalculationRule = priceCalculationRuleService.getRule(2);
+        else if (abstractBuilding.getLocation().equals("Poland")) {
+            priceCalculationRule = priceCalculationRuleService.findByCountry("Poland");
+        } else {
+            throw new IllegalArgumentException("This country is not supported yet!!!" + abstractBuilding.getLocation());
         }
 
         return priceCalculationRule;

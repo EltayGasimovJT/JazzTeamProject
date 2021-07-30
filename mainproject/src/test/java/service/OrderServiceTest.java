@@ -4,20 +4,59 @@ package service;
 import entity.*;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.OrderServiceImpl;
+import service.impl.PriceCalculationRuleServiceImpl;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OrderServiceTest {
     private final OrderService orderService = new OrderServiceImpl();
+    private PriceCalculationRuleService priceCalculationRuleService = new PriceCalculationRuleServiceImpl();
+
+    private static Stream<Arguments> testDataForCalculate() {
+        OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
+        orderProcessingPoint1.setLocation("Russia");
+        Order order1 = Order.builder()
+                .id(1)
+                .parcelParameters(new ParcelParameters(
+                        1,
+                        1,
+                        1,
+                        20
+                ))
+                .destinationPlace(orderProcessingPoint1)
+                .build();
+
+        orderProcessingPoint1.setLocation("Poland");
+        orderProcessingPoint1.setId(2);
+        Order order2 = Order.builder()
+                .id(2)
+                .parcelParameters(new ParcelParameters(
+                        4,
+                        10,
+                        1,
+                        20
+                ))
+                .destinationPlace(orderProcessingPoint1)
+                .build();
+        return Stream.of(
+                Arguments.of(order1, BigDecimal.valueOf(64.0)),
+                Arguments.of(order2, BigDecimal.valueOf(108.0))
+        );
+    }
 
     @Test
     void updateOrderCurrentLocation() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setLocation("Moskov");
+        orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
                 .id(1)
                 .parcelParameters(new ParcelParameters(
@@ -31,7 +70,7 @@ class OrderServiceTest {
 
         orderService.create(order);
 
-        orderProcessingPoint.setLocation("Minsk");
+        orderProcessingPoint.setLocation("Poland");
 
         orderService.updateOrderCurrentLocation(1, orderProcessingPoint);
 
@@ -41,7 +80,7 @@ class OrderServiceTest {
     @Test
     void updateOrderHistory() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setLocation("Moskov");
+        orderProcessingPoint.setLocation("Russia");
         OrderHistory orderHistory = new OrderHistory();
         orderHistory.setChangingTime("14:33");
         Order order = Order.builder()
@@ -68,7 +107,7 @@ class OrderServiceTest {
     @Test
     void create() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setLocation("Moskov");
+        orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
                 .id(1)
                 .parcelParameters(new ParcelParameters(
@@ -90,7 +129,7 @@ class OrderServiceTest {
     @Test
     void findById() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setLocation("Moskov");
+        orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
                 .id(1)
                 .parcelParameters(new ParcelParameters(
@@ -117,7 +156,7 @@ class OrderServiceTest {
                 .build();
 
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setLocation("Moskov");
+        orderProcessingPoint.setLocation("Russia");
 
         Order order = Order.builder()
                 .id(1)
@@ -148,7 +187,7 @@ class OrderServiceTest {
                 .build();
 
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setLocation("Moskov");
+        orderProcessingPoint.setLocation("Russia");
 
         Order order = Order.builder()
                 .id(1)
@@ -174,7 +213,7 @@ class OrderServiceTest {
     void getCurrentOrderLocation() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(1);
-        orderProcessingPoint.setLocation("Moskov");
+        orderProcessingPoint.setLocation("Russia");
 
         Order order = Order.builder()
                 .id(1)
@@ -231,7 +270,7 @@ class OrderServiceTest {
     void getState() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(1);
-        orderProcessingPoint.setLocation("Moskov");
+        orderProcessingPoint.setLocation("Russia");
 
         Order order = Order.builder()
                 .id(1)
@@ -255,11 +294,11 @@ class OrderServiceTest {
     void compareOrders() {
         OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
         orderProcessingPoint1.setId(1);
-        orderProcessingPoint1.setLocation("Moskov");
+        orderProcessingPoint1.setLocation("Russia");
 
         OrderProcessingPoint orderProcessingPoint2 = new OrderProcessingPoint();
         orderProcessingPoint2.setId(1);
-        orderProcessingPoint2.setLocation("Moskov");
+        orderProcessingPoint2.setLocation("Russia");
 
         Order order1 = Order.builder()
                 .id(1)
@@ -315,10 +354,37 @@ class OrderServiceTest {
                 .destinationPlace(orderProcessingPoint1)
                 .currentLocation(orderProcessingPoint1)
                 .build();
-
+        Assert.assertTrue(orderService.isFinalWarehouse(order1));
     }
 
-    @Test
-    void calculatePrice() {
+
+    @ParameterizedTest
+    @MethodSource("testDataForCalculate")
+    void calculatePrice(Order order, BigDecimal expectedPrice) {
+        PriceCalculationRule priceCalculationRule1 = PriceCalculationRule
+                .builder()
+                .id(1)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
+
+        PriceCalculationRule priceCalculationRule2 = PriceCalculationRule
+                .builder()
+                .id(2)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.8)
+                .country("Poland")
+                .parcelSizeLimit(40)
+                .build();
+
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule1);
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule2);
+
+
+        BigDecimal actualPrice = orderService.calculatePrice(order);
+
+        Assert.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
 }

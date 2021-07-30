@@ -33,11 +33,11 @@ class PriceCalculationRuleServiceTest {
 
         PriceCalculationRule priceCalculationRule1 = PriceCalculationRule
                 .builder()
+                .id(1)
                 .initialParcelPrice(40)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
-                .id(1)
                 .build();
 
         orderProcessingPoint1.setLocation("Poland");
@@ -55,11 +55,11 @@ class PriceCalculationRuleServiceTest {
 
         PriceCalculationRule priceCalculationRule2 = PriceCalculationRule
                 .builder()
+                .id(2)
                 .initialParcelPrice(40)
                 .countryCoefficient(1.8)
                 .country("Poland")
                 .parcelSizeLimit(40)
-                .id(2)
                 .build();
         orderProcessingPoint1.setLocation("Ukraine");
         Order order3 = Order.builder()
@@ -85,7 +85,7 @@ class PriceCalculationRuleServiceTest {
         return Stream.of(
                 Arguments.of(order1, priceCalculationRule1, BigDecimal.valueOf(64.0)),
                 Arguments.of(order2, priceCalculationRule2, BigDecimal.valueOf(108.0)),
-                Arguments.of(order3, priceCalculationRule3, BigDecimal.valueOf(230.0))
+                Arguments.of(order3, priceCalculationRule3, BigDecimal.valueOf(228.0))
         );
     }
 
@@ -123,6 +123,6 @@ class PriceCalculationRuleServiceTest {
     @MethodSource("testDataForCalculate")
     void calculatePrice(Order order, PriceCalculationRule rule, BigDecimal actual) {
         BigDecimal bigDecimal = priceCalculationRuleService.calculatePrice(order, rule);
-        Assert.assertEquals(actual, bigDecimal);
+        Assert.assertEquals(actual.doubleValue(), bigDecimal.doubleValue(),0.001);
     }
 }

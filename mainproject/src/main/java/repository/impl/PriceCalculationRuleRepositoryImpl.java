@@ -45,4 +45,12 @@ public class PriceCalculationRuleRepositoryImpl implements PriceCalculationRuleR
         }
         return update;
     }
+
+    @Override
+    public PriceCalculationRule findByCountry(String country) {
+        return priceCalculationRules.stream()
+                .filter(priceCalculationRule -> priceCalculationRule.getCountry() == country)
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -22,4 +22,5 @@ public interface PriceCalculationRuleService {
 
     BigDecimal calculatePrice(Order order, PriceCalculationRule priceCalculationRule) throws IllegalArgumentException;
 
+    PriceCalculationRule findByCountry(String country);
 }
