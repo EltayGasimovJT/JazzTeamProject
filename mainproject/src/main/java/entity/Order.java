@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
 public class Order {
     private int id;
     private OrderState state;
@@ -24,28 +25,5 @@ public class Order {
 
     private List<AbstractLocation> route;
 
-    public Order(
-            int id,
-            OrderState state,
-            ParcelParameters parcelParameters,
-            Client sender,
-            Client recipient,
-            BigDecimal prise,
-            AbstractBuilding destinationPlace,
-            AbstractLocation currentLocation,
-            OrderHistory history,
-            List<AbstractLocation> route
-    ) {
-        this.id = id;
-        this.state = state;
-        this.parcelParameters = parcelParameters;
-        this.sender = sender;
-        this.recipient = recipient;
-        this.prise = prise;
-        this.destinationPlace = destinationPlace;
-        this.currentLocation = currentLocation;
-        this.history = history;
-        this.route = route;
-    }
 }
 

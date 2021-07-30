@@ -3,10 +3,9 @@ package service.impl;
 import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import repository.OrderRepository;
-import repository.WareHouseRepository;
 import repository.impl.OrderRepositoryImpl;
-import repository.impl.WareHouseRepositoryImpl;
 import service.OrderService;
+import service.PriceCalculationRuleService;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,12 +14,16 @@ import java.util.List;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository = new OrderRepositoryImpl();
+    private final PriceCalculationRuleService priceCalculationRuleService = new PriceCalculationRuleServiceImpl();
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
+    private static final int INITIAL_ORDER_PRICE = 30;
+    private static final int LIMIT_FOR_THE_PARCEL_SIZE = 40;
+
 
     @Override
-    public Order UpdateOrderCurrentLocation(long id, AbstractLocation newLocation) {
+    public Order updateOrderCurrentLocation(long id, AbstractLocation newLocation) {
         Order order = orderRepository.findOne(id);
         order.setCurrentLocation(newLocation);
         return orderRepository.update(order);
@@ -35,7 +38,26 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order create(Order order) {
-        OrderState orderState = updateState("ReadyToSend");
+        OrderState orderState = updateState("Ready To Send");
+
+        PriceCalculationRule priceCalculationRule1 = PriceCalculationRule
+                .builder()
+                .id(1)
+                .country("Russia")
+                .parcelSizeLimit(40)
+                .countryCoefficient(2.6)
+                .build();
+        PriceCalculationRule priceCalculationRule2 = PriceCalculationRule
+                .builder()
+                .id(2)
+                .country("Poland")
+                .parcelSizeLimit(50)
+                .countryCoefficient(2.8)
+                .build();
+
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule1);
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule2);
+
         BigDecimal price = calculatePrice(order);
         order.setPrise(price);
         order.setState(orderState);
@@ -72,11 +94,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void accept(List<Order> orders) {
+    public List<Order> accept(List<Order> orders) {
         List<Order> orders1 = orderRepository.acceptOrders(orders);
         for (Order order : orders1) {
             log.info(order.toString());
         }
+
+        return orders1;
     }
 
     @Override
@@ -99,27 +123,26 @@ public class OrderServiceImpl implements OrderService {
         return order.getDestinationPlace().equals(order.getCurrentLocation());
     }
 
-    private BigDecimal calculatePrice(Order order) throws IllegalArgumentException {
-        BigDecimal decimal = BigDecimal.valueOf(1);
-        BigDecimal resultPrice;
-        String location = order.getDestinationPlace().getLocation();
-        switch (location) {
-            case "Moskov": {
-                resultPrice = decimal.multiply(new BigDecimal((20 * 10) / 5));
-                return resultPrice;
-            }
-            case "Poland": {
-                resultPrice = decimal.multiply(new BigDecimal((30 * 10) / 5));
-                return resultPrice;
-            }
-            case "Ukraine": {
-                resultPrice = decimal.multiply(new BigDecimal((40 * 10) / 5));
-                return resultPrice;
-            }
-            default: {
-                throw new IllegalArgumentException("Country is not supported Yet!!!");
-            }
-        }
+    @Override
+    public List<Order> findAll() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public Order addOrder(Order order) {
+        return orderRepository.save(order);
+    }
+
+    @Override
+    public BigDecimal calculatePrice(Order order) throws IllegalArgumentException {
+        PriceCalculationRule priceCalculationRule = getRule(order.getDestinationPlace());
+
+        return priceCalculationRuleService.calculatePrice(order, priceCalculationRule);
+    }
+
+    @Override
+    public List<List<Order>> getOrdersOnTheWay() {
+        return orderRepository.getSentOrders();
     }
 
     private OrderState updateState(String state) {
@@ -183,5 +206,18 @@ public class OrderServiceImpl implements OrderService {
         orderState.setRolesAllowedPutToState(newRolesAllowedPutToState);
         orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
         return orderState;
+    }
+
+    private PriceCalculationRule getRule(AbstractBuilding abstractBuilding) {
+        PriceCalculationRule priceCalculationRule = new PriceCalculationRule();
+
+        if (abstractBuilding.getLocation().equals("Russia")) {
+            priceCalculationRule = priceCalculationRuleService.getRule(1);
+        }
+        if (abstractBuilding.getLocation().equals("Poland")) {
+            priceCalculationRule = priceCalculationRuleService.getRule(2);
+        }
+
+        return priceCalculationRule;
     }
 }

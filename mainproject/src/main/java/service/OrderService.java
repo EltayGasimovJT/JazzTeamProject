@@ -2,10 +2,11 @@ package service;
 
 import entity.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
-   Order UpdateOrderCurrentLocation(long id, AbstractLocation newLocation);
+   Order updateOrderCurrentLocation(long id, AbstractLocation newLocation);
 
    void updateOrderHistory(long id, OrderHistory newHistory);
 
@@ -21,11 +22,19 @@ public interface OrderService {
 
    void send(List<Order> orders, Voyage voyage);
 
-   void accept(List<Order> orders);
+   List<Order> accept(List<Order> orders);
 
    String getState(long id);
 
    void compareOrders(List<Order> expectedOrders, List<Order> acceptedOrders) throws IllegalArgumentException;
 
    boolean isFinalWarehouse(Order order);
+
+   List<Order> findAll();
+
+   Order addOrder(Order order);
+
+   BigDecimal calculatePrice(Order order) throws IllegalArgumentException;
+
+   List<List<Order>> getOrdersOnTheWay();
 }

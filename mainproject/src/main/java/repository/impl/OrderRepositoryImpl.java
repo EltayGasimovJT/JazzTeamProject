@@ -37,6 +37,11 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
+    public List<List<Order>> getSentOrders() {
+        return ordersOnTheWay;
+    }
+
+    @Override
     public Order save(Order order) {
         orders.add(order);
         return order;

@@ -13,4 +13,6 @@ public interface OrderRepository extends GeneralRepository<Order> {
     List<Order> saveSentOrders(List<Order> orders);
 
     List<Order> acceptOrders(List<Order> orders);
+
+    List<List<Order>> getSentOrders();
 }
