@@ -119,7 +119,6 @@ class PriceCalculationRuleServiceTest {
         priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule);
 
         priceCalculationRuleService.deletePriceCalculationRule(priceCalculationRule);
-
         Assert.assertEquals(0, priceCalculationRuleService.findAllPriceCalculationRules().size());
     }
 
