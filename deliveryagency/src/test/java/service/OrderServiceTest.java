@@ -103,7 +103,7 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        Assert.assertNotEquals(order, orderService.findById(1));
+        Assert.assertNotEquals(orderHistory, orderService.findById(1).getHistory());
     }
 
     @Test

@@ -1,6 +1,5 @@
 package repository.impl;
 
-import entity.Client;
 import entity.PriceCalculationRule;
 import repository.PriceCalculationRuleRepository;
 
