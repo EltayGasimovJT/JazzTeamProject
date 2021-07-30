@@ -190,6 +190,27 @@ public class OrderServiceImpl implements OrderService {
     private PriceCalculationRule getRule(AbstractBuilding abstractBuilding) {
         PriceCalculationRule priceCalculationRule;
 
+        PriceCalculationRule priceCalculationRule1 = PriceCalculationRule
+                .builder()
+                .id(1)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
+
+        PriceCalculationRule priceCalculationRule2 = PriceCalculationRule
+                .builder()
+                .id(2)
+                .initialParcelPrice(40)
+                .countryCoefficient(1.8)
+                .country("Poland")
+                .parcelSizeLimit(40)
+                .build();
+
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule1);
+        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule2);
+
         if (abstractBuilding.getLocation().equals("Russia")) {
             priceCalculationRule = priceCalculationRuleService.findByCountry("Russia");
         }

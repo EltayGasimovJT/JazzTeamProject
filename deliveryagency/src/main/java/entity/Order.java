@@ -6,11 +6,8 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
-@Getter
-@Setter
 @NoArgsConstructor
-@ToString
-@EqualsAndHashCode
+@Data
 @AllArgsConstructor
 public class Order {
     private int id;
@@ -19,7 +16,7 @@ public class Order {
     private Client sender;
     private Client recipient;
     private BigDecimal prise;
-    private AbstractBuilding destinationPlace;
+    private OrderProcessingPoint destinationPlace;
     private AbstractLocation currentLocation;
     private OrderHistory history;
 

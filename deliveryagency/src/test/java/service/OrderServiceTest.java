@@ -48,7 +48,7 @@ class OrderServiceTest {
                 .destinationPlace(orderProcessingPoint1)
                 .build();
         return Stream.of(
-                Arguments.of(order1, BigDecimal.valueOf(64.0)),
+                Arguments.of(order1, BigDecimal.valueOf(72.0)),
                 Arguments.of(order2, BigDecimal.valueOf(108.0))
         );
     }
@@ -95,11 +95,13 @@ class OrderServiceTest {
                 .destinationPlace(orderProcessingPoint)
                 .build();
 
-        orderHistory.setChangingTime("12:35");
-
         orderService.addOrder(order);
 
-        orderService.updateOrderHistory(1, orderHistory);
+        OrderHistory newOrderHistory = new OrderHistory();
+
+        newOrderHistory.setChangingTime("12:35");
+
+        orderService.updateOrderHistory(1, newOrderHistory);
 
         Assert.assertNotEquals(order, orderService.findById(1));
     }
@@ -361,28 +363,6 @@ class OrderServiceTest {
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
     void calculatePrice(Order order, BigDecimal expectedPrice) {
-        PriceCalculationRule priceCalculationRule1 = PriceCalculationRule
-                .builder()
-                .id(1)
-                .initialParcelPrice(40)
-                .countryCoefficient(1.6)
-                .country("Russia")
-                .parcelSizeLimit(50)
-                .build();
-
-        PriceCalculationRule priceCalculationRule2 = PriceCalculationRule
-                .builder()
-                .id(2)
-                .initialParcelPrice(40)
-                .countryCoefficient(1.8)
-                .country("Poland")
-                .parcelSizeLimit(40)
-                .build();
-
-        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule1);
-        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule2);
-
-
         BigDecimal actualPrice = orderService.calculatePrice(order);
 
         Assert.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);

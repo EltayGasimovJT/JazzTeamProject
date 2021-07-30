@@ -1,12 +1,16 @@
 package entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Builder
-@Getter @Setter @NoArgsConstructor
-@EqualsAndHashCode @ToString @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Client {
     private long id;
     private String name;

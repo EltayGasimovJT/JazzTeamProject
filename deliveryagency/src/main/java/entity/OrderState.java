@@ -5,8 +5,8 @@ import lombok.*;
 import java.util.List;
 
 
-@Getter
-@Setter @NoArgsConstructor
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class OrderState {
     private long id;

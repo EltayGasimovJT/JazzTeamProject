@@ -3,8 +3,7 @@ package entity;
 import lombok.*;
 
 @Builder
-@Setter
-@Getter
+@Data
 @NoArgsConstructor @AllArgsConstructor
 public class PriceCalculationRule {
     private long id;

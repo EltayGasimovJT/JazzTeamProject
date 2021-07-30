@@ -5,8 +5,9 @@ import lombok.*;
 import java.util.List;
 
 @Builder
-@Getter @Setter @NoArgsConstructor
-@EqualsAndHashCode @ToString @AllArgsConstructor
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     private long id;
     private String name;

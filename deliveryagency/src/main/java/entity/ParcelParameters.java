@@ -4,8 +4,7 @@ package entity;
 import lombok.*;
 
 @Builder
-@Getter
-@Setter
+@Data
 @NoArgsConstructor @AllArgsConstructor
 public class ParcelParameters {
     private double height;

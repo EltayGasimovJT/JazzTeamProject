@@ -4,7 +4,8 @@ package entity;
 import lombok.*;
 
 @Builder
-@Getter @Setter @NoArgsConstructor
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class OrderHistory {
     private long orderId;
