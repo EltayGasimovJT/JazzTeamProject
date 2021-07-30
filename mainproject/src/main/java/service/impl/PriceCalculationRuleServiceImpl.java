@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class PriceCalculationRuleServiceImpl implements PriceCalculationRuleService {
-    private PriceCalculationRuleRepository priceCalculationRuleRepository = new PriceCalculationRuleRepositoryImpl();
+    private final PriceCalculationRuleRepository priceCalculationRuleRepository = new PriceCalculationRuleRepositoryImpl();
 
     @Override
     public PriceCalculationRule addPriceCalculationRule(PriceCalculationRule priceCalculationRule) {
@@ -47,11 +47,11 @@ public class PriceCalculationRuleServiceImpl implements PriceCalculationRuleServ
         BigDecimal resultPrice = new BigDecimal(1);
         double size = getSize(order);
         if (size > priceCalculationRule.getParcelSizeLimit()) {
-            resultPrice.multiply(BigDecimal.valueOf(
+            resultPrice = resultPrice.multiply(BigDecimal.valueOf(
                     priceCalculationRule.getCountryCoefficient() * priceCalculationRule.getInitialParcelPrice()
                             * size / priceCalculationRule.getParcelSizeLimit()));
         } else {
-            resultPrice.multiply(BigDecimal.valueOf(
+            resultPrice = resultPrice.multiply(BigDecimal.valueOf(
                     priceCalculationRule.getCountryCoefficient() * priceCalculationRule.getInitialParcelPrice()));
         }
 
@@ -59,8 +59,8 @@ public class PriceCalculationRuleServiceImpl implements PriceCalculationRuleServ
     }
 
     private double getSize(Order order) {
-        return order.getParcelParameters().getLength()
+        return (order.getParcelParameters().getLength()
                 * order.getParcelParameters().getHeight()
-                * order.getParcelParameters().getWidth();
+                * order.getParcelParameters().getWidth()) + order.getParcelParameters().getWeight();
     }
 }
