@@ -1,5 +1,6 @@
 package service;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import entity.*;
 
 import java.math.BigDecimal;
@@ -35,4 +36,8 @@ public interface OrderService {
    BigDecimal calculatePrice(Order order) throws IllegalArgumentException;
 
    List<List<Order>> getOrdersOnTheWay();
+
+   Order update(Order order);
+
+   void delete(Order order);
 }

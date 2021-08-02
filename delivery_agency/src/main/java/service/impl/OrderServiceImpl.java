@@ -148,6 +148,18 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getSentOrders();
     }
 
+    @Override
+    public Order update(Order order) {
+        OrderValidator.validateOrder(order);
+        return orderRepository.update(order);
+    }
+
+    @Override
+    public void delete(Order order) {
+        OrderValidator.validateOrder(order);
+        orderRepository.delete(order);
+    }
+
     private OrderState updateState(String state) {
         List<String> newRolesAllowedPutToState = new ArrayList<>();
         List<String> newRolesAllowedToWithdrawFromState = new ArrayList<>();
