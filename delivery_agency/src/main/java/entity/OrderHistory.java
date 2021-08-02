@@ -3,14 +3,15 @@ package entity;
 
 import lombok.*;
 
+import java.util.List;
+
 @Builder
 @Data
 public class OrderHistory {
     private Long orderId;
     private Long userId;
     private String comment;
-    private Order previousState;
-    private Order currentState;
+    private List<OrderState> allStates;
     private String changingTime;
     private ChangedTypeEnum changedTypeEnum;
 }
