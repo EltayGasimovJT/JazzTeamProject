@@ -100,7 +100,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
-        Assert.assertEquals(coefficientForPriceCalculation, priceCalculationRuleService.getRule(1L));
+        Assert.assertEquals(coefficientForPriceCalculation, priceCalculationRuleService.getCoefficient(1L));
     }
 
     @Test
@@ -134,7 +134,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void getRule() {
+    void getCoefficient() {
         CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
@@ -144,7 +144,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .build();
         priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
-        CoefficientForPriceCalculation rule = priceCalculationRuleService.getRule(1);
+        CoefficientForPriceCalculation rule = priceCalculationRuleService.getCoefficient(1);
 
         Assert.assertEquals(coefficientForPriceCalculation, rule);
     }

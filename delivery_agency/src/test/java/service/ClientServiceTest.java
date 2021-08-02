@@ -9,6 +9,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.ClientServiceImpl;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -73,7 +75,7 @@ class ClientServiceTest {
 
         List<Client> allClients = clientService.findAllClients();
 
-        Assert.assertEquals(2, allClients.size());
+        Assert.assertEquals(Arrays.asList(client1, client2), allClients);
     }
 
     @Test
@@ -88,7 +90,7 @@ class ClientServiceTest {
 
         List<Client> allClients = clientService.findAllClients();
 
-        Assert.assertEquals(3, allClients.size());
+        Assert.assertEquals(Arrays.asList(client1, client2, client3), allClients);
     }
 
     @Test
@@ -100,7 +102,7 @@ class ClientServiceTest {
         clientService.addClient(client);
 
         Client byId = clientService.findById(1);
-        Assert.assertEquals("Oleg", byId.getName());
+        Assert.assertEquals(client, byId);
     }
 
     @Test
@@ -117,7 +119,7 @@ class ClientServiceTest {
 
         Client byId = clientService.findById(1);
 
-        Assert.assertEquals("Igor", byId.getName());
+        Assert.assertEquals(client, byId);
     }
 
     @Test

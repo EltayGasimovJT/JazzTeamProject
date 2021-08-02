@@ -32,8 +32,6 @@ public interface OrderService {
 
    List<Order> findAll();
 
-   Order addOrder(Order order);
-
    BigDecimal calculatePrice(Order order) throws IllegalArgumentException;
 
    List<List<Order>> getOrdersOnTheWay();

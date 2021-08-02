@@ -35,7 +35,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public CoefficientForPriceCalculation getRule(long id) {
+    public CoefficientForPriceCalculation getCoefficient(long id) {
         return priceCalculationRuleRepository.findOne(id);
     }
 

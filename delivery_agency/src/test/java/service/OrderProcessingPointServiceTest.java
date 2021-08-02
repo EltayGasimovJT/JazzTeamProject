@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.OrderProcessingPointServiceImpl;
 
+import java.util.Arrays;
 import java.util.stream.Stream;
 
 
@@ -64,7 +65,8 @@ class OrderProcessingPointServiceTest {
 
         orderProcessingPointService.deleteOrderProcessingPoint(orderProcessingPoint3);
 
-        Assert.assertEquals(2, orderProcessingPointService.findAllOrderProcessingPoints().size());
+        Assert.assertEquals(Arrays.asList(orderProcessingPoint1, orderProcessingPoint2)
+                , orderProcessingPointService.findAllOrderProcessingPoints());
     }
 
     @Test
@@ -77,7 +79,8 @@ class OrderProcessingPointServiceTest {
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint2);
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint3);
 
-        Assert.assertEquals(3, orderProcessingPointService.findAllOrderProcessingPoints().size());
+        Assert.assertEquals(Arrays.asList(orderProcessingPoint1, orderProcessingPoint2, orderProcessingPoint3)
+                , orderProcessingPointService.findAllOrderProcessingPoints());
     }
 
     @Test
@@ -96,7 +99,7 @@ class OrderProcessingPointServiceTest {
 
         OrderProcessingPoint orderProcessingPoint = orderProcessingPointService.getOrderProcessingPoint(2);
 
-        Assert.assertEquals("Moscow", orderProcessingPoint.getLocation());
+        Assert.assertEquals(orderProcessingPoint2, orderProcessingPoint);
     }
 
     @Test

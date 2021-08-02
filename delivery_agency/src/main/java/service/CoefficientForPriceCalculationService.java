@@ -15,7 +15,7 @@ public interface CoefficientForPriceCalculationService {
 
     CoefficientForPriceCalculation update(CoefficientForPriceCalculation coefficientForPriceCalculation);
 
-    CoefficientForPriceCalculation getRule(long id);
+    CoefficientForPriceCalculation getCoefficient(long id);
 
     BigDecimal calculatePrice(Order order, CoefficientForPriceCalculation coefficientForPriceCalculation) throws IllegalArgumentException;
 
