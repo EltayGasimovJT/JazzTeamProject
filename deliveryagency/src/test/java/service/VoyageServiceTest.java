@@ -15,8 +15,8 @@ class VoyageServiceTest {
     void addVoyage() {
         Voyage voyage = new Voyage();
         voyage.setId(1L);
-        voyage.setExpectedOrders(Arrays.asList(new Order(), new Order()));
-        voyage.setDispatchedOrders(Arrays.asList(new Order(), new Order()));
+        voyage.setExpectedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
+        voyage.setDispatchedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
         voyage.setSendingTime("12:30");
         voyage.setDeparturePoint("Minsk");
         voyage.setDestinationPoint("Moscow");

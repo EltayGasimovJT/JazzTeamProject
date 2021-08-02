@@ -6,8 +6,6 @@ import java.util.List;
 
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class OrderState {
     private Long id;
     private String state;

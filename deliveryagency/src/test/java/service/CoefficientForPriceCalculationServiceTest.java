@@ -1,9 +1,9 @@
 package service;
 
+import entity.CoefficientForPrice;
 import entity.Order;
 import entity.OrderProcessingPoint;
 import entity.ParcelParameters;
-import entity.CoefficientForPrice;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,12 +22,13 @@ class CoefficientForPriceCalculationServiceTest {
         orderProcessingPoint1.setLocation("Russia");
         Order order1 = Order.builder()
                 .id(1L)
-                .parcelParameters(new ParcelParameters(
-                        1,
-                        1,
-                        1,
-                        20
-                ))
+                .parcelParameters(
+                        ParcelParameters.builder()
+                                .height(1)
+                                .width(1)
+                                .length(1)
+                                .weight(20).build()
+                )
                 .destinationPlace(orderProcessingPoint1)
                 .build();
 
@@ -43,12 +44,13 @@ class CoefficientForPriceCalculationServiceTest {
         orderProcessingPoint1.setId(2L);
         Order order2 = Order.builder()
                 .id(2L)
-                .parcelParameters(new ParcelParameters(
-                        4,
-                        10,
-                        1,
-                        20
-                ))
+                .parcelParameters(
+                        ParcelParameters.builder()
+                                .height(4)
+                                .width(10)
+                                .length(1)
+                                .weight(20).build()
+                )
                 .destinationPlace(orderProcessingPoint1)
                 .build();
 
@@ -62,12 +64,12 @@ class CoefficientForPriceCalculationServiceTest {
         orderProcessingPoint1.setLocation("Ukraine");
         Order order3 = Order.builder()
                 .id(3L)
-                .parcelParameters(new ParcelParameters(
-                        4,
-                        5,
-                        10,
-                        30
-                ))
+                .parcelParameters(
+                        ParcelParameters.builder()
+                                .height(4)
+                                .width(5)
+                                .length(10)
+                                .weight(30).build())
                 .destinationPlace(orderProcessingPoint1)
                 .build();
 

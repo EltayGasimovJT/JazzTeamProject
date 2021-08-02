@@ -57,9 +57,9 @@ class UserServiceTest {
 
     @Test
     void findAllUsers() {
-        User user1 = new User();
-        User user2 = new User();
-        User user3 = new User();
+        User user1 = User.builder().build();
+        User user2 = User.builder().build();
+        User user3 = User.builder().build();
 
         userService.addUser(user1);
         userService.addUser(user2);

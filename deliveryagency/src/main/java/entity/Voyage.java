@@ -1,16 +1,9 @@
 package entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.List;
+import lombok.Data;
 
 
-@Setter
-@Getter
-@NoArgsConstructor @AllArgsConstructor
+@Data
 public class Voyage extends AbstractLocation {
     private String departurePoint;
     private String destinationPoint;

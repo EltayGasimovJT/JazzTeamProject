@@ -5,8 +5,6 @@ import lombok.*;
 
 @Builder
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class OrderHistory {
     private Long orderId;
     private Long userId;

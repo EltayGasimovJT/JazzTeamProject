@@ -6,8 +6,6 @@ import java.util.List;
 
 @Builder
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class User {
     private Long id;
     private String name;

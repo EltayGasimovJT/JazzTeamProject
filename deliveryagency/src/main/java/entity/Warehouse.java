@@ -1,13 +1,12 @@
 package entity;
 
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
 
 
-@Getter @Setter
-@NoArgsConstructor @AllArgsConstructor
+@Data
 public class Warehouse extends AbstractBuilding {
     private List<OrderProcessingPoint> orderProcessingPoints;
     private List<Warehouse> connectedWarehouses;

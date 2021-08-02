@@ -6,9 +6,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Builder
-@NoArgsConstructor
 @Data
-@AllArgsConstructor
 public class Order {
     private Long id;
     private OrderState state;
