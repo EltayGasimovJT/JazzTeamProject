@@ -103,7 +103,7 @@ class OrderServiceTest {
                 .recipient(Client.builder().build())
                 .build();
 
-        orderService.addOrder(order);
+        orderService.create(order);
 
         OrderHistory newOrderHistory = OrderHistory.builder().build();
 

@@ -14,5 +14,4 @@ public class Client {
     private String passportId;
     private String phoneNumber;
     private List<Order> orders;
-
 }
