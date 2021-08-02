@@ -1,52 +1,52 @@
 package repository.impl;
 
-import entity.CoefficientForPrice;
+import entity.CoefficientForPriceCalculation;
 import repository.CoefficientForPriceCalculationRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CoefficientForPriceCalculationRepositoryImpl implements CoefficientForPriceCalculationRepository {
-    private List<CoefficientForPrice> coefficientForPrices = new ArrayList<>();
+    private List<CoefficientForPriceCalculation> coefficientForPriceCalculations = new ArrayList<>();
 
     @Override
-    public CoefficientForPrice save(CoefficientForPrice coefficientForPrice) {
-        coefficientForPrices.add(coefficientForPrice);
-        return coefficientForPrice;    }
+    public CoefficientForPriceCalculation save(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+        coefficientForPriceCalculations.add(coefficientForPriceCalculation);
+        return coefficientForPriceCalculation;    }
 
     @Override
-    public void delete(CoefficientForPrice coefficientForPrice) {
-        coefficientForPrices.remove(coefficientForPrice);
+    public void delete(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+        coefficientForPriceCalculations.remove(coefficientForPriceCalculation);
     }
 
     @Override
-    public List<CoefficientForPrice> findAll() {
-        return coefficientForPrices;
+    public List<CoefficientForPriceCalculation> findAll() {
+        return coefficientForPriceCalculations;
     }
 
     @Override
-    public CoefficientForPrice findOne(long id) {
-        return coefficientForPrices.stream()
+    public CoefficientForPriceCalculation findOne(long id) {
+        return coefficientForPriceCalculations.stream()
                 .filter(priceCalculationRule -> priceCalculationRule.getId() == id)
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public CoefficientForPrice update(CoefficientForPrice update) {
-        for (CoefficientForPrice coefficientForPrice : coefficientForPrices) {
-            if (coefficientForPrice.getId() == update.getId()){
-                coefficientForPrice.setCountry(update.getCountry());
-                coefficientForPrice.setCountryCoefficient(update.getCountryCoefficient());
-                coefficientForPrice.setParcelSizeLimit(update.getParcelSizeLimit());
+    public CoefficientForPriceCalculation update(CoefficientForPriceCalculation update) {
+        for (CoefficientForPriceCalculation coefficientForPriceCalculation : coefficientForPriceCalculations) {
+            if (coefficientForPriceCalculation.getId() == update.getId()){
+                coefficientForPriceCalculation.setCountry(update.getCountry());
+                coefficientForPriceCalculation.setCountryCoefficient(update.getCountryCoefficient());
+                coefficientForPriceCalculation.setParcelSizeLimit(update.getParcelSizeLimit());
             }
         }
         return update;
     }
 
     @Override
-    public CoefficientForPrice findByCountry(String country) {
-        return coefficientForPrices.stream()
+    public CoefficientForPriceCalculation findByCountry(String country) {
+        return coefficientForPriceCalculations.stream()
                 .filter(priceCalculationRule -> priceCalculationRule.getCountry().equals(country))
                 .findFirst()
                 .orElse(null);

@@ -1,23 +1,23 @@
 package service;
 
 import entity.Order;
-import entity.CoefficientForPrice;
+import entity.CoefficientForPriceCalculation;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface CoefficientForPriceCalculationService {
-    CoefficientForPrice addPriceCalculationRule(CoefficientForPrice coefficientForPrice);
+    CoefficientForPriceCalculation addPriceCalculationRule(CoefficientForPriceCalculation coefficientForPriceCalculation);
 
-    void deletePriceCalculationRule(CoefficientForPrice coefficientForPrice);
+    void deletePriceCalculationRule(CoefficientForPriceCalculation coefficientForPriceCalculation);
 
-    List<CoefficientForPrice> findAllPriceCalculationRules();
+    List<CoefficientForPriceCalculation> findAllPriceCalculationRules();
 
-    CoefficientForPrice update(CoefficientForPrice coefficientForPrice);
+    CoefficientForPriceCalculation update(CoefficientForPriceCalculation coefficientForPriceCalculation);
 
-    CoefficientForPrice getRule(long id);
+    CoefficientForPriceCalculation getRule(long id);
 
-    BigDecimal calculatePrice(Order order, CoefficientForPrice coefficientForPrice) throws IllegalArgumentException;
+    BigDecimal calculatePrice(Order order, CoefficientForPriceCalculation coefficientForPriceCalculation) throws IllegalArgumentException;
 
-    CoefficientForPrice findByCountry(String country);
+    CoefficientForPriceCalculation findByCountry(String country);
 }

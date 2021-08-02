@@ -1,7 +1,7 @@
 package repository;
 
-import entity.CoefficientForPrice;
+import entity.CoefficientForPriceCalculation;
 
-public interface CoefficientForPriceCalculationRepository extends GeneralRepository<CoefficientForPrice> {
-    CoefficientForPrice findByCountry(String country);
+public interface CoefficientForPriceCalculationRepository extends GeneralRepository<CoefficientForPriceCalculation> {
+    CoefficientForPriceCalculation findByCountry(String country);
 }

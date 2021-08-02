@@ -397,10 +397,9 @@ class OrderServiceTest {
 
         List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> orderService.compareOrders(ordersToSend, ordersOnTheWay.get(0))
-        );
+        ordersToSend.get(0).setId(5L);
+
+        Assert.assertEquals(ordersOnTheWay.get(0), ordersToSend);
     }
 
     @Test

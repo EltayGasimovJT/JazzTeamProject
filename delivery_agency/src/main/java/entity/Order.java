@@ -17,6 +17,7 @@ public class Order {
     private OrderProcessingPoint destinationPlace;
     private AbstractLocation currentLocation;
     private OrderHistory history;
+    private String sendingTime;
 
     private List<AbstractLocation> route;
 

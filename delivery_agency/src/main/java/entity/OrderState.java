@@ -5,7 +5,7 @@ import lombok.*;
 import java.util.List;
 
 
-@Data
+@Data @Builder
 public class OrderState {
     private Long id;
     private String state;

@@ -4,7 +4,7 @@ import lombok.*;
 
 @Builder
 @Data
-public class CoefficientForPrice {
+public class CoefficientForPriceCalculation {
     private Long id;
     private int parcelSizeLimit;
     private String country;

@@ -1,7 +1,7 @@
 package service.impl;
 
+import entity.CoefficientForPriceCalculation;
 import entity.Order;
-import entity.CoefficientForPrice;
 import repository.CoefficientForPriceCalculationRepository;
 import repository.impl.CoefficientForPriceCalculationRepositoryImpl;
 import service.CoefficientForPriceCalculationService;
@@ -12,54 +12,61 @@ import java.util.List;
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
     private final CoefficientForPriceCalculationRepository priceCalculationRuleRepository = new CoefficientForPriceCalculationRepositoryImpl();
     private static final int INITIAL_PRISE = 40;
+    private static final int INITIAL_WEIGHT = 20;
 
     @Override
-    public CoefficientForPrice addPriceCalculationRule(CoefficientForPrice coefficientForPrice) {
-        return priceCalculationRuleRepository.save(coefficientForPrice);
+    public CoefficientForPriceCalculation addPriceCalculationRule(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+        return priceCalculationRuleRepository.save(coefficientForPriceCalculation);
     }
 
     @Override
-    public void deletePriceCalculationRule(CoefficientForPrice coefficientForPrice) {
-        priceCalculationRuleRepository.delete(coefficientForPrice);
+    public void deletePriceCalculationRule(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+        priceCalculationRuleRepository.delete(coefficientForPriceCalculation);
     }
 
     @Override
-    public List<CoefficientForPrice> findAllPriceCalculationRules() {
+    public List<CoefficientForPriceCalculation> findAllPriceCalculationRules() {
         return priceCalculationRuleRepository.findAll();
     }
 
     @Override
-    public CoefficientForPrice update(CoefficientForPrice coefficientForPrice) {
-        return priceCalculationRuleRepository.update(coefficientForPrice);
+    public CoefficientForPriceCalculation update(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+        return priceCalculationRuleRepository.update(coefficientForPriceCalculation);
     }
 
     @Override
-    public CoefficientForPrice getRule(long id) {
+    public CoefficientForPriceCalculation getRule(long id) {
         return priceCalculationRuleRepository.findOne(id);
     }
 
     @Override
-    public BigDecimal calculatePrice(Order order, CoefficientForPrice coefficientForPrice) throws IllegalArgumentException {
+    public BigDecimal calculatePrice(Order order, CoefficientForPriceCalculation coefficientForPriceCalculation) throws IllegalArgumentException {
         BigDecimal resultPrice = new BigDecimal(1);
         BigDecimal size = BigDecimal.valueOf(getSize(order));
-        BigDecimal parcelSizeLimit = BigDecimal.valueOf(coefficientForPrice.getParcelSizeLimit());
+        BigDecimal parcelSizeLimit = BigDecimal.valueOf(coefficientForPriceCalculation.getParcelSizeLimit());
         if (size.doubleValue() > parcelSizeLimit.doubleValue()) {
             resultPrice =
                     resultPrice
-                            .multiply(BigDecimal.valueOf(coefficientForPrice.getCountryCoefficient())
+                            .multiply(BigDecimal.valueOf(coefficientForPriceCalculation.getCountryCoefficient())
                                     .multiply(BigDecimal.valueOf(INITIAL_PRISE)
-                                            .multiply((size.divide(parcelSizeLimit,1))))
+                                            .multiply(BigDecimal.valueOf(order.getParcelParameters().getWeight() / INITIAL_WEIGHT))
+                                            .multiply((size.divide(parcelSizeLimit, 1))))
                             );
+        } else if (order.getParcelParameters().getWeight() > INITIAL_WEIGHT) {
+            resultPrice = resultPrice.multiply(BigDecimal.valueOf(
+                    coefficientForPriceCalculation.getCountryCoefficient()
+                            * INITIAL_PRISE
+                            * (order.getParcelParameters().getWeight() / INITIAL_WEIGHT)));
         } else {
             resultPrice = resultPrice.multiply(BigDecimal.valueOf(
-                    coefficientForPrice.getCountryCoefficient() * INITIAL_PRISE));
+                    coefficientForPriceCalculation.getCountryCoefficient() * INITIAL_PRISE));
         }
 
         return resultPrice;
     }
 
     @Override
-    public CoefficientForPrice findByCountry(String country) {
+    public CoefficientForPriceCalculation findByCountry(String country) {
         return priceCalculationRuleRepository.findByCountry(country);
     }
 

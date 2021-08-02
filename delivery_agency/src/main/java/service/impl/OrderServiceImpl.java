@@ -4,12 +4,13 @@ import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import repository.OrderRepository;
 import repository.impl.OrderRepositoryImpl;
-import service.OrderService;
 import service.CoefficientForPriceCalculationService;
+import service.OrderService;
 import validator.OrderValidator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -42,6 +43,13 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal price = calculatePrice(order);
         order.setPrice(price);
         order.setState(orderState);
+        OrderHistory orderHistory = OrderHistory.builder()
+                .orderId(order.getId())
+                .allStates(Arrays.asList(orderState))
+                .changedTypeEnum(ChangedTypeEnum.READY_TO_SEND)
+                .changingTime(order.getSendingTime())
+                .build();
+        order.setHistory(orderHistory);
         return orderRepository.save(order);
     }
 
@@ -70,14 +78,16 @@ public class OrderServiceImpl implements OrderService {
     public void send(List<Order> orders, Voyage voyage) {
         for (Order order : orders) {
             order.setCurrentLocation(voyage);
+            OrderState orderState;
             if (isFinalWarehouse(order)) {
-                updateState("On the way to the final warehouse");
+                orderState = updateState("On the way to the final warehouse");
             } else {
-                updateState("On the way to the warehouse");
+                orderState = updateState("On the way to the warehouse");
             }
-            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint){
-                updateState("On the way to the pick up/reception");
+            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint) {
+                orderState = updateState("On the way to the pick up/reception");
             }
+            order.setState(orderState);
         }
         orderRepository.saveSentOrders(orders);
     }
@@ -87,16 +97,17 @@ public class OrderServiceImpl implements OrderService {
         List<Order> orders1 = orderRepository.acceptOrders(orders);
         for (Order order : orders1) {
             log.info(order.toString());
+            OrderState orderState;
             if (isFinalWarehouse(order)) {
-                updateState("On final warehouse");
+                orderState = updateState("On final warehouse");
             } else {
-                updateState("On the warehouse");
+                orderState = updateState("On the warehouse");
             }
-            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint){
-                updateState("Order completed");
+            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint) {
+                orderState = updateState("Order completed");
             }
+            order.setState(orderState);
         }
-
         return orders1;
     }
 
@@ -108,8 +119,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void compareOrders(List<Order> expectedOrders, List<Order> acceptedOrders) throws IllegalArgumentException {
-        for (Order expectedOrder : expectedOrders) {
-            if (!expectedOrder.equals(acceptedOrders)) {
+        for (int i = 0; i < expectedOrders.size(); i++) {
+            if (!expectedOrders.get(i).equals(acceptedOrders.get(i))) {
                 throw new IllegalArgumentException("Expected List is not equal to actual!!!");
             }
         }
@@ -132,9 +143,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public BigDecimal calculatePrice(Order order) throws IllegalArgumentException {
-        CoefficientForPrice coefficientForPrice = getRule(order.getDestinationPlace());
+        CoefficientForPriceCalculation coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
 
-        return priceCalculationRuleService.calculatePrice(order, coefficientForPrice);
+        return priceCalculationRuleService.calculatePrice(order, coefficientForPriceCalculation);
     }
 
     @Override
@@ -145,8 +156,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderState updateState(String state) {
         List<String> newRolesAllowedPutToState = new ArrayList<>();
         List<String> newRolesAllowedToWithdrawFromState = new ArrayList<>();
-        OrderState orderState = new OrderState();
-        orderState.setState(state);
+        OrderState orderState = OrderState.builder()
+                .state(state).build();
         if (state.equals("Ready To Send")) {
             newRolesAllowedPutToState.add(ROLE_ADMIN);
             newRolesAllowedPutToState.add("PickUp Worker");
@@ -205,10 +216,10 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPrice getRule(AbstractBuilding abstractBuilding) {
-        CoefficientForPrice coefficientForPrice;
+    private CoefficientForPriceCalculation getCoefficient(AbstractBuilding abstractBuilding) {
+        CoefficientForPriceCalculation coefficientForPriceCalculation;
 
-        CoefficientForPrice coefficientForPrice1 = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation1 = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -216,7 +227,7 @@ public class OrderServiceImpl implements OrderService {
                 .parcelSizeLimit(50)
                 .build();
 
-        CoefficientForPrice coefficientForPrice2 = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation2 = CoefficientForPriceCalculation
                 .builder()
                 .id(2L)
                 .countryCoefficient(1.8)
@@ -224,17 +235,16 @@ public class OrderServiceImpl implements OrderService {
                 .parcelSizeLimit(40)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice1);
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice2);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation1);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation2);
 
         if (abstractBuilding.getLocation().equals("Russia")) {
-            coefficientForPrice = priceCalculationRuleService.findByCountry("Russia");
+            coefficientForPriceCalculation = priceCalculationRuleService.findByCountry("Russia");
         } else if (abstractBuilding.getLocation().equals("Poland")) {
-            coefficientForPrice = priceCalculationRuleService.findByCountry("Poland");
+            coefficientForPriceCalculation = priceCalculationRuleService.findByCountry("Poland");
         } else {
             throw new IllegalArgumentException("This country is not supported yet!!!" + abstractBuilding.getLocation());
         }
-
-        return coefficientForPrice;
+        return coefficientForPriceCalculation;
     }
 }

@@ -1,6 +1,6 @@
 package service;
 
-import entity.CoefficientForPrice;
+import entity.CoefficientForPriceCalculation;
 import entity.Order;
 import entity.OrderProcessingPoint;
 import entity.ParcelParameters;
@@ -14,7 +14,7 @@ import service.impl.CoefficientForPriceCalculationServiceImpl;
 import java.math.BigDecimal;
 import java.util.stream.Stream;
 
-class CoefficientForPriceCalculationServiceTest {
+class CoefficientForPriceCalculationCalculationServiceTest {
     private final CoefficientForPriceCalculationService priceCalculationRuleService = new CoefficientForPriceCalculationServiceImpl();
 
     private static Stream<Arguments> testDataForCalculate() {
@@ -32,7 +32,7 @@ class CoefficientForPriceCalculationServiceTest {
                 .destinationPlace(orderProcessingPoint1)
                 .build();
 
-        CoefficientForPrice coefficientForPrice1 = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation1 = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -54,7 +54,7 @@ class CoefficientForPriceCalculationServiceTest {
                 .destinationPlace(orderProcessingPoint1)
                 .build();
 
-        CoefficientForPrice coefficientForPrice2 = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation2 = CoefficientForPriceCalculation
                 .builder()
                 .id(2L)
                 .countryCoefficient(1.8)
@@ -73,7 +73,7 @@ class CoefficientForPriceCalculationServiceTest {
                 .destinationPlace(orderProcessingPoint1)
                 .build();
 
-        CoefficientForPrice coefficientForPrice3 = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation3 = CoefficientForPriceCalculation
                 .builder()
                 .countryCoefficient(1.5)
                 .country("Ukraine")
@@ -82,15 +82,15 @@ class CoefficientForPriceCalculationServiceTest {
                 .build();
 
         return Stream.of(
-                Arguments.of(order1, coefficientForPrice1, BigDecimal.valueOf(64.0)),
-                Arguments.of(order2, coefficientForPrice2, BigDecimal.valueOf(108.0)),
-                Arguments.of(order3, coefficientForPrice3, BigDecimal.valueOf(228.0))
+                Arguments.of(order1, coefficientForPriceCalculation1, BigDecimal.valueOf(64.0)),
+                Arguments.of(order2, coefficientForPriceCalculation2, BigDecimal.valueOf(108.0)),
+                Arguments.of(order3, coefficientForPriceCalculation3, BigDecimal.valueOf(342.0))
         );
     }
 
     @Test
     void addPriceCalculationRule() {
-        CoefficientForPrice coefficientForPrice = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -98,14 +98,14 @@ class CoefficientForPriceCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
-        Assert.assertEquals(coefficientForPrice, priceCalculationRuleService.getRule(1L));
+        Assert.assertEquals(coefficientForPriceCalculation, priceCalculationRuleService.getRule(1L));
     }
 
     @Test
     void deletePriceCalculationRule() {
-        CoefficientForPrice coefficientForPrice = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -113,63 +113,63 @@ class CoefficientForPriceCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
-        priceCalculationRuleService.deletePriceCalculationRule(coefficientForPrice);
+        priceCalculationRuleService.deletePriceCalculationRule(coefficientForPriceCalculation);
         Assert.assertEquals(0, priceCalculationRuleService.findAllPriceCalculationRules().size());
     }
 
     @Test
     void findAllPriceCalculationRules() {
-        CoefficientForPrice coefficientForPrice = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
         Assert.assertEquals(1, priceCalculationRuleService.findAllPriceCalculationRules().size());
     }
 
     @Test
     void getRule() {
-        CoefficientForPrice coefficientForPrice = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
-        CoefficientForPrice rule = priceCalculationRuleService.getRule(1);
+        CoefficientForPriceCalculation rule = priceCalculationRuleService.getRule(1);
 
-        Assert.assertEquals(coefficientForPrice, rule);
+        Assert.assertEquals(coefficientForPriceCalculation, rule);
     }
 
     @Test
     void update() {
-        CoefficientForPrice coefficientForPrice = CoefficientForPrice
+        CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
-        coefficientForPrice.setParcelSizeLimit(52);
+        coefficientForPriceCalculation.setParcelSizeLimit(52);
 
-        CoefficientForPrice update = priceCalculationRuleService.update(coefficientForPrice);
+        CoefficientForPriceCalculation update = priceCalculationRuleService.update(coefficientForPriceCalculation);
 
         Assert.assertEquals(52, update.getParcelSizeLimit(), 0.001);
     }
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
-    void calculatePrice(Order order, CoefficientForPrice rule, BigDecimal actual) {
+    void calculatePrice(Order order, CoefficientForPriceCalculation rule, BigDecimal actual) {
         BigDecimal bigDecimal = priceCalculationRuleService.calculatePrice(order, rule);
         Assert.assertEquals(actual.doubleValue(), bigDecimal.doubleValue(), 0.001);
     }
