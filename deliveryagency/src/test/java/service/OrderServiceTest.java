@@ -8,7 +8,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.OrderServiceImpl;
-import service.impl.PriceCalculationRuleServiceImpl;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -19,26 +18,28 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OrderServiceTest {
     private final OrderService orderService = new OrderServiceImpl();
-    private PriceCalculationRuleService priceCalculationRuleService = new PriceCalculationRuleServiceImpl();
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
         orderProcessingPoint1.setLocation("Russia");
         Order order1 = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
                         1,
                         20
                 ))
+                .sender(Client.builder().build())
+                .price(BigDecimal.valueOf(1))
+                .recipient(Client.builder().build())
                 .destinationPlace(orderProcessingPoint1)
                 .build();
 
         orderProcessingPoint1.setLocation("Poland");
-        orderProcessingPoint1.setId(2);
+        orderProcessingPoint1.setId(2L);
         Order order2 = Order.builder()
-                .id(2)
+                .id(2L)
                 .parcelParameters(new ParcelParameters(
                         4,
                         10,
@@ -46,6 +47,9 @@ class OrderServiceTest {
                         20
                 ))
                 .destinationPlace(orderProcessingPoint1)
+                .sender(Client.builder().build())
+                .recipient(Client.builder().build())
+                .price(BigDecimal.valueOf(1))
                 .build();
         return Stream.of(
                 Arguments.of(order1, BigDecimal.valueOf(72.0)),
@@ -58,14 +62,17 @@ class OrderServiceTest {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
                         1,
                         20
                 ))
+                .sender(Client.builder().build())
+                .recipient(Client.builder().build())
                 .destinationPlace(orderProcessingPoint)
+                .price(BigDecimal.valueOf(1))
                 .build();
 
         orderService.create(order);
@@ -84,7 +91,7 @@ class OrderServiceTest {
         OrderHistory orderHistory = new OrderHistory();
         orderHistory.setChangingTime("14:33");
         Order order = Order.builder()
-                .id(1)
+                .id(1L)
                 .history(orderHistory)
                 .parcelParameters(new ParcelParameters(
                         1,
@@ -93,6 +100,9 @@ class OrderServiceTest {
                         20
                 ))
                 .destinationPlace(orderProcessingPoint)
+                .sender(Client.builder().build())
+                .price(BigDecimal.valueOf(1))
+                .recipient(Client.builder().build())
                 .build();
 
         orderService.addOrder(order);
@@ -111,7 +121,7 @@ class OrderServiceTest {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
@@ -119,6 +129,9 @@ class OrderServiceTest {
                         20
                 ))
                 .destinationPlace(orderProcessingPoint)
+                .sender(Client.builder().build())
+                .recipient(Client.builder().build())
+                .price(BigDecimal.valueOf(1))
                 .build();
 
         orderService.create(order);
@@ -133,7 +146,7 @@ class OrderServiceTest {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
@@ -141,6 +154,9 @@ class OrderServiceTest {
                         20
                 ))
                 .destinationPlace(orderProcessingPoint)
+                .sender(Client.builder().build())
+                .price(BigDecimal.valueOf(1))
+                .recipient(Client.builder().build())
                 .build();
 
         orderService.create(order);
@@ -153,7 +169,7 @@ class OrderServiceTest {
     @Test
     void findByRecipient() {
         Client recipient = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("Igor")
                 .build();
 
@@ -161,7 +177,7 @@ class OrderServiceTest {
         orderProcessingPoint.setLocation("Russia");
 
         Order order = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
@@ -169,6 +185,8 @@ class OrderServiceTest {
                         20
                 ))
                 .destinationPlace(orderProcessingPoint)
+                .sender(Client.builder().build())
+                .price(BigDecimal.valueOf(1))
                 .recipient(recipient)
                 .build();
 
@@ -184,7 +202,7 @@ class OrderServiceTest {
     @Test
     void findBySender() {
         Client sender = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("Igor")
                 .build();
 
@@ -192,7 +210,7 @@ class OrderServiceTest {
         orderProcessingPoint.setLocation("Russia");
 
         Order order = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
@@ -201,6 +219,8 @@ class OrderServiceTest {
                 ))
                 .destinationPlace(orderProcessingPoint)
                 .recipient(sender)
+                .price(BigDecimal.valueOf(1))
+                .sender(Client.builder().build())
                 .build();
 
         orderService.create(order);
@@ -214,17 +234,20 @@ class OrderServiceTest {
     @Test
     void getCurrentOrderLocation() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setId(1);
+        orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
 
         Order order = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
                         1,
                         20
                 ))
+                .sender(Client.builder().build())
+                .recipient(Client.builder().build())
+                .price(BigDecimal.valueOf(1))
                 .destinationPlace(orderProcessingPoint)
                 .currentLocation(orderProcessingPoint)
                 .build();
@@ -238,12 +261,31 @@ class OrderServiceTest {
 
     @Test
     void send() {
+        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        orderProcessingPoint.setId(1L);
+        orderProcessingPoint.setLocation("Russia");
+
+        Order order = Order.builder()
+                .id(1L)
+                .parcelParameters(new ParcelParameters(
+                        1,
+                        1,
+                        1,
+                        20
+                ))
+                .destinationPlace(orderProcessingPoint)
+                .currentLocation(orderProcessingPoint)
+                .price(BigDecimal.valueOf(1))
+                .recipient(Client.builder().build())
+                .sender(Client.builder().build())
+                .build();
         Voyage voyage = new Voyage();
         List<Order> orders = Arrays.asList(
-                new Order(),
-                new Order(),
-                new Order()
+                order
         );
+
+        orderService.create(order);
+
         orderService.send(orders, voyage);
 
         List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
@@ -253,12 +295,31 @@ class OrderServiceTest {
 
     @Test
     void accept() {
+        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        orderProcessingPoint.setId(1L);
+        orderProcessingPoint.setLocation("Russia");
+
+        Order order = Order.builder()
+                .id(1L)
+                .parcelParameters(new ParcelParameters(
+                        1,
+                        1,
+                        1,
+                        20
+                ))
+                .destinationPlace(orderProcessingPoint)
+                .currentLocation(orderProcessingPoint)
+                .price(BigDecimal.valueOf(1))
+                .sender(Client.builder().build())
+                .recipient(Client.builder().build())
+                .build();
         Voyage voyage = new Voyage();
         List<Order> orders = Arrays.asList(
-                new Order(),
-                new Order(),
-                new Order()
+                order
         );
+
+        orderService.create(order);
+
         orderService.send(orders, voyage);
 
         orderService.accept(orders);
@@ -271,11 +332,11 @@ class OrderServiceTest {
     @Test
     void getState() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setId(1);
+        orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
 
         Order order = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
@@ -284,6 +345,9 @@ class OrderServiceTest {
                 ))
                 .destinationPlace(orderProcessingPoint)
                 .currentLocation(orderProcessingPoint)
+                .price(BigDecimal.valueOf(1))
+                .recipient(Client.builder().build())
+                .sender(Client.builder().build())
                 .build();
         orderService.create(order);
 
@@ -295,27 +359,30 @@ class OrderServiceTest {
     @Test
     void compareOrders() {
         OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
-        orderProcessingPoint1.setId(1);
+        orderProcessingPoint1.setId(1L);
         orderProcessingPoint1.setLocation("Russia");
 
         OrderProcessingPoint orderProcessingPoint2 = new OrderProcessingPoint();
-        orderProcessingPoint2.setId(1);
+        orderProcessingPoint2.setId(2L);
         orderProcessingPoint2.setLocation("Russia");
 
         Order order1 = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
                         1,
                         20
                 ))
+                .recipient(Client.builder().build())
+                .sender(Client.builder().build())
                 .destinationPlace(orderProcessingPoint1)
+                .price(BigDecimal.valueOf(1))
                 .currentLocation(orderProcessingPoint1)
                 .build();
 
         Order order2 = Order.builder()
-                .id(1)
+                .id(2L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
@@ -324,7 +391,13 @@ class OrderServiceTest {
                 ))
                 .destinationPlace(orderProcessingPoint2)
                 .currentLocation(orderProcessingPoint2)
+                .sender(Client.builder().build())
+                .recipient(Client.builder().build())
+                .price(BigDecimal.valueOf(1))
                 .build();
+
+        orderService.create(order1);
+        orderService.create(order2);
 
         List<Order> ordersToSend = Arrays.asList(
                 order1, order2
@@ -343,17 +416,20 @@ class OrderServiceTest {
     @Test
     void isFinalWarehouse() {
         OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
-        orderProcessingPoint1.setId(1);
-        orderProcessingPoint1.setLocation("Moskov");
+        orderProcessingPoint1.setId(1L);
+        orderProcessingPoint1.setLocation("Moscow");
         Order order1 = Order.builder()
-                .id(1)
+                .id(1L)
                 .parcelParameters(new ParcelParameters(
                         1,
                         1,
                         1,
                         20
                 ))
+                .sender(Client.builder().build())
+                .recipient(Client.builder().build())
                 .destinationPlace(orderProcessingPoint1)
+                .price(BigDecimal.valueOf(1))
                 .currentLocation(orderProcessingPoint1)
                 .build();
         Assert.assertTrue(orderService.isFinalWarehouse(order1));

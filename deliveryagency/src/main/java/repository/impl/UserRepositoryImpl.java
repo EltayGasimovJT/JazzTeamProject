@@ -36,7 +36,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User update(User update) {
         for (User user : users) {
-            if (user.getId() == update.getId()) {
+            if (user.getId().equals(update.getId())) {
                 user.setName(update.getName());
                 user.setSurname(update.getSurname());
                 user.setWorkingPlace(update.getWorkingPlace());

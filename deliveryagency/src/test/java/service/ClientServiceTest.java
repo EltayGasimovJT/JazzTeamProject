@@ -17,17 +17,17 @@ class ClientServiceTest {
 
     private static Stream<Arguments> testClients() {
         Client client1 = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("client1")
                 .passportId("23612613616")
                 .build();
         Client client2 = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("client2")
                 .passportId("16714714713")
                 .build();
         Client client3 = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("client3")
                 .passportId("04786533747")
                 .build();
@@ -50,17 +50,17 @@ class ClientServiceTest {
     @Test
     void deleteClient() {
         Client client1 = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("client1")
                 .passportId("23612613616")
                 .build();
         Client client2 = Client.builder()
-                .id(1)
+                .id(2L)
                 .name("client2")
                 .passportId("16714714713")
                 .build();
         Client client3 = Client.builder()
-                .id(1)
+                .id(3L)
                 .name("client3")
                 .passportId("04786533747")
                 .build();
@@ -78,9 +78,9 @@ class ClientServiceTest {
 
     @Test
     void findAllClients() {
-        Client client1 = new Client();
-        Client client2 = new Client();
-        Client client3 = new Client();
+        Client client1 = Client.builder().build();
+        Client client2 = Client.builder().build();
+        Client client3 = Client.builder().build();
 
         clientService.addClient(client1);
         clientService.addClient(client2);
@@ -94,7 +94,7 @@ class ClientServiceTest {
     @Test
     void findById() {
         Client client = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("Oleg")
                 .build();
         clientService.addClient(client);
@@ -106,7 +106,7 @@ class ClientServiceTest {
     @Test
     void update() {
         Client client = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("Oleg")
                 .build();
         clientService.addClient(client);
@@ -123,7 +123,7 @@ class ClientServiceTest {
     @Test
     void findByPassportId() {
         Client client = Client.builder()
-                .id(1)
+                .id(1L)
                 .name("Oleg")
                 .passportId("12512515")
                 .build();

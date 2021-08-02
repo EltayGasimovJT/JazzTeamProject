@@ -14,25 +14,25 @@ class VoyageServiceTest {
     @Test
     void addVoyage() {
         Voyage voyage = new Voyage();
-        voyage.setId(1);
+        voyage.setId(1L);
         voyage.setExpectedOrders(Arrays.asList(new Order(), new Order()));
         voyage.setDispatchedOrders(Arrays.asList(new Order(), new Order()));
         voyage.setSendingTime("12:30");
-        voyage.setDeparturePoint("minsk");
-        voyage.setDestinationPoint("moskov");
+        voyage.setDeparturePoint("Minsk");
+        voyage.setDestinationPoint("Moscow");
 
         Voyage addVoyage = voyageService.addVoyage(voyage);
-        Assert.assertEquals("moskov", addVoyage.getDestinationPoint());
+        Assert.assertEquals("Moscow", addVoyage.getDestinationPoint());
     }
 
     @Test
     void deleteVoyage() {
         Voyage voyage1 = new Voyage();
-        voyage1.setId(1);
+        voyage1.setId(1L);
         Voyage voyage2 = new Voyage();
-        voyage2.setId(2);
+        voyage2.setId(2L);
         Voyage voyage3 = new Voyage();
-        voyage3.setId(3);
+        voyage3.setId(3L);
 
         voyageService.addVoyage(voyage1);
         voyageService.addVoyage(voyage2);
@@ -59,7 +59,7 @@ class VoyageServiceTest {
     @Test
     void getVoyage() {
         Voyage voyage1 = new Voyage();
-        voyage1.setId(1);
+        voyage1.setId(1L);
         voyage1.setSendingTime("12:30");
 
         voyageService.addVoyage(voyage1);
@@ -72,7 +72,7 @@ class VoyageServiceTest {
     @Test
     void update() {
         Voyage voyage1 = new Voyage();
-        voyage1.setId(1);
+        voyage1.setId(1L);
         voyage1.setSendingTime("12:30");
 
         voyageService.addVoyage(voyage1);

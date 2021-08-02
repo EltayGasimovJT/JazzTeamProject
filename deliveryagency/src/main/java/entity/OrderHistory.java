@@ -8,8 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderHistory {
-    private long orderId;
-    private long userId;
+    private Long orderId;
+    private Long userId;
     private String comment;
     private Order previousState;
     private Order currentState;

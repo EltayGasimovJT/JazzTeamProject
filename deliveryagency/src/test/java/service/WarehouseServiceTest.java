@@ -11,7 +11,7 @@ class WarehouseServiceTest {
     @Test
     void addWarehouse() {
         Warehouse warehouse = new Warehouse();
-        warehouse.setId(1);
+        warehouse.setId(1L);
         warehouse.setLocation("Minsk");
         warehouseService.addWarehouse(warehouse);
 
@@ -23,11 +23,11 @@ class WarehouseServiceTest {
     @Test
     void deleteWarehouse() {
         Warehouse warehouse1 = new Warehouse();
-        warehouse1.setId(1);
+        warehouse1.setId(1L);
         Warehouse warehouse2 = new Warehouse();
-        warehouse2.setId(2);
+        warehouse2.setId(2L);
         Warehouse warehouse3 = new Warehouse();
-        warehouse3.setId(3);
+        warehouse3.setId(3L);
 
         warehouseService.addWarehouse(warehouse1);
         warehouseService.addWarehouse(warehouse2);
@@ -54,7 +54,7 @@ class WarehouseServiceTest {
     @Test
     void getWarehouse() {
         Warehouse warehouse = new Warehouse();
-        warehouse.setId(1);
+        warehouse.setId(1L);
         warehouse.setLocation("Vitebsk");
 
         warehouseService.addWarehouse(warehouse);
@@ -67,7 +67,7 @@ class WarehouseServiceTest {
     @Test
     void update() {
         Warehouse warehouse = new Warehouse();
-        warehouse.setId(1);
+        warehouse.setId(1L);
         warehouse.setLocation("Vitebsk");
 
         warehouseService.addWarehouse(warehouse);

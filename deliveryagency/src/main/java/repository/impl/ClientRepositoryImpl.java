@@ -36,7 +36,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public Client update(Client update) {
         for (Client client : clients) {
-            if (client.getId() == update.getId()){
+            if (client.getId().equals(update.getId())){
                 client.setName(update.getName());
                 client.setSurName(update.getSurName());
                 client.setPhoneNumber(update.getPhoneNumber());

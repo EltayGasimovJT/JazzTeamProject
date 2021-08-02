@@ -5,7 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import repository.OrderRepository;
 import repository.impl.OrderRepositoryImpl;
 import service.OrderService;
-import service.PriceCalculationRuleService;
+import service.CoefficientForPriceCalculationService;
+import validator.OrderValidator;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository = new OrderRepositoryImpl();
-    private final PriceCalculationRuleService priceCalculationRuleService = new PriceCalculationRuleServiceImpl();
+    private final CoefficientForPriceCalculationService priceCalculationRuleService = new CoefficientForPriceCalculationServiceImpl();
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
@@ -36,9 +37,10 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order create(Order order) {
+        OrderValidator.validateOrder(order);
         OrderState orderState = updateState("Ready To Send");
         BigDecimal price = calculatePrice(order);
-        order.setPrise(price);
+        order.setPrice(price);
         order.setState(orderState);
         return orderRepository.save(order);
     }
@@ -130,9 +132,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public BigDecimal calculatePrice(Order order) throws IllegalArgumentException {
-        PriceCalculationRule priceCalculationRule = getRule(order.getDestinationPlace());
+        CoefficientForPrice coefficientForPrice = getRule(order.getDestinationPlace());
 
-        return priceCalculationRuleService.calculatePrice(order, priceCalculationRule);
+        return priceCalculationRuleService.calculatePrice(order, coefficientForPrice);
     }
 
     @Override
@@ -203,38 +205,36 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private PriceCalculationRule getRule(AbstractBuilding abstractBuilding) {
-        PriceCalculationRule priceCalculationRule;
+    private CoefficientForPrice getRule(AbstractBuilding abstractBuilding) {
+        CoefficientForPrice coefficientForPrice;
 
-        PriceCalculationRule priceCalculationRule1 = PriceCalculationRule
+        CoefficientForPrice coefficientForPrice1 = CoefficientForPrice
                 .builder()
-                .id(1)
-                .initialParcelPrice(40)
+                .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
 
-        PriceCalculationRule priceCalculationRule2 = PriceCalculationRule
+        CoefficientForPrice coefficientForPrice2 = CoefficientForPrice
                 .builder()
-                .id(2)
-                .initialParcelPrice(40)
+                .id(2L)
                 .countryCoefficient(1.8)
                 .country("Poland")
                 .parcelSizeLimit(40)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule1);
-        priceCalculationRuleService.addPriceCalculationRule(priceCalculationRule2);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice1);
+        priceCalculationRuleService.addPriceCalculationRule(coefficientForPrice2);
 
         if (abstractBuilding.getLocation().equals("Russia")) {
-            priceCalculationRule = priceCalculationRuleService.findByCountry("Russia");
+            coefficientForPrice = priceCalculationRuleService.findByCountry("Russia");
         } else if (abstractBuilding.getLocation().equals("Poland")) {
-            priceCalculationRule = priceCalculationRuleService.findByCountry("Poland");
+            coefficientForPrice = priceCalculationRuleService.findByCountry("Poland");
         } else {
             throw new IllegalArgumentException("This country is not supported yet!!!" + abstractBuilding.getLocation());
         }
 
-        return priceCalculationRule;
+        return coefficientForPrice;
     }
 }

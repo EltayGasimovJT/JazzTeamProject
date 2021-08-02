@@ -10,12 +10,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class Order {
-    private int id;
+    private Long id;
     private OrderState state;
     private ParcelParameters parcelParameters;
     private Client sender;
     private Client recipient;
-    private BigDecimal prise;
+    private BigDecimal price;
     private OrderProcessingPoint destinationPlace;
     private AbstractLocation currentLocation;
     private OrderHistory history;

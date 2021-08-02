@@ -36,7 +36,7 @@ public class WareHouseRepositoryImpl implements WareHouseRepository {
     @Override
     public Warehouse update(Warehouse update) {
         for (Warehouse warehouse : warehouses) {
-            if (warehouse.getId() == update.getId()) {
+            if (warehouse.getId().equals(update.getId())) {
                 warehouse.setLocation(update.getLocation());
                 warehouse.setConnectedWarehouses(update.getConnectedWarehouses());
                 warehouse.setOrderProcessingPoints(update.getOrderProcessingPoints());

@@ -18,7 +18,7 @@ class UserServiceTest {
     void addUser() {
         User user = User
                 .builder()
-                .id(1)
+                .id(1L)
                 .name("Igor")
                 .surname("Igor")
                 .workingPlace(new Warehouse())
@@ -27,22 +27,22 @@ class UserServiceTest {
 
         User addUser = userService.addUser(user);
 
-        Assert.assertEquals(1, addUser.getId());
+        Assert.assertEquals(user, addUser);
     }
 
     @Test
     void deleteUser() {
         User user1 = User
                 .builder()
-                .id(1)
+                .id(1L)
                 .build();
         User user2 = User
                 .builder()
-                .id(2)
+                .id(2L)
                 .build();
         User user3 = User
                 .builder()
-                .id(3)
+                .id(3L)
                 .build();
 
         userService.addUser(user1);
@@ -74,15 +74,15 @@ class UserServiceTest {
     void getUser() {
         User user1 = User
                 .builder()
-                .id(1)
+                .id(1L)
                 .build();
         User user2 = User
                 .builder()
-                .id(2)
+                .id(2L)
                 .build();
         User user3 = User
                 .builder()
-                .id(3)
+                .id(3L)
                 .build();
         userService.addUser(user1);
         userService.addUser(user2);
@@ -90,21 +90,21 @@ class UserServiceTest {
 
         User user = userService.getUser(2);
 
-        Assert.assertEquals(2, user.getId());
+        Assert.assertEquals(user2, user);
     }
 
     @Test
     void update() {
         User user = User
                 .builder()
-                .id(1)
+                .id(1L)
                 .name("Vlad")
                 .build();
         userService.addUser(user);
 
         User newUser = User
                 .builder()
-                .id(1)
+                .id(1L)
                 .name("Victor")
                 .build();
 
@@ -119,7 +119,7 @@ class UserServiceTest {
         workingPlace.setLocation("Minsk");
         User user = User
                 .builder()
-                .id(1)
+                .id(1L)
                 .workingPlace(workingPlace)
                 .name("Vlad")
                 .build();

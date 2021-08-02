@@ -17,23 +17,23 @@ class OrderProcessingPointServiceTest {
 
     private static Stream<Arguments> testOrderProcessingPoints() {
         OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
-        orderProcessingPoint1.setId(1);
+        orderProcessingPoint1.setId(1L);
         orderProcessingPoint1.setLocation("Minsk");
         orderProcessingPoint1.setWarehouse(new Warehouse());
 
         OrderProcessingPoint orderProcessingPoint2 = new OrderProcessingPoint();
-        orderProcessingPoint2.setId(2);
-        orderProcessingPoint2.setLocation("Moskov");
+        orderProcessingPoint2.setId(2L);
+        orderProcessingPoint2.setLocation("Moscow");
         orderProcessingPoint2.setWarehouse(new Warehouse());
 
         OrderProcessingPoint orderProcessingPoint3 = new OrderProcessingPoint();
-        orderProcessingPoint3.setId(3);
+        orderProcessingPoint3.setId(3L);
         orderProcessingPoint3.setLocation("Grodno");
         orderProcessingPoint3.setWarehouse(new Warehouse());
 
         return Stream.of(
                 Arguments.of(orderProcessingPoint1, "Minsk"),
-                Arguments.of(orderProcessingPoint2, "Moskov"),
+                Arguments.of(orderProcessingPoint2, "Moscow"),
                 Arguments.of(orderProcessingPoint3, "Grodno")
         );
     }
@@ -50,13 +50,13 @@ class OrderProcessingPointServiceTest {
     @Test
     void deleteOrderProcessingPoint() {
         OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
-        orderProcessingPoint1.setId(1);
+        orderProcessingPoint1.setId(1L);
 
         OrderProcessingPoint orderProcessingPoint2 = new OrderProcessingPoint();
-        orderProcessingPoint2.setId(2);
+        orderProcessingPoint2.setId(2L);
 
         OrderProcessingPoint orderProcessingPoint3 = new OrderProcessingPoint();
-        orderProcessingPoint3.setId(3);
+        orderProcessingPoint3.setId(3L);
 
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint1);
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint2);
@@ -83,12 +83,12 @@ class OrderProcessingPointServiceTest {
     @Test
     void getOrderProcessingPoint() {
         OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
-        orderProcessingPoint1.setId(1);
+        orderProcessingPoint1.setId(1L);
         orderProcessingPoint1.setLocation("Minsk");
 
         OrderProcessingPoint orderProcessingPoint2 = new OrderProcessingPoint();
-        orderProcessingPoint2.setId(2);
-        orderProcessingPoint2.setLocation("Moskov");
+        orderProcessingPoint2.setId(2L);
+        orderProcessingPoint2.setLocation("Moscow");
 
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint1);
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint2);
@@ -96,21 +96,21 @@ class OrderProcessingPointServiceTest {
 
         OrderProcessingPoint orderProcessingPoint = orderProcessingPointService.getOrderProcessingPoint(2);
 
-        Assert.assertEquals("Moskov", orderProcessingPoint.getLocation());
+        Assert.assertEquals("Moscow", orderProcessingPoint.getLocation());
     }
 
     @Test
     void update() {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setId(1);
+        orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Minsk");
 
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
 
-        orderProcessingPoint.setLocation("Gomel");
+        orderProcessingPoint.setLocation("Homel");
 
         OrderProcessingPoint processingPoint = orderProcessingPointService.getOrderProcessingPoint(1);
 
-        Assert.assertEquals("Gomel", processingPoint.getLocation());
+        Assert.assertEquals("Homel", processingPoint.getLocation());
     }
 }
