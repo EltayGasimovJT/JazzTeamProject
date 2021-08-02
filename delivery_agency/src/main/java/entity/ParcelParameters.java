@@ -1,7 +1,8 @@
 package entity;
 
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 
 @Builder
 @Data

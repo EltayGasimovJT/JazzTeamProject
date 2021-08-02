@@ -1,7 +1,7 @@
 package service;
 
-import entity.Order;
 import entity.CoefficientForPriceCalculation;
+import entity.Order;
 
 import java.math.BigDecimal;
 import java.util.List;

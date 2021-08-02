@@ -44,7 +44,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
         BigDecimal resultPrice = new BigDecimal(1);
         BigDecimal size = BigDecimal.valueOf(getSize(order));
         BigDecimal parcelSizeLimit = BigDecimal.valueOf(coefficientForPriceCalculation.getParcelSizeLimit());
-        if (size.doubleValue() > parcelSizeLimit.doubleValue()) {
+        if (size.doubleValue() > parcelSizeLimit.doubleValue() && order.getParcelParameters().getWeight() > INITIAL_WEIGHT) {
             resultPrice =
                     resultPrice
                             .multiply(BigDecimal.valueOf(coefficientForPriceCalculation.getCountryCoefficient())
@@ -52,6 +52,12 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
                                             .multiply(BigDecimal.valueOf(order.getParcelParameters().getWeight() / INITIAL_WEIGHT))
                                             .multiply((size.divide(parcelSizeLimit, 1))))
                             );
+        } else if (size.doubleValue() > parcelSizeLimit.doubleValue()) {
+            resultPrice =
+                    resultPrice
+                            .multiply(BigDecimal.valueOf(coefficientForPriceCalculation.getCountryCoefficient())
+                                    .multiply(BigDecimal.valueOf(INITIAL_PRISE)
+                                            .multiply((size.divide(parcelSizeLimit, 1)))));
         } else if (order.getParcelParameters().getWeight() > INITIAL_WEIGHT) {
             resultPrice = resultPrice.multiply(BigDecimal.valueOf(
                     coefficientForPriceCalculation.getCountryCoefficient()

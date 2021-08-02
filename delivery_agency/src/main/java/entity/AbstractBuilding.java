@@ -1,8 +1,6 @@
 package entity;
 
-import lombok.*;
-
-import java.util.List;
+import lombok.Data;
 
 @Data
 public abstract class AbstractBuilding extends AbstractLocation {

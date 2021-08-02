@@ -1,6 +1,6 @@
 package entity;
 
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
