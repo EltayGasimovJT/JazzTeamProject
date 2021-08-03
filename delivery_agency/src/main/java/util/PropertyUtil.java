@@ -11,21 +11,22 @@ public class PropertyUtil {
     private static final String CONFIG_PROPERTIES_FILE_LOCATION = "config.properties";
     private Properties properties;
 
-    public PropertyUtil(){
+    public PropertyUtil() {
         this.properties = new Properties();
 
-        try{
-            InputStream propertiesStream = getClass()
+        try {
+            try (InputStream propertiesStream = getClass()
                     .getClassLoader()
-                    .getResourceAsStream(CONFIG_PROPERTIES_FILE_LOCATION);
-            properties.load(propertiesStream);
+                    .getResourceAsStream(CONFIG_PROPERTIES_FILE_LOCATION)) {
+                properties.load(propertiesStream);
+            }
         } catch (IOException e) {
             log.error(e.getMessage());
             throw new IllegalArgumentException("Config property file not found!!!");
         }
     }
 
-    public String getProperty(String name){
+    public String getProperty(String name) {
         return properties.getProperty(name);
     }
 }

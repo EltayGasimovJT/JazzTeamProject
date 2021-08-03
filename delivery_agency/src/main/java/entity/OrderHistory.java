@@ -4,15 +4,16 @@ package entity;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Builder
 @Data
 public class OrderHistory {
-    private Long orderId;
-    private Long userId;
+    private Order order;
+    private User user;
     private String comment;
-    private List<OrderState> allStates;
-    private String changingTime;
+    private List<OrderHistory> allStates;
+    private Calendar changingTime;
     private ChangedTypeEnum changedTypeEnum;
 }

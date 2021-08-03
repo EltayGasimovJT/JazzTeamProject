@@ -36,7 +36,7 @@ public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointR
     @Override
     public OrderProcessingPoint update(OrderProcessingPoint update) {
         for (OrderProcessingPoint processingPoint : processingPoints) {
-            if (processingPoint.getId() == update.getId()){
+            if (processingPoint.getId().equals(update.getId())){
                 processingPoint.setWarehouse(update.getWarehouse());
                 processingPoint.setDispatchedOrders(update.getDispatchedOrders());
                 processingPoint.setLocation(update.getLocation());

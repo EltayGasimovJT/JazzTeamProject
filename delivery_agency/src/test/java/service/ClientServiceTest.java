@@ -18,26 +18,26 @@ class ClientServiceTest {
     private final ClientService clientService = new ClientServiceImpl();
 
     private static Stream<Arguments> testClients() {
-        Client client1 = Client.builder()
+        Client firstClientToTest = Client.builder()
                 .id(1L)
                 .name("client1")
                 .passportId("23612613616")
                 .build();
-        Client client2 = Client.builder()
+        Client secondClientToTest = Client.builder()
                 .id(1L)
                 .name("client2")
                 .passportId("16714714713")
                 .build();
-        Client client3 = Client.builder()
+        Client thirdClientToTest = Client.builder()
                 .id(1L)
                 .name("client3")
                 .passportId("04786533747")
                 .build();
 
         return Stream.of(
-                Arguments.of(client1, "23612613616"),
-                Arguments.of(client2, "16714714713"),
-                Arguments.of(client3, "04786533747")
+                Arguments.of(firstClientToTest, "23612613616"),
+                Arguments.of(secondClientToTest, "16714714713"),
+                Arguments.of(thirdClientToTest, "04786533747")
         );
     }
 
@@ -51,46 +51,46 @@ class ClientServiceTest {
 
     @Test
     void deleteClient() {
-        Client client1 = Client.builder()
+        Client firstClient = Client.builder()
                 .id(1L)
-                .name("client1")
+                .name("firstClient")
                 .passportId("23612613616")
                 .build();
-        Client client2 = Client.builder()
+        Client secondClient = Client.builder()
                 .id(2L)
-                .name("client2")
+                .name("secondClient")
                 .passportId("16714714713")
                 .build();
-        Client client3 = Client.builder()
+        Client thirdClient = Client.builder()
                 .id(3L)
-                .name("client3")
+                .name("thirdClient")
                 .passportId("04786533747")
                 .build();
 
-        clientService.addClient(client1);
-        clientService.addClient(client2);
-        clientService.addClient(client3);
+        clientService.addClient(firstClient);
+        clientService.addClient(secondClient);
+        clientService.addClient(thirdClient);
 
-        clientService.deleteClient(client3);
+        clientService.deleteClient(thirdClient);
 
         List<Client> allClients = clientService.findAllClients();
 
-        Assert.assertEquals(Arrays.asList(client1, client2), allClients);
+        Assert.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
     }
 
     @Test
     void findAllClients() {
-        Client client1 = Client.builder().build();
-        Client client2 = Client.builder().build();
-        Client client3 = Client.builder().build();
+        Client firstClient = Client.builder().build();
+        Client secondClient = Client.builder().build();
+        Client thirdClient = Client.builder().build();
 
-        clientService.addClient(client1);
-        clientService.addClient(client2);
-        clientService.addClient(client3);
+        clientService.addClient(firstClient);
+        clientService.addClient(secondClient);
+        clientService.addClient(thirdClient);
 
         List<Client> allClients = clientService.findAllClients();
 
-        Assert.assertEquals(Arrays.asList(client1, client2, client3), allClients);
+        Assert.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), allClients);
     }
 
     @Test
@@ -134,5 +134,10 @@ class ClientServiceTest {
         Client byId = clientService.findByPassportId("12512515");
 
         Assert.assertEquals("12512515", byId.getPassportId());
+    }
+
+    @Test
+    void someTest(){
+        clientService.saveToDB();
     }
 }

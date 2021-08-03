@@ -27,59 +27,59 @@ class VoyageServiceTest {
 
     @Test
     void deleteVoyage() {
-        Voyage voyage1 = new Voyage();
-        voyage1.setId(1L);
-        Voyage voyage2 = new Voyage();
-        voyage2.setId(2L);
-        Voyage voyage3 = new Voyage();
-        voyage3.setId(3L);
+        Voyage firstVoyage = new Voyage();
+        firstVoyage.setId(1L);
+        Voyage secondVoyage = new Voyage();
+        secondVoyage.setId(2L);
+        Voyage thirdVoyage = new Voyage();
+        thirdVoyage.setId(3L);
 
-        voyageService.addVoyage(voyage1);
-        voyageService.addVoyage(voyage2);
-        voyageService.addVoyage(voyage3);
+        voyageService.addVoyage(firstVoyage);
+        voyageService.addVoyage(secondVoyage);
+        voyageService.addVoyage(thirdVoyage);
 
-        voyageService.deleteVoyage(voyage1);
+        voyageService.deleteVoyage(firstVoyage);
 
         Assert.assertEquals(2, voyageService.findAllVoyages().size());
     }
 
     @Test
     void findAllVoyages() {
-        Voyage voyage1 = new Voyage();
-        Voyage voyage2 = new Voyage();
-        Voyage voyage3 = new Voyage();
+        Voyage firstVoyage = new Voyage();
+        Voyage secondVoyage = new Voyage();
+        Voyage thirdVoyage = new Voyage();
 
-        voyageService.addVoyage(voyage1);
-        voyageService.addVoyage(voyage2);
-        voyageService.addVoyage(voyage3);
+        voyageService.addVoyage(firstVoyage);
+        voyageService.addVoyage(secondVoyage);
+        voyageService.addVoyage(thirdVoyage);
 
         Assert.assertEquals(3, voyageService.findAllVoyages().size());
     }
 
     @Test
     void getVoyage() {
-        Voyage voyage1 = new Voyage();
-        voyage1.setId(1L);
-        voyage1.setSendingTime("12:30");
+        Voyage voyage = new Voyage();
+        voyage.setId(1L);
+        voyage.setSendingTime("12:30");
 
-        voyageService.addVoyage(voyage1);
+        voyageService.addVoyage(voyage);
 
-        Voyage voyage = voyageService.getVoyage(1);
+        Voyage getVoyageByID = voyageService.getVoyage(1);
 
-        Assert.assertEquals("12:30", voyage.getSendingTime());
+        Assert.assertEquals("12:30", getVoyageByID.getSendingTime());
     }
 
     @Test
     void update() {
-        Voyage voyage1 = new Voyage();
-        voyage1.setId(1L);
-        voyage1.setSendingTime("12:30");
+        Voyage voyage = new Voyage();
+        voyage.setId(1L);
+        voyage.setSendingTime("12:30");
 
-        voyageService.addVoyage(voyage1);
+        voyageService.addVoyage(voyage);
 
-        voyage1.setSendingTime("15:30");
+        voyage.setSendingTime("15:30");
 
-        Voyage update = voyageService.update(voyage1);
+        Voyage update = voyageService.update(voyage);
 
         Assert.assertEquals("15:30", update.getSendingTime());
     }

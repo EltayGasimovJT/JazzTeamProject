@@ -22,31 +22,31 @@ class WarehouseServiceTest {
 
     @Test
     void deleteWarehouse() {
-        Warehouse warehouse1 = new Warehouse();
-        warehouse1.setId(1L);
-        Warehouse warehouse2 = new Warehouse();
-        warehouse2.setId(2L);
-        Warehouse warehouse3 = new Warehouse();
-        warehouse3.setId(3L);
+        Warehouse firstWarehouse = new Warehouse();
+        firstWarehouse.setId(1L);
+        Warehouse secondWarehouse = new Warehouse();
+        secondWarehouse.setId(2L);
+        Warehouse thirdWarehouse = new Warehouse();
+        thirdWarehouse.setId(3L);
 
-        warehouseService.addWarehouse(warehouse1);
-        warehouseService.addWarehouse(warehouse2);
-        warehouseService.addWarehouse(warehouse3);
+        warehouseService.addWarehouse(firstWarehouse);
+        warehouseService.addWarehouse(secondWarehouse);
+        warehouseService.addWarehouse(thirdWarehouse);
 
-        warehouseService.deleteWarehouse(warehouse2);
+        warehouseService.deleteWarehouse(secondWarehouse);
 
         Assert.assertEquals(2, warehouseService.findAllWarehouses().size());
     }
 
     @Test
     void findAllWarehouses() {
-        Warehouse warehouse1 = new Warehouse();
-        Warehouse warehouse2 = new Warehouse();
-        Warehouse warehouse3 = new Warehouse();
+        Warehouse firstWarehouse = new Warehouse();
+        Warehouse secondWarehouse = new Warehouse();
+        Warehouse thirdWarehouse = new Warehouse();
 
-        warehouseService.addWarehouse(warehouse1);
-        warehouseService.addWarehouse(warehouse2);
-        warehouseService.addWarehouse(warehouse3);
+        warehouseService.addWarehouse(firstWarehouse);
+        warehouseService.addWarehouse(secondWarehouse);
+        warehouseService.addWarehouse(thirdWarehouse);
 
         Assert.assertEquals(3, warehouseService.findAllWarehouses().size());
     }
@@ -59,9 +59,9 @@ class WarehouseServiceTest {
 
         warehouseService.addWarehouse(warehouse);
 
-        Warehouse warehouse1 = warehouseService.getWarehouse(warehouse.getId());
+        Warehouse getWarehouseById = warehouseService.getWarehouse(warehouse.getId());
 
-        Assert.assertEquals("Vitebsk", warehouse1.getLocation());
+        Assert.assertEquals("Vitebsk", getWarehouseById.getLocation());
     }
 
     @Test

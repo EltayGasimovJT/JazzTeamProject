@@ -11,6 +11,7 @@ import validator.OrderValidator;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -32,7 +33,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderHistory(long id, OrderHistory newHistory) {
         Order order = orderRepository.findOne(id);
-        order.setHistory(newHistory);
+        order.setHistory(Arrays.asList(newHistory));
         orderRepository.update(order);
     }
 
@@ -44,12 +45,12 @@ public class OrderServiceImpl implements OrderService {
         order.setPrice(price);
         order.setState(orderState);
         OrderHistory orderHistory = OrderHistory.builder()
-                .orderId(order.getId())
-                .allStates(Arrays.asList(orderState))
+                .order(order)
+                .allStates(Collections.singletonList(OrderHistory.builder().build()))
                 .changedTypeEnum(ChangedTypeEnum.READY_TO_SEND)
                 .changingTime(order.getSendingTime())
                 .build();
-        order.setHistory(orderHistory);
+        order.setHistory(Collections.singletonList(orderHistory));
         return orderRepository.save(order);
     }
 
@@ -94,8 +95,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> accept(List<Order> orders) {
-        List<Order> orders1 = orderRepository.acceptOrders(orders);
-        for (Order order : orders1) {
+        List<Order> acceptedOrders = orderRepository.acceptOrders(orders);
+        for (Order order : acceptedOrders) {
             log.info(order.toString());
             OrderState orderState;
             if (isFinalWarehouse(order)) {
@@ -108,7 +109,7 @@ public class OrderServiceImpl implements OrderService {
             }
             order.setState(orderState);
         }
-        return orders1;
+        return acceptedOrders;
     }
 
     @Override
@@ -226,7 +227,7 @@ public class OrderServiceImpl implements OrderService {
     private CoefficientForPriceCalculation getCoefficient(AbstractBuilding abstractBuilding) {
         CoefficientForPriceCalculation coefficientForPriceCalculation;
 
-        CoefficientForPriceCalculation coefficientForPriceCalculation1 = CoefficientForPriceCalculation
+        CoefficientForPriceCalculation firstCoefficient = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -234,7 +235,7 @@ public class OrderServiceImpl implements OrderService {
                 .parcelSizeLimit(50)
                 .build();
 
-        CoefficientForPriceCalculation coefficientForPriceCalculation2 = CoefficientForPriceCalculation
+        CoefficientForPriceCalculation secondCoefficient = CoefficientForPriceCalculation
                 .builder()
                 .id(2L)
                 .countryCoefficient(1.8)
@@ -242,8 +243,8 @@ public class OrderServiceImpl implements OrderService {
                 .parcelSizeLimit(40)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation1);
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation2);
+        priceCalculationRuleService.addPriceCalculationRule(firstCoefficient);
+        priceCalculationRuleService.addPriceCalculationRule(secondCoefficient);
 
         if (abstractBuilding.getLocation().equals("Russia")) {
             coefficientForPriceCalculation = priceCalculationRuleService.findByCountry("Russia");

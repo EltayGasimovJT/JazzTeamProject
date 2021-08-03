@@ -32,24 +32,24 @@ class UserServiceTest {
 
     @Test
     void deleteUser() {
-        User user1 = User
+        User firstUser = User
                 .builder()
                 .id(1L)
                 .build();
-        User user2 = User
+        User secondUser = User
                 .builder()
                 .id(2L)
                 .build();
-        User user3 = User
+        User thirdUser = User
                 .builder()
                 .id(3L)
                 .build();
 
-        userService.addUser(user1);
-        userService.addUser(user2);
-        userService.addUser(user3);
+        userService.addUser(firstUser);
+        userService.addUser(secondUser);
+        userService.addUser(thirdUser);
 
-        userService.deleteUser(user1);
+        userService.deleteUser(firstUser);
 
         List<User> allUsers = userService.findAllUsers();
         Assert.assertNotEquals(3, allUsers.size());
@@ -57,13 +57,13 @@ class UserServiceTest {
 
     @Test
     void findAllUsers() {
-        User user1 = User.builder().build();
-        User user2 = User.builder().build();
-        User user3 = User.builder().build();
+        User firstUser = User.builder().build();
+        User secondUser = User.builder().build();
+        User thirdUser = User.builder().build();
 
-        userService.addUser(user1);
-        userService.addUser(user2);
-        userService.addUser(user3);
+        userService.addUser(firstUser);
+        userService.addUser(secondUser);
+        userService.addUser(thirdUser);
 
         List<User> allUsers = userService.findAllUsers();
 
@@ -72,25 +72,25 @@ class UserServiceTest {
 
     @Test
     void getUser() {
-        User user1 = User
+        User firstUser = User
                 .builder()
                 .id(1L)
                 .build();
-        User user2 = User
+        User secondUser = User
                 .builder()
                 .id(2L)
                 .build();
-        User user3 = User
+        User thirdUser = User
                 .builder()
                 .id(3L)
                 .build();
-        userService.addUser(user1);
-        userService.addUser(user2);
-        userService.addUser(user3);
+        userService.addUser(firstUser);
+        userService.addUser(secondUser);
+        userService.addUser(thirdUser);
 
         User user = userService.getUser(2);
 
-        Assert.assertEquals(user2, user);
+        Assert.assertEquals(secondUser, user);
     }
 
     @Test

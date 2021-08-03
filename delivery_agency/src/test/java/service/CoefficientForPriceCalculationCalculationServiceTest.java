@@ -18,8 +18,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     private final CoefficientForPriceCalculationService priceCalculationRuleService = new CoefficientForPriceCalculationServiceImpl();
 
     private static Stream<Arguments> testDataForCalculate() {
-        OrderProcessingPoint orderProcessingPoint1 = new OrderProcessingPoint();
-        orderProcessingPoint1.setLocation("Russia");
+        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        orderProcessingPoint.setLocation("Russia");
         Order order1 = Order.builder()
                 .id(1L)
                 .parcelParameters(
@@ -29,10 +29,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                                 .length(1)
                                 .weight(20).build()
                 )
-                .destinationPlace(orderProcessingPoint1)
+                .destinationPlace(orderProcessingPoint)
                 .build();
 
-        CoefficientForPriceCalculation coefficientForPriceCalculation1 = CoefficientForPriceCalculation
+        CoefficientForPriceCalculation firstCoefficient = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -40,8 +40,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        orderProcessingPoint1.setLocation("Poland");
-        orderProcessingPoint1.setId(2L);
+        orderProcessingPoint.setLocation("Poland");
+        orderProcessingPoint.setId(2L);
         Order order2 = Order.builder()
                 .id(2L)
                 .parcelParameters(
@@ -51,17 +51,17 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                                 .length(1)
                                 .weight(20).build()
                 )
-                .destinationPlace(orderProcessingPoint1)
+                .destinationPlace(orderProcessingPoint)
                 .build();
 
-        CoefficientForPriceCalculation coefficientForPriceCalculation2 = CoefficientForPriceCalculation
+        CoefficientForPriceCalculation secondCoefficient = CoefficientForPriceCalculation
                 .builder()
                 .id(2L)
                 .countryCoefficient(1.8)
                 .country("Poland")
                 .parcelSizeLimit(40)
                 .build();
-        orderProcessingPoint1.setLocation("Ukraine");
+        orderProcessingPoint.setLocation("Ukraine");
         Order order3 = Order.builder()
                 .id(3L)
                 .parcelParameters(
@@ -70,10 +70,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                                 .width(5)
                                 .length(10)
                                 .weight(30).build())
-                .destinationPlace(orderProcessingPoint1)
+                .destinationPlace(orderProcessingPoint)
                 .build();
 
-        CoefficientForPriceCalculation coefficientForPriceCalculation3 = CoefficientForPriceCalculation
+        CoefficientForPriceCalculation thirdCoefficient = CoefficientForPriceCalculation
                 .builder()
                 .countryCoefficient(1.5)
                 .country("Ukraine")
@@ -82,9 +82,9 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .build();
 
         return Stream.of(
-                Arguments.of(order1, coefficientForPriceCalculation1, BigDecimal.valueOf(64.0)),
-                Arguments.of(order2, coefficientForPriceCalculation2, BigDecimal.valueOf(108.0)),
-                Arguments.of(order3, coefficientForPriceCalculation3, BigDecimal.valueOf(342.0))
+                Arguments.of(order1, firstCoefficient, BigDecimal.valueOf(64.0)),
+                Arguments.of(order2, secondCoefficient, BigDecimal.valueOf(108.0)),
+                Arguments.of(order3, thirdCoefficient, BigDecimal.valueOf(342.0))
         );
     }
 
