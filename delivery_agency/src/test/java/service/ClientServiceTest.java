@@ -24,12 +24,12 @@ class ClientServiceTest {
                 .passportId("23612613616")
                 .build();
         Client secondClientToTest = Client.builder()
-                .id(1L)
+                .id(2L)
                 .name("client2")
                 .passportId("16714714713")
                 .build();
         Client thirdClientToTest = Client.builder()
-                .id(1L)
+                .id(3L)
                 .name("client3")
                 .passportId("04786533747")
                 .build();
@@ -75,7 +75,7 @@ class ClientServiceTest {
 
         List<Client> allClients = clientService.findAllClients();
 
-        //Assert.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
+        Assert.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
     }
 
     @Test

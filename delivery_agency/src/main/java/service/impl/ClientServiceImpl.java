@@ -27,7 +27,9 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void deleteClient(Client client) {
         try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
             clientRepository.deleteFromDB(client.getId(), connection);
+            connection.commit();
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
@@ -37,7 +39,9 @@ public class ClientServiceImpl implements ClientService {
     public List<Client> findAllClients() {
         List<Client> fromDB = new ArrayList<>();
         try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
             fromDB = clientRepository.getFromDB(connection);
+            connection.commit();
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
@@ -64,8 +68,9 @@ public class ClientServiceImpl implements ClientService {
         try (Connection connection = connectionRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
+                Client saveToDB = clientRepository.saveToDB(client, connection);
                 connection.commit();
-                return clientRepository.saveToDB(client, connection);
+                return saveToDB;
             } catch (SQLException | NullPointerException e) {
                 connection.rollback();
                 log.error(e.getMessage());
@@ -81,8 +86,9 @@ public class ClientServiceImpl implements ClientService {
         try (Connection connection = connectionRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
+                Client updateOnDB = clientRepository.updateOnDB(client, connection);
                 connection.commit();
-                return clientRepository.updateOnDB(client, connection);
+                return updateOnDB;
             } catch (SQLException | NullPointerException e) {
                 connection.rollback();
                 log.error(e.getMessage());
