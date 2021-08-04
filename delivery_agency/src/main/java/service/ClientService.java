@@ -17,5 +17,7 @@ public interface ClientService {
 
     Client findByPassportId(String passportId);
 
-    Client saveToDB();
+    Client saveToDB(Client client);
+
+    Client updateOnDB(Client client);
 }

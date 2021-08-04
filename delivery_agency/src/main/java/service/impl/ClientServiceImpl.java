@@ -10,6 +10,7 @@ import service.ClientService;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -25,15 +26,22 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void deleteClient(Client client) {
-        clientRepository.delete(client);
+        try (Connection connection = connectionRepository.getConnection()) {
+            clientRepository.deleteFromDB(client.getId(), connection);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Override
     public List<Client> findAllClients() {
-        for (Client client : clientRepository.findAll()) {
-            log.info(client.toString());
+        List<Client> fromDB = new ArrayList<>();
+        try (Connection connection = connectionRepository.getConnection()) {
+            fromDB = clientRepository.getFromDB(connection);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
         }
-        return clientRepository.findAll();
+        return fromDB;
     }
 
     @Override
@@ -52,18 +60,29 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client saveToDB() {
-        Client client = Client.builder()
-                .name("Alex")
-                .surName("dads")
-                .passportId("125125")
-                .phoneNumber("44-756-75-35")
-                .build();
+    public Client saveToDB(Client client) {
         try (Connection connection = connectionRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
                 connection.commit();
                 return clientRepository.saveToDB(client, connection);
+            } catch (SQLException | NullPointerException e) {
+                connection.rollback();
+                log.error(e.getMessage());
+            }
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
+        return client;
+    }
+
+    @Override
+    public Client updateOnDB(Client client) {
+        try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                connection.commit();
+                return clientRepository.updateOnDB(client, connection);
             } catch (SQLException | NullPointerException e) {
                 connection.rollback();
                 log.error(e.getMessage());

@@ -13,11 +13,14 @@ import java.util.List;
 public class ClientRepositoryImpl implements ClientRepository {
     private final List<Client> clients = new ArrayList<>();
 
+    @Override
     public Client saveToDB(Client client, Connection connection) throws SQLException {
+        String[] returnId = { "BATCH ID" };
+
         try (
                 PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO clients(name, surname, passportID, phone_number) VALUES (?, ?, ?, ?)",
-                        Statement.RETURN_GENERATED_KEYS
+                        "INSERT INTO clients (name, surname, passportID, phone_number) values(?, ?, ?, ?)",
+                        returnId
                 )
         ) {
             statement.setString(1, client.getName());
@@ -26,6 +29,7 @@ public class ClientRepositoryImpl implements ClientRepository {
             statement.setString(4, client.getPhoneNumber());
 
             int affectedRows = statement.executeUpdate();
+
             if (affectedRows == 0) {
                 throw new SQLException("Creating client failed, no rows affected.");
             }
@@ -37,6 +41,56 @@ public class ClientRepositoryImpl implements ClientRepository {
                 }
             }
             return client;
+        }
+    }
+
+    @Override
+    public List<Client> getFromDB(Connection connection) throws SQLException {
+        try (
+                PreparedStatement statement = connection.prepareStatement(
+                        "SELECT id, name, surname, passportID, phone_number FROM clients"
+                )
+        ) {
+            List<Client> clientsFromDB = new ArrayList<>();
+            try (ResultSet rs = statement.executeQuery()) {
+                while (rs.next()) {
+                    Client client = getClient(rs);
+                    clientsFromDB.add(client);
+                }
+                return clientsFromDB;
+            }
+        }
+    }
+
+    @Override
+    public void deleteFromDB(Long id, Connection connection) throws SQLException {
+        try (
+                PreparedStatement statement = connection.prepareStatement(
+                        "DELETE FROM clients WHERE id = ?",
+                        Statement.RETURN_GENERATED_KEYS
+
+                )
+        ) {
+            statement.setLong(1, id);
+            statement.execute();
+        }
+    }
+
+    @Override
+    public Client updateOnDB(Client update, Connection connection) throws SQLException {
+        try (
+                PreparedStatement statement = connection.prepareStatement(
+                        "UPDATE clients SET name = ? WHERE id = ?;",
+                        Statement.RETURN_GENERATED_KEYS
+                )
+        ) {
+            statement.setString(1, update.getName());
+            statement.setLong(2, update.getId());
+            int affectedRows = statement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating user information failed, no rows affected.");
+            }
+            return update;
         }
     }
 
@@ -86,5 +140,13 @@ public class ClientRepositoryImpl implements ClientRepository {
                 .orElse(null);
     }
 
-
+    private Client getClient(ResultSet rs) throws SQLException {
+        return Client.builder()
+                .id(rs.getLong("id"))
+                .name(rs.getString("name"))
+                .surName(rs.getString("surname"))
+                .passportId(rs.getString("passportID"))
+                .phoneNumber(rs.getString("phone_number"))
+                .build();
+    }
 }
