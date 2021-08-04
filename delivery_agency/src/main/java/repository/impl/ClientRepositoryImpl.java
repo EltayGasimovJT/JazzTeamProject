@@ -19,7 +19,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         try (
                 PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO clients (name, surname, passportID, phone_number) values(?, ?, ?, ?)",
+                        "INSERT INTO clients(name, surname, passportID, phone_number) values(?, ?, ?, ?)",
                         returnId
                 )
         ) {
