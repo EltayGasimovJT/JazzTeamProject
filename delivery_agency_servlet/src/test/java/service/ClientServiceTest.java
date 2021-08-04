@@ -62,8 +62,6 @@ class ClientServiceTest {
                 .passportId("04786533747")
                 .build();
 
-        //tableService.createTables();
-
         clientService.save(firstClient);
         clientService.save(secondClient);
         clientService.save(thirdClient);
@@ -72,7 +70,7 @@ class ClientServiceTest {
 
         List<Client> allClients = clientService.findAllClients();
 
-        //tableService.dropTablesIfExists();
+        tableService.dropTablesIfExists();
 
         Assert.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
     }
@@ -95,7 +93,6 @@ class ClientServiceTest {
     @Test
     void findById() {
         Client client = Client.builder()
-                .id(1L)
                 .name("Oleg")
                 .build();
         clientService.save(client);
@@ -107,7 +104,6 @@ class ClientServiceTest {
     @Test
     void update() {
         Client client = Client.builder()
-                .id(1L)
                 .name("Oleg")
                 .build();
         clientService.save(client);
@@ -124,7 +120,6 @@ class ClientServiceTest {
     @Test
     void findByPassportId() {
         Client client = Client.builder()
-                .id(1L)
                 .name("Oleg")
                 .passportId("12512515")
                 .build();
