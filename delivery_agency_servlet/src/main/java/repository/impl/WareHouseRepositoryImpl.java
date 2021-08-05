@@ -26,7 +26,7 @@ public class WareHouseRepositoryImpl implements WareHouseRepository {
     }
 
     @Override
-    public Warehouse findOne(long id) {
+    public Warehouse findOne(Long id) {
         return warehouses.stream()
                 .filter(warehouse -> warehouse.getId() == id)
                 .findFirst()

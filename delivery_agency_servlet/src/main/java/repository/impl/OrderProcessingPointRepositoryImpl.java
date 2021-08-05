@@ -26,7 +26,7 @@ public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointR
     }
 
     @Override
-    public OrderProcessingPoint findOne(long id) {
+    public OrderProcessingPoint findOne(Long id) {
         return processingPoints.stream()
                 .filter(processingPoint -> processingPoint.getId() == id)
                 .findFirst()

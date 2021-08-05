@@ -5,13 +5,14 @@ import repository.WareHouseRepository;
 import repository.impl.WareHouseRepositoryImpl;
 import service.WarehouseService;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class WarehouseServiceImpl implements WarehouseService {
     private final WareHouseRepository wareHouseRepository = new WareHouseRepositoryImpl();
 
     @Override
-    public Warehouse addWarehouse(Warehouse warehouse) {
+    public Warehouse addWarehouse(Warehouse warehouse) throws SQLException {
         return wareHouseRepository.save(warehouse);
     }
 
@@ -21,17 +22,17 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public List<Warehouse> findAllWarehouses() {
+    public List<Warehouse> findAllWarehouses() throws SQLException {
         return wareHouseRepository.findAll();
     }
 
     @Override
-    public Warehouse getWarehouse(long id) {
+    public Warehouse getWarehouse(long id) throws SQLException {
         return wareHouseRepository.findOne(id);
     }
 
     @Override
-    public Warehouse update(Warehouse warehouse) {
+    public Warehouse update(Warehouse warehouse) throws SQLException {
         return wareHouseRepository.update(warehouse);
     }
 }

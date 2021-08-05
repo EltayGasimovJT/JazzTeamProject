@@ -2,6 +2,7 @@ package service;
 
 import entity.OrderProcessingPoint;
 import entity.Warehouse;
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,6 +10,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.OrderProcessingPointServiceImpl;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
@@ -39,6 +41,7 @@ class OrderProcessingPointServiceTest {
         );
     }
 
+    @SneakyThrows
     @ParameterizedTest
     @MethodSource("testOrderProcessingPoints")
     void addOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint, String expectedLocation) {
@@ -49,7 +52,7 @@ class OrderProcessingPointServiceTest {
     }
 
     @Test
-    void deleteOrderProcessingPoint() {
+    void deleteOrderProcessingPoint() throws SQLException {
         OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
         firstProcessingPoint.setId(1L);
 
@@ -70,7 +73,7 @@ class OrderProcessingPointServiceTest {
     }
 
     @Test
-    void findAllOrderProcessingPoints() {
+    void findAllOrderProcessingPoints() throws SQLException {
         OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
         OrderProcessingPoint secondProcessingPoint = new OrderProcessingPoint();
         OrderProcessingPoint thirdProcessingPoint = new OrderProcessingPoint();
@@ -83,6 +86,7 @@ class OrderProcessingPointServiceTest {
                 , orderProcessingPointService.findAllOrderProcessingPoints());
     }
 
+    @SneakyThrows
     @Test
     void getOrderProcessingPoint() {
         OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
@@ -103,7 +107,7 @@ class OrderProcessingPointServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Minsk");

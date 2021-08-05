@@ -7,6 +7,7 @@ import repository.impl.CoefficientForPriceCalculationRepositoryImpl;
 import service.CoefficientForPriceCalculationService;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
@@ -15,7 +16,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     private static final int INITIAL_WEIGHT = 20;
 
     @Override
-    public CoefficientForPriceCalculation addPriceCalculationRule(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+    public CoefficientForPriceCalculation addPriceCalculationRule(CoefficientForPriceCalculation coefficientForPriceCalculation) throws SQLException {
         return priceCalculationRuleRepository.save(coefficientForPriceCalculation);
     }
 
@@ -25,17 +26,17 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public List<CoefficientForPriceCalculation> findAllPriceCalculationRules() {
+    public List<CoefficientForPriceCalculation> findAllPriceCalculationRules() throws SQLException {
         return priceCalculationRuleRepository.findAll();
     }
 
     @Override
-    public CoefficientForPriceCalculation update(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+    public CoefficientForPriceCalculation update(CoefficientForPriceCalculation coefficientForPriceCalculation) throws SQLException {
         return priceCalculationRuleRepository.update(coefficientForPriceCalculation);
     }
 
     @Override
-    public CoefficientForPriceCalculation getCoefficient(long id) {
+    public CoefficientForPriceCalculation getCoefficient(long id) throws SQLException {
         return priceCalculationRuleRepository.findOne(id);
     }
 

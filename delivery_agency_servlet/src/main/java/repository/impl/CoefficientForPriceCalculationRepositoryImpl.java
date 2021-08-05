@@ -25,7 +25,7 @@ public class CoefficientForPriceCalculationRepositoryImpl implements Coefficient
     }
 
     @Override
-    public CoefficientForPriceCalculation findOne(long id) {
+    public CoefficientForPriceCalculation findOne(Long id) {
         return coefficientForPriceCalculations.stream()
                 .filter(priceCalculationRule -> priceCalculationRule.getId() == id)
                 .findFirst()

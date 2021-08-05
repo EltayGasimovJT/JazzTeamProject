@@ -2,6 +2,7 @@ package service;
 
 
 import entity.*;
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,10 +10,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.OrderServiceImpl;
 
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.YearMonth;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -61,7 +60,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void updateOrderCurrentLocation() {
+    void updateOrderCurrentLocation() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
@@ -89,7 +88,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void updateOrderHistory() {
+    void updateOrderHistory() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
         OrderHistory orderHistory = OrderHistory.builder().build();
@@ -125,7 +124,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void create() {
+    void create() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
@@ -149,7 +148,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
         Order order = Order.builder()
@@ -173,7 +172,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void findByRecipient() {
+    void findByRecipient() throws SQLException {
         Client recipient = Client.builder()
                 .id(1L)
                 .name("Igor")
@@ -204,6 +203,7 @@ class OrderServiceTest {
                 .getName());
     }
 
+    @SneakyThrows
     @Test
     void findBySender() {
         Client sender = Client.builder()
@@ -236,7 +236,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void getCurrentOrderLocation() {
+    void getCurrentOrderLocation() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
@@ -263,7 +263,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void send() {
+    void send() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
@@ -296,7 +296,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void accept() {
+    void accept() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
@@ -331,7 +331,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void getState() {
+    void getState() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
@@ -357,7 +357,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void compareOrders() {
+    void compareOrders() throws SQLException {
         OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
         firstProcessingPoint.setId(1L);
         firstProcessingPoint.setLocation("Russia");
@@ -434,7 +434,7 @@ class OrderServiceTest {
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
-    void calculatePrice(Order order, BigDecimal expectedPrice) {
+    void calculatePrice(Order order, BigDecimal expectedPrice) throws SQLException {
         BigDecimal actualPrice = orderService.calculatePrice(order);
 
         Assert.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);

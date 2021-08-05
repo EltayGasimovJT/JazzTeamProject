@@ -5,11 +5,13 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import service.impl.WarehouseServiceImpl;
 
+import java.sql.SQLException;
+
 class WarehouseServiceTest {
     private final WarehouseService warehouseService = new WarehouseServiceImpl();
 
     @Test
-    void addWarehouse() {
+    void addWarehouse() throws SQLException {
         Warehouse warehouse = new Warehouse();
         warehouse.setId(1L);
         warehouse.setLocation("Minsk");
@@ -21,7 +23,7 @@ class WarehouseServiceTest {
     }
 
     @Test
-    void deleteWarehouse() {
+    void deleteWarehouse() throws SQLException {
         Warehouse firstWarehouse = new Warehouse();
         firstWarehouse.setId(1L);
         Warehouse secondWarehouse = new Warehouse();
@@ -39,7 +41,7 @@ class WarehouseServiceTest {
     }
 
     @Test
-    void findAllWarehouses() {
+    void findAllWarehouses() throws SQLException {
         Warehouse firstWarehouse = new Warehouse();
         Warehouse secondWarehouse = new Warehouse();
         Warehouse thirdWarehouse = new Warehouse();
@@ -52,7 +54,7 @@ class WarehouseServiceTest {
     }
 
     @Test
-    void getWarehouse() {
+    void getWarehouse() throws SQLException {
         Warehouse warehouse = new Warehouse();
         warehouse.setId(1L);
         warehouse.setLocation("Vitebsk");
@@ -65,7 +67,7 @@ class WarehouseServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         Warehouse warehouse = new Warehouse();
         warehouse.setId(1L);
         warehouse.setLocation("Vitebsk");

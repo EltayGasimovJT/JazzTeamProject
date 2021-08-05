@@ -4,6 +4,7 @@ import entity.Client;
 import entity.Order;
 import repository.OrderRepository;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,13 +59,12 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Order findOne(long id) {
+    public Order findOne(Long id) {
         return orders.stream()
-                .filter(order -> order.getId() == id)
+                .filter(order -> order.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
-
     @Override
     public Order update(Order update) {
         return null;

@@ -4,10 +4,12 @@ import entity.AbstractBuilding;
 import entity.OrderProcessingPoint;
 import entity.User;
 import entity.Warehouse;
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import service.impl.UserServiceImpl;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,7 +17,7 @@ class UserServiceTest {
     private final UserService userService = new UserServiceImpl();
 
     @Test
-    void addUser() {
+    void addUser() throws SQLException {
         User user = User
                 .builder()
                 .id(1L)
@@ -30,6 +32,7 @@ class UserServiceTest {
         Assert.assertEquals(user, addUser);
     }
 
+    @SneakyThrows
     @Test
     void deleteUser() {
         User firstUser = User
@@ -56,7 +59,7 @@ class UserServiceTest {
     }
 
     @Test
-    void findAllUsers() {
+    void findAllUsers() throws SQLException {
         User firstUser = User.builder().build();
         User secondUser = User.builder().build();
         User thirdUser = User.builder().build();
@@ -71,7 +74,7 @@ class UserServiceTest {
     }
 
     @Test
-    void getUser() {
+    void getUser() throws SQLException {
         User firstUser = User
                 .builder()
                 .id(1L)
@@ -94,7 +97,7 @@ class UserServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         User user = User
                 .builder()
                 .id(1L)
@@ -114,7 +117,7 @@ class UserServiceTest {
     }
 
     @Test
-    void changeWorkingPlace() {
+    void changeWorkingPlace() throws SQLException {
         AbstractBuilding workingPlace = new OrderProcessingPoint();
         workingPlace.setLocation("Minsk");
         User user = User

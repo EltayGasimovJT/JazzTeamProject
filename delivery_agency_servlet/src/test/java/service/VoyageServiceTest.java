@@ -6,13 +6,14 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import service.impl.VoyageServiceImpl;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 
 class VoyageServiceTest {
     private final VoyageService voyageService = new VoyageServiceImpl();
 
     @Test
-    void addVoyage() {
+    void addVoyage() throws SQLException {
         Voyage voyage = new Voyage();
         voyage.setId(1L);
         voyage.setExpectedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
@@ -26,7 +27,7 @@ class VoyageServiceTest {
     }
 
     @Test
-    void deleteVoyage() {
+    void deleteVoyage() throws SQLException {
         Voyage firstVoyage = new Voyage();
         firstVoyage.setId(1L);
         Voyage secondVoyage = new Voyage();
@@ -44,7 +45,7 @@ class VoyageServiceTest {
     }
 
     @Test
-    void findAllVoyages() {
+    void findAllVoyages() throws SQLException {
         Voyage firstVoyage = new Voyage();
         Voyage secondVoyage = new Voyage();
         Voyage thirdVoyage = new Voyage();
@@ -57,7 +58,7 @@ class VoyageServiceTest {
     }
 
     @Test
-    void getVoyage() {
+    void getVoyage() throws SQLException {
         Voyage voyage = new Voyage();
         voyage.setId(1L);
         voyage.setSendingTime("12:30");
@@ -70,7 +71,7 @@ class VoyageServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         Voyage voyage = new Voyage();
         voyage.setId(1L);
         voyage.setSendingTime("12:30");

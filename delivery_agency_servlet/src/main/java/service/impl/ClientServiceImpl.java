@@ -1,5 +1,6 @@
 package service.impl;
 
+import dto.ClientDTO;
 import entity.Client;
 import lombok.extern.slf4j.Slf4j;
 import repository.ClientRepository;
@@ -8,7 +9,6 @@ import repository.impl.ClientRepositoryImpl;
 import repository.impl.ConnectionRepositoryImpl;
 import service.ClientService;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,23 +19,18 @@ public class ClientServiceImpl implements ClientService {
     private final ConnectionRepository connectionRepository = new ConnectionRepositoryImpl();
 
     @Override
-    public void delete(Client client) {
-        try (Connection connection = connectionRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            clientRepository.delete(client.getId(), connection);
-            connection.commit();
-        } catch (SQLException e) {
-            log.error(e.getMessage());
-        }
+    public void delete(ClientDTO clientDTO) {
+        clientRepository.delete(fromDtoToClient(clientDTO));
     }
 
     @Override
-    public List<Client> findAllClients() {
-        List<Client> resultClients = new ArrayList<>();
-        try (Connection connection = connectionRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            connection.commit();
-            resultClients.addAll(clientRepository.findAll(connection));
+    public List<ClientDTO> findAllClients() {
+        List<ClientDTO> resultClients = new ArrayList<>();
+        try {
+            List<Client> clients = new ArrayList<>(clientRepository.findAll());
+            for (Client client : clients) {
+                resultClients.add(fromClientToDTO(client));
+            }
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
@@ -43,69 +38,80 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findById(long id) {
-        Client client = Client.builder().build();
-        try (Connection connection = connectionRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            client = clientRepository.findOne(id);
-            connection.commit();
+    public ClientDTO findById(long id) {
+        ClientDTO clientDTO = ClientDTO.builder().build();
+        Client actualClient;
+        try {
+            actualClient = clientRepository.findOne(id);
+            clientDTO.setId(actualClient.getId());
+            clientDTO.setName(actualClient.getName());
+            clientDTO.setSurname(actualClient.getSurname());
+            clientDTO.setPassportID(actualClient.getPassportID());
+            clientDTO.setPhoneNumber(actualClient.getPhoneNumber());
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        return client;
+        return clientDTO;
     }
 
     @Override
-    public Client findByPassportId(String passportId) {
-        Client byPassportId = Client.builder().build();
-        try (Connection connection = connectionRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            Client repositoryByPassportId = clientRepository.findByPassportId(passportId, connection);
-            byPassportId.setId(repositoryByPassportId.getId());
-            byPassportId.setName(repositoryByPassportId.getName());
-            byPassportId.setSurName(repositoryByPassportId.getSurName());
-            byPassportId.setPassportId(repositoryByPassportId.getPassportId());
-            byPassportId.setPhoneNumber(repositoryByPassportId.getPhoneNumber());
-            connection.commit();
+    public ClientDTO findByPassportId(String passportId) {
+        ClientDTO byPassportIdDTO = ClientDTO.builder().build();
+        Client clientByPassportId;
+        try {
+            clientByPassportId = clientRepository.findByPassportId(passportId);
+            byPassportIdDTO.setId(clientByPassportId.getId());
+            byPassportIdDTO.setName(clientByPassportId.getName());
+            byPassportIdDTO.setSurname(clientByPassportId.getSurname());
+            byPassportIdDTO.setPassportID(clientByPassportId.getPassportID());
+            byPassportIdDTO.setPhoneNumber(clientByPassportId.getPhoneNumber());
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        return byPassportId;
+        return byPassportIdDTO;
     }
 
     @Override
-    public Client save(Client client) {
-        try (Connection connection = connectionRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                Client saveToDB = clientRepository.save(client, connection);
-                connection.commit();
-                return saveToDB;
-            } catch (SQLException | NullPointerException e) {
-                connection.rollback();
-                log.error(e.getMessage());
-            }
+    public ClientDTO save(ClientDTO clientDTO) {
+        Client client = fromDtoToClient(clientDTO);
+        Client saveToDB;
+        try {
+            saveToDB = clientRepository.save(client);
+            return fromClientToDTO(saveToDB);
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        return client;
+        return clientDTO;
     }
 
     @Override
-    public Client update(Client client) {
-        try (Connection connection = connectionRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                Client updateOnDB = clientRepository.update(client, connection);
-                connection.commit();
-                return updateOnDB;
-            } catch (SQLException | NullPointerException e) {
-                connection.rollback();
-                log.error(e.getMessage());
-            }
+    public ClientDTO update(ClientDTO clientDTO) {
+        Client client = fromDtoToClient(clientDTO);
+        Client updateOnDB;
+        try {
+            updateOnDB = clientRepository.update(client);
+            return fromClientToDTO(updateOnDB);
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
         }
-        return client;
+        return clientDTO;
+    }
+
+    private ClientDTO fromClientToDTO(Client client) {
+        return ClientDTO.builder()
+                .name(client.getName())
+                .surname(client.getSurname())
+                .passportID(client.getPassportID())
+                .phoneNumber(client.getPhoneNumber())
+                .build();
+    }
+
+    private Client fromDtoToClient(ClientDTO clientDTO) {
+        return Client.builder()
+                .name(clientDTO.getName())
+                .surname(clientDTO.getSurname())
+                .passportID(clientDTO.getPassportID())
+                .phoneNumber(clientDTO.getPhoneNumber())
+                .build();
     }
 }

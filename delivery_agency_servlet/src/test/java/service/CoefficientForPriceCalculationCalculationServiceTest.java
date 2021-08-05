@@ -4,6 +4,7 @@ import entity.CoefficientForPriceCalculation;
 import entity.Order;
 import entity.OrderProcessingPoint;
 import entity.ParcelParameters;
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -12,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.CoefficientForPriceCalculationServiceImpl;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.stream.Stream;
 
 class CoefficientForPriceCalculationCalculationServiceTest {
@@ -89,7 +91,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void addPriceCalculationRule() {
+    void addPriceCalculationRule() throws SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
@@ -103,6 +105,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         Assert.assertEquals(coefficientForPriceCalculation, priceCalculationRuleService.getCoefficient(1L));
     }
 
+    @SneakyThrows
     @Test
     void deletePriceCalculationRule() {
         CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
@@ -120,7 +123,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void findAllPriceCalculationRules() {
+    void findAllPriceCalculationRules() throws SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
@@ -134,7 +137,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void getCoefficient() {
+    void getCoefficient() throws SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
@@ -150,7 +153,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)

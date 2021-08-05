@@ -1,6 +1,6 @@
 package entity;
 
-public enum ChangedTypeEnum {
+public enum OrderStateChangeType {
     READY_TO_SEND,
     FROM_ON_THE_WAY_TO_ACCEPTED,
     FROM_READY_TO_ON_THE_WAY,

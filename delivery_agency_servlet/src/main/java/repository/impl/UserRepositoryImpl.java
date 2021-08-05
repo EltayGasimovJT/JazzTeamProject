@@ -26,7 +26,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findOne(long id) {
+    public User findOne(Long id) {
         return users.stream()
                 .filter(user -> user.getId() == id)
                 .findFirst()

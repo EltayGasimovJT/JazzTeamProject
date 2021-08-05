@@ -4,40 +4,41 @@ import com.sun.org.apache.xpath.internal.operations.Or;
 import entity.*;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface OrderService {
-   Order updateOrderCurrentLocation(long id, AbstractLocation newLocation);
+   Order updateOrderCurrentLocation(long id, AbstractLocation newLocation) throws SQLException;
 
-   void updateOrderHistory(long id, OrderHistory newHistory);
+   void updateOrderHistory(long id, OrderHistory newHistory) throws SQLException;
 
-   Order create(Order order);
+   Order create(Order order) throws SQLException;
 
-   Order findById(long id);
+   Order findById(long id) throws SQLException;
 
    Order findByRecipient(Client recipient);
 
    Order findBySender(Client sender);
 
-   AbstractLocation getCurrentOrderLocation(long id);
+   AbstractLocation getCurrentOrderLocation(long id) throws SQLException;
 
-   void send(List<Order> orders, Voyage voyage);
+   void send(List<Order> orders, Voyage voyage) throws SQLException;
 
-   List<Order> accept(List<Order> orders);
+   List<Order> accept(List<Order> orders) throws SQLException;
 
-   String getState(long id);
+   String getState(long id) throws SQLException;
 
    void compareOrders(List<Order> expectedOrders, List<Order> acceptedOrders) throws IllegalArgumentException;
 
    boolean isFinalWarehouse(Order order);
 
-   List<Order> findAll();
+   List<Order> findAll() throws SQLException;
 
-   BigDecimal calculatePrice(Order order) throws IllegalArgumentException;
+   BigDecimal calculatePrice(Order order) throws IllegalArgumentException, SQLException;
 
    List<List<Order>> getOrdersOnTheWay();
 
-   Order update(Order order);
+   Order update(Order order) throws SQLException;
 
    void delete(Order order);
 }

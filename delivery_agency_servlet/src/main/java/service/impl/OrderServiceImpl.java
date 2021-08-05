@@ -9,6 +9,7 @@ import service.OrderService;
 import validator.OrderValidator;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,21 +25,21 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public Order updateOrderCurrentLocation(long id, AbstractLocation newLocation) {
+    public Order updateOrderCurrentLocation(long id, AbstractLocation newLocation) throws SQLException {
         Order order = orderRepository.findOne(id);
         order.setCurrentLocation(newLocation);
         return orderRepository.update(order);
     }
 
     @Override
-    public void updateOrderHistory(long id, OrderHistory newHistory) {
+    public void updateOrderHistory(long id, OrderHistory newHistory) throws SQLException {
         Order order = orderRepository.findOne(id);
         order.setHistory(Arrays.asList(newHistory));
         orderRepository.update(order);
     }
 
     @Override
-    public Order create(Order order) {
+    public Order create(Order order) throws SQLException {
         OrderValidator.validateOrder(order);
         OrderState orderState = updateState("Ready To Send");
         BigDecimal price = calculatePrice(order);
@@ -47,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
         OrderHistory orderHistory = OrderHistory.builder()
                 .order(order)
                 .allStates(Collections.singletonList(OrderHistory.builder().build()))
-                .changedTypeEnum(ChangedTypeEnum.READY_TO_SEND)
+                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .changingTime(order.getSendingTime())
                 .build();
         order.setHistory(Collections.singletonList(orderHistory));
@@ -55,7 +56,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order findById(long id) {
+    public Order findById(long id) throws SQLException {
         return orderRepository.findOne(id);
     }
 
@@ -70,13 +71,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public AbstractLocation getCurrentOrderLocation(long id) {
+    public AbstractLocation getCurrentOrderLocation(long id) throws SQLException {
         Order order = orderRepository.findOne(id);
         return order.getCurrentLocation();
     }
 
     @Override
-    public void send(List<Order> orders, Voyage voyage) {
+    public void send(List<Order> orders, Voyage voyage) throws SQLException {
         for (Order order : orders) {
             order.setCurrentLocation(voyage);
             OrderState orderState;
@@ -94,7 +95,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> accept(List<Order> orders) {
+    public List<Order> accept(List<Order> orders) throws SQLException {
         List<Order> acceptedOrders = orderRepository.acceptOrders(orders);
         for (Order order : acceptedOrders) {
             log.info(order.toString());
@@ -113,7 +114,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String getState(long id) {
+    public String getState(long id) throws SQLException {
         Order order = orderRepository.findOne(id);
         return order.getState().getState();
     }
@@ -133,12 +134,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<Order> findAll() throws SQLException {
         return orderRepository.findAll();
     }
 
     @Override
-    public BigDecimal calculatePrice(Order order) throws IllegalArgumentException {
+    public BigDecimal calculatePrice(Order order) throws IllegalArgumentException, SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
 
         return priceCalculationRuleService.calculatePrice(order, coefficientForPriceCalculation);
@@ -150,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order update(Order order) {
+    public Order update(Order order) throws SQLException {
         OrderValidator.validateOrder(order);
         return orderRepository.update(order);
     }
@@ -166,56 +167,56 @@ public class OrderServiceImpl implements OrderService {
         List<String> newRolesAllowedToWithdrawFromState = new ArrayList<>();
         OrderState orderState = OrderState.builder()
                 .state(state).build();
-        if (state.equals("Ready To Send")) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add("PickUp Worker");
-
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add("Pickup Worker");
-        }
-        if (state.equals("On the way to the warehouse")) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
-
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
-        }
-        if (state.equals("On the warehouse")) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
-
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
-        }
-        if (state.equals("On the way to the final warehouse")) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
-
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
-        }
-        if (state.equals("On the final warehouse")) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
-
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
-        }
-        if (state.equals("On the way to the pick up/reception")) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
-
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
-        }
-        if (state.equals("Order completed")) {
+        if (state.equals(OrderStates.READY_TO_SEND.toString())) {
             newRolesAllowedPutToState.add(ROLE_ADMIN);
             newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
 
             newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
             newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
         }
-        if (state.equals("Order locked")) {
+        if (state.equals(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString())) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+        }
+        if (state.equals(OrderStates.ON_THE_WAREHOUSE.toString())) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+        }
+        if (state.equals(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString())) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+        }
+        if (state.equals(OrderStates.ON_THE_FINAL_WAREHOUSE.toString())) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+        }
+        if (state.equals(OrderStates.ON_THE_WAY_TO_THE_RECEPTION.toString())) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
+        }
+        if (state.equals(OrderStates.ORDER_COMPLETED.toString())) {
+            newRolesAllowedPutToState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
+
+            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
+        }
+        if (state.equals(OrderStates.ORDER_LOCKED.toString())) {
             newRolesAllowedPutToState.add(ROLE_ADMIN);
             newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
         }
@@ -224,7 +225,7 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculation getCoefficient(AbstractBuilding abstractBuilding) {
+    private CoefficientForPriceCalculation getCoefficient(AbstractBuilding abstractBuilding) throws SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation;
 
         CoefficientForPriceCalculation firstCoefficient = CoefficientForPriceCalculation

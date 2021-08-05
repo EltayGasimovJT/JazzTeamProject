@@ -26,7 +26,7 @@ public class VoyageRepositoryImpl implements VoyageRepository {
     }
 
     @Override
-    public Voyage findOne(long id) {
+    public Voyage findOne(Long id) {
         return voyages.stream()
                 .filter(voyage -> voyage.getId() == id)
                 .findFirst()

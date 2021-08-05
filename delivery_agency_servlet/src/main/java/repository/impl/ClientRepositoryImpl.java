@@ -3,6 +3,7 @@ package repository.impl;
 import entity.Client;
 import lombok.extern.slf4j.Slf4j;
 import repository.ClientRepository;
+import repository.ConnectionRepository;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,173 +12,173 @@ import java.util.List;
 
 @Slf4j
 public class ClientRepositoryImpl implements ClientRepository {
-    private final List<Client> clients = new ArrayList<>();
+    private final ConnectionRepository connectionRepository = new ConnectionRepositoryImpl();
 
     @Override
-    public Client save(Client client, Connection connection) throws SQLException {
-        String[] returnId = {"BATCH ID"};
+    public Client save(Client client) throws SQLException {
+        try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            String[] returnId = {"BATCH ID"};
 
-        try (
-                PreparedStatement statement = connection.prepareStatement(
-                        "INSERT INTO clients(name, surname, passportID, phone_number) values(?, ?, ?, ?)",
-                        returnId
-                )
-        ) {
-            statement.setString(1, client.getName());
-            statement.setString(2, client.getSurName());
-            statement.setString(3, client.getPassportId());
-            statement.setString(4, client.getPhoneNumber());
+            try (
+                    PreparedStatement statement = connection.prepareStatement(
+                            "INSERT INTO clients(name, surname, passportID, phone_number) values(?, ?, ?, ?)",
+                            returnId
+                    )
+            ) {
+                statement.setString(1, client.getName());
+                statement.setString(2, client.getSurname());
+                statement.setString(3, client.getPassportID());
+                statement.setString(4, client.getPhoneNumber());
 
-            int affectedRows = statement.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new SQLException("Creating client failed, no rows affected.");
-            }
-            try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    client.setId(generatedKeys.getLong(1));
-                } else {
-                    throw new SQLException("Creating client failed, no ID obtained.");
+                int affectedRows = statement.executeUpdate();
+                connection.commit();
+                if (affectedRows == 0) {
+                    connection.rollback();
+                    throw new SQLException("Creating client failed, no rows affected.");
                 }
-            }
-            return client;
-        }
-    }
-
-    @Override
-    public List<Client> findAll(Connection connection) throws SQLException {
-        try (
-                PreparedStatement statement = connection.prepareStatement(
-                        "SELECT id, name, surname, passportID, phone_number FROM clients"
-                )
-        ) {
-            List<Client> clientsFromDB = new ArrayList<>();
-            try (ResultSet rs = statement.executeQuery()) {
-                while (rs.next()) {
-                    Client client = getClient(rs);
-                    clientsFromDB.add(client);
-                }
-                return clientsFromDB;
-            }
-        }
-    }
-
-    @Override
-    public void delete(Long id, Connection connection) throws SQLException {
-        try (
-                PreparedStatement statement = connection.prepareStatement(
-                        "DELETE FROM clients WHERE id = ?",
-                        Statement.RETURN_GENERATED_KEYS
-
-                )
-        ) {
-            statement.setLong(1, id);
-            statement.execute();
-        }
-    }
-
-    @Override
-    public Client update(Client update, Connection connection) throws SQLException {
-        try (
-                PreparedStatement statement = connection.prepareStatement(
-                        "UPDATE clients SET name = ? WHERE id = ?;",
-                        Statement.RETURN_GENERATED_KEYS
-                )
-        ) {
-            statement.setString(1, update.getName());
-            statement.setLong(2, update.getId());
-            int affectedRows = statement.executeUpdate();
-            if (affectedRows == 0) {
-                throw new SQLException("Creating user information failed, no rows affected.");
-            }
-            return update;
-        }
-    }
-
-    @Override
-    public Client findByPassportId(String passportID, Connection connection) throws SQLException, IllegalArgumentException {
-        try (
-                PreparedStatement statement = connection.prepareStatement(
-                        "SELECT id, name, surname, passportID, phone_number FROM clients WHERE passportID = ?"
-                )
-        ) {
-            statement.setString(1, passportID);
-
-            Client resultClient = Client.builder().build();
-            try (ResultSet rs = statement.executeQuery()) {
-                if (rs.getFetchSize() > 1) {
-                    throw new IllegalArgumentException("Clients cannot have two same passportID!!!" + passportID);
-                }
-                if (rs.next()) {
-                    Client clientFromDB = getClient(rs);
-                    resultClient.setId(clientFromDB.getId());
-                    resultClient.setName(clientFromDB.getName());
-                    resultClient.setSurName(clientFromDB.getSurName());
-                    resultClient.setPassportId(clientFromDB.getPassportId());
-                    resultClient.setPhoneNumber(clientFromDB.getPhoneNumber());
-                }
-                return resultClient;
-            }
-        }
-    }
-
-    @Override
-    public Client findOne(Long id, Connection connection) throws SQLException {
-        try (
-                PreparedStatement statement = connection.prepareStatement(
-                        "SELECT id, name, surname, passportID, phone_number FROM clients WHERE id = ?"
-                )
-        ) {
-            statement.setLong(1, id);
-
-            Client client = Client.builder().build();
-            try (ResultSet rs = statement.executeQuery()) {
-                if (rs.next()) {
-                    client = getClient(rs);
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        client.setId(generatedKeys.getLong(1));
+                    } else {
+                        connection.rollback();
+                        throw new SQLException("Creating client failed, no ID obtained.");
+                    }
                 }
                 return client;
             }
         }
     }
 
-
     @Override
-    public Client save(Client client) {
-        clients.add(client);
-        return client;
+    public List<Client> findAll() throws SQLException {
+        try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try (
+                    PreparedStatement statement = connection.prepareStatement(
+                            "SELECT id, name, surname, passportID, phone_number FROM clients"
+                    )
+            ) {
+                List<Client> clientsFromDB = new ArrayList<>();
+                try (ResultSet rs = statement.executeQuery()) {
+                    while (rs.next()) {
+                        Client client = getClient(rs);
+                        clientsFromDB.add(client);
+                    }
+                    connection.commit();
+                    return clientsFromDB;
+                }
+            }
+        }
     }
 
     @Override
-    public void delete(Client client) {
-        clients.remove(client);
+    public void delete(Long id) throws SQLException {
+        try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try (
+                    PreparedStatement statement = connection.prepareStatement(
+                            "DELETE FROM clients WHERE id = ?",
+                            Statement.RETURN_GENERATED_KEYS
+
+                    )
+            ) {
+                statement.setLong(1, id);
+                statement.execute();
+                connection.commit();
+            }
+        }
     }
 
     @Override
-    public List<Client> findAll() {
-        return clients;
+    public Client update(Client update) throws SQLException {
+        try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try (
+                    PreparedStatement statement = connection.prepareStatement(
+                            "UPDATE clients SET name = ? WHERE id = ?;",
+                            Statement.RETURN_GENERATED_KEYS
+                    )
+            ) {
+                statement.setString(1, update.getName());
+                statement.setLong(2, update.getId());
+                int affectedRows = statement.executeUpdate();
+                connection.commit();
+                if (affectedRows == 0) {
+                    connection.rollback();
+                    throw new SQLException("Creating user information failed, no rows affected.");
+                }
+                return update;
+            }
+        }
     }
 
     @Override
-    public Client findOne(long id) {
-        return clients.stream()
-                .filter(client -> client.getId() == id)
-                .findFirst()
-                .orElse(null);
+    public Client findByPassportId(String passportID) throws SQLException, IllegalArgumentException {
+        try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try (
+                    PreparedStatement statement = connection.prepareStatement(
+                            "SELECT id, name, surname, passportID, phone_number FROM clients WHERE passportID = ?"
+                    )
+            ) {
+                statement.setString(1, passportID);
+
+                Client resultClient = Client.builder().build();
+                try (ResultSet rs = statement.executeQuery()) {
+                    if (rs.getFetchSize() > 1) {
+                        throw new IllegalArgumentException("Clients cannot have two same passportID!!!" + passportID);
+                    }
+                    if (rs.next()) {
+                        Client clientFromDB = getClient(rs);
+                        resultClient.setId(clientFromDB.getId());
+                        resultClient.setName(clientFromDB.getName());
+                        resultClient.setSurname(clientFromDB.getSurname());
+                        resultClient.setPassportID(clientFromDB.getPassportID());
+                        resultClient.setPhoneNumber(clientFromDB.getPhoneNumber());
+                    }
+                    connection.commit();
+                    return resultClient;
+                }
+            }
+        }
     }
 
     @Override
-    public Client update(Client update) {
-        return null;
-    }
+    public Client findOne(Long id) throws SQLException {
+        try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try (
+                    PreparedStatement statement = connection.prepareStatement(
+                            "SELECT id, name, surname, passportID, phone_number FROM clients WHERE id = ?"
+                    )
+            ) {
+                statement.setLong(1, id);
 
+                Client client = Client.builder().build();
+                try (ResultSet rs = statement.executeQuery()) {
+                    if (rs.next()) {
+                        client = getClient(rs);
+                    }
+                    connection.commit();
+                    return client;
+                }
+            }
+        }
+    }
 
     private Client getClient(ResultSet rs) throws SQLException {
         return Client.builder()
                 .id(rs.getLong("id"))
                 .name(rs.getString("name"))
-                .surName(rs.getString("surname"))
-                .passportId(rs.getString("passportID"))
+                .surname(rs.getString("surname"))
+                .passportID(rs.getString("passportID"))
                 .phoneNumber(rs.getString("phone_number"))
                 .build();
+    }
+
+    @Override
+    public void delete(Client client) {
+
     }
 }

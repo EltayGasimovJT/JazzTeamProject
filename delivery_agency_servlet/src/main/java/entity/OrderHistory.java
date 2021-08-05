@@ -15,5 +15,5 @@ public class OrderHistory {
     private String comment;
     private List<OrderHistory> allStates;
     private Calendar changingTime;
-    private ChangedTypeEnum changedTypeEnum;
+    private OrderStateChangeType changedTypeEnum;
 }
