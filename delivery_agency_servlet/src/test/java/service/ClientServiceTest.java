@@ -61,6 +61,7 @@ class ClientServiceTest {
                 .name("thirdClient")
                 .passportID("04786533747")
                 .build();
+
         tableService.createTables();
 
         clientService.save(firstClient);
@@ -81,6 +82,7 @@ class ClientServiceTest {
         ClientDTO firstClient = ClientDTO.builder().build();
         ClientDTO secondClient = ClientDTO.builder().build();
         ClientDTO thirdClient = ClientDTO.builder().build();
+
         tableService.createTables();
 
         clientService.save(firstClient);
@@ -97,6 +99,7 @@ class ClientServiceTest {
     @Test
     void findById() {
         ClientDTO client = ClientDTO.builder()
+                .id(1L)
                 .name("Oleg")
                 .build();
         tableService.createTables();
@@ -106,6 +109,7 @@ class ClientServiceTest {
         ClientDTO actualClient = clientService.findById(1);
 
         ClientDTO expectedClient = ClientDTO.builder()
+                .id(client.getId())
                 .name(client.getName())
                 .surname(client.getSurname())
                 .passportID(client.getPassportID())
@@ -147,7 +151,9 @@ class ClientServiceTest {
 
         tableService.createTables();
 
-        clientService.save(expectedClient);
+        ClientDTO save = clientService.save(expectedClient);
+
+        expectedClient.setId(save.getId());
 
         ClientDTO actualClient = clientService.findByPassportId("12512515");
 
