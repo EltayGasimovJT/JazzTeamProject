@@ -18,12 +18,11 @@ public class ClientRepositoryImpl implements ClientRepository {
     public Client save(Client client) throws SQLException {
         try (Connection connection = connectionRepository.getConnection()) {
             connection.setAutoCommit(false);
-            String[] returnId = {"BATCH ID"};
 
             try (
                     PreparedStatement statement = connection.prepareStatement(
                             "INSERT INTO clients(name, surname, passportID, phone_number) values(?, ?, ?, ?)",
-                            returnId
+                            Statement.RETURN_GENERATED_KEYS
                     )
             ) {
                 statement.setString(1, client.getName());
@@ -32,12 +31,12 @@ public class ClientRepositoryImpl implements ClientRepository {
                 statement.setString(4, client.getPhoneNumber());
 
                 int affectedRows = statement.executeUpdate();
-                connection.commit();
                 if (affectedRows == 0) {
                     connection.rollback();
                     throw new SQLException("Creating client failed, no rows affected.");
                 }
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    connection.commit();
                     if (generatedKeys.next()) {
                         client.setId(generatedKeys.getLong(1));
                     } else {
@@ -152,16 +151,16 @@ public class ClientRepositoryImpl implements ClientRepository {
             ) {
                 statement.setLong(1, id);
 
-                Client client = Client.builder().build();
                 try (ResultSet rs = statement.executeQuery()) {
                     if (rs.next()) {
-                        client = getClient(rs);
+                        Client client = getClient(rs);
+                        connection.commit();
+                        return client;
                     }
-                    connection.commit();
-                    return client;
                 }
             }
         }
+        return null;
     }
 
     private Client getClient(ResultSet rs) throws SQLException {
