@@ -1,8 +1,8 @@
 package controller;
 
 import dto.ClientDTO;
-import service.ClientService;
-import service.impl.ClientServiceImpl;
+import servicetest.ClientService;
+import servicetest.impl.ClientServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

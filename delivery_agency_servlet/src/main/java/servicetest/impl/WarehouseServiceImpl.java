@@ -1,0 +1,38 @@
+package servicetest.impl;
+
+import entity.Warehouse;
+import repository.WareHouseRepository;
+import repository.impl.WareHouseRepositoryImpl;
+import servicetest.WarehouseService;
+
+import java.sql.SQLException;
+import java.util.List;
+
+public class WarehouseServiceImpl implements WarehouseService {
+    private final WareHouseRepository wareHouseRepository = new WareHouseRepositoryImpl();
+
+    @Override
+    public Warehouse addWarehouse(Warehouse warehouse) throws SQLException {
+        return wareHouseRepository.save(warehouse);
+    }
+
+    @Override
+    public void deleteWarehouse(Warehouse warehouse) {
+        wareHouseRepository.delete(warehouse);
+    }
+
+    @Override
+    public List<Warehouse> findAllWarehouses() throws SQLException {
+        return wareHouseRepository.findAll();
+    }
+
+    @Override
+    public Warehouse getWarehouse(long id) throws SQLException {
+        return wareHouseRepository.findOne(id);
+    }
+
+    @Override
+    public Warehouse update(Warehouse warehouse) throws SQLException {
+        return wareHouseRepository.update(warehouse);
+    }
+}

@@ -126,9 +126,6 @@ public class ClientRepositoryImpl implements ClientRepository {
 
                 Client resultClient = Client.builder().build();
                 try (ResultSet rs = statement.executeQuery()) {
-                    if (rs.getFetchSize() > 1) {
-                        throw new IllegalArgumentException("Clients cannot have two same passportID!!!" + passportID);
-                    }
                     if (rs.next()) {
                         Client clientFromDB = getClient(rs);
                         resultClient.setId(clientFromDB.getId());

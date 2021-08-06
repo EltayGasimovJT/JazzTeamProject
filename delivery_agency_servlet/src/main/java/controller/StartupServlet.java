@@ -1,7 +1,7 @@
 package controller;
 
-import service.TableService;
-import service.impl.TableServiceImpl;
+import servicetest.TableService;
+import servicetest.impl.TableServiceImpl;
 
 import javax.servlet.http.HttpServlet;
 
