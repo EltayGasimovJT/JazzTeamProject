@@ -62,6 +62,7 @@ public class ThreadTest {
         Assert.assertEquals(0, ships.get(2).getContainersToTake());
         Assert.assertEquals(30, ships.get(3).getContainersToUpload());
 
+
         try {
             Thread.sleep(700);
         } catch (InterruptedException e) {
