@@ -41,10 +41,10 @@ class ClientServiceTest {
 
     @ParameterizedTest
     @MethodSource("testClients")
-    void testAddClient(ClientDTO clientDTO, String actualPassportId) {
+    void testAddClient(ClientDTO clientDTO, String expectedPassportId) {
         clientService.save(clientDTO);
-        ClientDTO byPassportId = clientService.findByPassportId(actualPassportId);
-        Assert.assertEquals(actualPassportId, byPassportId.getPassportID());
+        ClientDTO actualClient = clientService.findByPassportId(expectedPassportId);
+        Assert.assertEquals(expectedPassportId, actualClient.getPassportID());
     }
 
     @Test
@@ -89,11 +89,11 @@ class ClientServiceTest {
         secondClient.setId(clientService.save(secondClient).getId());
         thirdClient.setId(clientService.save(thirdClient).getId());
 
-        List<ClientDTO> allClients = clientService.findAllClients();
+        List<ClientDTO> actualClients = clientService.findAllClients();
 
 
 
-        Assert.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), allClients);
+        Assert.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
     }
 
     @Test

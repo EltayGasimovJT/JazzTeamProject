@@ -18,7 +18,7 @@ class UserServiceTest {
 
     @Test
     void addUser() throws SQLException {
-        User user = User
+        User expected = User
                 .builder()
                 .id(1L)
                 .name("Igor")
@@ -27,9 +27,9 @@ class UserServiceTest {
                 .roles(Arrays.asList("User", "Client"))
                 .build();
 
-        User addUser = userService.addUser(user);
+        User actual = userService.addUser(expected);
 
-        Assert.assertEquals(user, addUser);
+        Assert.assertEquals(expected, actual);
     }
 
     @SneakyThrows
@@ -55,7 +55,11 @@ class UserServiceTest {
         userService.deleteUser(firstUser);
 
         List<User> allUsers = userService.findAllUsers();
-        Assert.assertNotEquals(3, allUsers.size());
+        int unexpected = 3;
+
+        int actual = allUsers.size();
+
+        Assert.assertNotEquals(unexpected, actual);
     }
 
     @Test
@@ -70,7 +74,11 @@ class UserServiceTest {
 
         List<User> allUsers = userService.findAllUsers();
 
-        Assert.assertEquals(3, allUsers.size());
+        int expected = 3;
+
+        int actual = allUsers.size();
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -79,7 +87,7 @@ class UserServiceTest {
                 .builder()
                 .id(1L)
                 .build();
-        User secondUser = User
+        User expected = User
                 .builder()
                 .id(2L)
                 .build();
@@ -88,12 +96,12 @@ class UserServiceTest {
                 .id(3L)
                 .build();
         userService.addUser(firstUser);
-        userService.addUser(secondUser);
+        userService.addUser(expected);
         userService.addUser(thirdUser);
 
-        User user = userService.getUser(2);
+        User actual = userService.getUser(2);
 
-        Assert.assertEquals(secondUser, user);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -105,15 +113,16 @@ class UserServiceTest {
                 .build();
         userService.addUser(user);
 
+        String expected = "Victor";
         User newUser = User
                 .builder()
                 .id(1L)
-                .name("Victor")
+                .name(expected)
                 .build();
 
-        User update = userService.update(newUser);
+        String actual = userService.update(newUser).getName();
 
-        Assert.assertEquals("Victor", update.getName());
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -134,11 +143,14 @@ class UserServiceTest {
 
         userService.changeWorkingPlace(userService.getUser(user.getId()), newWorkingPlace);
 
-        Assert.assertNotEquals(workingPlace.getLocation(),
-                userService
-                        .getUser(user
-                                .getId())
-                        .getWorkingPlace()
-                        .getLocation());
+        String expected = workingPlace.getLocation();
+
+        String actual = userService
+                .getUser(user
+                        .getId())
+                .getWorkingPlace()
+                .getLocation();
+        Assert.assertNotEquals(expected,
+                actual);
     }
 }

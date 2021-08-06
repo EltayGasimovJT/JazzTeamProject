@@ -84,21 +84,23 @@ class OrderServiceTest {
 
         orderService.updateOrderCurrentLocation(expected.getId(), orderProcessingPoint);
 
-        Assert.assertEquals(expected, orderService.findById(1));
+        Order actual = orderService.findById(1);
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
     void updateOrderHistory() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
-        OrderHistory orderHistory = OrderHistory.builder().build();
+        OrderHistory expected = OrderHistory.builder().build();
         GregorianCalendar changingTime = new GregorianCalendar();
         changingTime.set(Calendar.HOUR_OF_DAY, 15);
         changingTime.set(Calendar.MINUTE, 35);
-        orderHistory.setChangingTime(changingTime);
+        expected.setChangingTime(changingTime);
         Order order = Order.builder()
                 .id(1L)
-                .history(Arrays.asList(orderHistory))
+                .history(Arrays.asList(expected))
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
                         .width(1)
@@ -120,7 +122,9 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        Assert.assertNotEquals(orderHistory, orderService.findById(1).getHistory());
+        OrderHistory actual = orderService.findById(1).getHistory().get(0);
+
+        Assert.assertNotEquals(expected, actual);
     }
 
     @Test
@@ -280,17 +284,18 @@ class OrderServiceTest {
                 .sender(Client.builder().build())
                 .build();
         Voyage voyage = new Voyage();
-        List<Order> orders = Arrays.asList(
+        List<Order> expectedOrders = Arrays.asList(
                 order
         );
 
         orderService.create(order);
 
-        orderService.send(orders, voyage);
+        orderService.send(expectedOrders, voyage);
 
         List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
-        Assert.assertEquals(orders, ordersOnTheWay.get(0));
+        List<Order> actualOrders = ordersOnTheWay.get(0);
+        Assert.assertEquals(expectedOrders, actualOrders);
     }
 
     @Test
@@ -325,7 +330,11 @@ class OrderServiceTest {
 
         List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
-        Assert.assertEquals(0, ordersOnTheWay.size());
+        int expected = 0;
+
+        int actual = ordersOnTheWay.size();
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -349,9 +358,11 @@ class OrderServiceTest {
                 .build();
         orderService.create(order);
 
-        String state = orderService.getState(1);
+        String actual = orderService.getState(1);
 
-        Assert.assertEquals("Ready To Send", state);
+        String expected = "Ready To Send";
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -395,17 +406,19 @@ class OrderServiceTest {
         orderService.create(firstOrder);
         orderService.create(secondOrder);
 
-        List<Order> ordersToSend = Arrays.asList(
+        List<Order> actual = Arrays.asList(
                 firstOrder, secondOrder
         );
 
-        orderService.send(ordersToSend, new Voyage());
+        orderService.send(actual, new Voyage());
 
         List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
-        ordersToSend.get(0).setId(5L);
+        actual.get(0).setId(5L);
 
-        Assert.assertEquals(ordersOnTheWay.get(0), ordersToSend);
+        List<Order> expected = ordersOnTheWay.get(0);
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test

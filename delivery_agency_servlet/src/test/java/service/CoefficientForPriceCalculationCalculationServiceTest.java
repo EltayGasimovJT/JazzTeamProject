@@ -102,7 +102,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         priceCalculationRuleService.addPriceCalculationRule(expectedCoefficient);
 
-        Assert.assertEquals(expectedCoefficient, priceCalculationRuleService.getCoefficient(1L));
+        CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.getCoefficient(1L);
+        Assert.assertEquals(expectedCoefficient, actualCoefficient);
     }
 
     @SneakyThrows
@@ -119,8 +120,11 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
         priceCalculationRuleService.deletePriceCalculationRule(coefficientForPriceCalculation);
-        int expected = 0;
-        Assert.assertEquals(expected, priceCalculationRuleService.findAllPriceCalculationRules().size());
+
+        int expectedSize = 0;
+
+        int actualSize = priceCalculationRuleService.findAllPriceCalculationRules().size();
+        Assert.assertEquals(expectedSize, actualSize);
     }
 
     @Test
@@ -134,8 +138,11 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .build();
         priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
-        int expected = 1;
-        Assert.assertEquals(expected, priceCalculationRuleService.findAllPriceCalculationRules().size());
+        int expectedSize = 1;
+
+        int actualSize = priceCalculationRuleService.findAllPriceCalculationRules().size();
+
+        Assert.assertEquals(expectedSize, actualSize);
     }
 
     @Test
@@ -171,7 +178,9 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         int expectedParcelSizeLimit = 52;
 
-        Assert.assertEquals(expectedParcelSizeLimit, update.getParcelSizeLimit(), 0.001);
+        int actualParcelSizeLimit = update.getParcelSizeLimit();
+
+        Assert.assertEquals(expectedParcelSizeLimit, actualParcelSizeLimit, 0.001);
     }
 
     @ParameterizedTest

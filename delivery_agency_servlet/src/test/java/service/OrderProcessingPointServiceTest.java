@@ -12,6 +12,7 @@ import service.impl.OrderProcessingPointServiceImpl;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 
@@ -68,8 +69,9 @@ class OrderProcessingPointServiceTest {
 
         orderProcessingPointService.deleteOrderProcessingPoint(thirdProcessingPoint);
 
+        List<OrderProcessingPoint> actualProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
         Assert.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint)
-                , orderProcessingPointService.findAllOrderProcessingPoints());
+                , actualProcessingPoints);
     }
 
     @Test
@@ -82,8 +84,10 @@ class OrderProcessingPointServiceTest {
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(thirdProcessingPoint);
 
+        List<OrderProcessingPoint> actualOrderProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
+
         Assert.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint, thirdProcessingPoint)
-                , orderProcessingPointService.findAllOrderProcessingPoints());
+                , actualOrderProcessingPoints);
     }
 
     @SneakyThrows
@@ -118,8 +122,8 @@ class OrderProcessingPointServiceTest {
 
         orderProcessingPoint.setLocation(expected);
 
-        OrderProcessingPoint processingPoint = orderProcessingPointService.getOrderProcessingPoint(1);
+        String actualLocation = orderProcessingPointService.getOrderProcessingPoint(1).getLocation();
 
-        Assert.assertEquals(expected, processingPoint.getLocation());
+        Assert.assertEquals(expected, actualLocation);
     }
 }
