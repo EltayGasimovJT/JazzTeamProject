@@ -15,7 +15,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <sonar.projectKey>third_task</sonar.projectKey>
+        <sonar.projectKey>delivery_agency_servlet</sonar.projectKey>
 
     </properties>
 
