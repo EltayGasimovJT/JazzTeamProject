@@ -129,8 +129,9 @@ class ClientServiceTest {
 
         tableService.createTables();
 
-        clientService.save(expectedClient);
+        ClientDTO savedClient = clientService.save(expectedClient);
 
+        expectedClient.setId(savedClient.getId());
         expectedClient.setName("Igor");
 
         clientService.update(expectedClient);
@@ -144,9 +145,10 @@ class ClientServiceTest {
 
     @Test
     void findByPassportId() {
+        String expectedPassportID = "12512515";
         ClientDTO expectedClient = ClientDTO.builder()
                 .name("Oleg")
-                .passportID("12512515")
+                .passportID(expectedPassportID)
                 .build();
 
         tableService.createTables();
@@ -155,10 +157,10 @@ class ClientServiceTest {
 
         expectedClient.setId(save.getId());
 
-        ClientDTO actualClient = clientService.findByPassportId("12512515");
+        ClientDTO actualClient = clientService.findByPassportId(expectedPassportID);
 
         tableService.dropTablesIfExists();
 
-        Assert.assertEquals("12512515", actualClient.getPassportID());
+        Assert.assertEquals(expectedPassportID, actualClient.getPassportID());
     }
 }

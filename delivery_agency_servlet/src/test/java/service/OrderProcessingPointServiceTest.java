@@ -93,17 +93,17 @@ class OrderProcessingPointServiceTest {
         firstProcessingPoint.setId(1L);
         firstProcessingPoint.setLocation("Minsk");
 
-        OrderProcessingPoint secondProcessingPoint = new OrderProcessingPoint();
-        secondProcessingPoint.setId(2L);
-        secondProcessingPoint.setLocation("Moscow");
+        OrderProcessingPoint expected = new OrderProcessingPoint();
+        expected.setId(2L);
+        expected.setLocation("Moscow");
 
         orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
-        orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
+        orderProcessingPointService.addOrderProcessingPoint(expected);
 
 
-        OrderProcessingPoint orderProcessingPoint = orderProcessingPointService.getOrderProcessingPoint(2);
+        OrderProcessingPoint actual = orderProcessingPointService.getOrderProcessingPoint(2);
 
-        Assert.assertEquals(secondProcessingPoint, orderProcessingPoint);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -114,10 +114,12 @@ class OrderProcessingPointServiceTest {
 
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
 
-        orderProcessingPoint.setLocation("Homel");
+        String expected = "Homel";
+
+        orderProcessingPoint.setLocation(expected);
 
         OrderProcessingPoint processingPoint = orderProcessingPointService.getOrderProcessingPoint(1);
 
-        Assert.assertEquals("Homel", processingPoint.getLocation());
+        Assert.assertEquals(expected, processingPoint.getLocation());
     }
 }

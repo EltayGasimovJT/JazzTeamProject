@@ -16,7 +16,6 @@ import java.util.List;
 @Slf4j
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
-    private final ConnectionRepository connectionRepository = new ConnectionRepositoryImpl();
 
     @Override
     public void delete(ClientDTO clientDTO) {
@@ -99,6 +98,7 @@ public class ClientServiceImpl implements ClientService {
 
     private ClientDTO fromClientToDTO(Client client) {
         return ClientDTO.builder()
+                .id(client.getId())
                 .name(client.getName())
                 .surname(client.getSurname())
                 .passportID(client.getPassportID())
@@ -108,6 +108,7 @@ public class ClientServiceImpl implements ClientService {
 
     private Client fromDtoToClient(ClientDTO clientDTO) {
         return Client.builder()
+                .id(clientDTO.getId())
                 .name(clientDTO.getName())
                 .surname(clientDTO.getSurname())
                 .passportID(clientDTO.getPassportID())

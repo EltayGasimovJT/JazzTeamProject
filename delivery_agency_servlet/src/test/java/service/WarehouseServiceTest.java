@@ -74,10 +74,12 @@ class WarehouseServiceTest {
 
         warehouseService.addWarehouse(warehouse);
 
-        warehouse.setLocation("Minsk");
+        String expectedLocation = "Minsk";
+
+        warehouse.setLocation(expectedLocation);
 
         Warehouse update = warehouseService.update(warehouse);
 
-        Assert.assertEquals("Minsk", update.getLocation());
+        Assert.assertEquals(expectedLocation, update.getLocation());
     }
 }

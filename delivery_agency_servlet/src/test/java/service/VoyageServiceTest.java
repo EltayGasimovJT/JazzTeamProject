@@ -82,6 +82,8 @@ class VoyageServiceTest {
 
         Voyage update = voyageService.update(voyage);
 
-        Assert.assertEquals("15:30", update.getSendingTime());
+        String expectedTime = "15:30";
+
+        Assert.assertEquals(expectedTime, update.getSendingTime());
     }
 }

@@ -17,7 +17,6 @@ public class ConnectionRepositoryImpl implements ConnectionRepository {
     private static final String DATABASE_USER_NAME = "datasource.username";
     private static final String DATABASE_PASSWORD = "datasource.password";
 
-
     @Override
     public Connection getConnection() {
         try {

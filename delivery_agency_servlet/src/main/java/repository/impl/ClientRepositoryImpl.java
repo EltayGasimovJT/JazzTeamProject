@@ -179,6 +179,21 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public void delete(Client client) {
+        try (Connection connection = connectionRepository.getConnection()) {
+            connection.setAutoCommit(false);
+            try (
+                    PreparedStatement statement = connection.prepareStatement(
+                            "DELETE FROM clients WHERE id = ?",
+                            Statement.RETURN_GENERATED_KEYS
 
+                    )
+            ) {
+                statement.setLong(1, client.getId());
+                statement.execute();
+                connection.commit();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

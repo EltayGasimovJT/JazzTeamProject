@@ -17,14 +17,12 @@ public class ClientServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Long id = Long.parseLong(req.getParameter("id"));
         String name = req.getParameter("name");
         String surname = req.getParameter("surname");
         String passportId = req.getParameter("passportId");
         String phoneNumber = req.getParameter("phoneNumber");
 
         ClientDTO clientDTO = ClientDTO.builder()
-                .id(id)
                 .name(name)
                 .surname(surname)
                 .passportID(passportId)
@@ -39,6 +37,6 @@ public class ClientServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        doGet(req, resp);
     }
 }
