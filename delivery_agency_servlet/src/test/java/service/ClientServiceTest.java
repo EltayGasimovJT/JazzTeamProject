@@ -74,15 +74,14 @@ class ClientServiceTest {
 
         List<ClientDTO> allClients = clientService.findAllClients();
 
-
         Assert.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
     }
 
     @Test
     void findAllClients() throws SQLException {
-        ClientDTO firstClient = ClientDTO.builder().build();
-        ClientDTO secondClient = ClientDTO.builder().build();
-        ClientDTO thirdClient = ClientDTO.builder().build();
+        ClientDTO firstClient = ClientDTO.builder().name("Igor").build();
+        ClientDTO secondClient = ClientDTO.builder().name("Eltay").build();
+        ClientDTO thirdClient = ClientDTO.builder().name("Alex").build();
 
         tableService.truncateTables();
 
@@ -91,8 +90,6 @@ class ClientServiceTest {
         thirdClient.setId(clientService.save(thirdClient).getId());
 
         List<ClientDTO> actualClients = clientService.findAllClients();
-
-
 
         Assert.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
     }

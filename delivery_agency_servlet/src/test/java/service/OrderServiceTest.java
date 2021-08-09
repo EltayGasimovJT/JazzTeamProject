@@ -124,7 +124,7 @@ class OrderServiceTest {
 
         OrderHistory actual = orderService.findById(1).getHistory().get(0);
 
-        Assert.assertNotEquals(expected, actual);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -296,45 +296,6 @@ class OrderServiceTest {
 
         List<Order> actualOrders = ordersOnTheWay.get(0);
         Assert.assertEquals(expectedOrders, actualOrders);
-    }
-
-    @Test
-    void accept() throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setId(1L);
-        orderProcessingPoint.setLocation("Russia");
-
-        Order order = Order.builder()
-                .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
-                .destinationPlace(orderProcessingPoint)
-                .currentLocation(orderProcessingPoint)
-                .price(BigDecimal.valueOf(1))
-                .sender(Client.builder().build())
-                .recipient(Client.builder().build())
-                .build();
-        Voyage voyage = new Voyage();
-        List<Order> orders = Arrays.asList(
-                order
-        );
-
-        orderService.create(order);
-
-        orderService.send(orders, voyage);
-
-        orderService.accept(orders);
-
-        List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
-
-        int expected = 0;
-
-        int actual = ordersOnTheWay.size();
-
-        Assert.assertEquals(expected, actual);
     }
 
     @Test
