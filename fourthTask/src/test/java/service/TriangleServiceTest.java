@@ -56,7 +56,6 @@ public class TriangleServiceTest {
     @ParameterizedTest
     @MethodSource("trianglesToTest")
     public void checkIfPointBelongsToTriangleTest(Triangle triangle, Point point) {
-
         boolean actual = TriangleService.isBelongsToTriangle(point, triangle);
 
         Assert.assertTrue(actual);
