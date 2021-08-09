@@ -26,7 +26,6 @@ public class TreeTest {
         secondTreeToCheck.getRoot().setHeight(2);
         secondTreeToCheck.getRoot().getLeft().setHeight(1);
         secondTreeToCheck.getRoot().getRight().setHeight(1);
-
         return Stream.of(
                 Arguments.of(new int[]{10, 9, 11}, firstTreeToCheck),
                 Arguments.of(new int[]{125, 51, 623, 61, 256, 240, 11}, secondTreeToCheck)
