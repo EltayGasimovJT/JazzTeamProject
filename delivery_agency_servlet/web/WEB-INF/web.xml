@@ -3,17 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
-    <servlet>
-        <servlet-name>StartupServlet</servlet-name>
-        <servlet-class>controller.StartupServlet</servlet-class>
-        <load-on-startup>1</load-on-startup>
-    </servlet>
-    
-    <servlet-mapping>
-        <servlet-name>StartupServlet</servlet-name>
-        <url-pattern>/</url-pattern>
-    </servlet-mapping>
-    
+
     <servlet>
         <servlet-name>ClientServlet</servlet-name>
         <servlet-class>controller.ClientServlet</servlet-class>
@@ -21,7 +11,7 @@
 
     <servlet-mapping>
         <servlet-name>ClientServlet</servlet-name>
-        <url-pattern>/save</url-pattern>
+        <url-pattern>/client</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -31,6 +21,6 @@
 
     <filter-mapping>
         <filter-name>ClientFilter</filter-name>
-        <url-pattern>/save</url-pattern>
+        <url-pattern>/client</url-pattern>
     </filter-mapping>
 </web-app>

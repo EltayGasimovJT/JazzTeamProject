@@ -99,15 +99,14 @@ class ClientServiceTest {
     @Test
     void findById() {
         ClientDTO client = ClientDTO.builder()
-                .id(1L)
                 .name("Oleg")
                 .build();
 
         tableService.truncateTables();
 
-        clientService.save(client);
+        ClientDTO savedClient = clientService.save(client);
 
-        ClientDTO actualClient = clientService.findById(1);
+        ClientDTO actualClient = clientService.findById(savedClient.getId());
 
         ClientDTO expectedClient = ClientDTO.builder()
                 .id(client.getId())
@@ -135,7 +134,7 @@ class ClientServiceTest {
 
         clientService.update(expectedClient);
 
-        ClientDTO actualClient = clientService.findById(1);
+        ClientDTO actualClient = clientService.findById(savedClient.getId());
 
         Assert.assertEquals(expectedClient, actualClient);
     }

@@ -7,17 +7,14 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class ClientFilter implements Filter {
-
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-
-    }
-
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession();
-        session.setAttribute("name", "Eltay");
+
+        if (((HttpServletRequest) servletRequest).getMethod().equals("POST")) {
+            session.setAttribute("METHOD_TYPE", "POST");
+        }
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
