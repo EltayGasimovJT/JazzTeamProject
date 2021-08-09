@@ -1,6 +1,5 @@
 package service;
 
-
 import entity.Warehouse;
 
 import java.sql.SQLException;

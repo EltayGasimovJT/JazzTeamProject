@@ -1,10 +1,8 @@
 package repository.impl;
 
-import entity.Order;
 import entity.User;
 import repository.UserRepository;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

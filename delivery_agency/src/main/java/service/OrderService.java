@@ -33,7 +33,7 @@ public interface OrderService {
 
    List<Order> findAll() throws SQLException;
 
-   BigDecimal calculatePrice(Order order) throws IllegalArgumentException;
+   BigDecimal calculatePrice(Order order) throws IllegalArgumentException, SQLException;
 
    List<List<Order>> getOrdersOnTheWay();
 

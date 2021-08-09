@@ -139,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BigDecimal calculatePrice(Order order) throws IllegalArgumentException {
+    public BigDecimal calculatePrice(Order order) throws IllegalArgumentException, SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
 
         return priceCalculationRuleService.calculatePrice(order, coefficientForPriceCalculation);
@@ -225,7 +225,7 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculation getCoefficient(AbstractBuilding abstractBuilding) {
+    private CoefficientForPriceCalculation getCoefficient(AbstractBuilding abstractBuilding) throws SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation;
 
         CoefficientForPriceCalculation firstCoefficient = CoefficientForPriceCalculation

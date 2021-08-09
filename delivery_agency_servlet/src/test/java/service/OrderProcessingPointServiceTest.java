@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-
 class OrderProcessingPointServiceTest {
     private final OrderProcessingPointService orderProcessingPointService = new OrderProcessingPointServiceImpl();
 
@@ -118,12 +117,12 @@ class OrderProcessingPointServiceTest {
 
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
 
-        String expected = "Homel";
+        String expectedLocation = "Homel";
 
-        orderProcessingPoint.setLocation(expected);
+        orderProcessingPoint.setLocation(expectedLocation);
 
         String actualLocation = orderProcessingPointService.getOrderProcessingPoint(1).getLocation();
 
-        Assert.assertEquals(expected, actualLocation);
+        Assert.assertEquals(expectedLocation, actualLocation);
     }
 }

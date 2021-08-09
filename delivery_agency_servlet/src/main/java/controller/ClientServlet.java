@@ -15,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.List;
 
-
 @Slf4j
 @WebServlet("/client")
 public class ClientServlet extends HttpServlet {

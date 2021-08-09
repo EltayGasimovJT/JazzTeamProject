@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-
 @Slf4j
 public class ConnectionRepositoryImpl implements ConnectionRepository {
     private final PropertyUtil propertyUtil = new PropertyUtil();

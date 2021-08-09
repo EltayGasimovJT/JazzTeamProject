@@ -10,6 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.ClientServiceImpl;
 import service.impl.TableServiceImpl;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -48,7 +49,7 @@ class ClientServiceTest {
     }
 
     @Test
-    void deleteClient() {
+    void deleteClient() throws SQLException {
         ClientDTO firstClient = ClientDTO.builder()
                 .name("firstClient")
                 .passportID("23612613616")
@@ -78,7 +79,7 @@ class ClientServiceTest {
     }
 
     @Test
-    void findAllClients() {
+    void findAllClients() throws SQLException {
         ClientDTO firstClient = ClientDTO.builder().build();
         ClientDTO secondClient = ClientDTO.builder().build();
         ClientDTO thirdClient = ClientDTO.builder().build();
@@ -97,7 +98,7 @@ class ClientServiceTest {
     }
 
     @Test
-    void findById() {
+    void findById() throws SQLException {
         ClientDTO client = ClientDTO.builder()
                 .name("Oleg")
                 .build();
@@ -120,7 +121,7 @@ class ClientServiceTest {
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         ClientDTO expectedClient = ClientDTO.builder()
                 .name("Oleg")
                 .build();
@@ -140,7 +141,7 @@ class ClientServiceTest {
     }
 
     @Test
-    void findByPassportId() {
+    void findByPassportId() throws SQLException {
         String expectedPassportID = "12512515";
         ClientDTO expectedClient = ClientDTO.builder()
                 .name("Oleg")

@@ -1,10 +1,8 @@
 package repository.impl;
 
-import entity.User;
 import entity.Voyage;
 import repository.VoyageRepository;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

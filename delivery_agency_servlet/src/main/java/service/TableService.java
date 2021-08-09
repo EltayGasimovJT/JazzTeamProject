@@ -1,9 +1,11 @@
 package service;
 
+import java.sql.SQLException;
+
 public interface TableService {
-    void dropTablesIfExists();
+    void dropTablesIfExists() throws SQLException;
 
-    void createTables();
+    void createTables() throws SQLException;
 
-    void truncateTables();
+    void truncateTables() throws SQLException;
 }

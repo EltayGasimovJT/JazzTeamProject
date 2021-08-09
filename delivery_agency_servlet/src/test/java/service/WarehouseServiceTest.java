@@ -88,8 +88,8 @@ class WarehouseServiceTest {
 
         warehouse.setLocation(expectedLocation);
 
-        String actual = warehouseService.update(warehouse).getLocation();
+        String actualLocation = warehouseService.update(warehouse).getLocation();
 
-        Assert.assertEquals(expectedLocation, actual);
+        Assert.assertEquals(expectedLocation, actualLocation);
     }
 }

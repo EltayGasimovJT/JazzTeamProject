@@ -9,7 +9,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Slf4j
 public class ClientRepositoryImpl implements ClientRepository {
     private final ConnectionRepository connectionRepository = new ConnectionRepositoryImpl();
