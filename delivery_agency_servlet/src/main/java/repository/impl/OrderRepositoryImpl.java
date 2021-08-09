@@ -4,7 +4,6 @@ import entity.Client;
 import entity.Order;
 import repository.OrderRepository;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,14 +58,28 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Order findOne(Long id) {
+    public Order findOne(Long id){
         return orders.stream()
                 .filter(order -> order.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
+
     @Override
     public Order update(Order update) {
-        return null;
+        Order actual = findOne(update.getId());
+        orders.remove(actual);
+        actual.setHistory(update.getHistory());
+        actual.setState(update.getState());
+        actual.setCurrentLocation(update.getCurrentLocation());
+        actual.setDestinationPlace(update.getDestinationPlace());
+        actual.setParcelParameters(update.getParcelParameters());
+        actual.setRecipient(update.getRecipient());
+        actual.setSender(update.getSender());
+        actual.setSendingTime(update.getSendingTime());
+        actual.setPrice(update.getPrice());
+        actual.setRoute(update.getRoute());
+        orders.add(actual);
+        return actual;
     }
 }

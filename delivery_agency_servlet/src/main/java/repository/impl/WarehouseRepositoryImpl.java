@@ -28,22 +28,21 @@ public class WarehouseRepositoryImpl implements WareHouseRepository {
     @Override
     public Warehouse findOne(Long id) {
         return warehouses.stream()
-                .filter(warehouse -> warehouse.getId() == id)
+                .filter(warehouse -> warehouse.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public Warehouse update(Warehouse update) {
-        for (Warehouse warehouse : warehouses) {
-            if (warehouse.getId().equals(update.getId())) {
-                warehouse.setLocation(update.getLocation());
-                warehouse.setConnectedWarehouses(update.getConnectedWarehouses());
-                warehouse.setOrderProcessingPoints(update.getOrderProcessingPoints());
-                warehouse.setDispatchedOrders(update.getDispatchedOrders());
-                warehouse.setExpectedOrders(update.getExpectedOrders());
-            }
-        }
-        return update;
+    public Warehouse update(Warehouse update)  {
+        Warehouse actual = findOne(update.getId());
+        warehouses.remove(actual);
+        actual.setLocation(update.getLocation());
+        actual.setConnectedWarehouses(update.getConnectedWarehouses());
+        actual.setOrderProcessingPoints(update.getOrderProcessingPoints());
+        actual.setDispatchedOrders(update.getDispatchedOrders());
+        actual.setExpectedOrders(update.getExpectedOrders());
+        warehouses.add(actual);
+        return actual;
     }
 }

@@ -1,4 +1,4 @@
-package repository.impl;
+package service.impl;
 
 import entity.Voyage;
 import repository.VoyageRepository;

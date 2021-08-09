@@ -28,22 +28,20 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User findOne(Long id) {
         return users.stream()
-                .filter(user -> user.getId() == id)
+                .filter(user -> user.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
     public User update(User update) {
-        for (User user : users) {
-            if (user.getId().equals(update.getId())) {
-                user.setName(update.getName());
-                user.setSurname(update.getSurname());
-                user.setWorkingPlace(update.getWorkingPlace());
-                user.setRoles(update.getRoles());
-                return user;
-            }
-        }
-        return null;
+        User actual = findOne(update.getId());
+        users.remove(actual);
+        actual.setName(update.getName());
+        actual.setSurname(update.getSurname());
+        actual.setWorkingPlace(update.getWorkingPlace());
+        actual.setRoles(update.getRoles());
+        users.add(actual);
+        return actual;
     }
 }
