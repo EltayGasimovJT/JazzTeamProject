@@ -40,6 +40,7 @@ public class TriangleService {
                 || (firstSideVector >= 0 && secondSideVector >= 0 && thirdSideVector >= 0)) {
             isBelongs = true;
         }
+
         return isBelongs;
     }
 
