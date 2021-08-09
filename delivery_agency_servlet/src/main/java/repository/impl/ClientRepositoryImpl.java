@@ -30,6 +30,7 @@ public class ClientRepositoryImpl implements ClientRepository {
                 statement.setString(4, client.getPhoneNumber());
 
                 int affectedRows = statement.executeUpdate();
+
                 if (affectedRows == 0) {
                     connection.rollback();
                     throw new SQLException("Creating client failed, no rows affected.");

@@ -2,7 +2,7 @@ package service;
 
 
 import dto.ClientDTO;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -45,7 +45,7 @@ class ClientServiceTest {
     void testAddClient(ClientDTO clientDTO, String expectedPassportId) {
         clientService.save(clientDTO);
         ClientDTO actualClient = clientService.findByPassportId(expectedPassportId);
-        Assert.assertEquals(expectedPassportId, actualClient.getPassportID());
+        Assertions.assertEquals(expectedPassportId, actualClient.getPassportID());
     }
 
     @Test
@@ -74,7 +74,7 @@ class ClientServiceTest {
 
         List<ClientDTO> allClients = clientService.findAllClients();
 
-        Assert.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
+        Assertions.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
     }
 
     @Test
@@ -91,7 +91,7 @@ class ClientServiceTest {
 
         List<ClientDTO> actualClients = clientService.findAllClients();
 
-        Assert.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
+        Assertions.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
     }
 
     @Test
@@ -114,7 +114,7 @@ class ClientServiceTest {
                 .phoneNumber(client.getPhoneNumber())
                 .build();
 
-        Assert.assertEquals(expectedClient, actualClient);
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
@@ -134,7 +134,7 @@ class ClientServiceTest {
 
         ClientDTO actualClient = clientService.findById(savedClient.getId());
 
-        Assert.assertEquals(expectedClient, actualClient);
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
@@ -153,6 +153,6 @@ class ClientServiceTest {
 
         ClientDTO actualClient = clientService.findByPassportId(expectedPassportID);
 
-        Assert.assertEquals(expectedPassportID, actualClient.getPassportID());
+        Assertions.assertEquals(expectedPassportID, actualClient.getPassportID());
     }
 }
