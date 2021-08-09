@@ -5,7 +5,7 @@ import dto.ClientDTO;
 import java.util.List;
 
 public interface ClientService {
-    void delete(ClientDTO clientDTO);
+    void delete(Long id);
 
     List<ClientDTO> findAllClients();
 

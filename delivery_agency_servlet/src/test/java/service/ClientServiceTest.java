@@ -69,7 +69,7 @@ class ClientServiceTest {
         secondClient.setId(clientService.save(secondClient).getId());
         thirdClient.setId(clientService.save(thirdClient).getId());
 
-        clientService.delete(thirdClient);
+        clientService.delete(thirdClient.getId());
 
         List<ClientDTO> allClients = clientService.findAllClients();
 

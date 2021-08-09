@@ -43,7 +43,7 @@ public class ClientServlet extends HttpServlet {
 
         HttpSession session = req.getSession();
 
-        Object methodType = session.getAttribute("METHOD_TYPE");
+        String methodType = (String) session.getAttribute("METHOD_TYPE");
 
         out.println("This is the do" + methodType + " Method");
         out.println("<h2>" + savedClient + " <h2>");
@@ -51,11 +51,9 @@ public class ClientServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientDTO clientDTO = getClientDTOFromPostRequest(req);
+        ClientDTO clientDTO = getClientDTOFromPutOrDeleteRequest(req);
 
         ClientDTO update = clientService.update(clientDTO);
-
-        log.info(req.getMethod());
 
         PrintWriter out = resp.getWriter();
 
@@ -65,9 +63,9 @@ public class ClientServlet extends HttpServlet {
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientDTO clientDTO = getClientDTOFromPostRequest(req);
-
-        clientService.delete(clientDTO);
+        JSONObject jsonObject = new JSONObject(getBody(req));
+        Long id = jsonObject.getLong("id");
+        clientService.delete(id);
 
         PrintWriter out = resp.getWriter();
 
@@ -81,8 +79,23 @@ public class ClientServlet extends HttpServlet {
         String surname = jsonObject.getString("surname");
         String passportId = jsonObject.getString("passportId");
         String phoneNumber = jsonObject.getString("phoneNumber");
-
         return ClientDTO.builder()
+                .name(name)
+                .surname(surname)
+                .passportID(passportId)
+                .phoneNumber(phoneNumber)
+                .build();
+    }
+
+    private ClientDTO getClientDTOFromPutOrDeleteRequest(HttpServletRequest req) {
+        JSONObject jsonObject = new JSONObject(getBody(req));
+        Long id = jsonObject.getLong("id");
+        String name = jsonObject.getString("name");
+        String surname = jsonObject.getString("surname");
+        String passportId = jsonObject.getString("passportId");
+        String phoneNumber = jsonObject.getString("phoneNumber");
+        return ClientDTO.builder()
+                .id(id)
                 .name(name)
                 .surname(surname)
                 .passportID(passportId)

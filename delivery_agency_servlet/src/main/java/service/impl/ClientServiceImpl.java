@@ -16,8 +16,12 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
 
     @Override
-    public void delete(ClientDTO clientDTO) {
-        clientRepository.delete(fromDtoToClient(clientDTO));
+    public void delete(Long id) {
+        try {
+            clientRepository.delete(id);
+        } catch (SQLException e) {
+            log.error(e.getMessage());
+        }
     }
 
     @Override

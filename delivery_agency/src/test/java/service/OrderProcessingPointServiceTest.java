@@ -2,6 +2,7 @@ package service;
 
 import entity.OrderProcessingPoint;
 import entity.Warehouse;
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -9,7 +10,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.OrderProcessingPointServiceImpl;
 
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 
@@ -39,6 +42,7 @@ class OrderProcessingPointServiceTest {
         );
     }
 
+    @SneakyThrows
     @ParameterizedTest
     @MethodSource("testOrderProcessingPoints")
     void addOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint, String expectedLocation) {
@@ -49,7 +53,7 @@ class OrderProcessingPointServiceTest {
     }
 
     @Test
-    void deleteOrderProcessingPoint() {
+    void deleteOrderProcessingPoint() throws SQLException {
         OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
         firstProcessingPoint.setId(1L);
 
@@ -65,12 +69,13 @@ class OrderProcessingPointServiceTest {
 
         orderProcessingPointService.deleteOrderProcessingPoint(thirdProcessingPoint);
 
+        List<OrderProcessingPoint> actualProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
         Assert.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint)
-                , orderProcessingPointService.findAllOrderProcessingPoints());
+                , actualProcessingPoints);
     }
 
     @Test
-    void findAllOrderProcessingPoints() {
+    void findAllOrderProcessingPoints() throws SQLException {
         OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
         OrderProcessingPoint secondProcessingPoint = new OrderProcessingPoint();
         OrderProcessingPoint thirdProcessingPoint = new OrderProcessingPoint();
@@ -79,41 +84,46 @@ class OrderProcessingPointServiceTest {
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(thirdProcessingPoint);
 
+        List<OrderProcessingPoint> actualOrderProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
+
         Assert.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint, thirdProcessingPoint)
-                , orderProcessingPointService.findAllOrderProcessingPoints());
+                , actualOrderProcessingPoints);
     }
 
+    @SneakyThrows
     @Test
     void getOrderProcessingPoint() {
         OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
         firstProcessingPoint.setId(1L);
         firstProcessingPoint.setLocation("Minsk");
 
-        OrderProcessingPoint secondProcessingPoint = new OrderProcessingPoint();
-        secondProcessingPoint.setId(2L);
-        secondProcessingPoint.setLocation("Moscow");
+        OrderProcessingPoint expected = new OrderProcessingPoint();
+        expected.setId(2L);
+        expected.setLocation("Moscow");
 
         orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
-        orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
+        orderProcessingPointService.addOrderProcessingPoint(expected);
 
 
-        OrderProcessingPoint orderProcessingPoint = orderProcessingPointService.getOrderProcessingPoint(2);
+        OrderProcessingPoint actual = orderProcessingPointService.getOrderProcessingPoint(2);
 
-        Assert.assertEquals(secondProcessingPoint, orderProcessingPoint);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Minsk");
 
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
 
-        orderProcessingPoint.setLocation("Homel");
+        String expected = "Homel";
 
-        OrderProcessingPoint processingPoint = orderProcessingPointService.getOrderProcessingPoint(1);
+        orderProcessingPoint.setLocation(expected);
 
-        Assert.assertEquals("Homel", processingPoint.getLocation());
+        String actualLocation = orderProcessingPointService.getOrderProcessingPoint(1).getLocation();
+
+        Assert.assertEquals(expected, actualLocation);
     }
 }

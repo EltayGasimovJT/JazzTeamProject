@@ -1,13 +1,14 @@
 package service;
 
 
-import entity.Client;
+import dto.ClientDTO;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.ClientServiceImpl;
+import service.impl.TableServiceImpl;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,22 +16,20 @@ import java.util.stream.Stream;
 
 class ClientServiceTest {
     private final ClientService clientService = new ClientServiceImpl();
+    private final TableService tableService = new TableServiceImpl();
 
     private static Stream<Arguments> testClients() {
-        Client firstClientToTest = Client.builder()
-                .id(1L)
+        ClientDTO firstClientToTest = ClientDTO.builder()
                 .name("client1")
-                .passportId("23612613616")
+                .passportID("23612613616")
                 .build();
-        Client secondClientToTest = Client.builder()
-                .id(2L)
+        ClientDTO secondClientToTest = ClientDTO.builder()
                 .name("client2")
-                .passportId("16714714713")
+                .passportID("16714714713")
                 .build();
-        Client thirdClientToTest = Client.builder()
-                .id(3L)
+        ClientDTO thirdClientToTest = ClientDTO.builder()
                 .name("client3")
-                .passportId("04786533747")
+                .passportID("04786533747")
                 .build();
 
         return Stream.of(
@@ -42,111 +41,120 @@ class ClientServiceTest {
 
     @ParameterizedTest
     @MethodSource("testClients")
-    void testAddClient(Client client, String actualPassportId) {
-        clientService.addClient(client);
-        Client byPassportId = clientService.findByPassportId(actualPassportId);
-        Assert.assertEquals(actualPassportId, byPassportId.getPassportId());
+    void testAddClient(ClientDTO clientDTO, String expectedPassportId) {
+        clientService.save(clientDTO);
+        ClientDTO actualClient = clientService.findByPassportId(expectedPassportId);
+        Assert.assertEquals(expectedPassportId, actualClient.getPassportID());
     }
 
     @Test
     void deleteClient() {
-        Client firstClient = Client.builder()
-                .id(1L)
+        ClientDTO firstClient = ClientDTO.builder()
                 .name("firstClient")
-                .passportId("23612613616")
+                .passportID("23612613616")
                 .build();
-        Client secondClient = Client.builder()
-                .id(2L)
+        ClientDTO secondClient = ClientDTO.builder()
                 .name("secondClient")
-                .passportId("16714714713")
+                .passportID("16714714713")
                 .build();
-        Client thirdClient = Client.builder()
-                .id(3L)
+        ClientDTO thirdClient = ClientDTO.builder()
                 .name("thirdClient")
-                .passportId("04786533747")
+                .passportID("04786533747")
                 .build();
 
-        clientService.saveToDB(firstClient);
-        clientService.saveToDB(secondClient);
-        clientService.saveToDB(thirdClient);
+        tableService.truncateTables();
 
-        clientService.deleteClient(thirdClient);
+        ClientDTO clientDTO = clientService.save(firstClient);
+        firstClient.setId(clientDTO.getId());
+        secondClient.setId(clientService.save(secondClient).getId());
+        thirdClient.setId(clientService.save(thirdClient).getId());
 
-        List<Client> allClients = clientService.findAllClients();
+        clientService.delete(thirdClient);
+
+        List<ClientDTO> allClients = clientService.findAllClients();
+
 
         Assert.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
     }
 
     @Test
     void findAllClients() {
-        Client firstClient = Client.builder().build();
-        Client secondClient = Client.builder().build();
-        Client thirdClient = Client.builder().build();
+        ClientDTO firstClient = ClientDTO.builder().build();
+        ClientDTO secondClient = ClientDTO.builder().build();
+        ClientDTO thirdClient = ClientDTO.builder().build();
 
-        clientService.addClient(firstClient);
-        clientService.addClient(secondClient);
-        clientService.addClient(thirdClient);
+        tableService.truncateTables();
 
-        List<Client> allClients = clientService.findAllClients();
+        firstClient.setId(clientService.save(firstClient).getId());
+        secondClient.setId(clientService.save(secondClient).getId());
+        thirdClient.setId(clientService.save(thirdClient).getId());
 
-        Assert.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), allClients);
+        List<ClientDTO> actualClients = clientService.findAllClients();
+
+
+
+        Assert.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
     }
 
     @Test
     void findById() {
-        Client client = Client.builder()
-                .id(1L)
+        ClientDTO client = ClientDTO.builder()
                 .name("Oleg")
                 .build();
-        clientService.addClient(client);
 
-        Client byId = clientService.findById(1);
-        Assert.assertEquals(client, byId);
+        tableService.truncateTables();
+
+        ClientDTO savedClient = clientService.save(client);
+
+        ClientDTO actualClient = clientService.findById(savedClient.getId());
+
+        ClientDTO expectedClient = ClientDTO.builder()
+                .id(client.getId())
+                .name(client.getName())
+                .surname(client.getSurname())
+                .passportID(client.getPassportID())
+                .phoneNumber(client.getPhoneNumber())
+                .build();
+
+        Assert.assertEquals(expectedClient, actualClient);
     }
 
     @Test
     void update() {
-        Client client = Client.builder()
-                .id(1L)
+        ClientDTO expectedClient = ClientDTO.builder()
                 .name("Oleg")
                 .build();
-        clientService.addClient(client);
 
-        client.setName("Igor");
+        tableService.truncateTables();
 
-        clientService.update(client);
+        ClientDTO savedClient = clientService.save(expectedClient);
 
-        Client byId = clientService.findById(1);
+        expectedClient.setId(savedClient.getId());
+        expectedClient.setName("Igor");
 
-        Assert.assertEquals(client, byId);
+        clientService.update(expectedClient);
+
+        ClientDTO actualClient = clientService.findById(savedClient.getId());
+
+        Assert.assertEquals(expectedClient, actualClient);
     }
 
     @Test
     void findByPassportId() {
-        Client client = Client.builder()
-                .id(1L)
+        String expectedPassportID = "12512515";
+        ClientDTO expectedClient = ClientDTO.builder()
                 .name("Oleg")
-                .passportId("12512515")
+                .passportID(expectedPassportID)
                 .build();
-        clientService.addClient(client);
 
-        Client byId = clientService.findByPassportId("12512515");
+        tableService.truncateTables();
 
-        Assert.assertEquals("12512515", byId.getPassportId());
-    }
+        ClientDTO save = clientService.save(expectedClient);
 
-    @Test
-    void someTest(){
-        Client firstClient = Client.builder()
-                .name("Alex")
-                .surName("dads")
-                .passportId("125125")
-                .phoneNumber("44-756-75-35")
-                .build();
-        clientService.saveToDB(firstClient);
-        List<Client> fromDB = clientService.findAllClients();
-        for (Client client : fromDB) {
-            System.out.println(client);
-        }
+        expectedClient.setId(save.getId());
+
+        ClientDTO actualClient = clientService.findByPassportId(expectedPassportID);
+
+        Assert.assertEquals(expectedPassportID, actualClient.getPassportID());
     }
 }

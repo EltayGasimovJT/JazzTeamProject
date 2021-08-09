@@ -95,12 +95,15 @@ public class ClientRepositoryImpl implements ClientRepository {
             connection.setAutoCommit(false);
             try (
                     PreparedStatement statement = connection.prepareStatement(
-                            "UPDATE clients SET name = ? WHERE id = ?;",
+                            "UPDATE clients SET name = ?, surname = ?, passportID = ?, phone_number = ? WHERE id = ?;",
                             Statement.RETURN_GENERATED_KEYS
                     )
             ) {
                 statement.setString(1, update.getName());
-                statement.setLong(2, update.getId());
+                statement.setString(2, update.getSurname());
+                statement.setString(3, update.getPassportID());
+                statement.setString(4, update.getPhoneNumber());
+                statement.setLong(5, update.getId());
                 int affectedRows = statement.executeUpdate();
                 connection.commit();
                 if (affectedRows == 0) {

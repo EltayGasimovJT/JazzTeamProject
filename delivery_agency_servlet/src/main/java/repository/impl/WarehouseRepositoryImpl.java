@@ -6,7 +6,7 @@ import repository.WareHouseRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WareHouseRepositoryImpl implements WareHouseRepository {
+public class WarehouseRepositoryImpl implements WareHouseRepository {
     private final List<Warehouse> warehouses = new ArrayList<>();
 
     @Override

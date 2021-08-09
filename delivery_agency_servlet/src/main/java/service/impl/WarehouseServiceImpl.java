@@ -2,14 +2,14 @@ package service.impl;
 
 import entity.Warehouse;
 import repository.WareHouseRepository;
-import repository.impl.WareHouseRepositoryImpl;
+import repository.impl.WarehouseRepositoryImpl;
 import service.WarehouseService;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class WarehouseServiceImpl implements WarehouseService {
-    private final WareHouseRepository wareHouseRepository = new WareHouseRepositoryImpl();
+    private final WareHouseRepository wareHouseRepository = new WarehouseRepositoryImpl();
 
     @Override
     public Warehouse addWarehouse(Warehouse warehouse) throws SQLException {

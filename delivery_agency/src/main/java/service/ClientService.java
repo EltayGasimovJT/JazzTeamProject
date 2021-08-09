@@ -1,23 +1,19 @@
 package service;
 
-import entity.Client;
+import dto.ClientDTO;
 
 import java.util.List;
 
 public interface ClientService {
-    Client addClient(Client client);
+    void delete(ClientDTO clientDTO);
 
-    void deleteClient(Client client);
+    List<ClientDTO> findAllClients();
 
-    List<Client> findAllClients();
+    ClientDTO findById(long id);
 
-    Client findById(long id);
+    ClientDTO findByPassportId(String passportId);
 
-    Client update(Client client);
+    ClientDTO save(ClientDTO clientDTO);
 
-    Client findByPassportId(String passportId);
-
-    Client saveToDB(Client client);
-
-    Client updateOnDB(Client client);
+    ClientDTO update(ClientDTO clientDTO);
 }

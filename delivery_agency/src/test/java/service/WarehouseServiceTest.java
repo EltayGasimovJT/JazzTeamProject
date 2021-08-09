@@ -5,23 +5,26 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import service.impl.WarehouseServiceImpl;
 
+import java.sql.SQLException;
+
 class WarehouseServiceTest {
     private final WarehouseService warehouseService = new WarehouseServiceImpl();
 
     @Test
-    void addWarehouse() {
+    void addWarehouse() throws SQLException {
         Warehouse warehouse = new Warehouse();
         warehouse.setId(1L);
-        warehouse.setLocation("Minsk");
+        String expected = "Minsk";
+        warehouse.setLocation(expected);
         warehouseService.addWarehouse(warehouse);
 
-        Warehouse warehouse1 = warehouseService.getWarehouse(warehouse.getId());
+        String actual = warehouseService.getWarehouse(warehouse.getId()).getLocation();
 
-        Assert.assertEquals("Minsk", warehouse1.getLocation());
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void deleteWarehouse() {
+    void deleteWarehouse() throws SQLException {
         Warehouse firstWarehouse = new Warehouse();
         firstWarehouse.setId(1L);
         Warehouse secondWarehouse = new Warehouse();
@@ -35,11 +38,15 @@ class WarehouseServiceTest {
 
         warehouseService.deleteWarehouse(secondWarehouse);
 
-        Assert.assertEquals(2, warehouseService.findAllWarehouses().size());
+        int expected = 2;
+
+        int actual = warehouseService.findAllWarehouses().size();
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void findAllWarehouses() {
+    void findAllWarehouses() throws SQLException {
         Warehouse firstWarehouse = new Warehouse();
         Warehouse secondWarehouse = new Warehouse();
         Warehouse thirdWarehouse = new Warehouse();
@@ -48,34 +55,41 @@ class WarehouseServiceTest {
         warehouseService.addWarehouse(secondWarehouse);
         warehouseService.addWarehouse(thirdWarehouse);
 
-        Assert.assertEquals(3, warehouseService.findAllWarehouses().size());
+        int expected = 3;
+
+        int actual = warehouseService.findAllWarehouses().size();
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void getWarehouse() {
+    void getWarehouse() throws SQLException {
+        Warehouse warehouse = new Warehouse();
+        warehouse.setId(1L);
+        String expected = "Vitebsk";
+        warehouse.setLocation(expected);
+
+        warehouseService.addWarehouse(warehouse);
+
+        String actual = warehouseService.getWarehouse(warehouse.getId()).getLocation();
+
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    void update() throws SQLException {
         Warehouse warehouse = new Warehouse();
         warehouse.setId(1L);
         warehouse.setLocation("Vitebsk");
 
         warehouseService.addWarehouse(warehouse);
 
-        Warehouse getWarehouseById = warehouseService.getWarehouse(warehouse.getId());
+        String expectedLocation = "Minsk";
 
-        Assert.assertEquals("Vitebsk", getWarehouseById.getLocation());
-    }
+        warehouse.setLocation(expectedLocation);
 
-    @Test
-    void update() {
-        Warehouse warehouse = new Warehouse();
-        warehouse.setId(1L);
-        warehouse.setLocation("Vitebsk");
+        String actual = warehouseService.update(warehouse).getLocation();
 
-        warehouseService.addWarehouse(warehouse);
-
-        warehouse.setLocation("Minsk");
-
-        Warehouse update = warehouseService.update(warehouse);
-
-        Assert.assertEquals("Minsk", update.getLocation());
+        Assert.assertEquals(expectedLocation, actual);
     }
 }

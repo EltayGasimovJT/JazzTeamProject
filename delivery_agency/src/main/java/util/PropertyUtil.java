@@ -9,7 +9,7 @@ import java.util.Properties;
 @Slf4j
 public class PropertyUtil {
     private static final String CONFIG_PROPERTIES_FILE_LOCATION = "config.properties";
-    private Properties properties;
+    private final Properties properties;
 
     public PropertyUtil() {
         this.properties = new Properties();

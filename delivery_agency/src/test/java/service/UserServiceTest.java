@@ -4,10 +4,12 @@ import entity.AbstractBuilding;
 import entity.OrderProcessingPoint;
 import entity.User;
 import entity.Warehouse;
+import lombok.SneakyThrows;
 import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import service.impl.UserServiceImpl;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,8 +17,8 @@ class UserServiceTest {
     private final UserService userService = new UserServiceImpl();
 
     @Test
-    void addUser() {
-        User user = User
+    void addUser() throws SQLException {
+        User expected = User
                 .builder()
                 .id(1L)
                 .name("Igor")
@@ -25,11 +27,12 @@ class UserServiceTest {
                 .roles(Arrays.asList("User", "Client"))
                 .build();
 
-        User addUser = userService.addUser(user);
+        User actual = userService.addUser(expected);
 
-        Assert.assertEquals(user, addUser);
+        Assert.assertEquals(expected, actual);
     }
 
+    @SneakyThrows
     @Test
     void deleteUser() {
         User firstUser = User
@@ -52,11 +55,15 @@ class UserServiceTest {
         userService.deleteUser(firstUser);
 
         List<User> allUsers = userService.findAllUsers();
-        Assert.assertNotEquals(3, allUsers.size());
+        int unexpected = 3;
+
+        int actual = allUsers.size();
+
+        Assert.assertNotEquals(unexpected, actual);
     }
 
     @Test
-    void findAllUsers() {
+    void findAllUsers() throws SQLException {
         User firstUser = User.builder().build();
         User secondUser = User.builder().build();
         User thirdUser = User.builder().build();
@@ -67,16 +74,20 @@ class UserServiceTest {
 
         List<User> allUsers = userService.findAllUsers();
 
-        Assert.assertEquals(3, allUsers.size());
+        int expected = 3;
+
+        int actual = allUsers.size();
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void getUser() {
+    void getUser() throws SQLException {
         User firstUser = User
                 .builder()
                 .id(1L)
                 .build();
-        User secondUser = User
+        User expected = User
                 .builder()
                 .id(2L)
                 .build();
@@ -85,16 +96,16 @@ class UserServiceTest {
                 .id(3L)
                 .build();
         userService.addUser(firstUser);
-        userService.addUser(secondUser);
+        userService.addUser(expected);
         userService.addUser(thirdUser);
 
-        User user = userService.getUser(2);
+        User actual = userService.getUser(2);
 
-        Assert.assertEquals(secondUser, user);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         User user = User
                 .builder()
                 .id(1L)
@@ -102,19 +113,20 @@ class UserServiceTest {
                 .build();
         userService.addUser(user);
 
+        String expected = "Victor";
         User newUser = User
                 .builder()
                 .id(1L)
-                .name("Victor")
+                .name(expected)
                 .build();
 
-        User update = userService.update(newUser);
+        String actual = userService.update(newUser).getName();
 
-        Assert.assertEquals("Victor", update.getName());
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void changeWorkingPlace() {
+    void changeWorkingPlace() throws SQLException {
         AbstractBuilding workingPlace = new OrderProcessingPoint();
         workingPlace.setLocation("Minsk");
         User user = User
@@ -131,11 +143,14 @@ class UserServiceTest {
 
         userService.changeWorkingPlace(userService.getUser(user.getId()), newWorkingPlace);
 
-        Assert.assertNotEquals(workingPlace.getLocation(),
-                userService
-                        .getUser(user
-                                .getId())
-                        .getWorkingPlace()
-                        .getLocation());
+        String expected = workingPlace.getLocation();
+
+        String actual = userService
+                .getUser(user
+                        .getId())
+                .getWorkingPlace()
+                .getLocation();
+        Assert.assertNotEquals(expected,
+                actual);
     }
 }

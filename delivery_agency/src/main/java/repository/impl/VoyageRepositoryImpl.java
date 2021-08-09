@@ -1,8 +1,10 @@
 package repository.impl;
 
+import entity.User;
 import entity.Voyage;
 import repository.VoyageRepository;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,22 +28,23 @@ public class VoyageRepositoryImpl implements VoyageRepository {
     }
 
     @Override
-    public Voyage findOne(long id) {
+    public Voyage findOne(Long id) {
         return voyages.stream()
-                .filter(voyage -> voyage.getId() == id)
+                .filter(voyage -> voyage.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
     public Voyage update(Voyage update) {
-        for (Voyage voyage : voyages) {
-            voyage.setDeparturePoint(update.getDeparturePoint());
-            voyage.setDestinationPoint(update.getDestinationPoint());
-            voyage.setSendingTime(update.getSendingTime());
-            voyage.setDispatchedOrders(update.getDispatchedOrders());
-            voyage.setExpectedOrders(update.getExpectedOrders());
-        }
-        return update;
+        Voyage actual = findOne(update.getId());
+        voyages.remove(actual);
+        actual.setDeparturePoint(update.getDeparturePoint());
+        actual.setDestinationPoint(update.getDestinationPoint());
+        actual.setSendingTime(update.getSendingTime());
+        actual.setDispatchedOrders(update.getDispatchedOrders());
+        actual.setExpectedOrders(update.getExpectedOrders());
+        voyages.add(actual);
+        return actual;
     }
 }

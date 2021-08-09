@@ -6,27 +6,37 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import service.impl.VoyageServiceImpl;
 
+import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 class VoyageServiceTest {
     private final VoyageService voyageService = new VoyageServiceImpl();
 
     @Test
-    void addVoyage() {
+    void addVoyage() throws SQLException {
+        GregorianCalendar sendingTime = new GregorianCalendar();
+        sendingTime.set(Calendar.HOUR_OF_DAY, 12);
+        sendingTime.set(Calendar.MINUTE, 30);
+
         Voyage voyage = new Voyage();
         voyage.setId(1L);
         voyage.setExpectedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
         voyage.setDispatchedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
-        voyage.setSendingTime("12:30");
+        voyage.setSendingTime(sendingTime);
         voyage.setDeparturePoint("Minsk");
-        voyage.setDestinationPoint("Moscow");
+        String expected = "Moscow";
+        voyage.setDestinationPoint(expected);
 
         Voyage addVoyage = voyageService.addVoyage(voyage);
-        Assert.assertEquals("Moscow", addVoyage.getDestinationPoint());
+        String actual = addVoyage.getDestinationPoint();
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void deleteVoyage() {
+    void deleteVoyage() throws SQLException {
         Voyage firstVoyage = new Voyage();
         firstVoyage.setId(1L);
         Voyage secondVoyage = new Voyage();
@@ -40,11 +50,14 @@ class VoyageServiceTest {
 
         voyageService.deleteVoyage(firstVoyage);
 
-        Assert.assertEquals(2, voyageService.findAllVoyages().size());
+        int expected = 2;
+        int actual = voyageService.findAllVoyages().size();
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void findAllVoyages() {
+    void findAllVoyages() throws SQLException {
         Voyage firstVoyage = new Voyage();
         Voyage secondVoyage = new Voyage();
         Voyage thirdVoyage = new Voyage();
@@ -53,34 +66,51 @@ class VoyageServiceTest {
         voyageService.addVoyage(secondVoyage);
         voyageService.addVoyage(thirdVoyage);
 
-        Assert.assertEquals(3, voyageService.findAllVoyages().size());
+        int expected = 3;
+
+        int actual = voyageService.findAllVoyages().size();
+
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
-    void getVoyage() {
+    void getVoyage() throws SQLException {
         Voyage voyage = new Voyage();
         voyage.setId(1L);
-        voyage.setSendingTime("12:30");
+
+        GregorianCalendar expectedTime = new GregorianCalendar();
+
+        expectedTime.set(Calendar.HOUR_OF_DAY, 15);
+        expectedTime.set(Calendar.MINUTE, 30);
+        voyage.setSendingTime(expectedTime);
 
         voyageService.addVoyage(voyage);
 
-        Voyage getVoyageByID = voyageService.getVoyage(1);
+        Calendar actualTime = voyageService.getVoyage(1).getSendingTime();
 
-        Assert.assertEquals("12:30", getVoyageByID.getSendingTime());
+        Assert.assertEquals(expectedTime, actualTime);
     }
 
     @Test
-    void update() {
+    void update() throws SQLException {
         Voyage voyage = new Voyage();
         voyage.setId(1L);
-        voyage.setSendingTime("12:30");
+        GregorianCalendar sendingTime = new GregorianCalendar();
+        sendingTime.set(Calendar.HOUR_OF_DAY, 12);
+        sendingTime.set(Calendar.MINUTE, 30);
+
+        voyage.setSendingTime(sendingTime);
 
         voyageService.addVoyage(voyage);
 
-        voyage.setSendingTime("15:30");
+        GregorianCalendar expectedTime = new GregorianCalendar();
+        expectedTime.set(Calendar.HOUR_OF_DAY, 15);
+        expectedTime.set(Calendar.MINUTE, 30);
 
-        Voyage update = voyageService.update(voyage);
+        voyage.setSendingTime(expectedTime);
 
-        Assert.assertEquals("15:30", update.getSendingTime());
+        Calendar actualTime = voyageService.update(voyage).getSendingTime();
+
+        Assert.assertEquals(expectedTime, actualTime);
     }
 }
