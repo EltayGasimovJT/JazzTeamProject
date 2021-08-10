@@ -1,7 +1,7 @@
-package repository;
+package util;
 
 import java.sql.Connection;
 
-public interface ConnectionRepository {
+public interface ConnectionRepositoryUtil {
     Connection getConnection();
 }

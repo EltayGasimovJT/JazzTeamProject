@@ -1,7 +1,7 @@
-package repository.impl;
+package util.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import repository.ConnectionRepository;
+import util.ConnectionRepositoryUtil;
 import util.PropertyUtil;
 
 import java.sql.Connection;
@@ -9,7 +9,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 @Slf4j
-public class ConnectionRepositoryImpl implements ConnectionRepository {
+public class ConnectionRepositoryUtiImpl implements ConnectionRepositoryUtil {
     private final PropertyUtil propertyUtil = new PropertyUtil();
     private static final String DATABASE_URL = "datasource.url";
     private static final String DATABASE_USER_NAME = "datasource.username";

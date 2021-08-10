@@ -10,14 +10,14 @@ import java.util.List;
 
 @Builder
 @Data
-public class OrderDTO {
+public class OrderDto {
     private Long id;
     private OrderState state;
     private ParcelParameters parcelParameters;
     private Client sender;
     private Client recipient;
     private BigDecimal price;
-    private OrderProcessingPointDTO destinationPlace;
+    private OrderProcessingPointDto destinationPlace;
     private AbstractLocation currentLocation;
     private List<OrderHistory> history;
     private Calendar sendingTime;

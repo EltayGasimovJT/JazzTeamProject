@@ -1,6 +1,6 @@
 package service.impl;
 
-import dto.ClientDTO;
+import dto.ClientDto;
 import entity.Client;
 import lombok.extern.slf4j.Slf4j;
 import repository.ClientRepository;
@@ -25,8 +25,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDTO> findAllClients() {
-        List<ClientDTO> resultClients = new ArrayList<>();
+    public List<ClientDto> findAllClients() {
+        List<ClientDto> resultClients = new ArrayList<>();
         try {
             List<Client> clients = new ArrayList<>(clientRepository.findAll());
             for (Client client : clients) {
@@ -39,7 +39,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDTO findById(long id) {
+    public ClientDto findById(long id) {
         try {
             Client actualClient = clientRepository.findOne(id);
             return fromClientToDTO(actualClient);
@@ -50,15 +50,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDTO findByPassportId(String passportId) {
-        ClientDTO byPassportIdDTO = ClientDTO.builder().build();
+    public ClientDto findByPassportId(String passportId) {
+        ClientDto byPassportIdDTO = ClientDto.builder().build();
         Client clientByPassportId;
         try {
             clientByPassportId = clientRepository.findByPassportId(passportId);
             byPassportIdDTO.setId(clientByPassportId.getId());
             byPassportIdDTO.setName(clientByPassportId.getName());
             byPassportIdDTO.setSurname(clientByPassportId.getSurname());
-            byPassportIdDTO.setPassportID(clientByPassportId.getPassportID());
+            byPassportIdDTO.setPassportId(clientByPassportId.getPassportId());
             byPassportIdDTO.setPhoneNumber(clientByPassportId.getPhoneNumber());
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -67,7 +67,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDTO save(ClientDTO clientDTO) {
+    public ClientDto save(ClientDto clientDTO) {
         Client client = fromDtoToClient(clientDTO);
         try {
             client.setId(clientRepository.save(client).getId());
@@ -79,7 +79,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDTO update(ClientDTO clientDTO) {
+    public ClientDto update(ClientDto clientDTO) {
         Client client = fromDtoToClient(clientDTO);
         Client updateOnDB;
         try {
@@ -91,22 +91,22 @@ public class ClientServiceImpl implements ClientService {
         return clientDTO;
     }
 
-    private ClientDTO fromClientToDTO(Client client) {
-        return ClientDTO.builder()
+    private ClientDto fromClientToDTO(Client client) {
+        return ClientDto.builder()
                 .id(client.getId())
                 .name(client.getName())
                 .surname(client.getSurname())
-                .passportID(client.getPassportID())
+                .passportId(client.getPassportId())
                 .phoneNumber(client.getPhoneNumber())
                 .build();
     }
 
-    private Client fromDtoToClient(ClientDTO clientDTO) {
+    private Client fromDtoToClient(ClientDto clientDTO) {
         return Client.builder()
                 .id(clientDTO.getId())
                 .name(clientDTO.getName())
                 .surname(clientDTO.getSurname())
-                .passportID(clientDTO.getPassportID())
+                .passportId(clientDTO.getPassportId())
                 .phoneNumber(clientDTO.getPhoneNumber())
                 .build();
     }

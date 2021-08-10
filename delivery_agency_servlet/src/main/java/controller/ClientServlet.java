@@ -1,6 +1,6 @@
 package controller;
 
-import dto.ClientDTO;
+import dto.ClientDto;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import service.ClientService;
@@ -24,19 +24,19 @@ public class ClientServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PrintWriter out = resp.getWriter();
 
-        List<ClientDTO> allClients = clientService.findAllClients();
+        List<ClientDto> allClients = clientService.findAllClients();
 
         out.println("This is the doGet Method");
-        for (ClientDTO client : allClients) {
+        for (ClientDto client : allClients) {
             out.println("<h3>" + client + " <h3>");
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientDTO clientDTO = getClientDTOFromPostRequest(req);
+        ClientDto clientDTO = getClientDTOFromPostRequest(req);
 
-        ClientDTO savedClient = clientService.save(clientDTO);
+        ClientDto savedClient = clientService.save(clientDTO);
 
         PrintWriter out = resp.getWriter();
 
@@ -50,9 +50,9 @@ public class ClientServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientDTO clientDTO = getClientDTOFromPutOrDeleteRequest(req);
+        ClientDto clientDTO = getClientDTOFromPutOrDeleteRequest(req);
 
-        ClientDTO update = clientService.update(clientDTO);
+        ClientDto update = clientService.update(clientDTO);
 
         PrintWriter out = resp.getWriter();
 
@@ -72,32 +72,32 @@ public class ClientServlet extends HttpServlet {
         out.println("<h2>The client was successfully deleted <h2>");
     }
 
-    private ClientDTO getClientDTOFromPostRequest(HttpServletRequest req) {
+    private ClientDto getClientDTOFromPostRequest(HttpServletRequest req) {
         JSONObject jsonObject = new JSONObject(getBody(req));
         String name = jsonObject.getString("name");
         String surname = jsonObject.getString("surname");
         String passportId = jsonObject.getString("passportId");
         String phoneNumber = jsonObject.getString("phoneNumber");
-        return ClientDTO.builder()
+        return ClientDto.builder()
                 .name(name)
                 .surname(surname)
-                .passportID(passportId)
+                .passportId(passportId)
                 .phoneNumber(phoneNumber)
                 .build();
     }
 
-    private ClientDTO getClientDTOFromPutOrDeleteRequest(HttpServletRequest req) {
+    private ClientDto getClientDTOFromPutOrDeleteRequest(HttpServletRequest req) {
         JSONObject jsonObject = new JSONObject(getBody(req));
         Long id = jsonObject.getLong("id");
         String name = jsonObject.getString("name");
         String surname = jsonObject.getString("surname");
         String passportId = jsonObject.getString("passportId");
         String phoneNumber = jsonObject.getString("phoneNumber");
-        return ClientDTO.builder()
+        return ClientDto.builder()
                 .id(id)
                 .name(name)
                 .surname(surname)
-                .passportID(passportId)
+                .passportId(passportId)
                 .phoneNumber(phoneNumber)
                 .build();
     }

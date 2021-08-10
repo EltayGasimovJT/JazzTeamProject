@@ -6,7 +6,7 @@ import java.util.List;
 public interface GeneralRepository<T> {
     T save(T t) throws SQLException;
 
-    void delete(T t);
+    void delete(T t) throws SQLException;
 
     List<T> findAll() throws SQLException;
 

@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Builder
 @Data
-public class CoefficientForPriceCalculationDTO {
+public class CoefficientForPriceCalculationDto {
     private Long id;
     private int parcelSizeLimit;
     private String country;
