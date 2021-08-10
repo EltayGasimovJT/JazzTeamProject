@@ -39,5 +39,5 @@ public interface OrderService {
 
    Order update(Order order) throws SQLException;
 
-   void delete(Order order);
+   void delete(Order order) throws SQLException;
 }

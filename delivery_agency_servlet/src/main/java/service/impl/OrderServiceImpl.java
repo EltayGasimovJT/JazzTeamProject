@@ -1,5 +1,6 @@
 package service.impl;
 
+import dto.CoefficientForPriceCalculationDto;
 import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import repository.OrderRepository;
@@ -47,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
         order.setState(orderState);
         OrderHistory orderHistory = OrderHistory.builder()
                 .order(order)
-                .allStates(Collections.singletonList(OrderHistory.builder().build()))
+                .history(Collections.singletonList(OrderHistory.builder().build()))
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .changingTime(order.getSendingTime())
                 .build();
@@ -140,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public BigDecimal calculatePrice(Order order) throws IllegalArgumentException, SQLException {
-        CoefficientForPriceCalculation coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
+        CoefficientForPriceCalculationDto coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
 
         return priceCalculationRuleService.calculatePrice(order, coefficientForPriceCalculation);
     }
@@ -157,7 +158,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void delete(Order order) {
+    public void delete(Order order) throws SQLException {
         OrderValidator.validateOrder(order);
         orderRepository.delete(order);
     }
@@ -225,8 +226,8 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculation getCoefficient(AbstractBuilding abstractBuilding) throws SQLException {
-        CoefficientForPriceCalculation coefficientForPriceCalculation;
+    private CoefficientForPriceCalculationDto getCoefficient(AbstractBuilding abstractBuilding) throws SQLException {
+        CoefficientForPriceCalculationDto coefficientForPriceCalculation;
 
         CoefficientForPriceCalculation firstCoefficient = CoefficientForPriceCalculation
                 .builder()
@@ -244,8 +245,8 @@ public class OrderServiceImpl implements OrderService {
                 .parcelSizeLimit(40)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(firstCoefficient);
-        priceCalculationRuleService.addPriceCalculationRule(secondCoefficient);
+        priceCalculationRuleService.addPriceCalculationRule(fromCoefficientForPriceCalculationToDTO(firstCoefficient));
+        priceCalculationRuleService.addPriceCalculationRule(fromCoefficientForPriceCalculationToDTO(secondCoefficient));
 
         if (abstractBuilding.getLocation().equals("Russia")) {
             coefficientForPriceCalculation = priceCalculationRuleService.findByCountry("Russia");
@@ -255,5 +256,23 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("This country is not supported yet!!!" + abstractBuilding.getLocation());
         }
         return coefficientForPriceCalculation;
+    }
+
+    private CoefficientForPriceCalculationDto fromCoefficientForPriceCalculationToDTO(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+        return CoefficientForPriceCalculationDto.builder()
+                .id(coefficientForPriceCalculation.getId())
+                .country(coefficientForPriceCalculation.getCountry())
+                .countryCoefficient(coefficientForPriceCalculation.getCountryCoefficient())
+                .parcelSizeLimit(coefficientForPriceCalculation.getParcelSizeLimit())
+                .build();
+    }
+
+    private CoefficientForPriceCalculation fromDtoToCoefficientForPriceCalculation(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
+        return CoefficientForPriceCalculation.builder()
+                .id(coefficientForPriceCalculationDto.getId())
+                .country(coefficientForPriceCalculationDto.getCountry())
+                .countryCoefficient(coefficientForPriceCalculationDto.getCountryCoefficient())
+                .parcelSizeLimit(coefficientForPriceCalculationDto.getParcelSizeLimit())
+                .build();
     }
 }

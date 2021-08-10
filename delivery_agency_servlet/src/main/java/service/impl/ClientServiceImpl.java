@@ -42,7 +42,11 @@ public class ClientServiceImpl implements ClientService {
     public ClientDto findById(long id) {
         try {
             Client actualClient = clientRepository.findOne(id);
-            return fromClientToDTO(actualClient);
+            if (actualClient == null) {
+                return null;
+            } else {
+                return fromClientToDTO(actualClient);
+            }
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
@@ -51,19 +55,19 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDto findByPassportId(String passportId) {
-        ClientDto byPassportIdDTO = ClientDto.builder().build();
+        ClientDto clientDto = ClientDto.builder().build();
         Client clientByPassportId;
         try {
             clientByPassportId = clientRepository.findByPassportId(passportId);
-            byPassportIdDTO.setId(clientByPassportId.getId());
-            byPassportIdDTO.setName(clientByPassportId.getName());
-            byPassportIdDTO.setSurname(clientByPassportId.getSurname());
-            byPassportIdDTO.setPassportId(clientByPassportId.getPassportId());
-            byPassportIdDTO.setPhoneNumber(clientByPassportId.getPhoneNumber());
+            clientDto.setId(clientByPassportId.getId());
+            clientDto.setName(clientByPassportId.getName());
+            clientDto.setSurname(clientByPassportId.getSurname());
+            clientDto.setPassportId(clientByPassportId.getPassportId());
+            clientDto.setPhoneNumber(clientByPassportId.getPhoneNumber());
         } catch (SQLException e) {
             log.error(e.getMessage());
         }
-        return byPassportIdDTO;
+        return clientDto;
     }
 
     @Override
