@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.io.*;
 import java.util.List;
 
+import static util.JsonUtil.getBody;
+
 @Slf4j
 @WebServlet("/client")
 public class ClientServlet extends HttpServlet {
@@ -39,9 +41,7 @@ public class ClientServlet extends HttpServlet {
 
         PrintWriter out = resp.getWriter();
 
-        HttpSession session = req.getSession();
-
-        String methodType = (String) session.getAttribute("METHOD_TYPE");
+        String methodType = req.getMethod();
 
         out.println("This is the do" + methodType + " Method");
         out.println("<h2>" + savedClient + " <h2>");
@@ -49,7 +49,7 @@ public class ClientServlet extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ClientDto clientDTO = getClientDTOFromPutOrDeleteRequest(req);
+        ClientDto clientDTO = getClientDTOFromPutRequest(req);
 
         ClientDto update = clientService.update(clientDTO);
 
@@ -63,6 +63,7 @@ public class ClientServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         JSONObject jsonObject = new JSONObject(getBody(req));
         Long id = jsonObject.getLong("id");
+
         clientService.delete(id);
 
         PrintWriter out = resp.getWriter();
@@ -85,7 +86,7 @@ public class ClientServlet extends HttpServlet {
                 .build();
     }
 
-    private ClientDto getClientDTOFromPutOrDeleteRequest(HttpServletRequest req) {
+    private ClientDto getClientDTOFromPutRequest(HttpServletRequest req) {
         JSONObject jsonObject = new JSONObject(getBody(req));
         Long id = jsonObject.getLong("id");
         String name = jsonObject.getString("name");
@@ -99,37 +100,5 @@ public class ClientServlet extends HttpServlet {
                 .passportId(passportId)
                 .phoneNumber(phoneNumber)
                 .build();
-    }
-
-    private String getBody(HttpServletRequest request) {
-        StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader bufferedReader = null;
-
-        try {
-            InputStream inputStream = request.getInputStream();
-            if (inputStream != null) {
-                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-                char[] charBuffer = new char[128];
-                int bytesRead = -1;
-                while ((bytesRead = bufferedReader.read(charBuffer)) > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead);
-                }
-            } else {
-                stringBuilder.append("");
-            }
-        } catch (IOException ex) {
-            log.error(ex.getMessage());
-            return "";
-        } finally {
-            if (bufferedReader != null) {
-                try {
-                    bufferedReader.close();
-                } catch (IOException ex) {
-                    log.error(ex.getMessage());
-                }
-            }
-        }
-
-        return stringBuilder.toString();
     }
 }

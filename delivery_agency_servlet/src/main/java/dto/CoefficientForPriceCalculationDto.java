@@ -8,6 +8,6 @@ import lombok.Data;
 public class CoefficientForPriceCalculationDto {
     private Long id;
     private int parcelSizeLimit;
-    private String country;
     private double countryCoefficient;
+    private String country;
 }
