@@ -59,6 +59,9 @@ public class ClientServiceImpl implements ClientService {
         Client clientByPassportId;
         try {
             clientByPassportId = clientRepository.findByPassportId(passportId);
+            if (clientByPassportId == null) {
+                return null;
+            }
             clientDto.setId(clientByPassportId.getId());
             clientDto.setName(clientByPassportId.getName());
             clientDto.setSurname(clientByPassportId.getSurname());

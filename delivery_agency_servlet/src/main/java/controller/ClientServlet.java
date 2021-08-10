@@ -39,7 +39,7 @@ public class ClientServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         ClientDto clientDTO = getClientDTOFromPostRequest(req);
 
-        if (clientService.findByPassportId(clientDTO.getPassportId()).getPassportId() != null) {
+        if (clientService.findByPassportId(clientDTO.getPassportId())!= null) {
             try {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Clients cannot have equals passportId!!!");
             } catch (IOException e) {
@@ -61,7 +61,8 @@ public class ClientServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         ClientDto clientDTO = getClientDTOFromPutRequest(req);
 
-        if (clientService.findByPassportId(clientDTO.getPassportId()) == null) {
+        ClientDto byPassportId = clientService.findByPassportId(clientDTO.getPassportId());
+        if (byPassportId == null) {
             try {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "There is no client to update!!!");
             } catch (IOException e) {

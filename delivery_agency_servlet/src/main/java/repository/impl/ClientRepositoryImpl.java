@@ -123,6 +123,8 @@ public class ClientRepositoryImpl implements ClientRepository {
                         resultClient.setSurname(clientFromDB.getSurname());
                         resultClient.setPassportId(clientFromDB.getPassportId());
                         resultClient.setPhoneNumber(clientFromDB.getPhoneNumber());
+                    } else {
+                        return null;
                     }
                     return resultClient;
                 }
