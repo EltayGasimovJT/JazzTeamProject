@@ -35,7 +35,6 @@ public class ClientServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         ClientDto clientDTO = getClientDTOFromPostRequest(req);
-
         ClientDto savedClient = clientService.save(clientDTO);
 
         PrintWriter out = resp.getWriter();
