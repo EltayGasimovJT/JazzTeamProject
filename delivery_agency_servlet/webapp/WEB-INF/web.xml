@@ -11,7 +11,7 @@
 
     <servlet-mapping>
         <servlet-name>ClientServlet</servlet-name>
-        <url-pattern>/client</url-pattern>
+        <url-pattern>/clients</url-pattern>
     </servlet-mapping>
 
     <filter>
@@ -21,6 +21,6 @@
 
     <filter-mapping>
         <filter-name>ClientFilter</filter-name>
-        <url-pattern>/client</url-pattern>
+        <url-pattern>/clients</url-pattern>
     </filter-mapping>
 </web-app>

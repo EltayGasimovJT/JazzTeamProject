@@ -3,6 +3,7 @@ package service;
 
 import dto.ClientDto;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -44,7 +45,7 @@ class ClientServiceTest {
     @MethodSource("testClients")
     void testAddClient(ClientDto expectedClient) {
         ClientDto actualClient = clientService.save(expectedClient);
-        Assert.assertEquals(expectedClient, actualClient);
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
@@ -73,7 +74,7 @@ class ClientServiceTest {
 
         List<ClientDto> allClients = clientService.findAllClients();
 
-        Assert.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
+        Assertions.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
     }
 
     @Test
@@ -90,7 +91,7 @@ class ClientServiceTest {
 
         List<ClientDto> actualClients = clientService.findAllClients();
 
-        Assert.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
+        Assertions.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
     }
 
     @Test
@@ -113,7 +114,7 @@ class ClientServiceTest {
                 .phoneNumber(client.getPhoneNumber())
                 .build();
 
-        Assert.assertEquals(expectedClient, actualClient);
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
@@ -133,7 +134,7 @@ class ClientServiceTest {
 
         ClientDto actualClient = clientService.findById(savedClient.getId());
 
-        Assert.assertEquals(expectedClient, actualClient);
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
@@ -152,6 +153,6 @@ class ClientServiceTest {
 
         ClientDto actualClient = clientService.findByPassportId(expectedPassportID);
 
-        Assert.assertEquals(expectedClient, actualClient);
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 }

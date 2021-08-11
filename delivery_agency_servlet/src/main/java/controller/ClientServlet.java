@@ -18,7 +18,7 @@ import java.util.List;
 import static util.JsonUtil.getBody;
 
 @Slf4j
-@WebServlet("/client")
+@WebServlet("/clients")
 public class ClientServlet extends HttpServlet {
     private final ClientService clientService = new ClientServiceImpl();
 
@@ -61,8 +61,9 @@ public class ClientServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         ClientDto clientDTO = getClientDTOFromPutRequest(req);
 
-        ClientDto byPassportId = clientService.findByPassportId(clientDTO.getPassportId());
-        if (byPassportId == null) {
+        ClientDto clientById = clientService.findById(clientDTO.getId());
+
+        if (clientById == null) {
             try {
                 resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, "There is no client to update!!!");
             } catch (IOException e) {

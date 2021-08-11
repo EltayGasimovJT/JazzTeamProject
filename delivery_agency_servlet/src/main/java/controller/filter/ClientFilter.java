@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-@WebFilter("/client")
+@WebFilter("/clients")
 public class ClientFilter implements Filter {
     private final ClientService clientService = new ClientServiceImpl();
 

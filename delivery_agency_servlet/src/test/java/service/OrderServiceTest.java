@@ -4,6 +4,7 @@ package service;
 import entity.*;
 import lombok.SneakyThrows;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -86,7 +87,7 @@ class OrderServiceTest {
 
         Order actual = orderService.findById(1);
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -100,7 +101,7 @@ class OrderServiceTest {
         expected.setChangingTime(changingTime);
         Order order = Order.builder()
                 .id(1L)
-                .history(Arrays.asList(expected))
+                .history(expected)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
                         .width(1)
@@ -122,9 +123,9 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        OrderHistory actual = orderService.findById(1).getHistory().get(0);
+        OrderHistory actual = orderService.findById(1).getHistory();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -148,7 +149,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findById(1);
 
-        Assert.assertEquals(expectedOrder, actualOrder);
+        Assertions.assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
@@ -172,7 +173,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findById(1);
 
-        Assert.assertEquals(expectedOrder, actualOrder);
+        Assertions.assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
@@ -202,7 +203,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findByRecipient(recipient);
 
-        Assert.assertEquals(expectedOrder, actualOrder);
+        Assertions.assertEquals(expectedOrder, actualOrder);
     }
 
     @SneakyThrows
@@ -233,7 +234,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findByRecipient(sender);
 
-        Assert.assertEquals(expectedOrder, actualOrder);
+        Assertions.assertEquals(expectedOrder, actualOrder);
 
     }
 
@@ -261,7 +262,7 @@ class OrderServiceTest {
 
         AbstractLocation actualLocation = orderService.getCurrentOrderLocation(order.getId());
 
-        Assert.assertEquals(expectedLocation, actualLocation);
+        Assertions.assertEquals(expectedLocation, actualLocation);
     }
 
     @Test
@@ -295,7 +296,7 @@ class OrderServiceTest {
         List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
         List<Order> actualOrders = ordersOnTheWay.get(0);
-        Assert.assertEquals(expectedOrders, actualOrders);
+        Assertions.assertEquals(expectedOrders, actualOrders);
     }
 
     @Test
@@ -323,7 +324,7 @@ class OrderServiceTest {
 
         String expected = "Ready To Send";
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -379,7 +380,7 @@ class OrderServiceTest {
 
         List<Order> expected = ordersOnTheWay.get(0);
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -400,7 +401,7 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(processingPoint)
                 .build();
-        Assert.assertTrue(orderService.isFinalWarehouse(order));
+        Assertions.assertTrue(orderService.isFinalWarehouse(order));
     }
 
 
@@ -409,6 +410,6 @@ class OrderServiceTest {
     void calculatePrice(Order order, BigDecimal expectedPrice) throws SQLException {
         BigDecimal actualPrice = orderService.calculatePrice(order);
 
-        Assert.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
+        Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
 }

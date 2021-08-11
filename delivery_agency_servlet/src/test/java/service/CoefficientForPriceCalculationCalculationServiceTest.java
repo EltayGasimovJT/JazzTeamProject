@@ -7,6 +7,7 @@ import entity.OrderProcessingPoint;
 import entity.ParcelParameters;
 import lombok.SneakyThrows;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -125,7 +126,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         int expectedSize = 0;
 
         int actualSize = priceCalculationRuleService.findAllPriceCalculationRules().size();
-        Assert.assertEquals(expectedSize, actualSize);
+
+        Assertions.assertEquals(expectedSize, actualSize);
     }
 
     @Test
@@ -143,7 +145,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         int actualSize = priceCalculationRuleService.findAllPriceCalculationRules().size();
 
-        Assert.assertEquals(expectedSize, actualSize);
+        Assertions.assertEquals(expectedSize, actualSize);
     }
 
     @Test
@@ -159,7 +161,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         CoefficientForPriceCalculationDto actualCoefficient = priceCalculationRuleService.getCoefficient(1);
 
-        Assert.assertEquals(expectedCoefficient, actualCoefficient);
+        Assertions.assertEquals(expectedCoefficient, actualCoefficient);
     }
 
     @Test
@@ -181,13 +183,13 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         int actualParcelSizeLimit = update.getParcelSizeLimit();
 
-        Assert.assertEquals(expectedParcelSizeLimit, actualParcelSizeLimit, 0.001);
+        Assertions.assertEquals(expectedParcelSizeLimit, actualParcelSizeLimit, 0.001);
     }
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
     void calculatePrice(Order order, CoefficientForPriceCalculationDto rule, BigDecimal expected) {
         BigDecimal actual = priceCalculationRuleService.calculatePrice(order, rule);
-        Assert.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
+        Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
     }
 }

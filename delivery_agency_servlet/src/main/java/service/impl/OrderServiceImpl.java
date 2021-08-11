@@ -24,7 +24,6 @@ public class OrderServiceImpl implements OrderService {
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
 
-
     @Override
     public Order updateOrderCurrentLocation(long id, AbstractLocation newLocation) throws SQLException {
         Order order = orderRepository.findOne(id);
@@ -35,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderHistory(long id, OrderHistory newHistory) throws SQLException {
         Order order = orderRepository.findOne(id);
-        order.setHistory(Arrays.asList(newHistory));
+        order.setHistory(newHistory);
         orderRepository.update(order);
     }
 
@@ -52,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .changingTime(order.getSendingTime())
                 .build();
-        order.setHistory(Collections.singletonList(orderHistory));
+        order.setHistory(orderHistory);
         return orderRepository.save(order);
     }
 
