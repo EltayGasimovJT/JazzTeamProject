@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 public class FileService {
     private FileService() {
     }
-
     public static String getStringFromFile(String pathName) throws IOException {
         Path path = Paths.get(pathName);
 
