@@ -9,4 +9,5 @@ public class Voyage extends AbstractLocation {
     private String departurePoint;
     private String destinationPoint;
     private Calendar sendingTime;
+    private Calendar arrivingTime;
 }

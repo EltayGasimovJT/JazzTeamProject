@@ -3,8 +3,8 @@ package dto;
 import lombok.Builder;
 import lombok.Data;
 
-@Builder
 @Data
+@Builder
 public class CoefficientForPriceCalculationDto {
     private Long id;
     private int parcelSizeLimit;

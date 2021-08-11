@@ -12,5 +12,4 @@ public class OrderState {
     private String state;
     private List<String> rolesAllowedWithdrawFromState;
     private List<String> rolesAllowedPutToState;
-    private List<Order> orders;
 }

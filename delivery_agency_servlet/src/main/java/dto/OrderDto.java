@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.List;
 
-@Builder
 @Data
+@Builder
 public class OrderDto {
     private Long id;
     private OrderState state;
