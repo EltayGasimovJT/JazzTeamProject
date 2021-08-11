@@ -17,7 +17,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     }
 
     @Override
-    public void deleteOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint) {
+    public void deleteOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint) throws SQLException {
         orderProcessingPointRepository.delete(orderProcessingPoint);
     }
 

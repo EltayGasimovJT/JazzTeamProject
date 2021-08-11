@@ -17,7 +17,7 @@ public class VoyageServiceImpl implements VoyageService {
     }
 
     @Override
-    public void deleteVoyage(Voyage voyage) {
+    public void deleteVoyage(Voyage voyage) throws SQLException {
         voyageRepository.delete(voyage);
     }
 

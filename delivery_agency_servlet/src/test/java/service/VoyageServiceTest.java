@@ -29,8 +29,8 @@ class VoyageServiceTest {
         String expected = "Moscow";
         voyage.setDestinationPoint(expected);
 
-        Voyage addVoyage = voyageService.addVoyage(voyage);
-        String actual = addVoyage.getDestinationPoint();
+        Voyage addedVoyage = voyageService.addVoyage(voyage);
+        String actual = addedVoyage.getDestinationPoint();
 
         Assert.assertEquals(expected, actual);
     }

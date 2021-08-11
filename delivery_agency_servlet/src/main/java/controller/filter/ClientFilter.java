@@ -24,12 +24,12 @@ public class ClientFilter implements Filter {
         if (((HttpServletRequest) servletRequest).getMethod().equals("GET")) {
             List<ClientDto> clients = clientService.findAllClients();
             if (clients.isEmpty()) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "There is no clients to show!!!");
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "There is no clients to show!!!");
             }
         } else if (((HttpServletRequest) servletRequest).getMethod().equals("DELETE")) {
             long id = Long.parseLong(servletRequest.getParameter("id"));
             if (clientService.findById(id) == null) {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "There is no such client!!!");
+                response.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, "There is no such client!!!");
             }
         }
 

@@ -8,7 +8,7 @@ import java.util.List;
 public interface WarehouseService {
     Warehouse addWarehouse(Warehouse warehouse) throws SQLException;
 
-    void deleteWarehouse(Warehouse warehouse);
+    void deleteWarehouse(Warehouse warehouse) throws SQLException;
 
     List<Warehouse> findAllWarehouses() throws SQLException;
 

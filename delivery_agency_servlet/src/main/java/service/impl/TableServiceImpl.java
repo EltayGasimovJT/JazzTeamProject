@@ -12,7 +12,7 @@ import java.sql.SQLException;
 
 @Slf4j
 public class TableServiceImpl implements TableService {
-    private TableRepository tableRepository = new TableRepositoryImpl();
+    private final TableRepository tableRepository = new TableRepositoryImpl();
 
 
     @Override

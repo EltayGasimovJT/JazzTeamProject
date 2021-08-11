@@ -152,6 +152,6 @@ class ClientServiceTest {
 
         ClientDto actualClient = clientService.findByPassportId(expectedPassportID);
 
-        Assert.assertEquals(expectedPassportID, actualClient.getPassportId());
+        Assert.assertEquals(expectedClient, actualClient);
     }
 }

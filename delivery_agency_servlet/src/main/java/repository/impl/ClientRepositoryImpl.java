@@ -105,14 +105,14 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Client findByPassportId(String passportID) throws SQLException, IllegalArgumentException {
+    public Client findByPassportId(String passportId) throws SQLException, IllegalArgumentException {
         try (Connection connection = connectionRepositoryUtil.getConnection()) {
             try (
                     PreparedStatement statement = connection.prepareStatement(
-                            "SELECT id, name, surname, passportID, phone_number FROM clients WHERE passportID = ?"
+                            "SELECT id, name, surname, passportID, phone_number FROM clients WHERE passportId = ?"
                     )
             ) {
-                statement.setString(1, passportID);
+                statement.setString(1, passportId);
 
                 Client resultClient = Client.builder().build();
                 try (ResultSet rs = statement.executeQuery()) {

@@ -8,7 +8,7 @@ import java.util.List;
 public interface VoyageService {
     Voyage addVoyage(Voyage voyage) throws SQLException;
 
-    void deleteVoyage(Voyage voyage);
+    void deleteVoyage(Voyage voyage) throws SQLException;
 
     List<Voyage> findAllVoyages() throws SQLException;
 

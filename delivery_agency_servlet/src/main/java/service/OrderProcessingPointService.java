@@ -8,7 +8,7 @@ import java.util.List;
 public interface OrderProcessingPointService {
     OrderProcessingPoint addOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint) throws SQLException;
 
-    void deleteOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint);
+    void deleteOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint) throws SQLException;
 
     List<OrderProcessingPoint> findAllOrderProcessingPoints() throws SQLException;
 

@@ -9,7 +9,7 @@ import java.util.List;
 public interface UserService {
     User addUser(User user) throws SQLException;
 
-    void deleteUser(User user);
+    void deleteUser(User user) throws SQLException;
 
     List<User> findAllUsers() throws SQLException;
 

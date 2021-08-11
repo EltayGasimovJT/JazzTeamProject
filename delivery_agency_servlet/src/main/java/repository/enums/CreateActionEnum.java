@@ -6,7 +6,7 @@ public enum CreateActionEnum {
             "    id bigint(11) NOT NULL primary key auto_increment,\n" +
             "    name Varchar(50) NULL,\n" +
             "    surname VARCHAR(50) NULL,\n" +
-            "    passportID VARCHAR(80) NULL,\n" +
+            "    passportId VARCHAR(80) NULL,\n" +
             "    phone_number VARCHAR(50) NULL\n" +
             ");");
 
