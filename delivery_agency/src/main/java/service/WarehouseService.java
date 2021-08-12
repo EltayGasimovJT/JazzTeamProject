@@ -1,7 +1,6 @@
 package service;
 
 import dto.WarehouseDto;
-import entity.Warehouse;
 
 import java.sql.SQLException;
 import java.util.List;

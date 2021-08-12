@@ -2,11 +2,8 @@ package repository.impl;
 
 import entity.Client;
 import entity.Order;
-import entity.OrderProcessingPoint;
-import entity.User;
 import repository.OrderRepository;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +14,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Order findByRecipient(Client recipient) {
         return orders.stream()
-                .filter(order1 -> order1.getRecipient().getId() == recipient.getId())
+                .filter(order -> order.getRecipient().getId().equals(recipient.getId()))
                 .findFirst()
                 .orElse(null);
     }

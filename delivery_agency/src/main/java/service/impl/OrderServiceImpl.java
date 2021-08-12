@@ -264,29 +264,33 @@ public class OrderServiceImpl implements OrderService {
     private CoefficientForPriceCalculationDto getCoefficient(AbstractBuilding abstractBuilding) throws SQLException {
         CoefficientForPriceCalculationDto coefficientForPriceCalculation;
 
+        String russia = "Russia";
+
         CoefficientForPriceCalculationDto firstCoefficient = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
-                .country("Russia")
+                .country(russia)
                 .parcelSizeLimit(50)
                 .build();
+
+        String poland = "Poland";
 
         CoefficientForPriceCalculationDto secondCoefficient = CoefficientForPriceCalculationDto
                 .builder()
                 .id(2L)
                 .countryCoefficient(1.8)
-                .country("Poland")
+                .country(poland)
                 .parcelSizeLimit(40)
                 .build();
 
         priceCalculationRuleService.addPriceCalculationRule(firstCoefficient);
         priceCalculationRuleService.addPriceCalculationRule(secondCoefficient);
 
-        if (abstractBuilding.getLocation().equals("Russia")) {
-            coefficientForPriceCalculation = priceCalculationRuleService.findByCountry("Russia");
-        } else if (abstractBuilding.getLocation().equals("Poland")) {
-            coefficientForPriceCalculation = priceCalculationRuleService.findByCountry("Poland");
+        if (abstractBuilding.getLocation().equals(russia)) {
+            coefficientForPriceCalculation = priceCalculationRuleService.findByCountry(russia);
+        } else if (abstractBuilding.getLocation().equals(poland)) {
+            coefficientForPriceCalculation = priceCalculationRuleService.findByCountry(poland);
         } else {
             throw new IllegalArgumentException("This country is not supported yet!!!" + abstractBuilding.getLocation());
         }

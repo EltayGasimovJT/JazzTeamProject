@@ -3,7 +3,6 @@ package repository.impl;
 import entity.CoefficientForPriceCalculation;
 import repository.CoefficientForPriceCalculationRepository;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

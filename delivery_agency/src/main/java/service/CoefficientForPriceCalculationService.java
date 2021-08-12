@@ -1,7 +1,6 @@
 package service;
 
 import dto.CoefficientForPriceCalculationDto;
-import entity.CoefficientForPriceCalculation;
 import entity.Order;
 
 import java.math.BigDecimal;

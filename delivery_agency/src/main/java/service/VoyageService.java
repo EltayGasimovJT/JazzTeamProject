@@ -1,7 +1,6 @@
 package service;
 
 import dto.VoyageDto;
-import entity.Voyage;
 
 import java.sql.SQLException;
 import java.util.List;
