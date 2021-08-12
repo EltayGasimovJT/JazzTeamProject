@@ -1,8 +1,6 @@
 package service;
 
 import dto.WarehouseDto;
-import entity.Warehouse;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.impl.WarehouseServiceImpl;
@@ -80,18 +78,18 @@ class WarehouseServiceTest {
 
     @Test
     void update() throws SQLException {
-        WarehouseDto warehouse = WarehouseDto.builder().build();
-        warehouse.setId(1L);
-        warehouse.setLocation("Vitebsk");
+        WarehouseDto expected = WarehouseDto.builder().build();
+        expected.setId(1L);
+        expected.setLocation("Vitebsk");
 
-        warehouseService.addWarehouse(warehouse);
+        warehouseService.addWarehouse(expected);
 
-        String expectedLocation = "Minsk";
+        String newLocation = "Minsk";
 
-        warehouse.setLocation(expectedLocation);
+        expected.setLocation(newLocation);
 
-        String actual = warehouseService.update(warehouse).getLocation();
+        WarehouseDto actual = warehouseService.update(expected);
 
-        Assertions.assertEquals(expectedLocation, actual);
+        Assertions.assertEquals(expected, actual);
     }
 }

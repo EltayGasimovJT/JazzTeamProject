@@ -152,7 +152,7 @@ class UserServiceTest {
                         .getId())
                 .getWorkingPlace()
                 .getLocation();
-        Assertions.assertNotEquals(expected,
-                actual);
+
+        Assertions.assertNotEquals(expected, actual);
     }
 }

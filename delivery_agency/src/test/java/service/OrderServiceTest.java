@@ -12,10 +12,7 @@ import service.impl.OrderServiceImpl;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 class OrderServiceTest {
@@ -284,7 +281,7 @@ class OrderServiceTest {
                 .sender(Client.builder().build())
                 .build();
         Voyage voyage = new Voyage();
-        List<OrderDto> expectedOrders = Arrays.asList(
+        List<OrderDto> expectedOrders = Collections.singletonList(
                 order
         );
 
