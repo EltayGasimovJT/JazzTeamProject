@@ -1,18 +1,18 @@
 package service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import repository.TableRepository;
+import repository.DatabaseRepository;
 import repository.enums.CreateActionEnum;
 import repository.enums.DropActionEnum;
 import repository.enums.TruncateActionEnum;
-import repository.impl.TableRepositoryImpl;
-import service.TableService;
+import repository.impl.DatabaseRepositoryImpl;
+import service.DatabaseService;
 
 import java.sql.SQLException;
 
 @Slf4j
-public class TableServiceImpl implements TableService {
-    private final TableRepository tableRepository = new TableRepositoryImpl();
+public class DatabaseServiceImpl implements DatabaseService {
+    private final DatabaseRepository tableRepository = new DatabaseRepositoryImpl();
 
 
     @Override
@@ -35,5 +35,10 @@ public class TableServiceImpl implements TableService {
         for (TruncateActionEnum action : TruncateActionEnum.values()) {
             tableRepository.executeQuery(action.getQuery());
         }
+    }
+
+    @Override
+    public void executeSqlScript(String path) {
+        tableRepository.executeSqlScript(path);
     }
 }

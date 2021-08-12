@@ -2,14 +2,15 @@ package service;
 
 
 import dto.ClientDto;
-import org.junit.Assert;
+import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.ClientServiceImpl;
-import service.impl.TableServiceImpl;
+import service.impl.DatabaseServiceImpl;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 
 class ClientServiceTest {
     private final ClientService clientService = new ClientServiceImpl();
-    private final TableService tableService = new TableServiceImpl();
+    private final DatabaseService databaseService = new DatabaseServiceImpl();
 
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()
@@ -39,6 +40,11 @@ class ClientServiceTest {
                 Arguments.of(secondClientToTest),
                 Arguments.of(thirdClientToTest)
         );
+    }
+
+    @Before
+    public void setup() {
+        //databaseService.executeSqlScript("init_database.sql");
     }
 
     @ParameterizedTest
@@ -63,7 +69,7 @@ class ClientServiceTest {
                 .passportId("04786533747")
                 .build();
 
-        tableService.truncateTables();
+        databaseService.truncateTables();
 
         ClientDto clientDTO = clientService.save(firstClient);
         firstClient.setId(clientDTO.getId());
@@ -83,7 +89,7 @@ class ClientServiceTest {
         ClientDto secondClient = ClientDto.builder().name("Eltay").build();
         ClientDto thirdClient = ClientDto.builder().name("Alex").build();
 
-        tableService.truncateTables();
+        databaseService.truncateTables();
 
         firstClient.setId(clientService.save(firstClient).getId());
         secondClient.setId(clientService.save(secondClient).getId());
@@ -100,7 +106,7 @@ class ClientServiceTest {
                 .name("Oleg")
                 .build();
 
-        tableService.truncateTables();
+        databaseService.truncateTables();
 
         ClientDto savedClient = clientService.save(client);
 
@@ -123,7 +129,7 @@ class ClientServiceTest {
                 .name("Oleg")
                 .build();
 
-        tableService.truncateTables();
+        databaseService.truncateTables();
 
         ClientDto savedClient = clientService.save(expectedClient);
 
@@ -145,7 +151,7 @@ class ClientServiceTest {
                 .passportId(expectedPassportID)
                 .build();
 
-        tableService.truncateTables();
+        databaseService.truncateTables();
 
         ClientDto save = clientService.save(expectedClient);
 
@@ -154,5 +160,10 @@ class ClientServiceTest {
         ClientDto actualClient = clientService.findByPassportId(expectedPassportID);
 
         Assertions.assertEquals(expectedClient, actualClient);
+    }
+
+    @AfterEach
+    void tearDown() {
+        //databaseService.executeSqlScript("drop_database.sql");
     }
 }
