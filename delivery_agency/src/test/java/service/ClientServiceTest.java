@@ -38,10 +38,10 @@ class ClientServiceTest {
 
     @ParameterizedTest
     @MethodSource("testClients")
-    void testAddClient(ClientDto clientDTO, String expectedPassportId) {
-        clientService.save(clientDTO);
+    void testAddClient(ClientDto expectedClient, String expectedPassportId) {
+        clientService.save(expectedClient);
         ClientDto actualClient = clientService.findByPassportId(expectedPassportId);
-        Assertions.assertEquals(expectedPassportId, actualClient.getPassportId());
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
@@ -146,6 +146,6 @@ class ClientServiceTest {
 
         ClientDto actualClient = clientService.findByPassportId(expectedPassportID);
 
-        Assertions.assertEquals(expectedPassportID, actualClient.getPassportId());
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 }
