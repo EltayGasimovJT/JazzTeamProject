@@ -119,7 +119,7 @@ public class OrderServiceImpl implements OrderService {
             } else {
                 orderState = updateState(OrderStates.ON_THE_WAREHOUSE.toString());
             }
-            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint) {
+            if (getCurrentOrderLocation(order.getId()).equals(order.getDestinationPlace())) {
                 orderState = updateState(OrderStates.ORDER_COMPLETED.toString());
             }
             order.setState(orderState);
