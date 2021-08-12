@@ -72,11 +72,11 @@ class OrderProcessingPointServiceTest {
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(thirdProcessingPoint);
 
-        orderProcessingPointService.deleteOrderProcessingPoint(thirdProcessingPoint.getId());
+        orderProcessingPointService.deleteOrderProcessingPoint(firstProcessingPoint.getId());
 
         List<OrderProcessingPointDto> actualProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
 
-        Assertions.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint)
+        Assertions.assertEquals(Arrays.asList(secondProcessingPoint, thirdProcessingPoint)
                 , actualProcessingPoints);
     }
 
