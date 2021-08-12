@@ -171,7 +171,7 @@ public class ClientRepositoryImpl implements ClientRepository {
                 .id(rs.getLong("id"))
                 .name(rs.getString("name"))
                 .surname(rs.getString("surname"))
-                .passportID(rs.getString("passportID"))
+                .passportID(rs.getString("passportId"))
                 .phoneNumber(rs.getString("phone_number"))
                 .build();
     }

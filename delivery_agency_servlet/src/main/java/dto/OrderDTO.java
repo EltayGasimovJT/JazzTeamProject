@@ -19,7 +19,7 @@ public class OrderDTO {
     private BigDecimal price;
     private OrderProcessingPointDTO destinationPlace;
     private AbstractLocation currentLocation;
-    private List<OrderHistory> history;
+    private OrderHistory history;
     private Calendar sendingTime;
     private List<AbstractLocation> route;
 }

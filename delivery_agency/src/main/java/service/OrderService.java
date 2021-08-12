@@ -1,5 +1,6 @@
 package service;
 
+import dto.OrderDto;
 import entity.*;
 
 import java.math.BigDecimal;
@@ -7,37 +8,37 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface OrderService {
-   Order updateOrderCurrentLocation(long id, AbstractLocation newLocation) throws SQLException;
+   OrderDto updateOrderCurrentLocation(long id, AbstractLocation newLocation) throws SQLException;
 
    void updateOrderHistory(long id, OrderHistory newHistory) throws SQLException;
 
-   Order create(Order order) throws SQLException;
+   OrderDto create(OrderDto order) throws SQLException;
 
-   Order findById(long id) throws SQLException;
+   OrderDto findById(long id) throws SQLException;
 
-   Order findByRecipient(Client recipient);
+   OrderDto findByRecipient(Client recipient);
 
-   Order findBySender(Client sender);
+   OrderDto findBySender(Client sender);
 
    AbstractLocation getCurrentOrderLocation(long id) throws SQLException;
 
-   void send(List<Order> orders, Voyage voyage) throws SQLException;
+   void send(List<OrderDto> orders, Voyage voyage) throws SQLException;
 
-   List<Order> accept(List<Order> orders) throws SQLException;
+   List<OrderDto> accept(List<OrderDto> orders) throws SQLException;
 
    String getState(long id) throws SQLException;
 
-   void compareOrders(List<Order> expectedOrders, List<Order> acceptedOrders) throws IllegalArgumentException;
+   void compareOrders(List<OrderDto> expectedOrders, List<OrderDto> acceptedOrders) throws IllegalArgumentException;
 
-   boolean isFinalWarehouse(Order order);
+   boolean isFinalWarehouse(OrderDto order);
 
-   List<Order> findAll() throws SQLException;
+   List<OrderDto> findAll() throws SQLException;
 
-   BigDecimal calculatePrice(Order order) throws IllegalArgumentException, SQLException;
+   BigDecimal calculatePrice(OrderDto order) throws IllegalArgumentException, SQLException;
 
-   List<List<Order>> getOrdersOnTheWay();
+   List<List<OrderDto>> getOrdersOnTheWay();
 
-   Order update(Order order) throws SQLException;
+   OrderDto update(OrderDto order) throws SQLException;
 
-   void delete(Order order);
+   void delete(OrderDto order);
 }

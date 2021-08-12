@@ -1,8 +1,9 @@
 package service;
 
+import dto.OrderDto;
 import entity.*;
 import lombok.SneakyThrows;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -23,7 +24,7 @@ class OrderServiceTest {
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPoint processingPointToTest = new OrderProcessingPoint();
         processingPointToTest.setLocation("Russia");
-        Order firstOrderToTest = Order.builder()
+        OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -39,7 +40,7 @@ class OrderServiceTest {
 
         processingPointToTest.setLocation("Poland");
         processingPointToTest.setId(2L);
-        Order secondOrderToTest = Order.builder()
+        OrderDto secondOrderToTest = OrderDto.builder()
                 .id(2L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(4)
@@ -62,7 +63,7 @@ class OrderServiceTest {
     void updateOrderCurrentLocation() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
-        Order expected = Order.builder()
+        OrderDto expected = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(
                         ParcelParameters.builder()
@@ -83,9 +84,9 @@ class OrderServiceTest {
 
         orderService.updateOrderCurrentLocation(expected.getId(), orderProcessingPoint);
 
-        Order actual = orderService.findById(1);
+        OrderDto actual = orderService.findById(1);
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertNotEquals(expected, actual);
     }
 
     @Test
@@ -97,9 +98,9 @@ class OrderServiceTest {
         changingTime.set(Calendar.HOUR_OF_DAY, 15);
         changingTime.set(Calendar.MINUTE, 35);
         expected.setChangingTime(changingTime);
-        Order order = Order.builder()
+        OrderDto order = OrderDto.builder()
                 .id(1L)
-                .history(Arrays.asList(expected))
+                .history(expected)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
                         .width(1)
@@ -121,16 +122,16 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        OrderHistory actual = orderService.findById(1).getHistory().get(0);
+        OrderHistory actual = orderService.findById(1).getHistory();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void create() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
-        Order expectedOrder = Order.builder()
+        OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -145,16 +146,16 @@ class OrderServiceTest {
 
         orderService.create(expectedOrder);
 
-        Order actualOrder = orderService.findById(1);
+        OrderDto actualOrder = orderService.findById(1);
 
-        Assert.assertEquals(expectedOrder, actualOrder);
+        Assertions.assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
     void findById() throws SQLException {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
-        Order expectedOrder = Order.builder()
+        OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -169,9 +170,9 @@ class OrderServiceTest {
 
         orderService.create(expectedOrder);
 
-        Order actualOrder = orderService.findById(1);
+        OrderDto actualOrder = orderService.findById(1);
 
-        Assert.assertEquals(expectedOrder, actualOrder);
+        Assertions.assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
@@ -184,7 +185,7 @@ class OrderServiceTest {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
 
-        Order expectedOrder = Order.builder()
+        OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -199,9 +200,9 @@ class OrderServiceTest {
 
         orderService.create(expectedOrder);
 
-        Order actualOrder = orderService.findByRecipient(recipient);
+        OrderDto actualOrder = orderService.findByRecipient(recipient);
 
-        Assert.assertEquals(expectedOrder, actualOrder);
+        Assertions.assertEquals(expectedOrder, actualOrder);
     }
 
     @SneakyThrows
@@ -215,7 +216,7 @@ class OrderServiceTest {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setLocation("Russia");
 
-        Order expectedOrder = Order.builder()
+        OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -230,9 +231,9 @@ class OrderServiceTest {
 
         orderService.create(expectedOrder);
 
-        Order actualOrder = orderService.findByRecipient(sender);
+        OrderDto actualOrder = orderService.findByRecipient(sender);
 
-        Assert.assertEquals(expectedOrder, actualOrder);
+        Assertions.assertEquals(expectedOrder, actualOrder);
 
     }
 
@@ -242,7 +243,7 @@ class OrderServiceTest {
         expectedLocation.setId(1L);
         expectedLocation.setLocation("Russia");
 
-        Order order = Order.builder()
+        OrderDto order = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -260,7 +261,7 @@ class OrderServiceTest {
 
         AbstractLocation actualLocation = orderService.getCurrentOrderLocation(order.getId());
 
-        Assert.assertEquals(expectedLocation, actualLocation);
+        Assertions.assertEquals(expectedLocation, actualLocation);
     }
 
     @Test
@@ -269,7 +270,7 @@ class OrderServiceTest {
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
 
-        Order order = Order.builder()
+        OrderDto order = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -283,7 +284,7 @@ class OrderServiceTest {
                 .sender(Client.builder().build())
                 .build();
         Voyage voyage = new Voyage();
-        List<Order> expectedOrders = Arrays.asList(
+        List<OrderDto> expectedOrders = Arrays.asList(
                 order
         );
 
@@ -291,10 +292,10 @@ class OrderServiceTest {
 
         orderService.send(expectedOrders, voyage);
 
-        List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
+        List<List<OrderDto>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
-        List<Order> actualOrders = ordersOnTheWay.get(0);
-        Assert.assertEquals(expectedOrders, actualOrders);
+        List<OrderDto> actualOrders = ordersOnTheWay.get(0);
+        Assertions.assertEquals(expectedOrders, actualOrders);
     }
 
     @Test
@@ -303,7 +304,7 @@ class OrderServiceTest {
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
 
-        Order order = Order.builder()
+        OrderDto order = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -316,13 +317,14 @@ class OrderServiceTest {
                 .recipient(Client.builder().build())
                 .sender(Client.builder().build())
                 .build();
+
         orderService.create(order);
 
         String actual = orderService.getState(1);
 
         String expected = "Ready To Send";
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -335,7 +337,7 @@ class OrderServiceTest {
         secondProcessingPoint.setId(2L);
         secondProcessingPoint.setLocation("Russia");
 
-        Order firstOrder = Order.builder()
+        OrderDto firstOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -349,7 +351,7 @@ class OrderServiceTest {
                 .currentLocation(firstProcessingPoint)
                 .build();
 
-        Order secondOrder = Order.builder()
+        OrderDto secondOrder = OrderDto.builder()
                 .id(2L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -366,19 +368,19 @@ class OrderServiceTest {
         orderService.create(firstOrder);
         orderService.create(secondOrder);
 
-        List<Order> actual = Arrays.asList(
+        List<OrderDto> actual = Arrays.asList(
                 firstOrder, secondOrder
         );
 
         orderService.send(actual, new Voyage());
 
-        List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
+        List<List<OrderDto>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
         actual.get(0).setId(5L);
 
-        List<Order> expected = ordersOnTheWay.get(0);
+        List<OrderDto> expected = ordersOnTheWay.get(0);
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertNotEquals(expected, actual);
     }
 
     @Test
@@ -386,7 +388,7 @@ class OrderServiceTest {
         OrderProcessingPoint processingPoint = new OrderProcessingPoint();
         processingPoint.setId(1L);
         processingPoint.setLocation("Moscow");
-        Order order = Order.builder()
+        OrderDto order = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
@@ -399,15 +401,15 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(processingPoint)
                 .build();
-        Assert.assertTrue(orderService.isFinalWarehouse(order));
+        Assertions.assertTrue(orderService.isFinalWarehouse(order));
     }
 
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
-    void calculatePrice(Order order, BigDecimal expectedPrice) throws SQLException {
+    void calculatePrice(OrderDto order, BigDecimal expectedPrice) throws SQLException {
         BigDecimal actualPrice = orderService.calculatePrice(order);
 
-        Assert.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
+        Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
 }

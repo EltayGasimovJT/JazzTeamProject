@@ -1,5 +1,7 @@
 package service.impl;
 
+import dto.CoefficientForPriceCalculationDto;
+import dto.OrderDto;
 import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import repository.OrderRepository;
@@ -11,7 +13,6 @@ import validator.OrderValidator;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,49 +26,49 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public Order updateOrderCurrentLocation(long id, AbstractLocation newLocation) throws SQLException {
+    public OrderDto updateOrderCurrentLocation(long id, AbstractLocation newLocation) throws SQLException {
         Order order = orderRepository.findOne(id);
         order.setCurrentLocation(newLocation);
-        return orderRepository.update(order);
+        return fromOrderToDto(orderRepository.update(order));
     }
 
     @Override
     public void updateOrderHistory(long id, OrderHistory newHistory) throws SQLException {
         Order order = orderRepository.findOne(id);
-        order.setHistory(Arrays.asList(newHistory));
+        order.setHistory(newHistory);
         orderRepository.update(order);
     }
 
     @Override
-    public Order create(Order order) throws SQLException {
+    public OrderDto create(OrderDto order) throws SQLException {
         OrderValidator.validateOrder(order);
         OrderState orderState = updateState("Ready To Send");
         BigDecimal price = calculatePrice(order);
         order.setPrice(price);
         order.setState(orderState);
         OrderHistory orderHistory = OrderHistory.builder()
-                .order(order)
-                .allStates(Collections.singletonList(OrderHistory.builder().build()))
+                .order(fromDtoToOrder(order))
+                .histories(Collections.singletonList(OrderHistory.builder().build()))
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .changingTime(order.getSendingTime())
                 .build();
-        order.setHistory(Collections.singletonList(orderHistory));
-        return orderRepository.save(order);
+        order.setHistory(orderHistory);
+        return fromOrderToDto(orderRepository.save(fromDtoToOrder(order)));
     }
 
     @Override
-    public Order findById(long id) throws SQLException {
-        return orderRepository.findOne(id);
+    public OrderDto findById(long id) throws SQLException {
+        return fromOrderToDto(orderRepository.findOne(id));
     }
 
     @Override
-    public Order findByRecipient(Client recipient) {
-        return orderRepository.findByRecipient(recipient);
+    public OrderDto findByRecipient(Client recipient) {
+        return fromOrderToDto(orderRepository.findByRecipient(recipient));
     }
 
     @Override
-    public Order findBySender(Client sender) {
-        return orderRepository.findBySender(sender);
+    public OrderDto findBySender(Client sender) {
+        return fromOrderToDto(orderRepository.findBySender(sender));
     }
 
     @Override
@@ -77,8 +78,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void send(List<Order> orders, Voyage voyage) throws SQLException {
-        for (Order order : orders) {
+    public void send(List<OrderDto> orders, Voyage voyage) throws SQLException {
+        for (OrderDto order : orders) {
             order.setCurrentLocation(voyage);
             OrderState orderState;
             if (isFinalWarehouse(order)) {
@@ -91,16 +92,27 @@ public class OrderServiceImpl implements OrderService {
             }
             order.setState(orderState);
         }
-        orderRepository.saveSentOrders(orders);
+        List<Order> ordersToSend = new ArrayList<>();
+        for (OrderDto order : orders) {
+            ordersToSend.add(fromDtoToOrder(order));
+        }
+
+        orderRepository.saveSentOrders(ordersToSend);
     }
 
     @Override
-    public List<Order> accept(List<Order> orders) throws SQLException {
-        List<Order> acceptedOrders = orderRepository.acceptOrders(orders);
+    public List<OrderDto> accept(List<OrderDto> orders) throws SQLException {
+        List<Order> ordersToAccept = new ArrayList<>();
+        for (OrderDto order : orders) {
+            ordersToAccept.add(fromDtoToOrder(order));
+        }
+
+        List<Order> acceptedOrders = orderRepository.acceptOrders(ordersToAccept);
+
         for (Order order : acceptedOrders) {
             log.info(order.toString());
             OrderState orderState;
-            if (isFinalWarehouse(order)) {
+            if (isFinalWarehouse(fromOrderToDto(order))) {
                 orderState = updateState("On final warehouse");
             } else {
                 orderState = updateState("On the warehouse");
@@ -110,7 +122,14 @@ public class OrderServiceImpl implements OrderService {
             }
             order.setState(orderState);
         }
-        return acceptedOrders;
+
+        List<OrderDto> acceptedOrdersDto = new ArrayList<>();
+
+        for (Order acceptedOrder : acceptedOrders) {
+            acceptedOrdersDto.add(fromOrderToDto(acceptedOrder));
+        }
+
+        return acceptedOrdersDto;
     }
 
     @Override
@@ -120,7 +139,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void compareOrders(List<Order> expectedOrders, List<Order> acceptedOrders) throws IllegalArgumentException {
+    public void compareOrders(List<OrderDto> expectedOrders, List<OrderDto> acceptedOrders) throws IllegalArgumentException {
         for (int i = 0; i < expectedOrders.size(); i++) {
             if (!expectedOrders.get(i).equals(acceptedOrders.get(i))) {
                 throw new IllegalArgumentException("Expected List is not equal to actual!!!");
@@ -129,37 +148,55 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean isFinalWarehouse(Order order) {
+    public boolean isFinalWarehouse(OrderDto order) {
         return order.getDestinationPlace().equals(order.getCurrentLocation());
     }
 
     @Override
-    public List<Order> findAll() throws SQLException {
-        return orderRepository.findAll();
+    public List<OrderDto> findAll() throws SQLException {
+        List<Order> orders = orderRepository.findAll();
+        List<OrderDto> orderDtos = new ArrayList<>();
+
+        for (Order order : orders) {
+            orderDtos.add(fromOrderToDto(order));
+        }
+        return orderDtos;
     }
 
     @Override
-    public BigDecimal calculatePrice(Order order) throws IllegalArgumentException, SQLException {
-        CoefficientForPriceCalculation coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
+    public BigDecimal calculatePrice(OrderDto order) throws IllegalArgumentException, SQLException {
+        CoefficientForPriceCalculationDto coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
 
-        return priceCalculationRuleService.calculatePrice(order, coefficientForPriceCalculation);
+        return priceCalculationRuleService.calculatePrice(fromDtoToOrder(order), coefficientForPriceCalculation);
     }
 
     @Override
-    public List<List<Order>> getOrdersOnTheWay() {
-        return orderRepository.getSentOrders();
+    public List<List<OrderDto>> getOrdersOnTheWay() {
+        List<List<Order>> allSentOrders = orderRepository.getSentOrders();
+        List<List<OrderDto>> allSentOrderDtos = new ArrayList<>();
+
+        for (List<Order> sentOrders : allSentOrders) {
+            List<OrderDto> sentOrderDtos = new ArrayList<>();
+            for (Order sentOrder : sentOrders) {
+                sentOrderDtos.add(fromOrderToDto(sentOrder));
+            }
+            allSentOrderDtos.add(sentOrderDtos);
+        }
+
+        return allSentOrderDtos;
     }
 
     @Override
-    public Order update(Order order) throws SQLException {
+    public OrderDto update(OrderDto order) throws SQLException {
         OrderValidator.validateOrder(order);
-        return orderRepository.update(order);
+        Order update = orderRepository.update(fromDtoToOrder(order));
+        return fromOrderToDto(update);
     }
 
     @Override
-    public void delete(Order order) {
+    public void delete(OrderDto order) {
         OrderValidator.validateOrder(order);
-        orderRepository.delete(order);
+        orderRepository.delete(fromDtoToOrder(order));
     }
 
     private OrderState updateState(String state) {
@@ -225,10 +262,10 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculation getCoefficient(AbstractBuilding abstractBuilding) throws SQLException {
-        CoefficientForPriceCalculation coefficientForPriceCalculation;
+    private CoefficientForPriceCalculationDto getCoefficient(AbstractBuilding abstractBuilding) throws SQLException {
+        CoefficientForPriceCalculationDto coefficientForPriceCalculation;
 
-        CoefficientForPriceCalculation firstCoefficient = CoefficientForPriceCalculation
+        CoefficientForPriceCalculationDto firstCoefficient = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -236,7 +273,7 @@ public class OrderServiceImpl implements OrderService {
                 .parcelSizeLimit(50)
                 .build();
 
-        CoefficientForPriceCalculation secondCoefficient = CoefficientForPriceCalculation
+        CoefficientForPriceCalculationDto secondCoefficient = CoefficientForPriceCalculationDto
                 .builder()
                 .id(2L)
                 .countryCoefficient(1.8)
@@ -255,5 +292,37 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("This country is not supported yet!!!" + abstractBuilding.getLocation());
         }
         return coefficientForPriceCalculation;
+    }
+
+    private OrderDto fromOrderToDto(Order order) {
+        return OrderDto.builder()
+                .id(order.getId())
+                .currentLocation(order.getCurrentLocation())
+                .destinationPlace(order.getDestinationPlace())
+                .history(order.getHistory())
+                .parcelParameters(order.getParcelParameters())
+                .price(order.getPrice())
+                .recipient(order.getRecipient())
+                .route(order.getRoute())
+                .sender(order.getSender())
+                .sendingTime(order.getSendingTime())
+                .state(order.getState())
+                .build();
+    }
+
+    private Order fromDtoToOrder(OrderDto orderDto) {
+        return Order.builder()
+                .id(orderDto.getId())
+                .currentLocation(orderDto.getCurrentLocation())
+                .destinationPlace(orderDto.getDestinationPlace())
+                .history(orderDto.getHistory())
+                .parcelParameters(orderDto.getParcelParameters())
+                .price(orderDto.getPrice())
+                .recipient(orderDto.getRecipient())
+                .route(orderDto.getRoute())
+                .sender(orderDto.getSender())
+                .sendingTime(orderDto.getSendingTime())
+                .state(orderDto.getState())
+                .build();
     }
 }

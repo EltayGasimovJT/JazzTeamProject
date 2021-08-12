@@ -12,7 +12,7 @@ public class OrderHistory {
     private Order order;
     private User user;
     private String comment;
-    private List<OrderHistory> allStates;
+    private List<OrderHistory> histories;
     private Calendar changingTime;
     private OrderStateChangeType changedTypeEnum;
 }

@@ -1,6 +1,6 @@
 package validator;
 
-import entity.Order;
+import dto.OrderDto;
 
 public class OrderValidator {
 
@@ -8,7 +8,7 @@ public class OrderValidator {
 
     }
 
-    public static void validateOrder(Order order) throws IllegalArgumentException {
+    public static void validateOrder(OrderDto order) throws IllegalArgumentException {
         if (order == null) {
             throw new IllegalArgumentException("The order cannot be empty " + order);
         }

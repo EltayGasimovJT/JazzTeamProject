@@ -1,9 +1,10 @@
 package service;
 
+import dto.OrderProcessingPointDto;
 import entity.OrderProcessingPoint;
 import entity.Warehouse;
 import lombok.SneakyThrows;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,20 +20,23 @@ class OrderProcessingPointServiceTest {
     private final OrderProcessingPointService orderProcessingPointService = new OrderProcessingPointServiceImpl();
 
     private static Stream<Arguments> testOrderProcessingPoints() {
-        OrderProcessingPoint firstProcessingPointToTest = new OrderProcessingPoint();
-        firstProcessingPointToTest.setId(1L);
-        firstProcessingPointToTest.setLocation("Minsk");
-        firstProcessingPointToTest.setWarehouse(new Warehouse());
+        OrderProcessingPointDto firstProcessingPointToTest = OrderProcessingPointDto.builder()
+                .id(1L)
+                .location("Minsk")
+                .warehouse(new Warehouse())
+                .build();
 
-        OrderProcessingPoint secondProcessingPointToTest = new OrderProcessingPoint();
-        secondProcessingPointToTest.setId(2L);
-        secondProcessingPointToTest.setLocation("Moscow");
-        secondProcessingPointToTest.setWarehouse(new Warehouse());
+        OrderProcessingPointDto secondProcessingPointToTest = OrderProcessingPointDto.builder()
+                .id(2L)
+                .location("Moscow")
+                .warehouse(new Warehouse())
+                .build();
 
-        OrderProcessingPoint thirdProcessingPointToTest = new OrderProcessingPoint();
-        thirdProcessingPointToTest.setId(3L);
-        thirdProcessingPointToTest.setLocation("Grodno");
-        thirdProcessingPointToTest.setWarehouse(new Warehouse());
+        OrderProcessingPointDto thirdProcessingPointToTest = OrderProcessingPointDto.builder()
+                .id(3L)
+                .location("Grodno")
+                .warehouse(new Warehouse())
+                .build();
 
         return Stream.of(
                 Arguments.of(firstProcessingPointToTest, "Minsk"),
@@ -44,23 +48,26 @@ class OrderProcessingPointServiceTest {
     @SneakyThrows
     @ParameterizedTest
     @MethodSource("testOrderProcessingPoints")
-    void addOrderProcessingPoint(OrderProcessingPoint orderProcessingPoint, String expectedLocation) {
+    void addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPoint, String expectedLocation) {
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
 
         String actualLocation = orderProcessingPointService.getOrderProcessingPoint(orderProcessingPoint.getId()).getLocation();
-        Assert.assertEquals(expectedLocation, actualLocation);
+        Assertions.assertEquals(expectedLocation, actualLocation);
     }
 
     @Test
     void deleteOrderProcessingPoint() throws SQLException {
-        OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
-        firstProcessingPoint.setId(1L);
+        OrderProcessingPointDto firstProcessingPoint = OrderProcessingPointDto.builder()
+                .id(1L)
+                .build();
 
-        OrderProcessingPoint secondProcessingPoint = new OrderProcessingPoint();
-        secondProcessingPoint.setId(2L);
+        OrderProcessingPointDto secondProcessingPoint  = OrderProcessingPointDto.builder()
+                .id(2L)
+                .build();
 
-        OrderProcessingPoint thirdProcessingPoint = new OrderProcessingPoint();
-        thirdProcessingPoint.setId(3L);
+        OrderProcessingPointDto thirdProcessingPoint  = OrderProcessingPointDto.builder()
+                .id(3L)
+                .build();
 
         orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
@@ -68,52 +75,55 @@ class OrderProcessingPointServiceTest {
 
         orderProcessingPointService.deleteOrderProcessingPoint(thirdProcessingPoint);
 
-        List<OrderProcessingPoint> actualProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
-        Assert.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint)
+        List<OrderProcessingPointDto> actualProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
+        Assertions.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint)
                 , actualProcessingPoints);
     }
 
     @Test
     void findAllOrderProcessingPoints() throws SQLException {
-        OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
-        OrderProcessingPoint secondProcessingPoint = new OrderProcessingPoint();
-        OrderProcessingPoint thirdProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto firstProcessingPoint = OrderProcessingPointDto.builder().build();
+        OrderProcessingPointDto secondProcessingPoint = OrderProcessingPointDto.builder().build();
+        OrderProcessingPointDto thirdProcessingPoint = OrderProcessingPointDto.builder().build();
 
         orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(thirdProcessingPoint);
 
-        List<OrderProcessingPoint> actualOrderProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
+        List<OrderProcessingPointDto> actualOrderProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
 
-        Assert.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint, thirdProcessingPoint)
+        Assertions.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint, thirdProcessingPoint)
                 , actualOrderProcessingPoints);
     }
 
     @SneakyThrows
     @Test
     void getOrderProcessingPoint() {
-        OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
-        firstProcessingPoint.setId(1L);
-        firstProcessingPoint.setLocation("Minsk");
+        OrderProcessingPointDto processingPoint = OrderProcessingPointDto.builder()
+                .id(1L)
+                .location("Minsk")
+                .build();
 
-        OrderProcessingPoint expected = new OrderProcessingPoint();
-        expected.setId(2L);
-        expected.setLocation("Moscow");
+        OrderProcessingPointDto expected = OrderProcessingPointDto.builder()
+                .id(2L)
+                .location("Moscow")
+                .build();
 
-        orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
+        orderProcessingPointService.addOrderProcessingPoint(processingPoint);
         orderProcessingPointService.addOrderProcessingPoint(expected);
 
 
-        OrderProcessingPoint actual = orderProcessingPointService.getOrderProcessingPoint(2);
+        OrderProcessingPointDto actual = orderProcessingPointService.getOrderProcessingPoint(2);
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void update() throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setId(1L);
-        orderProcessingPoint.setLocation("Minsk");
+        OrderProcessingPointDto orderProcessingPoint = OrderProcessingPointDto.builder()
+                .id(1L)
+                .location("Minsk")
+                .build();
 
         orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
 
@@ -123,6 +133,6 @@ class OrderProcessingPointServiceTest {
 
         String actualLocation = orderProcessingPointService.getOrderProcessingPoint(1).getLocation();
 
-        Assert.assertEquals(expected, actualLocation);
+        Assertions.assertEquals(expected, actualLocation);
     }
 }

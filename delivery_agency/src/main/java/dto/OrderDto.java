@@ -1,5 +1,6 @@
-package entity;
+package dto;
 
+import entity.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class Order {
+public class OrderDto {
     private Long id;
     private OrderState state;
     private ParcelParameters parcelParameters;

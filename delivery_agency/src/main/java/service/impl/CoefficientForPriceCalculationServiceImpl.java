@@ -1,5 +1,6 @@
 package service.impl;
 
+import dto.CoefficientForPriceCalculationDto;
 import entity.CoefficientForPriceCalculation;
 import entity.Order;
 import repository.CoefficientForPriceCalculationRepository;
@@ -7,7 +8,9 @@ import repository.impl.CoefficientForPriceCalculationRepositoryImpl;
 import service.CoefficientForPriceCalculationService;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
@@ -16,70 +19,97 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     private static final int INITIAL_WEIGHT = 20;
 
     @Override
-    public CoefficientForPriceCalculation addPriceCalculationRule(CoefficientForPriceCalculation coefficientForPriceCalculation) throws SQLException {
-        return priceCalculationRuleRepository.save(coefficientForPriceCalculation);
+    public CoefficientForPriceCalculationDto addPriceCalculationRule(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
+        CoefficientForPriceCalculation coefficientForPriceCalculation = fromDtoToCoefficientForPriceCalculation(coefficientForPriceCalculationDto);
+        return fromCoefficientForPriceCalculationToDTO(priceCalculationRuleRepository.save(coefficientForPriceCalculation));
     }
 
     @Override
-    public void deletePriceCalculationRule(CoefficientForPriceCalculation coefficientForPriceCalculation) {
-        priceCalculationRuleRepository.delete(coefficientForPriceCalculation);
+    public void deletePriceCalculationRule(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
+        priceCalculationRuleRepository.delete(fromDtoToCoefficientForPriceCalculation(coefficientForPriceCalculationDto));
     }
 
     @Override
-    public List<CoefficientForPriceCalculation> findAllPriceCalculationRules() throws SQLException {
-        return priceCalculationRuleRepository.findAll();
+    public List<CoefficientForPriceCalculationDto> findAllPriceCalculationRules()  {
+        List<CoefficientForPriceCalculation> coefficientsFromRepository = priceCalculationRuleRepository.findAll();
+        List<CoefficientForPriceCalculationDto> coefficientForPriceCalculationDtos = new ArrayList<>();
+        for (CoefficientForPriceCalculation coefficientForPriceCalculation : coefficientsFromRepository) {
+            coefficientForPriceCalculationDtos.add(fromCoefficientForPriceCalculationToDTO(coefficientForPriceCalculation));
+        }
+        return coefficientForPriceCalculationDtos;
     }
 
     @Override
-    public CoefficientForPriceCalculation update(CoefficientForPriceCalculation coefficientForPriceCalculation) throws SQLException {
-        return priceCalculationRuleRepository.update(coefficientForPriceCalculation);
+    public CoefficientForPriceCalculationDto update(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException {
+        CoefficientForPriceCalculation updatedCoefficient = priceCalculationRuleRepository.update(fromDtoToCoefficientForPriceCalculation(coefficientForPriceCalculationDto));
+        return fromCoefficientForPriceCalculationToDTO(updatedCoefficient);
     }
 
     @Override
-    public CoefficientForPriceCalculation getCoefficient(long id) throws SQLException {
-        return priceCalculationRuleRepository.findOne(id);
+    public CoefficientForPriceCalculationDto getCoefficient(long id)  {
+        return fromCoefficientForPriceCalculationToDTO(priceCalculationRuleRepository.findOne(id));
     }
 
     @Override
-    public BigDecimal calculatePrice(Order order, CoefficientForPriceCalculation coefficientForPriceCalculation) throws IllegalArgumentException {
+    public BigDecimal calculatePrice(Order order, CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws IllegalArgumentException {
         BigDecimal resultPrice = new BigDecimal(1);
         BigDecimal size = BigDecimal.valueOf(getSize(order));
-        BigDecimal parcelSizeLimit = BigDecimal.valueOf(coefficientForPriceCalculation.getParcelSizeLimit());
+        BigDecimal parcelSizeLimit = BigDecimal.valueOf(coefficientForPriceCalculationDto.getParcelSizeLimit());
         if (size.doubleValue() > parcelSizeLimit.doubleValue() && order.getParcelParameters().getWeight() > INITIAL_WEIGHT) {
             resultPrice =
                     resultPrice
-                            .multiply(BigDecimal.valueOf(coefficientForPriceCalculation.getCountryCoefficient())
+                            .multiply(BigDecimal.valueOf(coefficientForPriceCalculationDto.getCountryCoefficient())
                                     .multiply(BigDecimal.valueOf(INITIAL_PRISE)
                                             .multiply(BigDecimal.valueOf(order.getParcelParameters().getWeight() / INITIAL_WEIGHT))
-                                            .multiply((size.divide(parcelSizeLimit, 1))))
+                                            .multiply((size.divide(parcelSizeLimit, RoundingMode.DOWN))))
                             );
         } else if (size.doubleValue() > parcelSizeLimit.doubleValue()) {
             resultPrice =
                     resultPrice
-                            .multiply(BigDecimal.valueOf(coefficientForPriceCalculation.getCountryCoefficient())
+                            .multiply(BigDecimal.valueOf(coefficientForPriceCalculationDto.getCountryCoefficient())
                                     .multiply(BigDecimal.valueOf(INITIAL_PRISE)
-                                            .multiply((size.divide(parcelSizeLimit, 1)))));
+                                            .multiply((size.divide(parcelSizeLimit, RoundingMode.DOWN)))));
         } else if (order.getParcelParameters().getWeight() > INITIAL_WEIGHT) {
             resultPrice = resultPrice.multiply(BigDecimal.valueOf(
-                    coefficientForPriceCalculation.getCountryCoefficient()
+                    coefficientForPriceCalculationDto.getCountryCoefficient()
                             * INITIAL_PRISE
                             * (order.getParcelParameters().getWeight() / INITIAL_WEIGHT)));
         } else {
             resultPrice = resultPrice.multiply(BigDecimal.valueOf(
-                    coefficientForPriceCalculation.getCountryCoefficient() * INITIAL_PRISE));
+                    coefficientForPriceCalculationDto.getCountryCoefficient() * INITIAL_PRISE));
         }
 
         return resultPrice;
     }
 
     @Override
-    public CoefficientForPriceCalculation findByCountry(String country) {
-        return priceCalculationRuleRepository.findByCountry(country);
+    public CoefficientForPriceCalculationDto findByCountry(String country) {
+        CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleRepository.findByCountry(country);
+
+        return fromCoefficientForPriceCalculationToDTO(actualCoefficient);
     }
 
     private double getSize(Order order) {
         return (order.getParcelParameters().getLength()
                 * order.getParcelParameters().getHeight()
                 * order.getParcelParameters().getWidth()) + order.getParcelParameters().getWeight();
+    }
+
+    private CoefficientForPriceCalculationDto fromCoefficientForPriceCalculationToDTO(CoefficientForPriceCalculation coefficientForPriceCalculation) {
+        return CoefficientForPriceCalculationDto.builder()
+                .id(coefficientForPriceCalculation.getId())
+                .country(coefficientForPriceCalculation.getCountry())
+                .countryCoefficient(coefficientForPriceCalculation.getCountryCoefficient())
+                .parcelSizeLimit(coefficientForPriceCalculation.getParcelSizeLimit())
+                .build();
+    }
+
+    private CoefficientForPriceCalculation fromDtoToCoefficientForPriceCalculation(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
+        return CoefficientForPriceCalculation.builder()
+                .id(coefficientForPriceCalculationDto.getId())
+                .country(coefficientForPriceCalculationDto.getCountry())
+                .countryCoefficient(coefficientForPriceCalculationDto.getCountryCoefficient())
+                .parcelSizeLimit(coefficientForPriceCalculationDto.getParcelSizeLimit())
+                .build();
     }
 }
