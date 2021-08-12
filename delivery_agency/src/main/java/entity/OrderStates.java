@@ -1,5 +1,6 @@
 package entity;
 
+
 public enum OrderStates {
     READY_TO_SEND,
     ON_THE_WAY_TO_THE_WAREHOUSE,

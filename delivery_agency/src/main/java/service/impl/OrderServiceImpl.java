@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import entity.OrderStateChangeType;
+
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository = new OrderRepositoryImpl();
@@ -42,8 +44,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto create(OrderDto order) throws SQLException {
         OrderValidator.validateOrder(order);
-        OrderState orderState = updateState("Ready To Send");
         BigDecimal price = calculatePrice(order);
+        OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         order.setPrice(price);
         order.setState(orderState);
         OrderHistory orderHistory = OrderHistory.builder()
@@ -83,12 +85,12 @@ public class OrderServiceImpl implements OrderService {
             order.setCurrentLocation(voyage);
             OrderState orderState;
             if (isFinalWarehouse(order)) {
-                orderState = updateState("On the way to the final warehouse");
+                orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString());
             } else {
-                orderState = updateState("On the way to the warehouse");
+                orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString());
             }
             if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint) {
-                orderState = updateState("On the way to the pick up/reception");
+                orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_RECEPTION.toString());
             }
             order.setState(orderState);
         }
@@ -113,12 +115,12 @@ public class OrderServiceImpl implements OrderService {
             log.info(order.toString());
             OrderState orderState;
             if (isFinalWarehouse(fromOrderToDto(order))) {
-                orderState = updateState("On final warehouse");
+                orderState = updateState(OrderStates.ON_THE_FINAL_WAREHOUSE.toString());
             } else {
-                orderState = updateState("On the warehouse");
+                orderState = updateState(OrderStates.ON_THE_WAREHOUSE.toString());
             }
             if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint) {
-                orderState = updateState("Order completed");
+                orderState = updateState(OrderStates.ORDER_COMPLETED.toString());
             }
             order.setState(orderState);
         }
