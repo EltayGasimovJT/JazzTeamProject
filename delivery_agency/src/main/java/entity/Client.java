@@ -11,7 +11,7 @@ public class Client {
     private Long id;
     private String name;
     private String surname;
-    private String passportID;
+    private String passportId;
     private String phoneNumber;
     private List<Order> orders;
 }

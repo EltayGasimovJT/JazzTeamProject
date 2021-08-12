@@ -14,7 +14,6 @@ public class ClientFilter implements Filter {
         if (((HttpServletRequest) servletRequest).getMethod().equals("POST")) {
             session.setAttribute("METHOD_TYPE", "POST");
         }
-
         filterChain.doFilter(servletRequest, servletResponse);
     }
 }

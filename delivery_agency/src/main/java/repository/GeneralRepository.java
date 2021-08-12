@@ -1,16 +1,15 @@
 package repository;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface GeneralRepository<T> {
-    T save(T t) throws SQLException;
+    T save(T t);
 
     void delete(T t);
 
-    List<T> findAll() throws SQLException;
+    List<T> findAll();
 
-    T findOne(Long id) throws SQLException;
+    T findOne(Long id);
 
-    T update(T update) throws SQLException;
+    T update(T update);
 }
