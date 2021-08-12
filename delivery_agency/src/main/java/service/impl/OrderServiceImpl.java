@@ -194,9 +194,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void delete(OrderDto order) {
-        OrderValidator.validateOrder(order);
-        orderRepository.delete(fromDtoToOrder(order));
+    public void delete(Long id) {
+        orderRepository.delete(id);
     }
 
     private OrderState updateState(String state) {

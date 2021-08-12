@@ -25,8 +25,8 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public void deletePriceCalculationRule(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
-        priceCalculationRuleRepository.delete(fromDtoToCoefficientForPriceCalculation(coefficientForPriceCalculationDto));
+    public void deletePriceCalculationRule(Long id) {
+        priceCalculationRuleRepository.delete(id);
     }
 
     @Override

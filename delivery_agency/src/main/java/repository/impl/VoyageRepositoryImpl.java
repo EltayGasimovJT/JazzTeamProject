@@ -16,8 +16,8 @@ public class VoyageRepositoryImpl implements VoyageRepository {
     }
 
     @Override
-    public void delete(Voyage voyage) {
-        voyages.remove(voyage);
+    public void delete(Long id) {
+        voyages.remove(findOne(id));
     }
 
     @Override

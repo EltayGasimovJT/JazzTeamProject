@@ -15,8 +15,8 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
 
     @Override
-    public void delete(ClientDto clientDto) {
-        clientRepository.delete(fromDtoToClient(clientDto));
+    public void delete(Long id) {
+        clientRepository.delete(id);
     }
 
     @Override

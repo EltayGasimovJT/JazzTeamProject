@@ -5,7 +5,7 @@ import java.util.List;
 public interface GeneralRepository<T> {
     T save(T t);
 
-    void delete(T t);
+    void delete(Long id);
 
     List<T> findAll();
 

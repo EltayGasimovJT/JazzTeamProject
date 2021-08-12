@@ -1,8 +1,9 @@
 package service;
 
+import dto.VoyageDto;
 import entity.Order;
 import entity.Voyage;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.impl.VoyageServiceImpl;
 
@@ -20,7 +21,7 @@ class VoyageServiceTest {
         sendingTime.set(Calendar.HOUR_OF_DAY, 12);
         sendingTime.set(Calendar.MINUTE, 30);
 
-        Voyage voyage = new Voyage();
+        VoyageDto voyage = VoyageDto.builder().build();
         voyage.setId(1L);
         voyage.setExpectedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
         voyage.setDispatchedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
@@ -29,38 +30,38 @@ class VoyageServiceTest {
         String expected = "Moscow";
         voyage.setDestinationPoint(expected);
 
-        Voyage addVoyage = voyageService.addVoyage(voyage);
+        VoyageDto addVoyage = voyageService.addVoyage(voyage);
         String actual = addVoyage.getDestinationPoint();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void deleteVoyage() throws SQLException {
-        Voyage firstVoyage = new Voyage();
+        VoyageDto firstVoyage = VoyageDto.builder().build();
         firstVoyage.setId(1L);
-        Voyage secondVoyage = new Voyage();
+        VoyageDto secondVoyage = VoyageDto.builder().build();
         secondVoyage.setId(2L);
-        Voyage thirdVoyage = new Voyage();
+        VoyageDto thirdVoyage = VoyageDto.builder().build();
         thirdVoyage.setId(3L);
 
         voyageService.addVoyage(firstVoyage);
         voyageService.addVoyage(secondVoyage);
         voyageService.addVoyage(thirdVoyage);
 
-        voyageService.deleteVoyage(firstVoyage);
+        voyageService.deleteVoyage(firstVoyage.getId());
 
         int expected = 2;
         int actual = voyageService.findAllVoyages().size();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void findAllVoyages() throws SQLException {
-        Voyage firstVoyage = new Voyage();
-        Voyage secondVoyage = new Voyage();
-        Voyage thirdVoyage = new Voyage();
+        VoyageDto firstVoyage = VoyageDto.builder().build();
+        VoyageDto secondVoyage = VoyageDto.builder().build();
+        VoyageDto thirdVoyage = VoyageDto.builder().build();
 
         voyageService.addVoyage(firstVoyage);
         voyageService.addVoyage(secondVoyage);
@@ -70,12 +71,12 @@ class VoyageServiceTest {
 
         int actual = voyageService.findAllVoyages().size();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void getVoyage() throws SQLException {
-        Voyage voyage = new Voyage();
+        VoyageDto voyage = VoyageDto.builder().build();
         voyage.setId(1L);
 
         GregorianCalendar expectedTime = new GregorianCalendar();
@@ -88,12 +89,12 @@ class VoyageServiceTest {
 
         Calendar actualTime = voyageService.getVoyage(1).getSendingTime();
 
-        Assert.assertEquals(expectedTime, actualTime);
+        Assertions.assertEquals(expectedTime, actualTime);
     }
 
     @Test
     void update() throws SQLException {
-        Voyage voyage = new Voyage();
+        VoyageDto voyage = VoyageDto.builder().build();
         voyage.setId(1L);
         GregorianCalendar sendingTime = new GregorianCalendar();
         sendingTime.set(Calendar.HOUR_OF_DAY, 12);
@@ -111,6 +112,6 @@ class VoyageServiceTest {
 
         Calendar actualTime = voyageService.update(voyage).getSendingTime();
 
-        Assert.assertEquals(expectedTime, actualTime);
+        Assertions.assertEquals(expectedTime, actualTime);
     }
 }

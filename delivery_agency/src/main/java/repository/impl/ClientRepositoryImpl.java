@@ -56,9 +56,4 @@ public class ClientRepositoryImpl implements ClientRepository {
                 .findFirst()
                 .orElse(null);
     }
-
-    @Override
-    public void delete(Client client) {
-        clients.remove(client);
-    }
 }

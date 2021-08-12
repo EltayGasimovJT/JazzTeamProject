@@ -17,8 +17,8 @@ public class CoefficientForPriceCalculationRepositoryImpl implements Coefficient
     }
 
     @Override
-    public void delete(CoefficientForPriceCalculation coefficientForPriceCalculation) {
-        coefficientForPriceCalculations.remove(coefficientForPriceCalculation);
+    public void delete(Long id) {
+        coefficientForPriceCalculations.remove(findOne(id));
     }
 
     @Override

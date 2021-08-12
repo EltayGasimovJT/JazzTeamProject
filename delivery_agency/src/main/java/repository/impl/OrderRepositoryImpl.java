@@ -51,8 +51,8 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public void delete(Order order) {
-        orders.remove(order);
+    public void delete(Long id) {
+        orders.remove(findOne(id));
     }
 
     @Override

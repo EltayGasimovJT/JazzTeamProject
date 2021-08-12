@@ -11,7 +11,7 @@ import java.util.List;
 public interface CoefficientForPriceCalculationService {
     CoefficientForPriceCalculationDto addPriceCalculationRule(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException;
 
-    void deletePriceCalculationRule(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException;
+    void deletePriceCalculationRule(Long id) throws SQLException;
 
     List<CoefficientForPriceCalculationDto> findAllPriceCalculationRules() throws SQLException;
 

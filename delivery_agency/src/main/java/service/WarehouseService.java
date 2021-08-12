@@ -1,18 +1,19 @@
 package service;
 
+import dto.WarehouseDto;
 import entity.Warehouse;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface WarehouseService {
-    Warehouse addWarehouse(Warehouse warehouse) throws SQLException;
+    WarehouseDto addWarehouse(WarehouseDto warehouse) throws SQLException;
 
-    void deleteWarehouse(Warehouse warehouse);
+    void deleteWarehouse(Long id);
 
-    List<Warehouse> findAllWarehouses() throws SQLException;
+    List<WarehouseDto> findAllWarehouses() throws SQLException;
 
-    Warehouse getWarehouse(long id) throws SQLException;
+    WarehouseDto getWarehouse(long id) throws SQLException;
 
-    Warehouse update(Warehouse warehouse) throws SQLException;
+    WarehouseDto update(WarehouseDto warehouse) throws SQLException;
 }

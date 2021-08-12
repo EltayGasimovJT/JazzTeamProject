@@ -54,7 +54,7 @@ class UserServiceTest {
         userService.addUser(secondUser);
         userService.addUser(thirdUser);
 
-        userService.deleteUser(firstUser);
+        userService.deleteUser(firstUser.getId());
 
         List<UserDto> allUsers = userService.findAllUsers();
         int unexpected = 3;

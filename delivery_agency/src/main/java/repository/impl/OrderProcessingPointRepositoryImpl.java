@@ -17,8 +17,8 @@ public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointR
     }
 
     @Override
-    public void delete(OrderProcessingPoint orderProcessingPoint) {
-        processingPoints.remove(orderProcessingPoint);
+    public void delete(Long id) {
+        processingPoints.remove(findOne(id));
     }
 
     @Override

@@ -40,5 +40,5 @@ public interface OrderService {
 
    OrderDto update(OrderDto order) throws SQLException;
 
-   void delete(OrderDto order);
+   void delete(Long id);
 }

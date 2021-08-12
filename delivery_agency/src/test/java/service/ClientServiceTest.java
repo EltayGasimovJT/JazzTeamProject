@@ -47,14 +47,17 @@ class ClientServiceTest {
     @Test
     void deleteClient() {
         ClientDto firstClient = ClientDto.builder()
+                .id(1L)
                 .name("firstClient")
                 .passportId("23612613616")
                 .build();
         ClientDto secondClient = ClientDto.builder()
+                .id(2L)
                 .name("secondClient")
                 .passportId("16714714713")
                 .build();
         ClientDto thirdClient = ClientDto.builder()
+                .id(3L)
                 .name("thirdClient")
                 .passportId("04786533747")
                 .build();
@@ -64,7 +67,7 @@ class ClientServiceTest {
         secondClient.setId(clientService.save(secondClient).getId());
         thirdClient.setId(clientService.save(thirdClient).getId());
 
-        clientService.delete(thirdClient);
+        clientService.delete(thirdClient.getId());
 
         List<ClientDto> allClients = clientService.findAllClients();
 

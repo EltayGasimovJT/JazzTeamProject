@@ -14,18 +14,18 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     private final OrderProcessingPointRepository orderProcessingPointRepository = new OrderProcessingPointRepositoryImpl();
 
     @Override
-    public OrderProcessingPointDto addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) throws SQLException {
+    public OrderProcessingPointDto addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) {
         OrderProcessingPoint orderProcessingPoint = fromDtoToOrderProcessingPoint(orderProcessingPointDto);
         return fromOrderProcessingPointToDTO(orderProcessingPointRepository.save(orderProcessingPoint));
     }
 
     @Override
-    public void deleteOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) throws SQLException {
-        orderProcessingPointRepository.delete(fromDtoToOrderProcessingPoint(orderProcessingPointDto));
+    public void deleteOrderProcessingPoint(Long id) {
+        orderProcessingPointRepository.delete(id);
     }
 
     @Override
-    public List<OrderProcessingPointDto> findAllOrderProcessingPoints() throws SQLException {
+    public List<OrderProcessingPointDto> findAllOrderProcessingPoints() {
         List<OrderProcessingPoint> processingPoints = orderProcessingPointRepository.findAll();
         List<OrderProcessingPointDto> processingPointDto = new ArrayList<>();
         for (OrderProcessingPoint processingPoint : processingPoints) {
@@ -36,7 +36,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     }
 
     @Override
-    public OrderProcessingPointDto getOrderProcessingPoint(long id) throws SQLException {
+    public OrderProcessingPointDto getOrderProcessingPoint(long id) {
         return fromOrderProcessingPointToDTO(orderProcessingPointRepository.findOne(id));
     }
 
@@ -59,10 +59,10 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     private OrderProcessingPoint fromDtoToOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(orderProcessingPointDto.getId());
-        orderProcessingPoint.setWarehouse(orderProcessingPoint.getWarehouse());
-        orderProcessingPoint.setLocation(orderProcessingPoint.getLocation());
-        orderProcessingPoint.setDispatchedOrders(orderProcessingPoint.getDispatchedOrders());
-        orderProcessingPoint.setExpectedOrders(orderProcessingPoint.getExpectedOrders());
+        orderProcessingPoint.setWarehouse(orderProcessingPointDto.getWarehouse());
+        orderProcessingPoint.setLocation(orderProcessingPointDto.getLocation());
+        orderProcessingPoint.setDispatchedOrders(orderProcessingPointDto.getDispatchedOrders());
+        orderProcessingPoint.setExpectedOrders(orderProcessingPointDto.getExpectedOrders());
         return orderProcessingPoint;
     }
 }

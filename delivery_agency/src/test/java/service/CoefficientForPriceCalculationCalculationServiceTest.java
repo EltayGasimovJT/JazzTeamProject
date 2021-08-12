@@ -121,7 +121,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
 
-        priceCalculationRuleService.deletePriceCalculationRule(coefficientForPriceCalculation);
+        priceCalculationRuleService.deletePriceCalculationRule(coefficientForPriceCalculation.getId());
 
         int expectedSize = 0;
 

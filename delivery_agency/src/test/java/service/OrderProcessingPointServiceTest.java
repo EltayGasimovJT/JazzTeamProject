@@ -1,7 +1,6 @@
 package service;
 
 import dto.OrderProcessingPointDto;
-import entity.OrderProcessingPoint;
 import entity.Warehouse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -73,9 +72,10 @@ class OrderProcessingPointServiceTest {
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(thirdProcessingPoint);
 
-        orderProcessingPointService.deleteOrderProcessingPoint(thirdProcessingPoint);
+        orderProcessingPointService.deleteOrderProcessingPoint(thirdProcessingPoint.getId());
 
         List<OrderProcessingPointDto> actualProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
+
         Assertions.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint)
                 , actualProcessingPoints);
     }
@@ -120,19 +120,19 @@ class OrderProcessingPointServiceTest {
 
     @Test
     void update() throws SQLException {
-        OrderProcessingPointDto orderProcessingPoint = OrderProcessingPointDto.builder()
+        OrderProcessingPointDto expected = OrderProcessingPointDto.builder()
                 .id(1L)
                 .location("Minsk")
                 .build();
 
-        orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
+        orderProcessingPointService.addOrderProcessingPoint(expected);
 
-        String expected = "Homel";
+        String newLocation = "Homel";
 
-        orderProcessingPoint.setLocation(expected);
+        expected.setLocation(newLocation);
 
-        String actualLocation = orderProcessingPointService.getOrderProcessingPoint(1).getLocation();
+        OrderProcessingPointDto actual = orderProcessingPointService.update(expected);
 
-        Assertions.assertEquals(expected, actualLocation);
+        Assertions.assertEquals(expected, actual);
     }
 }

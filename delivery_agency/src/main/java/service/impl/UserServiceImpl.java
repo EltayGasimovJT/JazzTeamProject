@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(UserDto user) {
-        userRepository.delete(fromDtoToUser(user));
+    public void deleteUser(Long id) {
+        userRepository.delete(id);
     }
 
     @Override
