@@ -34,7 +34,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderHistory(long id, OrderHistory newHistory) throws SQLException {
         Order order = orderRepository.findOne(id);
-        order.setHistory(newHistory);
+        order.setHistory(Collections.singletonList(newHistory));
         orderRepository.update(order);
     }
 
@@ -47,11 +47,10 @@ public class OrderServiceImpl implements OrderService {
         order.setState(orderState);
         OrderHistory orderHistory = OrderHistory.builder()
                 .order(order)
-                .history(Collections.singletonList(OrderHistory.builder().build()))
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .changingTime(order.getSendingTime())
                 .build();
-        order.setHistory(orderHistory);
+        order.setHistory(Collections.singletonList(orderHistory));
         return orderRepository.save(order);
     }
 

@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.ConvertUtil.fromClientToDTO;
+import static util.ConvertUtil.fromDtoToClient;
+
 @Slf4j
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
@@ -111,23 +114,5 @@ public class ClientServiceImpl implements ClientService {
         return clientDTO;
     }
 
-    private ClientDto fromClientToDTO(Client client) {
-        return ClientDto.builder()
-                .id(client.getId())
-                .name(client.getName())
-                .surname(client.getSurname())
-                .passportId(client.getPassportId())
-                .phoneNumber(client.getPhoneNumber())
-                .build();
-    }
 
-    private Client fromDtoToClient(ClientDto clientDTO) {
-        return Client.builder()
-                .id(clientDTO.getId())
-                .name(clientDTO.getName())
-                .surname(clientDTO.getSurname())
-                .passportId(clientDTO.getPassportId())
-                .phoneNumber(clientDTO.getPhoneNumber())
-                .build();
-    }
 }

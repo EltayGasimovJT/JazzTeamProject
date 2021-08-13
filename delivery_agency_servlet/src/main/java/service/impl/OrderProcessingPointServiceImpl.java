@@ -49,9 +49,6 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     private OrderProcessingPointDto fromOrderProcessingPointToDTO(OrderProcessingPoint orderProcessingPoint) {
         return OrderProcessingPointDto.builder()
                 .id(orderProcessingPoint.getId())
-                .dispatchedOrders(orderProcessingPoint.getDispatchedOrders())
-                .expectedOrders(orderProcessingPoint.getExpectedOrders())
-                .location(orderProcessingPoint.getLocation())
                 .warehouse(orderProcessingPoint.getWarehouse())
                 .build();
     }

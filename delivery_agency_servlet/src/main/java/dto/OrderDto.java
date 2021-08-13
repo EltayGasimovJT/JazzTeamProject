@@ -1,6 +1,5 @@
 package dto;
 
-import entity.*;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,15 +11,15 @@ import java.util.List;
 @Builder
 public class OrderDto {
     private Long id;
-    private OrderState state;
-    private ParcelParameters parcelParameters;
-    private Client sender;
-    private Client recipient;
+    private OrderStateDto state;
+    private ParcelParametersDto parcelParameters;
+    private ClientDto sender;
+    private ClientDto recipient;
     private BigDecimal price;
-    private OrderProcessingPoint destinationPlace;
-    private AbstractLocation currentLocation;
-    private OrderHistory history;
+    private OrderProcessingPointDto destinationPlace;
+    private AbstractLocationDto currentLocation;
+    private OrderHistoryDto history;
     private Calendar sendingTime;
-    private List<AbstractLocation> route;
+    private List<AbstractLocationDto> route;
 }
 

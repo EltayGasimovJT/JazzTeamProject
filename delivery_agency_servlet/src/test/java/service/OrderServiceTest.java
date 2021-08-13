@@ -98,7 +98,7 @@ class OrderServiceTest {
         expected.setChangingTime(changingTime);
         Order order = Order.builder()
                 .id(1L)
-                .history(expected)
+                .history(Collections.singletonList(expected))
                 .parcelParameters(ParcelParameters.builder()
                         .height(1)
                         .width(1)
@@ -120,9 +120,9 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        OrderHistory actual = orderService.findById(1).getHistory();
+        List<OrderHistory> actual = orderService.findById(1).getHistory();
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(Collections.singletonList(expected), actual);
     }
 
     @Test

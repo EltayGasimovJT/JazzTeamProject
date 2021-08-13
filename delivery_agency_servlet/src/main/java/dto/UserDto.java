@@ -1,6 +1,5 @@
 package dto;
 
-import entity.AbstractBuilding;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +11,6 @@ public class UserDto {
     private Long id;
     private String name;
     private String surname;
-    private AbstractBuilding workingPlace;
+    private AbstractBuildingDto workingPlace;
     private List<String> roles;
 }
