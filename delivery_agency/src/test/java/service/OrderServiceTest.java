@@ -1,6 +1,6 @@
 package service;
 
-import dto.OrderDto;
+import dto.*;
 import entity.*;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
@@ -19,19 +19,19 @@ class OrderServiceTest {
     private final OrderService orderService = new OrderServiceImpl();
 
     private static Stream<Arguments> testDataForCalculate() {
-        OrderProcessingPoint processingPointToTest = new OrderProcessingPoint();
+        OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
         processingPointToTest.setLocation("Russia");
         OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build()
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build()
                 )
-                .sender(Client.builder().build())
+                .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
-                .recipient(Client.builder().build())
+                .recipient(ClientDto.builder().build())
                 .destinationPlace(processingPointToTest)
                 .build();
 
@@ -39,15 +39,15 @@ class OrderServiceTest {
         processingPointToTest.setId(2L);
         OrderDto secondOrderToTest = OrderDto.builder()
                 .id(2L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(4)
-                        .width(10)
-                        .length(1)
-                        .weight(20).build()
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(4.0)
+                        .width(10.0)
+                        .length(1.0)
+                        .weight(20.0).build()
                 )
                 .destinationPlace(processingPointToTest)
-                .sender(Client.builder().build())
-                .recipient(Client.builder().build())
+                .sender(ClientDto.builder().build())
+                .recipient(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .build();
         return Stream.of(
@@ -58,19 +58,19 @@ class OrderServiceTest {
 
     @Test
     void updateOrderCurrentLocation() throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
         OrderDto expected = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(
-                        ParcelParameters.builder()
-                                .height(1)
-                                .width(1)
-                                .length(1)
-                                .weight(20).build()
+                        ParcelParametersDto.builder()
+                                .height(1.0)
+                                .width(1.0)
+                                .length(1.0)
+                                .weight(20.0).build()
                 )
-                .sender(Client.builder().build())
-                .recipient(Client.builder().build())
+                .sender(ClientDto.builder().build())
+                .recipient(ClientDto.builder().build())
                 .destinationPlace(orderProcessingPoint)
                 .price(BigDecimal.valueOf(1))
                 .build();
@@ -88,9 +88,9 @@ class OrderServiceTest {
 
     @Test
     void updateOrderHistory() throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
-        OrderHistory expected = OrderHistory.builder().build();
+        OrderHistoryDto expected = OrderHistoryDto.builder().build();
         GregorianCalendar changingTime = new GregorianCalendar();
         changingTime.set(Calendar.HOUR_OF_DAY, 15);
         changingTime.set(Calendar.MINUTE, 35);
@@ -98,15 +98,15 @@ class OrderServiceTest {
         OrderDto order = OrderDto.builder()
                 .id(1L)
                 .history(expected)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
-                .sender(Client.builder().build())
+                .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
-                .recipient(Client.builder().build())
+                .recipient(ClientDto.builder().build())
                 .build();
 
         orderService.create(order);
@@ -119,25 +119,25 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        OrderHistory actual = orderService.findById(1).getHistory();
+        OrderHistoryDto actual = orderService.findById(1).getHistory();
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void create() throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
-                .sender(Client.builder().build())
-                .recipient(Client.builder().build())
+                .sender(ClientDto.builder().build())
+                .recipient(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .build();
 
@@ -150,19 +150,19 @@ class OrderServiceTest {
 
     @Test
     void findById() throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
-                .sender(Client.builder().build())
+                .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
-                .recipient(Client.builder().build())
+                .recipient(ClientDto.builder().build())
                 .build();
 
         orderService.create(expectedOrder);
@@ -174,23 +174,23 @@ class OrderServiceTest {
 
     @Test
     void findByRecipient() throws SQLException {
-        Client recipient = Client.builder()
+        ClientDto recipient = ClientDto.builder()
                 .id(1L)
                 .name("Igor")
                 .build();
 
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
 
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
-                .sender(Client.builder().build())
+                .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .recipient(recipient)
                 .build();
@@ -205,25 +205,25 @@ class OrderServiceTest {
     @SneakyThrows
     @Test
     void findBySender() {
-        Client sender = Client.builder()
+        ClientDto sender = ClientDto.builder()
                 .id(1L)
                 .name("Igor")
                 .build();
 
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
 
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
                 .recipient(sender)
                 .price(BigDecimal.valueOf(1))
-                .sender(Client.builder().build())
+                .sender(ClientDto.builder().build())
                 .build();
 
         orderService.create(expectedOrder);
@@ -236,49 +236,48 @@ class OrderServiceTest {
 
     @Test
     void getCurrentOrderLocation() throws SQLException {
-        OrderProcessingPoint expectedLocation = new OrderProcessingPoint();
+        OrderProcessingPointDto expectedLocation = new OrderProcessingPointDto();
         expectedLocation.setId(1L);
         expectedLocation.setLocation("Russia");
 
         OrderDto order = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
-                .sender(Client.builder().build())
-                .recipient(Client.builder().build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
+                .sender(ClientDto.builder().build())
+                .recipient(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .destinationPlace(expectedLocation)
                 .currentLocation(expectedLocation)
                 .build();
         orderService.create(order);
 
-
-        AbstractLocation actualLocation = orderService.getCurrentOrderLocation(order.getId());
+        AbstractBuildingDto actualLocation = orderService.getCurrentOrderLocation(order.getId());
 
         Assertions.assertEquals(expectedLocation, actualLocation);
     }
 
     @Test
     void send() throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
 
         OrderDto order = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
                 .currentLocation(orderProcessingPoint)
                 .price(BigDecimal.valueOf(1))
-                .recipient(Client.builder().build())
-                .sender(Client.builder().build())
+                .recipient(ClientDto.builder().build())
+                .sender(ClientDto.builder().build())
                 .build();
         Voyage voyage = new Voyage();
         List<OrderDto> expectedOrders = Collections.singletonList(
@@ -287,7 +286,7 @@ class OrderServiceTest {
 
         orderService.create(order);
 
-        orderService.send(expectedOrders, voyage);
+        orderService.send(expectedOrders);
 
         List<List<OrderDto>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
@@ -297,22 +296,22 @@ class OrderServiceTest {
 
     @Test
     void getState() throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
 
         OrderDto order = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
                 .currentLocation(orderProcessingPoint)
                 .price(BigDecimal.valueOf(1))
-                .recipient(Client.builder().build())
-                .sender(Client.builder().build())
+                .recipient(ClientDto.builder().build())
+                .sender(ClientDto.builder().build())
                 .build();
 
         orderService.create(order);
@@ -326,23 +325,23 @@ class OrderServiceTest {
 
     @Test
     void compareOrders() throws SQLException {
-        OrderProcessingPoint firstProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto firstProcessingPoint = new OrderProcessingPointDto();
         firstProcessingPoint.setId(1L);
         firstProcessingPoint.setLocation("Russia");
 
-        OrderProcessingPoint secondProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto secondProcessingPoint = new OrderProcessingPointDto();
         secondProcessingPoint.setId(2L);
         secondProcessingPoint.setLocation("Russia");
 
         OrderDto firstOrder = OrderDto.builder()
                 .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
-                .recipient(Client.builder().build())
-                .sender(Client.builder().build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
+                .recipient(ClientDto.builder().build())
+                .sender(ClientDto.builder().build())
                 .destinationPlace(firstProcessingPoint)
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(firstProcessingPoint)
@@ -350,15 +349,15 @@ class OrderServiceTest {
 
         OrderDto secondOrder = OrderDto.builder()
                 .id(2L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
                 .destinationPlace(secondProcessingPoint)
                 .currentLocation(secondProcessingPoint)
-                .sender(Client.builder().build())
-                .recipient(Client.builder().build())
+                .sender(ClientDto.builder().build())
+                .recipient(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .build();
 
@@ -369,7 +368,7 @@ class OrderServiceTest {
                 firstOrder, secondOrder
         );
 
-        orderService.send(actual, new Voyage());
+        orderService.send(actual);
 
         List<List<OrderDto>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
@@ -379,28 +378,6 @@ class OrderServiceTest {
 
         Assertions.assertNotEquals(expected, actual);
     }
-
-    @Test
-    void isFinalWarehouse() {
-        OrderProcessingPoint processingPoint = new OrderProcessingPoint();
-        processingPoint.setId(1L);
-        processingPoint.setLocation("Moscow");
-        OrderDto order = OrderDto.builder()
-                .id(1L)
-                .parcelParameters(ParcelParameters.builder()
-                        .height(1)
-                        .width(1)
-                        .length(1)
-                        .weight(20).build())
-                .sender(Client.builder().build())
-                .recipient(Client.builder().build())
-                .destinationPlace(processingPoint)
-                .price(BigDecimal.valueOf(1))
-                .currentLocation(processingPoint)
-                .build();
-        Assertions.assertTrue(orderService.isFinalWarehouse(order));
-    }
-
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")

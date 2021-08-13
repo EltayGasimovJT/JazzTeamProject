@@ -1,13 +1,11 @@
 package dto;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.Calendar;
 
 @Data
-@Builder
-public class VoyageDto {
+public class VoyageDto extends AbstractLocationDto{
     private Long id;
     private String departurePoint;
     private String destinationPoint;

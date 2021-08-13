@@ -1,5 +1,7 @@
 package service;
 
+import dto.AbstractBuildingDto;
+import dto.OrderProcessingPointDto;
 import dto.UserDto;
 import entity.AbstractBuilding;
 import entity.OrderProcessingPoint;
@@ -25,7 +27,6 @@ class UserServiceTest {
                 .id(1L)
                 .name("Igor")
                 .surname("Igor")
-                .workingPlace(new Warehouse())
                 .roles(Arrays.asList("User", "Client"))
                 .build();
 
@@ -129,7 +130,7 @@ class UserServiceTest {
 
     @Test
     void changeWorkingPlace() throws SQLException {
-        AbstractBuilding workingPlace = new OrderProcessingPoint();
+        AbstractBuildingDto workingPlace = new OrderProcessingPointDto();
         workingPlace.setLocation("Minsk");
         UserDto user = UserDto
                 .builder()
@@ -147,9 +148,7 @@ class UserServiceTest {
 
         String expected = workingPlace.getLocation();
 
-        String actual = userService
-                .getUser(user
-                        .getId())
+        String actual = userService.getUser(user.getId())
                 .getWorkingPlace()
                 .getLocation();
 

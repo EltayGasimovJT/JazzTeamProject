@@ -19,23 +19,20 @@ class OrderProcessingPointServiceTest {
     private final OrderProcessingPointService orderProcessingPointService = new OrderProcessingPointServiceImpl();
 
     private static Stream<Arguments> testOrderProcessingPoints() {
-        OrderProcessingPointDto firstProcessingPointToTest = OrderProcessingPointDto.builder()
-                .id(1L)
-                .location("Minsk")
-                .warehouse(new Warehouse())
-                .build();
+        OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
+        firstProcessingPointToTest.setId(1L);
+        firstProcessingPointToTest.setLocation("Minsk");
+        firstProcessingPointToTest.setWarehouse(new Warehouse());
 
-        OrderProcessingPointDto secondProcessingPointToTest = OrderProcessingPointDto.builder()
-                .id(2L)
-                .location("Moscow")
-                .warehouse(new Warehouse())
-                .build();
+        OrderProcessingPointDto secondProcessingPointToTest = new OrderProcessingPointDto();
+        secondProcessingPointToTest.setId(2L);
+        secondProcessingPointToTest.setLocation("Moscow");
+        secondProcessingPointToTest.setWarehouse(new Warehouse());
 
-        OrderProcessingPointDto thirdProcessingPointToTest = OrderProcessingPointDto.builder()
-                .id(3L)
-                .location("Grodno")
-                .warehouse(new Warehouse())
-                .build();
+        OrderProcessingPointDto thirdProcessingPointToTest = new OrderProcessingPointDto();
+        thirdProcessingPointToTest.setId(3L);
+        thirdProcessingPointToTest.setLocation("Grodno");
+        thirdProcessingPointToTest.setWarehouse(new Warehouse());
 
         return Stream.of(
                 Arguments.of(firstProcessingPointToTest, "Minsk"),
@@ -56,17 +53,14 @@ class OrderProcessingPointServiceTest {
 
     @Test
     void deleteOrderProcessingPoint() throws SQLException {
-        OrderProcessingPointDto firstProcessingPoint = OrderProcessingPointDto.builder()
-                .id(1L)
-                .build();
+        OrderProcessingPointDto firstProcessingPoint = new OrderProcessingPointDto();
+        firstProcessingPoint.setId(1L);
 
-        OrderProcessingPointDto secondProcessingPoint  = OrderProcessingPointDto.builder()
-                .id(2L)
-                .build();
+        OrderProcessingPointDto secondProcessingPoint = new OrderProcessingPointDto();
+        firstProcessingPoint.setId(2L);
 
-        OrderProcessingPointDto thirdProcessingPoint  = OrderProcessingPointDto.builder()
-                .id(3L)
-                .build();
+        OrderProcessingPointDto thirdProcessingPoint = new OrderProcessingPointDto();
+        firstProcessingPoint.setId(3L);
 
         orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
@@ -82,9 +76,9 @@ class OrderProcessingPointServiceTest {
 
     @Test
     void findAllOrderProcessingPoints() throws SQLException {
-        OrderProcessingPointDto firstProcessingPoint = OrderProcessingPointDto.builder().build();
-        OrderProcessingPointDto secondProcessingPoint = OrderProcessingPointDto.builder().build();
-        OrderProcessingPointDto thirdProcessingPoint = OrderProcessingPointDto.builder().build();
+        OrderProcessingPointDto firstProcessingPoint = new OrderProcessingPointDto();
+        OrderProcessingPointDto secondProcessingPoint = new OrderProcessingPointDto();
+        OrderProcessingPointDto thirdProcessingPoint = new OrderProcessingPointDto();
 
         orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
@@ -99,15 +93,13 @@ class OrderProcessingPointServiceTest {
     @SneakyThrows
     @Test
     void getOrderProcessingPoint() {
-        OrderProcessingPointDto processingPoint = OrderProcessingPointDto.builder()
-                .id(1L)
-                .location("Minsk")
-                .build();
+        OrderProcessingPointDto processingPoint = new OrderProcessingPointDto();
+        processingPoint.setId(1L);
+        processingPoint.setLocation("Minsk");
 
-        OrderProcessingPointDto expected = OrderProcessingPointDto.builder()
-                .id(2L)
-                .location("Moscow")
-                .build();
+        OrderProcessingPointDto expected = new OrderProcessingPointDto();
+        expected.setId(2L);
+        expected.setLocation("Moscow");
 
         orderProcessingPointService.addOrderProcessingPoint(processingPoint);
         orderProcessingPointService.addOrderProcessingPoint(expected);
@@ -120,10 +112,9 @@ class OrderProcessingPointServiceTest {
 
     @Test
     void update() throws SQLException {
-        OrderProcessingPointDto expected = OrderProcessingPointDto.builder()
-                .id(1L)
-                .location("Minsk")
-                .build();
+        OrderProcessingPointDto expected = new OrderProcessingPointDto();
+        expected.setId(1L);
+        expected.setLocation("Minsk");
 
         orderProcessingPointService.addOrderProcessingPoint(expected);
 

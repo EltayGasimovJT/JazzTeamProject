@@ -11,15 +11,17 @@ public class ConvertUtil {
     private ConvertUtil(){}
 
     public static OrderProcessingPointDto fromOrderProcessingPointToDTO(OrderProcessingPoint orderProcessingPoint) {
-        return OrderProcessingPointDto.builder()
-                .id(orderProcessingPoint.getId())
-                .warehouse(orderProcessingPoint.getWarehouse())
-                .build();
+        final OrderProcessingPointDto processingPointDto = new OrderProcessingPointDto();
+        processingPointDto.setId(orderProcessingPoint.getId());
+        processingPointDto.setLocation(orderProcessingPoint.getLocation());
+        processingPointDto.setWarehouse(orderProcessingPoint.getWarehouse());
+        return processingPointDto;
     }
 
     public static OrderProcessingPoint fromDtoToOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(orderProcessingPointDto.getId());
+        orderProcessingPoint.setLocation(orderProcessingPointDto.getLocation());
         orderProcessingPoint.setWarehouse(orderProcessingPointDto.getWarehouse());
         return orderProcessingPoint;
     }
@@ -29,7 +31,22 @@ public class ConvertUtil {
                 .id(order.getId())
                 .price(order.getPrice())
                 .sendingTime(order.getSendingTime())
+                .parcelParameters(fromDtoToParcelParameters(order.getParcelParameters()))
                 .build();
+    }
+
+    private static ParcelParametersDto fromDtoToParcelParameters(ParcelParameters parcelParameters) {
+        return ParcelParametersDto.builder()
+                .height(parcelParameters.getHeight())
+                .weight(parcelParameters.getWeight())
+                .width(parcelParameters.getWidth())
+                .length(parcelParameters.getLength())
+                .build();
+    }
+
+    private static ParcelParameters fromParcelParametersToDto(ParcelParametersDto parcelParameters) {
+
+        return null;
     }
 
     public static Order fromDtoToOrder(OrderDto orderDto) {
@@ -37,6 +54,7 @@ public class ConvertUtil {
         return builder
                 .id(orderDto.getId())
                 .price(orderDto.getPrice())
+                .parcelParameters(fromParcelParametersToDto(orderDto.getParcelParameters()))
                 .sendingTime(orderDto.getSendingTime())
                 .build();
     }
@@ -78,12 +96,12 @@ public class ConvertUtil {
     }
 
     public static VoyageDto fromVoyageToDTO(Voyage voyage) {
-        return VoyageDto.builder()
-                .id(voyage.getId())
-                .departurePoint(voyage.getDeparturePoint())
-                .destinationPoint(voyage.getDestinationPoint())
-                .sendingTime(voyage.getSendingTime())
-                .build();
+        VoyageDto voyageDto = new VoyageDto();
+        voyageDto.setId(voyage.getId());
+        voyageDto.setDeparturePoint(voyage.getDeparturePoint());
+        voyageDto.setDestinationPoint(voyage.getDestinationPoint());
+        voyageDto.setSendingTime(voyage.getSendingTime());
+        return voyageDto;
     }
 
     public static Voyage fromDtoToVoyage(VoyageDto voyageDto) {
@@ -97,14 +115,16 @@ public class ConvertUtil {
 
 
     public static WarehouseDto fromWarehouseToDTO(Warehouse warehouse) {
-        return WarehouseDto.builder()
-                .id(warehouse.getId())
-                .build();
+        WarehouseDto warehouseDto = new WarehouseDto();
+        warehouseDto.setId(warehouse.getId());
+        warehouseDto.setLocation(warehouse.getLocation());
+        return warehouseDto;
     }
 
     public static Warehouse fromDtoToWarehouse(WarehouseDto warehouseDto) {
         Warehouse warehouse = new Warehouse();
         warehouse.setId(warehouseDto.getId());
+        warehouse.setLocation(warehouseDto.getLocation());
         return warehouse;
     }
 
@@ -144,6 +164,58 @@ public class ConvertUtil {
                 .surname(clientDto.getSurname())
                 .passportId(clientDto.getPassportId())
                 .phoneNumber(clientDto.getPhoneNumber())
+                .build();
+    }
+
+    public static List<OrderProcessingPoint> fromDtosToProcessingPoints(List<OrderProcessingPointDto> processingPointDtos){
+        List<OrderProcessingPoint> processingPoints = new ArrayList<>();
+
+        for (OrderProcessingPointDto processingPointDto : processingPointDtos) {
+            processingPoints.add(fromDtoToOrderProcessingPoint(processingPointDto));
+        }
+
+        return processingPoints;
+    }
+
+    public static List<OrderProcessingPointDto> fromProcessingPointsToDtos(List<OrderProcessingPoint> processingPoints){
+        List<OrderProcessingPointDto> processingPointsDtos = new ArrayList<>();
+
+        for (OrderProcessingPoint processingPoint : processingPoints) {
+            processingPointsDtos.add(fromOrderProcessingPointToDTO(processingPoint));
+        }
+
+        return processingPointsDtos;
+    }
+
+    public static OrderHistoryDto fromOrderHistoryToDto(OrderHistory history){
+        return OrderHistoryDto.builder()
+                .changingTime(history.getChangingTime())
+                .order(fromOrderToDto(history.getOrder()))
+                .comment(history.getComment())
+                .user(fromUserToDto(history.getUser()))
+                .build();
+    }
+
+    public static OrderHistory fromDtoToOrderHistory(OrderHistoryDto historyDto){
+        return OrderHistory.builder()
+                .changingTime(historyDto.getChangingTime())
+                .order(fromDtoToOrder(historyDto.getOrder()))
+                .comment(historyDto.getComment())
+                .user(fromDtoToUser(historyDto.getUser()))
+                .build();
+    }
+
+    public static OrderStateDto fromOrderStateToDto(OrderState state){
+        return OrderStateDto.builder()
+                .id(state.getId())
+                .state(state.getState())
+                .build();
+    }
+
+    public static OrderState fromDtoToOrderHistory(OrderStateDto stateDto){
+        return OrderState.builder()
+                .id(stateDto.getId())
+                .state(stateDto.getState())
                 .build();
     }
 }

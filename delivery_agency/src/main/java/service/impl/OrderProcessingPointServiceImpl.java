@@ -1,6 +1,5 @@
 package service.impl;
 
-import dto.AbstractLocationDto;
 import dto.OrderProcessingPointDto;
 import entity.OrderProcessingPoint;
 import repository.OrderProcessingPointRepository;

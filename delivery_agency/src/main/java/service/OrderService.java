@@ -1,14 +1,17 @@
 package service;
 
+import dto.AbstractBuildingDto;
+import dto.ClientDto;
 import dto.OrderDto;
-import entity.*;
+import entity.OrderHistory;
+import entity.Voyage;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
 public interface OrderService {
-   OrderDto updateOrderCurrentLocation(long id, AbstractLocation newLocation) throws SQLException;
+   OrderDto updateOrderCurrentLocation(long id, AbstractBuildingDto newLocation) throws SQLException;
 
    void updateOrderHistory(long id, OrderHistory newHistory) throws SQLException;
 
@@ -16,21 +19,19 @@ public interface OrderService {
 
    OrderDto findById(long id) throws SQLException;
 
-   OrderDto findByRecipient(Client recipient);
+   OrderDto findByRecipient(ClientDto recipient);
 
-   OrderDto findBySender(Client sender);
+   OrderDto findBySender(ClientDto sender);
 
-   AbstractLocation getCurrentOrderLocation(long id) throws SQLException;
+   AbstractBuildingDto getCurrentOrderLocation(long id) throws SQLException;
 
-   void send(List<OrderDto> orders, Voyage voyage) throws SQLException;
+   void send(List<OrderDto> orders) throws SQLException;
 
    List<OrderDto> accept(List<OrderDto> orders) throws SQLException;
 
    String getState(long id) throws SQLException;
 
    void compareOrders(List<OrderDto> expectedOrders, List<OrderDto> acceptedOrders) throws IllegalArgumentException;
-
-   boolean isFinalWarehouse(OrderDto order);
 
    List<OrderDto> findAll() throws SQLException;
 

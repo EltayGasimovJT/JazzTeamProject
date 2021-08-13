@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-public class OrderProcessingPointDto  {
+public class OrderProcessingPointDto extends AbstractBuildingDto{
     private Long id;
     private Warehouse warehouse;
 }

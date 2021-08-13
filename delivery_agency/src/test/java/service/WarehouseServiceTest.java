@@ -12,7 +12,7 @@ class WarehouseServiceTest {
 
     @Test
     void addWarehouse() throws SQLException {
-        WarehouseDto warehouse = WarehouseDto.builder().build();
+        WarehouseDto warehouse = new WarehouseDto();
         warehouse.setId(1L);
         String expected = "Minsk";
         warehouse.setLocation(expected);
@@ -25,11 +25,11 @@ class WarehouseServiceTest {
 
     @Test
     void deleteWarehouse() throws SQLException {
-        WarehouseDto firstWarehouse = WarehouseDto.builder().build();
+        WarehouseDto firstWarehouse = new WarehouseDto();
         firstWarehouse.setId(1L);
-        WarehouseDto secondWarehouse = WarehouseDto.builder().build();
+        WarehouseDto secondWarehouse = new WarehouseDto();
         secondWarehouse.setId(2L);
-        WarehouseDto thirdWarehouse = WarehouseDto.builder().build();
+        WarehouseDto thirdWarehouse = new WarehouseDto();
         thirdWarehouse.setId(3L);
 
         warehouseService.addWarehouse(firstWarehouse);
@@ -47,9 +47,9 @@ class WarehouseServiceTest {
 
     @Test
     void findAllWarehouses() throws SQLException {
-        WarehouseDto firstWarehouse = WarehouseDto.builder().build();
-        WarehouseDto secondWarehouse = WarehouseDto.builder().build();
-        WarehouseDto thirdWarehouse = WarehouseDto.builder().build();
+        WarehouseDto firstWarehouse = new WarehouseDto();
+        WarehouseDto secondWarehouse = new WarehouseDto();
+        WarehouseDto thirdWarehouse = new WarehouseDto();
 
         warehouseService.addWarehouse(firstWarehouse);
         warehouseService.addWarehouse(secondWarehouse);
@@ -64,7 +64,7 @@ class WarehouseServiceTest {
 
     @Test
     void getWarehouse() throws SQLException {
-        WarehouseDto warehouse = WarehouseDto.builder().build();
+        WarehouseDto warehouse = new WarehouseDto();
         warehouse.setId(1L);
         String expected = "Vitebsk";
         warehouse.setLocation(expected);
@@ -78,7 +78,7 @@ class WarehouseServiceTest {
 
     @Test
     void update() throws SQLException {
-        WarehouseDto expected = WarehouseDto.builder().build();
+        WarehouseDto expected = new WarehouseDto();
         expected.setId(1L);
         expected.setLocation("Vitebsk");
 

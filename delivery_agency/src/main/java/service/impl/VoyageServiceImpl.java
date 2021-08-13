@@ -47,9 +47,8 @@ public class VoyageServiceImpl implements VoyageService {
 
     @Override
     public VoyageDto update(VoyageDto voyage) throws SQLException {
-        Voyage update = voyageRepository.update(fromDtoToVoyage(voyage));
+        final Voyage update1 = fromDtoToVoyage(voyage);
+        Voyage update = voyageRepository.update(update1);
         return fromVoyageToDTO(update);
     }
-
-
 }
