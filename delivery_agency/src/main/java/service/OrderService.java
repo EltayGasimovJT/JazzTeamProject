@@ -3,6 +3,7 @@ package service;
 import dto.AbstractBuildingDto;
 import dto.ClientDto;
 import dto.OrderDto;
+import dto.OrderHistoryDto;
 import entity.OrderHistory;
 import entity.Voyage;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public interface OrderService {
    OrderDto updateOrderCurrentLocation(long id, AbstractBuildingDto newLocation) throws SQLException;
 
-   void updateOrderHistory(long id, OrderHistory newHistory) throws SQLException;
+   void updateOrderHistory(long id, OrderHistoryDto newHistory) throws SQLException;
 
    OrderDto create(OrderDto order) throws SQLException;
 

@@ -40,6 +40,20 @@ public class ConvertUtil {
                 .build();
     }
 
+    public static Order fromDtoToOrder(OrderDto orderDto) {
+        return Order.builder()
+                .id(orderDto.getId())
+                .price(orderDto.getPrice())
+                .parcelParameters(fromParcelParametersToDto(orderDto.getParcelParameters()))
+                .sender(fromDtoToClient(orderDto.getSender()))
+                .recipient(fromDtoToClient(orderDto.getRecipient()))
+                .destinationPlace(fromDtoToOrderProcessingPoint(orderDto.getDestinationPlace()))
+                .history(fromDtoToOrderHistory(orderDto.getHistory()))
+                .state(fromDtoToOrderHistory(orderDto.getState()))
+                .sendingTime(orderDto.getSendingTime())
+                .build();
+    }
+
     private static ParcelParametersDto fromDtoToParcelParameters(ParcelParameters parcelParameters) {
         return ParcelParametersDto.builder()
                 .height(parcelParameters.getHeight())
@@ -55,20 +69,6 @@ public class ConvertUtil {
                 .weight(parcelParameters.getWeight())
                 .width(parcelParameters.getWidth())
                 .length(parcelParameters.getLength())
-                .build();
-    }
-
-    public static Order fromDtoToOrder(OrderDto orderDto) {
-        return Order.builder()
-                .id(orderDto.getId())
-                .price(orderDto.getPrice())
-                .parcelParameters(fromParcelParametersToDto(orderDto.getParcelParameters()))
-                .sender(fromDtoToClient(orderDto.getSender()))
-                .recipient(fromDtoToClient(orderDto.getRecipient()))
-                .destinationPlace(fromDtoToOrderProcessingPoint(orderDto.getDestinationPlace()))
-                .history(fromDtoToOrderState(orderDto.getHistory()))
-                .state(fromDtoToOrderState(orderDto.getState()))
-                .sendingTime(orderDto.getSendingTime())
                 .build();
     }
 
@@ -95,6 +95,7 @@ public class ConvertUtil {
                 .id(user.getId())
                 .name(user.getName())
                 .surname(user.getSurname())
+                .workingPlace(user.getWorkingPlace())
                 .roles(user.getRoles())
                 .build();
     }
@@ -105,6 +106,7 @@ public class ConvertUtil {
                 .name(userDto.getName())
                 .surname(userDto.getSurname())
                 .roles(userDto.getRoles())
+                .workingPlace(userDto.getWorkingPlace())
                 .build();
     }
 
@@ -208,7 +210,7 @@ public class ConvertUtil {
                 .build();
     }
 
-    public static OrderHistory fromDtoToOrderState(OrderHistoryDto historyDto){
+    public static OrderHistory fromDtoToOrderHistory(OrderHistoryDto historyDto){
         return OrderHistory.builder()
                 .changingTime(historyDto.getChangingTime())
                 .comment(historyDto.getComment())
@@ -223,7 +225,7 @@ public class ConvertUtil {
                 .build();
     }
 
-    public static OrderState fromDtoToOrderState(OrderStateDto stateDto){
+    public static OrderState fromDtoToOrderHistory(OrderStateDto stateDto){
         return OrderState.builder()
                 .id(stateDto.getId())
                 .state(stateDto.getState())

@@ -35,6 +35,8 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .recipient(ClientDto.builder().build())
                 .destinationPlace(processingPointToTest)
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
                 .build();
 
         processingPointToTest.setLocation("Poland");
@@ -51,6 +53,8 @@ class OrderServiceTest {
                 .sender(ClientDto.builder().build())
                 .recipient(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
                 .build();
         return Stream.of(
                 Arguments.of(firstOrderToTest, BigDecimal.valueOf(72.0)),
@@ -75,6 +79,8 @@ class OrderServiceTest {
                 .recipient(ClientDto.builder().build())
                 .destinationPlace(orderProcessingPoint)
                 .price(BigDecimal.valueOf(1))
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
                 .build();
 
         orderService.create(expected);
@@ -85,14 +91,14 @@ class OrderServiceTest {
 
         OrderDto actual = orderService.findById(1);
 
-        Assertions.assertNotEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void updateOrderHistory() throws SQLException {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
-        OrderHistoryDto expected = OrderHistoryDto.builder().build();
+        OrderHistoryDto expected = OrderHistoryDto.builder().user(UserDto.builder().build()).build();
         GregorianCalendar changingTime = new GregorianCalendar();
         changingTime.set(Calendar.HOUR_OF_DAY, 15);
         changingTime.set(Calendar.MINUTE, 35);
@@ -108,12 +114,13 @@ class OrderServiceTest {
                 .destinationPlace(orderProcessingPoint)
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
+                .state(OrderStateDto.builder().build())
                 .recipient(ClientDto.builder().build())
                 .build();
 
         orderService.create(order);
 
-        OrderHistory newOrderHistory = OrderHistory.builder().build();
+        OrderHistoryDto newOrderHistory = OrderHistoryDto.builder().user(UserDto.builder().build()).build();
 
         changingTime.set(Calendar.HOUR_OF_DAY, 12);
 
@@ -171,6 +178,8 @@ class OrderServiceTest {
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .recipient(ClientDto.builder().build())
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
                 .build();
 
         orderService.create(expectedOrder);
@@ -201,6 +210,8 @@ class OrderServiceTest {
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .recipient(recipient)
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
                 .build();
 
         orderService.create(expectedOrder);
@@ -232,6 +243,8 @@ class OrderServiceTest {
                 .recipient(sender)
                 .price(BigDecimal.valueOf(1))
                 .sender(ClientDto.builder().build())
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
                 .build();
 
         orderService.create(expectedOrder);
@@ -240,32 +253,6 @@ class OrderServiceTest {
 
         Assertions.assertEquals(expectedOrder, actualOrder);
 
-    }
-
-    @Test
-    void getCurrentOrderLocation() throws SQLException {
-        OrderProcessingPointDto expectedLocation = new OrderProcessingPointDto();
-        expectedLocation.setId(1L);
-        expectedLocation.setLocation("Russia");
-
-        OrderDto order = OrderDto.builder()
-                .id(1L)
-                .parcelParameters(ParcelParametersDto.builder()
-                        .height(1.0)
-                        .width(1.0)
-                        .length(1.0)
-                        .weight(20.0).build())
-                .sender(ClientDto.builder().build())
-                .recipient(ClientDto.builder().build())
-                .price(BigDecimal.valueOf(1))
-                .destinationPlace(expectedLocation)
-                .currentLocation(expectedLocation)
-                .build();
-        orderService.create(order);
-
-        AbstractBuildingDto actualLocation = orderService.getCurrentOrderLocation(order.getId());
-
-        Assertions.assertEquals(expectedLocation, actualLocation);
     }
 
     @Test
@@ -282,12 +269,12 @@ class OrderServiceTest {
                         .length(1.0)
                         .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
-                .currentLocation(orderProcessingPoint)
                 .price(BigDecimal.valueOf(1))
                 .recipient(ClientDto.builder().build())
                 .sender(ClientDto.builder().build())
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
                 .build();
-        Voyage voyage = new Voyage();
         List<OrderDto> expectedOrders = Collections.singletonList(
                 order
         );
@@ -320,13 +307,15 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .recipient(ClientDto.builder().build())
                 .sender(ClientDto.builder().build())
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
                 .build();
 
         orderService.create(order);
 
         String actual = orderService.getState(1);
 
-        String expected = "Ready To Send";
+        String expected = "READY_TO_SEND";
 
         Assertions.assertEquals(expected, actual);
     }
@@ -355,7 +344,6 @@ class OrderServiceTest {
                 .currentLocation(firstProcessingPoint)
                 .state(OrderStateDto.builder().build())
                 .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
-                .currentLocation(new AbstractBuildingDto())
                 .recipient(ClientDto.builder().build())
                 .build();
 
@@ -373,7 +361,6 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .state(OrderStateDto.builder().build())
                 .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
-                .currentLocation(new AbstractBuildingDto())
                 .recipient(ClientDto.builder().build())
                 .build();
 

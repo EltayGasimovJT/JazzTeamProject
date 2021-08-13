@@ -6,6 +6,6 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AbstractBuildingDto extends AbstractLocationDto{
+public abstract class AbstractBuildingDto extends AbstractLocationDto{
     private String location;
 }

@@ -12,7 +12,6 @@ import validator.OrderValidator;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import entity.OrderStateChangeType;
@@ -38,9 +37,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderHistory(long id, OrderHistory newHistory) {
+    public void updateOrderHistory(long id, OrderHistoryDto newHistory) {
         Order order = orderRepository.findOne(id);
-        order.setHistory(newHistory);
+        order.setHistory(fromDtoToOrderHistory(newHistory));
         orderRepository.update(order);
     }
 
@@ -88,23 +87,11 @@ public class OrderServiceImpl implements OrderService {
             OrderState orderState;
             if (isFinalWarehouse(fromOrderToDto(order))) {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString());
-                AbstractBuilding abstractBuilding = new Warehouse();
-                abstractBuilding.setLocation("Delivering From + " + order.getCurrentLocation().getLocation() + " to " + order.getDestinationPlace().getWarehouse().getLocation());
-                order.setCurrentLocation(abstractBuilding);
             } else {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString());
-                AbstractBuilding abstractBuilding = new Warehouse();
-                abstractBuilding.setLocation("Delivering From + "
-                        + order.getCurrentLocation().getLocation()
-                        + " to "
-                        + order.getDestinationPlace().getWarehouse().getLocation());
-                order.setCurrentLocation(abstractBuilding);
             }
             if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPointDto) {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_RECEPTION.toString());
-                AbstractBuilding abstractBuilding = new OrderProcessingPoint();
-                abstractBuilding.setLocation("Delivering From + " + order.getCurrentLocation().getLocation() + " to " + order.getDestinationPlace().getLocation());
-                order.setCurrentLocation(abstractBuilding);
             }
             order.setState(orderState);
 
