@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(User user) throws SQLException {
-        userRepository.delete(user);
+        userRepository.delete(user.getId());
     }
 
     @Override

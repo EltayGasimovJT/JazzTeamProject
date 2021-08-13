@@ -13,10 +13,7 @@ import service.impl.OrderServiceImpl;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
 
 class OrderServiceTest {
@@ -285,7 +282,7 @@ class OrderServiceTest {
                 .sender(Client.builder().build())
                 .build();
         Voyage voyage = new Voyage();
-        List<Order> expectedOrders = Arrays.asList(
+        List<Order> expectedOrders = Collections.singletonList(
                 order
         );
 
@@ -322,7 +319,7 @@ class OrderServiceTest {
 
         String actual = orderService.getState(1);
 
-        String expected = "Ready To Send";
+        String expected = "READY_TO_SEND";
 
         Assertions.assertEquals(expected, actual);
     }

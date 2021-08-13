@@ -22,4 +22,3 @@ public class Order {
     private Calendar sendingTime;
     private List<AbstractLocation> route;
 }
-

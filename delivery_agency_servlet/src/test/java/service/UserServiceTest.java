@@ -6,6 +6,7 @@ import entity.User;
 import entity.Warehouse;
 import lombok.SneakyThrows;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.impl.UserServiceImpl;
 
@@ -29,7 +30,7 @@ class UserServiceTest {
 
         User actual = userService.addUser(expected);
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @SneakyThrows
@@ -59,7 +60,7 @@ class UserServiceTest {
 
         int actual = allUsers.size();
 
-        Assert.assertNotEquals(unexpected, actual);
+        Assertions.assertNotEquals(unexpected, actual);
     }
 
     @Test
@@ -78,7 +79,7 @@ class UserServiceTest {
 
         int actual = allUsers.size();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -101,7 +102,7 @@ class UserServiceTest {
 
         User actual = userService.getUser(2);
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -122,7 +123,7 @@ class UserServiceTest {
 
         String actual = userService.update(newUser).getName();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -150,7 +151,7 @@ class UserServiceTest {
                         .getId())
                 .getWorkingPlace()
                 .getLocation();
-        Assert.assertNotEquals(expected,
+        Assertions.assertNotEquals(expected,
                 actual);
     }
 }

@@ -16,8 +16,11 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws IllegalArgumentException {
         try {
+            if (clientRepository.findOne(id) == null){
+                throw new IllegalArgumentException("There is no such client to delete!!!");
+            }
             clientRepository.delete(id);
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -74,9 +77,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDto save(ClientDto clientDTO) {
+    public ClientDto save(ClientDto clientDTO) throws IllegalArgumentException {
         Client client = fromDtoToClient(clientDTO);
+
         try {
+            if (clientRepository.findByPassportId(clientDTO.getPassportId()) != null) {
+                throw new IllegalArgumentException("Clients cannot have equals passportId!!!");
+            }
             client.setId(clientRepository.save(client).getId());
         } catch (SQLException e) {
             log.error(e.getMessage());
@@ -86,10 +93,16 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientDto update(ClientDto clientDTO) {
+    public ClientDto update(ClientDto clientDTO) throws IllegalArgumentException {
         Client client = fromDtoToClient(clientDTO);
         Client updateOnDB;
         try {
+            if (clientRepository.findOne(clientDTO.getId()) == null) {
+                throw new IllegalArgumentException("There is no client to update!!!");
+            }
+            if (clientRepository.findOne(clientDTO.getId()).getPassportId().equals(clientDTO.getPassportId())){
+                throw new IllegalArgumentException("This passportId already exists!!!");
+            }
             updateOnDB = clientRepository.update(client);
             return fromClientToDTO(updateOnDB);
         } catch (SQLException e) {

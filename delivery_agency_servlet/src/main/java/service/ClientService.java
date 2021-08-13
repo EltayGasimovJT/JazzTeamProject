@@ -5,7 +5,7 @@ import dto.ClientDto;
 import java.util.List;
 
 public interface ClientService {
-    void delete(Long id);
+    void delete(Long id) throws IllegalArgumentException;
 
     List<ClientDto> findAllClients();
 
@@ -13,7 +13,7 @@ public interface ClientService {
 
     ClientDto findByPassportId(String passportId);
 
-    ClientDto save(ClientDto clientDTO);
+    ClientDto save(ClientDto clientDTO) throws IllegalArgumentException;
 
-    ClientDto update(ClientDto clientDTO);
+    ClientDto update(ClientDto clientDTO) throws IllegalArgumentException;
 }

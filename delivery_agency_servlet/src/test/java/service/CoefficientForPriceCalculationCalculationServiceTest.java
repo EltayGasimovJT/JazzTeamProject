@@ -105,7 +105,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         priceCalculationRuleService.addPriceCalculationRule(expectedCoefficient);
 
         CoefficientForPriceCalculationDto actualCoefficient = priceCalculationRuleService.getCoefficient(1L);
-        Assert.assertEquals(expectedCoefficient, actualCoefficient);
+        Assertions.assertEquals(expectedCoefficient, actualCoefficient);
     }
 
     @SneakyThrows

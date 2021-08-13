@@ -1,10 +1,8 @@
 package service;
 
 import dto.OrderProcessingPointDto;
-import entity.OrderProcessingPoint;
 import entity.Warehouse;
 import lombok.SneakyThrows;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,10 +72,10 @@ class OrderProcessingPointServiceTest {
         orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
         orderProcessingPointService.addOrderProcessingPoint(thirdProcessingPoint);
 
-        orderProcessingPointService.deleteOrderProcessingPoint(thirdProcessingPoint);
+        orderProcessingPointService.deleteOrderProcessingPoint(firstProcessingPoint.getId());
 
         List<OrderProcessingPointDto> actualProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
-        Assertions.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint)
+        Assertions.assertEquals(Arrays.asList(secondProcessingPoint, thirdProcessingPoint)
                 , actualProcessingPoints);
     }
 
@@ -121,19 +119,19 @@ class OrderProcessingPointServiceTest {
 
     @Test
     void update() throws SQLException {
-        OrderProcessingPointDto orderProcessingPoint = OrderProcessingPointDto.builder()
+        OrderProcessingPointDto expectedProcessingPoint = OrderProcessingPointDto.builder()
                 .id(1L)
                 .location("Minsk")
                 .build();
 
-        orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
+        orderProcessingPointService.addOrderProcessingPoint(expectedProcessingPoint);
 
-        String expectedLocation = "Homel";
+        String newLocation = "Homel";
 
-        orderProcessingPoint.setLocation(expectedLocation);
+        expectedProcessingPoint.setLocation(newLocation);
 
-        String actualLocation = orderProcessingPointService.getOrderProcessingPoint(1).getLocation();
+        OrderProcessingPointDto actualProcessingPoint = orderProcessingPointService.update(expectedProcessingPoint);
 
-        Assertions.assertEquals(expectedLocation, actualLocation);
+        Assertions.assertEquals(expectedProcessingPoint, actualProcessingPoint);
     }
 }

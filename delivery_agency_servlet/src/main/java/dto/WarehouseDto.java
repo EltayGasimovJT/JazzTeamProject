@@ -1,6 +1,8 @@
 package dto;
 
 import entity.Order;
+import entity.OrderProcessingPoint;
+import entity.Warehouse;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,9 +12,9 @@ import java.util.List;
 @Builder
 public class WarehouseDto {
     private Long id;
-    private String location;
     private List<Order> expectedOrders;
     private List<Order> dispatchedOrders;
-    private List<OrderProcessingPointDto> orderProcessingPoints;
-    private List<WarehouseDto> connectedWarehouses;
+    private String location;
+    private List<OrderProcessingPoint> orderProcessingPoints;
+    private List<Warehouse> connectedWarehouses;
 }

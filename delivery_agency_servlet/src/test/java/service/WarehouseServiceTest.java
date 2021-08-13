@@ -2,6 +2,7 @@ package service;
 
 import entity.Warehouse;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.impl.WarehouseServiceImpl;
 
@@ -20,7 +21,7 @@ class WarehouseServiceTest {
 
         String actual = warehouseService.getWarehouse(warehouse.getId()).getLocation();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -42,7 +43,7 @@ class WarehouseServiceTest {
 
         int actual = warehouseService.findAllWarehouses().size();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -59,7 +60,7 @@ class WarehouseServiceTest {
 
         int actual = warehouseService.findAllWarehouses().size();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -73,7 +74,7 @@ class WarehouseServiceTest {
 
         String actual = warehouseService.getWarehouse(warehouse.getId()).getLocation();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -90,6 +91,6 @@ class WarehouseServiceTest {
 
         String actualLocation = warehouseService.update(warehouse).getLocation();
 
-        Assert.assertEquals(expectedLocation, actualLocation);
+        Assertions.assertEquals(expectedLocation, actualLocation);
     }
 }

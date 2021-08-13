@@ -17,10 +17,10 @@ public class OrderDto {
     private Client sender;
     private Client recipient;
     private BigDecimal price;
-    private OrderProcessingPointDto destinationPlace;
+    private OrderProcessingPoint destinationPlace;
     private AbstractLocation currentLocation;
+    private OrderHistory history;
     private Calendar sendingTime;
-    private List<OrderHistory> history;
     private List<AbstractLocation> route;
 }
 

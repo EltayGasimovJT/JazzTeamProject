@@ -11,10 +11,9 @@ import java.util.List;
 @Builder
 public class VoyageDto {
     private Long id;
-    private String location;
+    private List<Order> expectedOrders;
+    private List<Order> dispatchedOrders;
     private String departurePoint;
     private String destinationPoint;
     private Calendar sendingTime;
-    private List<Order> expectedOrders;
-    private List<Order> dispatchedOrders;
 }

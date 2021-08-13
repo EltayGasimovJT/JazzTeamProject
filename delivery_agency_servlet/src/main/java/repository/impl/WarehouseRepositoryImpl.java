@@ -16,8 +16,8 @@ public class WarehouseRepositoryImpl implements WareHouseRepository {
     }
 
     @Override
-    public void delete(Warehouse warehouse) {
-        warehouses.remove(warehouse);
+    public void delete(Long id) {
+        warehouses.remove(findOne(id));
     }
 
     @Override

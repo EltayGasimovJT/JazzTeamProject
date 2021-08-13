@@ -162,19 +162,4 @@ public class ClientRepositoryImpl implements ClientRepository {
                 .phoneNumber(rs.getString("phone_number"))
                 .build();
     }
-
-    @Override
-    public void delete(Client client) throws SQLException {
-        try (Connection connection = connectionRepositoryUtil.getConnection()) {
-            try (
-                    PreparedStatement statement = connection.prepareStatement(
-                            "DELETE FROM clients WHERE id = ?",
-                            Statement.RETURN_GENERATED_KEYS
-                    )
-            ) {
-                statement.setLong(1, client.getId());
-                statement.execute();
-            }
-        }
-    }
 }

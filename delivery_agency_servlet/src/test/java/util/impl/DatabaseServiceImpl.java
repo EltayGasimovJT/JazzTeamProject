@@ -1,12 +1,11 @@
-package service.impl;
+package util.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import repository.DatabaseRepository;
+import util.DatabaseRepository;
 import repository.enums.CreateActionEnum;
 import repository.enums.DropActionEnum;
 import repository.enums.TruncateActionEnum;
-import repository.impl.DatabaseRepositoryImpl;
-import service.DatabaseService;
+import util.DatabaseService;
 
 import java.sql.SQLException;
 

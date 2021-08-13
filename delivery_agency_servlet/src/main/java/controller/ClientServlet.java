@@ -1,5 +1,6 @@
 package controller;
 
+import com.google.gson.Gson;
 import dto.ClientDto;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.UnknownHostException;
 import java.util.List;
 
 import static util.JsonUtil.getBody;
@@ -21,37 +23,49 @@ import static util.JsonUtil.getBody;
 @WebServlet("/clients")
 public class ClientServlet extends HttpServlet {
     private final ClientService clientService = new ClientServiceImpl();
+    private static final String CONTENT_TYPE_JSON = "application/json";
+    private static final String ENCODING = "UTF-8";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
         List<ClientDto> allClients = clientService.findAllClients();
+        resp.setContentType(CONTENT_TYPE_JSON);
+        resp.setCharacterEncoding(ENCODING);
         try (PrintWriter out = resp.getWriter()) {
-            out.println("This is the doGet Method");
             for (ClientDto client : allClients) {
-                out.println("<h3>" + client + " <h3>");
+                String toJson = new Gson().toJson(client);
+                out.println(toJson);
+                out.flush();
             }
-        } catch (IOException e) {
+        } catch (JSONException e) {
             log.error(e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         ClientDto clientDTO = getClientDTOFromPostRequest(req);
+        resp.setContentType(CONTENT_TYPE_JSON);
+        resp.setCharacterEncoding(ENCODING);
 
-        if (clientService.findByPassportId(clientDTO.getPassportId())!= null) {
+        ClientDto savedClient = null;
+
+        try {
+            savedClient = clientService.save(clientDTO);
+        } catch (IllegalArgumentException e) {
             try {
-                resp.sendError(HttpServletResponse.SC_CONFLICT, "Clients cannot have equals passportId!!!");
-            } catch (IOException e) {
+                resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+            } catch (IOException ex) {
                 log.error(e.getMessage());
             }
         }
 
-        ClientDto savedClient = clientService.save(clientDTO);
-
         try (PrintWriter out = resp.getWriter()) {
-            out.println("This is the doPost Method");
-            out.println("<h2>" + savedClient + " <h2>");
+            String toJson = new Gson().toJson(savedClient);
+            out.println(toJson);
+            out.flush();
         } catch (IOException e) {
             log.error(e.getMessage());
         }
@@ -61,21 +75,24 @@ public class ClientServlet extends HttpServlet {
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) {
         ClientDto clientDTO = getClientDTOFromPutRequest(req);
 
-        ClientDto clientById = clientService.findById(clientDTO.getId());
+        resp.setContentType(CONTENT_TYPE_JSON);
+        resp.setCharacterEncoding(ENCODING);
 
-        if (clientById == null) {
+        ClientDto update = null;
+        try {
+            update = clientService.update(clientDTO);
+        } catch (IllegalArgumentException e) {
             try {
-                resp.sendError(HttpServletResponse.SC_NOT_ACCEPTABLE, "There is no client to update!!!");
-            } catch (IOException e) {
-                log.error(e.getMessage());
+                resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+            } catch (IOException ex) {
+                log.error(ex.getMessage());
             }
         }
 
-        ClientDto update = clientService.update(clientDTO);
-
         try (PrintWriter out = resp.getWriter()) {
-            out.println("This is the doPut Method");
-            out.println("<h2>" + update + " <h2>");
+            String toJson = new Gson().toJson(update);
+            out.println(toJson);
+            out.flush();
         } catch (IOException e) {
             log.error(e.getMessage());
         }
@@ -85,10 +102,15 @@ public class ClientServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         try (PrintWriter out = resp.getWriter()) {
             long id = Long.parseLong(req.getParameter("id"));
-
-            clientService.delete(id);
-
-            out.println("This is the doDelete Method");
+            try {
+                clientService.delete(id);
+            } catch (IllegalArgumentException e) {
+                try {
+                    resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+                } catch (IOException ex) {
+                    log.error(ex.getMessage());
+                }
+            }
             out.println("<h2>The client was successfully deleted <h2>");
         } catch (IOException | JSONException e) {
             log.error(e.getMessage());

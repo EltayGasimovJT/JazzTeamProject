@@ -9,13 +9,20 @@ import java.util.Properties;
 @Slf4j
 public class PropertyUtil {
     private static final String CONFIG_PROPERTIES_FILE_LOCATION = "config.properties";
-    private final Properties properties;
+    private static Properties properties;
+
+    static {
+        loadProperties();
+    }
 
     public PropertyUtil() {
-        this.properties = new Properties();
+    }
+
+    private static void loadProperties(){
+        properties = new Properties();
 
         try {
-            try (InputStream propertiesStream = getClass()
+            try (InputStream propertiesStream = PropertyUtil.class
                     .getClassLoader()
                     .getResourceAsStream(CONFIG_PROPERTIES_FILE_LOCATION)) {
                 properties.load(propertiesStream);

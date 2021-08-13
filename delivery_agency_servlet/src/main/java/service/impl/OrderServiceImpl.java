@@ -159,7 +159,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void delete(Order order) throws SQLException {
         OrderValidator.validateOrder(order);
-        orderRepository.delete(order);
+        orderRepository.delete(order.getId());
     }
 
     private OrderState updateState(String state) {

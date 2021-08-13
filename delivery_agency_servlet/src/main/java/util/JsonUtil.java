@@ -10,7 +10,6 @@ import java.io.InputStreamReader;
 
 @Slf4j
 public class JsonUtil {
-
     private JsonUtil(){}
 
     public static String getBody(HttpServletRequest request) {

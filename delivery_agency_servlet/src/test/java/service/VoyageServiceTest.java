@@ -3,6 +3,7 @@ package service;
 import entity.Order;
 import entity.Voyage;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import service.impl.VoyageServiceImpl;
 
@@ -32,7 +33,7 @@ class VoyageServiceTest {
         Voyage addedVoyage = voyageService.addVoyage(voyage);
         String actual = addedVoyage.getDestinationPoint();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -53,7 +54,7 @@ class VoyageServiceTest {
         int expected = 2;
         int actual = voyageService.findAllVoyages().size();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -70,7 +71,7 @@ class VoyageServiceTest {
 
         int actual = voyageService.findAllVoyages().size();
 
-        Assert.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test
@@ -88,7 +89,7 @@ class VoyageServiceTest {
 
         Calendar actualTime = voyageService.getVoyage(1).getSendingTime();
 
-        Assert.assertEquals(expectedTime, actualTime);
+        Assertions.assertEquals(expectedTime, actualTime);
     }
 
     @Test
@@ -111,6 +112,6 @@ class VoyageServiceTest {
 
         Calendar actualTime = voyageService.update(voyage).getSendingTime();
 
-        Assert.assertEquals(expectedTime, actualTime);
+        Assertions.assertEquals(expectedTime, actualTime);
     }
 }

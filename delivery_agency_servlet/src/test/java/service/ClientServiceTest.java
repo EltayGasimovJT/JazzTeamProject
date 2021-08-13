@@ -2,15 +2,14 @@ package service;
 
 
 import dto.ClientDto;
-import org.junit.Before;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import service.impl.ClientServiceImpl;
-import service.impl.DatabaseServiceImpl;
+import util.impl.DatabaseServiceImpl;
+import util.DatabaseService;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -40,11 +39,6 @@ class ClientServiceTest {
                 Arguments.of(secondClientToTest),
                 Arguments.of(thirdClientToTest)
         );
-    }
-
-    @Before
-    public void setup() {
-        //databaseService.executeSqlScript("init_database.sql");
     }
 
     @ParameterizedTest
@@ -160,10 +154,5 @@ class ClientServiceTest {
         ClientDto actualClient = clientService.findByPassportId(expectedPassportID);
 
         Assertions.assertEquals(expectedClient, actualClient);
-    }
-
-    @AfterEach
-    void tearDown() {
-        //databaseService.executeSqlScript("drop_database.sql");
     }
 }

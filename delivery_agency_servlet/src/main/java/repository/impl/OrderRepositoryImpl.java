@@ -14,7 +14,7 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Order findByRecipient(Client recipient) {
         return orders.stream()
-                .filter(order1 -> order1.getRecipient().getId() == recipient.getId())
+                .filter(order1 -> order1.getRecipient().getId().equals(recipient.getId()))
                 .findFirst()
                 .orElse(null);
     }
@@ -48,8 +48,8 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public void delete(Order order) {
-        orders.remove(order);
+    public void delete(Long id) {
+        orders.remove(findOne(id));
     }
 
     @Override

@@ -20,8 +20,8 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     }
 
     @Override
-    public void deleteOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) throws SQLException {
-        orderProcessingPointRepository.delete(fromDtoToOrderProcessingPoint(orderProcessingPointDto));
+    public void deleteOrderProcessingPoint(Long id) throws SQLException {
+        orderProcessingPointRepository.delete(id);
     }
 
     @Override
@@ -59,10 +59,10 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     private OrderProcessingPoint fromDtoToOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(orderProcessingPointDto.getId());
-        orderProcessingPoint.setWarehouse(orderProcessingPoint.getWarehouse());
-        orderProcessingPoint.setLocation(orderProcessingPoint.getLocation());
-        orderProcessingPoint.setDispatchedOrders(orderProcessingPoint.getDispatchedOrders());
-        orderProcessingPoint.setExpectedOrders(orderProcessingPoint.getExpectedOrders());
+        orderProcessingPoint.setWarehouse(orderProcessingPointDto.getWarehouse());
+        orderProcessingPoint.setLocation(orderProcessingPointDto.getLocation());
+        orderProcessingPoint.setDispatchedOrders(orderProcessingPointDto.getDispatchedOrders());
+        orderProcessingPoint.setExpectedOrders(orderProcessingPointDto.getExpectedOrders());
         return orderProcessingPoint;
     }
 }

@@ -9,10 +9,10 @@ import java.util.List;
 
 @Data
 @Builder
-public class OrderProcessingPointDto {
+public class OrderProcessingPointDto  {
     private Long id;
-    private String location;
-    private Warehouse warehouse;
     private List<Order> expectedOrders;
     private List<Order> dispatchedOrders;
+    private String location;
+    private Warehouse warehouse;
 }

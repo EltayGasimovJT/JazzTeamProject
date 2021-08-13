@@ -18,7 +18,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void deleteWarehouse(Warehouse warehouse) throws SQLException {
-        wareHouseRepository.delete(warehouse);
+        wareHouseRepository.delete(warehouse.getId());
     }
 
     @Override

@@ -18,7 +18,7 @@ public class VoyageServiceImpl implements VoyageService {
 
     @Override
     public void deleteVoyage(Voyage voyage) throws SQLException {
-        voyageRepository.delete(voyage);
+        voyageRepository.delete(voyage.getId());
     }
 
     @Override

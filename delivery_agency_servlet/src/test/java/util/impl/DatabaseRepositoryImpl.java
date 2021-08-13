@@ -1,10 +1,9 @@
-package repository.impl;
+package util.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import util.ConnectionRepositoryUtil;
-import repository.DatabaseRepository;
+import util.DatabaseRepository;
 import util.DatabaseScriptUtil;
-import util.impl.ConnectionRepositoryUtilImpl;
 
 import java.sql.Connection;
 import java.sql.SQLException;

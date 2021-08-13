@@ -7,7 +7,7 @@ CREATE TABLE clients
     id           bigint(11)         NOT NULL primary key auto_increment,
     name         varchar(50)        NULL,
     surname      VARCHAR(50)        NULL,
-    passportID   VARCHAR(80) unique NULL,
+    passportId   VARCHAR(80) unique NULL,
     phone_number VARCHAR(50)        NULL
 );
 
