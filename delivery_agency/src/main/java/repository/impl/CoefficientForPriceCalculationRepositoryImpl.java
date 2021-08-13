@@ -38,8 +38,8 @@ public class CoefficientForPriceCalculationRepositoryImpl implements Coefficient
         CoefficientForPriceCalculation actual = findOne(update.getId());
         coefficientForPriceCalculations.remove(actual);
         actual.setCountry(update.getCountry());
-        actual.setCountryCoefficient(update.getCountryCoefficient());
         actual.setParcelSizeLimit(update.getParcelSizeLimit());
+        actual.setCountryCoefficient(update.getCountryCoefficient());
         coefficientForPriceCalculations.add(actual);
         return actual;
     }

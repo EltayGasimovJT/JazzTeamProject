@@ -23,6 +23,7 @@ class OrderServiceTest {
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
         processingPointToTest.setLocation("Russia");
+        processingPointToTest.setWarehouse(new WarehouseDto());
         OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -66,6 +67,7 @@ class OrderServiceTest {
     void updateOrderCurrentLocation() throws SQLException {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
         OrderDto expected = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(
@@ -98,6 +100,7 @@ class OrderServiceTest {
     void updateOrderHistory() throws SQLException {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
         OrderHistoryDto expected = OrderHistoryDto.builder().user(UserDto.builder().build()).build();
         GregorianCalendar changingTime = new GregorianCalendar();
         changingTime.set(Calendar.HOUR_OF_DAY, 15);
@@ -137,6 +140,8 @@ class OrderServiceTest {
     void create() throws SQLException {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -167,6 +172,7 @@ class OrderServiceTest {
     void findById() throws SQLException {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -198,6 +204,7 @@ class OrderServiceTest {
 
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
@@ -231,6 +238,7 @@ class OrderServiceTest {
 
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
@@ -260,6 +268,7 @@ class OrderServiceTest {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderDto order = OrderDto.builder()
                 .id(1L)
@@ -294,6 +303,7 @@ class OrderServiceTest {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderDto order = OrderDto.builder()
                 .id(1L)
@@ -325,10 +335,12 @@ class OrderServiceTest {
         OrderProcessingPointDto firstProcessingPoint = new OrderProcessingPointDto();
         firstProcessingPoint.setId(1L);
         firstProcessingPoint.setLocation("Russia");
+        firstProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderProcessingPointDto secondProcessingPoint = new OrderProcessingPointDto();
         secondProcessingPoint.setId(2L);
         secondProcessingPoint.setLocation("Russia");
+        secondProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderDto firstOrder = OrderDto.builder()
                 .id(1L)

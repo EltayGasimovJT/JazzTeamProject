@@ -1,5 +1,6 @@
 package service;
 
+import dto.AbstractBuildingDto;
 import dto.UserDto;
 import entity.AbstractBuilding;
 
@@ -17,5 +18,5 @@ public interface UserService {
 
     UserDto update(UserDto user) throws SQLException;
 
-    UserDto changeWorkingPlace(UserDto userId, AbstractBuilding newWorkingPlace) throws SQLException;
+    UserDto changeWorkingPlace(UserDto userId, AbstractBuildingDto newWorkingPlace) throws SQLException;
 }

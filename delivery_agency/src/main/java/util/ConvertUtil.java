@@ -15,7 +15,7 @@ public class ConvertUtil {
         final OrderProcessingPointDto processingPointDto = new OrderProcessingPointDto();
         processingPointDto.setId(orderProcessingPoint.getId());
         processingPointDto.setLocation(orderProcessingPoint.getLocation());
-        processingPointDto.setWarehouse(orderProcessingPoint.getWarehouse());
+        processingPointDto.setWarehouse(fromWarehouseToDTO(orderProcessingPoint.getWarehouse()));
         return processingPointDto;
     }
 
@@ -23,7 +23,7 @@ public class ConvertUtil {
         OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
         orderProcessingPoint.setId(orderProcessingPointDto.getId());
         orderProcessingPoint.setLocation(orderProcessingPointDto.getLocation());
-        orderProcessingPoint.setWarehouse(orderProcessingPointDto.getWarehouse());
+        orderProcessingPoint.setWarehouse(fromDtoToWarehouse(orderProcessingPointDto.getWarehouse()));
         return orderProcessingPoint;
     }
 
@@ -101,12 +101,12 @@ public class ConvertUtil {
                 .build();
     }
 
-    private static AbstractBuildingDto fromAbstractBuildingToDto(AbstractBuilding workingPlace) {
+    public static AbstractBuildingDto fromAbstractBuildingToDto(AbstractBuilding workingPlace) {
         if (workingPlace instanceof OrderProcessingPoint) {
             OrderProcessingPointDto abstractBuildingDto = new OrderProcessingPointDto();
             abstractBuildingDto.setLocation(workingPlace.getLocation());
             abstractBuildingDto.setId(workingPlace.getId());
-            abstractBuildingDto.setWarehouse(((OrderProcessingPoint) workingPlace).getWarehouse());
+            abstractBuildingDto.setWarehouse(fromOrderProcessingPointToDTO((OrderProcessingPoint) workingPlace).getWarehouse());
             return abstractBuildingDto;
         } else if (workingPlace instanceof Warehouse) {
             WarehouseDto abstractBuildingDto = new WarehouseDto();
@@ -118,12 +118,12 @@ public class ConvertUtil {
         return null;
     }
 
-    private static AbstractBuilding fromDtoToAbstractBuilding(AbstractBuildingDto workingPlace) {
+    public static AbstractBuilding fromDtoToAbstractBuilding(AbstractBuildingDto workingPlace) {
         if (workingPlace instanceof OrderProcessingPointDto) {
             OrderProcessingPoint abstractBuilding = new OrderProcessingPoint();
             abstractBuilding.setLocation(workingPlace.getLocation());
             abstractBuilding.setId(workingPlace.getId());
-            abstractBuilding.setWarehouse(((OrderProcessingPointDto) workingPlace).getWarehouse());
+            abstractBuilding.setWarehouse(fromDtoToOrderProcessingPoint((OrderProcessingPointDto) workingPlace).getWarehouse());
             return abstractBuilding;
         } else if (workingPlace instanceof WarehouseDto) {
             Warehouse abstractBuilding = new Warehouse();

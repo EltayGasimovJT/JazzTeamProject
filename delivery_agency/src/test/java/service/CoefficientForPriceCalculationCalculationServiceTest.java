@@ -28,10 +28,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(1L)
                 .parcelParameters(
                         ParcelParameters.builder()
-                                .height(1)
-                                .width(1)
-                                .length(1)
-                                .weight(20).build()
+                                .height(1.0)
+                                .width(1.0)
+                                .length(1.0)
+                                .weight(20.0).build()
                 )
                 .destinationPlace(orderProcessingPoint)
                 .build();
@@ -50,10 +50,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(2L)
                 .parcelParameters(
                         ParcelParameters.builder()
-                                .height(4)
-                                .width(10)
-                                .length(1)
-                                .weight(20).build()
+                                .height(4.0)
+                                .width(10.0)
+                                .length(1.0)
+                                .weight(20.0).build()
                 )
                 .destinationPlace(orderProcessingPoint)
                 .build();
@@ -70,10 +70,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(3L)
                 .parcelParameters(
                         ParcelParameters.builder()
-                                .height(4)
-                                .width(5)
-                                .length(10)
-                                .weight(30).build())
+                                .height(4.0)
+                                .width(5.0)
+                                .length(10.0)
+                                .weight(30.0).build())
                 .destinationPlace(orderProcessingPoint)
                 .build();
 

@@ -1,5 +1,6 @@
 package service.impl;
 
+import dto.AbstractBuildingDto;
 import dto.UserDto;
 import entity.AbstractBuilding;
 import entity.User;
@@ -12,8 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static util.ConvertUtil.fromDtoToUser;
-import static util.ConvertUtil.fromUserToDto;
+import static util.ConvertUtil.*;
 
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -52,13 +52,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto changeWorkingPlace(UserDto userToUpdate, AbstractBuilding newWorkingPlace) {
+    public UserDto changeWorkingPlace(UserDto userToUpdate, AbstractBuildingDto newWorkingPlace) {
         User user = User.builder()
                 .id(userToUpdate.getId())
                 .name(userToUpdate.getName())
                 .surname(userToUpdate.getSurname())
                 .roles(userToUpdate.getRoles())
-                .workingPlace(newWorkingPlace)
+                .workingPlace(fromDtoToAbstractBuilding(newWorkingPlace))
                 .build();
         User update = userRepository.update(user);
 
