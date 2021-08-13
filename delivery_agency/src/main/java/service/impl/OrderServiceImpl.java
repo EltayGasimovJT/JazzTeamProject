@@ -3,6 +3,7 @@ package service.impl;
 import dto.*;
 import entity.*;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import repository.OrderRepository;
 import repository.impl.OrderRepositoryImpl;
 import service.CoefficientForPriceCalculationService;
@@ -16,66 +17,77 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import entity.OrderStateChangeType;
-
-import static util.ConvertUtil.*;
-
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository = new OrderRepositoryImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
     private final CoefficientForPriceCalculationService priceCalculationRuleService = new CoefficientForPriceCalculationServiceImpl();
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
 
     @Override
-    public OrderDto updateOrderCurrentLocation(long id, AbstractBuildingDto newLocation) {
-        Order order = orderRepository.findOne(id);
-        OrderDto orderDto = fromOrderToDto(order);
-        orderDto.setCurrentLocation(newLocation);
-        return fromOrderToDto(orderRepository.update(fromDtoToOrder(orderDto)));
+    public Order updateOrderCurrentLocation(long id, AbstractBuildingDto newLocation) {
+        Order order = findOne(id);
+        order.setCurrentLocation(modelMapper.map(newLocation, AbstractBuilding.class));
+        return orderRepository.update(order);
     }
 
     @Override
     public void updateOrderHistory(long id, OrderHistoryDto newHistory) {
         Order order = orderRepository.findOne(id);
-        order.setHistory(Collections.singletonList(fromDtoToOrderHistory(newHistory)));
+        order.setHistory(Collections.singletonList(modelMapper.map(newHistory, OrderHistory.class)));
         orderRepository.update(order);
     }
 
     @Override
-    public OrderDto create(OrderDto order) throws SQLException {
+    public Order create(OrderDto order) throws SQLException {
         OrderValidator.validateOrder(order);
         BigDecimal price = calculatePrice(order);
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         order.setPrice(price);
-        order.setState(fromOrderStateToDto(orderState));
+        order.setState(modelMapper.map(orderState, OrderStateDto.class));
         OrderHistory orderHistory = OrderHistory.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .changingTime(order.getSendingTime())
                 .user(User.builder().build())
                 .build();
-        order.setHistory(Arrays.asList(fromOrderHistoryToDto(orderHistory)));
-        return fromOrderToDto(orderRepository.save(fromDtoToOrder(order)));
+        order.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
+
+        Order orderToSave = Order.builder()
+                .id(order.getId())
+                .sendingTime(order.getSendingTime())
+                .sender()
+                .sendingTime()
+                .recipient()
+                .currentLocation()
+                .destinationPlace(order.getDestinationPlace())
+                .history()
+                .parcelParameters()
+                .price(order.getPrice())
+                .route(order.getRoute())
+                .state()
+                .build();
+        return orderRepository.save(orderToSave);
     }
 
     @Override
-    public OrderDto findById(long id) {
+    public Order findOne(long id) {
         return fromOrderToDto(orderRepository.findOne(id));
     }
 
     @Override
-    public OrderDto findByRecipient(ClientDto recipient) {
+    public Order findByRecipient(ClientDto recipient) {
         return fromOrderToDto(orderRepository.findByRecipient(fromDtoToClient(recipient)));
     }
 
     @Override
-    public OrderDto findBySender(ClientDto sender) {
+    public Order findBySender(ClientDto sender) {
         return fromOrderToDto(orderRepository.findBySender(fromDtoToClient(sender)));
     }
 
     @Override
-    public AbstractBuildingDto getCurrentOrderLocation(long id) {
+    public AbstractBuilding getCurrentOrderLocation(long id) {
         return fromOrderToDto(orderRepository.findOne(id)).getCurrentLocation();
     }
 
@@ -104,7 +116,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> accept(List<OrderDto> acceptedOrders) {
+    public List<Order> accept(List<OrderDto> acceptedOrders) {
         List<Order> ordersToAccept = new ArrayList<>();
         for (OrderDto order : acceptedOrders) {
             ordersToAccept.add(fromDtoToOrder(order));
@@ -157,7 +169,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> findAll() throws SQLException {
+    public List<Order> findAll() throws SQLException {
         List<Order> orders = orderRepository.findAll();
         List<OrderDto> resultOrderDtos = new ArrayList<>();
 
@@ -175,7 +187,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<List<OrderDto>> getOrdersOnTheWay() {
+    public List<List<Order>> getOrdersOnTheWay() {
         List<List<Order>> allSentOrders = orderRepository.getSentOrders();
         List<List<OrderDto>> allSentOrderDtos = new ArrayList<>();
 
@@ -191,7 +203,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDto update(OrderDto order) throws SQLException {
+    public Order update(OrderDto order) throws SQLException {
         OrderValidator.validateOrder(order);
         Order update = orderRepository.update(fromDtoToOrder(order));
         return fromOrderToDto(update);
@@ -265,12 +277,12 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws SQLException {
-        CoefficientForPriceCalculationDto coefficientForPriceCalculation;
+    private CoefficientForPriceCalculation getCoefficient(OrderProcessingPointDto processingPointDto) throws SQLException {
+        CoefficientForPriceCalculation coefficientForPriceCalculation;
 
         String russia = "Russia";
 
-        CoefficientForPriceCalculationDto firstCoefficient = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculation firstCoefficient = CoefficientForPriceCalculation
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -280,7 +292,7 @@ public class OrderServiceImpl implements OrderService {
 
         String poland = "Poland";
 
-        CoefficientForPriceCalculationDto secondCoefficient = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculation secondCoefficient = CoefficientForPriceCalculation
                 .builder()
                 .id(2L)
                 .countryCoefficient(1.8)
@@ -288,8 +300,8 @@ public class OrderServiceImpl implements OrderService {
                 .parcelSizeLimit(40)
                 .build();
 
-        priceCalculationRuleService.save(firstCoefficient);
-        priceCalculationRuleService.save(secondCoefficient);
+        priceCalculationRuleService.save(modelMapper.map(firstCoefficient, CoefficientForPriceCalculationDto.class));
+        priceCalculationRuleService.save(modelMapper.map(secondCoefficient, CoefficientForPriceCalculationDto.class));
 
         if (processingPointDto.getLocation().equals(russia)) {
             coefficientForPriceCalculation = priceCalculationRuleService.findByCountry(russia);

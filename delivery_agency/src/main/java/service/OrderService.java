@@ -20,7 +20,7 @@ public interface OrderService {
 
    Order create(OrderDto order) throws SQLException;
 
-   Order findById(long id) throws SQLException;
+   Order findOne(long id) throws SQLException;
 
    Order findByRecipient(ClientDto recipient);
 

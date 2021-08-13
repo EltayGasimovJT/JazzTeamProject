@@ -1,7 +1,6 @@
 package service;
 
 import dto.*;
-import entity.*;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,6 @@ import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Stream;
-
-import static entity.OrderStates.READY_TO_SEND;
 
 class OrderServiceTest {
     private final OrderService orderService = new OrderServiceImpl();
@@ -91,7 +88,7 @@ class OrderServiceTest {
 
         orderService.updateOrderCurrentLocation(expected.getId(), orderProcessingPoint);
 
-        OrderDto actual = orderService.findById(1);
+        OrderDto actual = orderService.findOne(1);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -131,7 +128,7 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        List<OrderHistoryDto> actual = orderService.findById(1).getHistory();
+        List<OrderHistoryDto> actual = orderService.findOne(1).getHistory();
 
         Assertions.assertEquals(expected, actual.get(0));
     }
@@ -162,7 +159,7 @@ class OrderServiceTest {
         expectedOrder.setHistory(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()));
         orderService.create(expectedOrder);
 
-        OrderDto actualOrder = orderService.findById(1);
+        OrderDto actualOrder = orderService.findOne(1);
 
         Assertions.assertEquals(expectedOrder, actualOrder);
     }
@@ -189,7 +186,7 @@ class OrderServiceTest {
 
         orderService.create(expectedOrder);
 
-        OrderDto actualOrder = orderService.findById(1);
+        OrderDto actualOrder = orderService.findOne(1);
 
         Assertions.assertEquals(expectedOrder, actualOrder);
     }

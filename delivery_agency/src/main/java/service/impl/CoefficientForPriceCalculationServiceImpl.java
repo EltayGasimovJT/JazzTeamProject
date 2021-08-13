@@ -10,11 +10,7 @@ import service.CoefficientForPriceCalculationService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
-import static util.ConvertUtil.fromCoefficientForPriceCalculationToDTO;
-import static util.ConvertUtil.fromDtoToCoefficientForPriceCalculation;
 
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
     private final CoefficientForPriceCalculationRepository priceCalculationRuleRepository = new CoefficientForPriceCalculationRepositoryImpl();
@@ -22,9 +18,14 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     private static final int INITIAL_WEIGHT = 20;
 
     @Override
-    public CoefficientForPriceCalculationDto save(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
-        CoefficientForPriceCalculation coefficientForPriceCalculation = fromDtoToCoefficientForPriceCalculation(coefficientForPriceCalculationDto);
-        return fromCoefficientForPriceCalculationToDTO(priceCalculationRuleRepository.save(coefficientForPriceCalculation));
+    public CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
+        CoefficientForPriceCalculation coefficientForPriceCalculation = CoefficientForPriceCalculation.builder()
+                .id(coefficientForPriceCalculationDto.getId())
+                .country(coefficientForPriceCalculationDto.getCountry())
+                .countryCoefficient(coefficientForPriceCalculationDto.getCountryCoefficient())
+                .parcelSizeLimit(coefficientForPriceCalculationDto.getParcelSizeLimit())
+                .build();
+        return priceCalculationRuleRepository.save(coefficientForPriceCalculation);
     }
 
     @Override
@@ -33,24 +34,32 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public List<CoefficientForPriceCalculationDto> findAll()  {
+    public List<CoefficientForPriceCalculation> findAll() {
         List<CoefficientForPriceCalculation> coefficientsFromRepository = priceCalculationRuleRepository.findAll();
-        List<CoefficientForPriceCalculationDto> coefficientForPriceCalculationDtos = new ArrayList<>();
-        for (CoefficientForPriceCalculation coefficientForPriceCalculation : coefficientsFromRepository) {
-            coefficientForPriceCalculationDtos.add(fromCoefficientForPriceCalculationToDTO(coefficientForPriceCalculation));
+        if (coefficientsFromRepository.isEmpty()) {
+            throw new IllegalArgumentException("There is not coefficients in database!!!");
         }
-        return coefficientForPriceCalculationDtos;
+        return coefficientsFromRepository;
     }
 
     @Override
-    public CoefficientForPriceCalculationDto update(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException {
-        CoefficientForPriceCalculation updatedCoefficient = priceCalculationRuleRepository.update(fromDtoToCoefficientForPriceCalculation(coefficientForPriceCalculationDto));
-        return fromCoefficientForPriceCalculationToDTO(updatedCoefficient);
+    public CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException {
+        CoefficientForPriceCalculation coefficientForUpdate = CoefficientForPriceCalculation.builder()
+                .id(coefficientForPriceCalculationDto.getId())
+                .country(coefficientForPriceCalculationDto.getCountry())
+                .countryCoefficient(coefficientForPriceCalculationDto.getCountryCoefficient())
+                .parcelSizeLimit(coefficientForPriceCalculationDto.getParcelSizeLimit())
+                .build();
+        return priceCalculationRuleRepository.update(coefficientForUpdate);
     }
 
     @Override
-    public CoefficientForPriceCalculationDto findOne(long id)  {
-        return fromCoefficientForPriceCalculationToDTO(priceCalculationRuleRepository.findOne(id));
+    public CoefficientForPriceCalculation findOne(long id) {
+        final CoefficientForPriceCalculation priceCalculation = priceCalculationRuleRepository.findOne(id);
+        if (priceCalculation == null) {
+            throw new IllegalArgumentException("There is not coefficient with this Id!!! " + id);
+        }
+        return priceCalculation;
     }
 
     @Override
@@ -86,10 +95,12 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public CoefficientForPriceCalculationDto findByCountry(String country) {
+    public CoefficientForPriceCalculation findByCountry(String country) {
         CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleRepository.findByCountry(country);
-
-        return fromCoefficientForPriceCalculationToDTO(actualCoefficient);
+        if (actualCoefficient == null) {
+            throw new IllegalArgumentException("This country is not supported yet!!! " + country);
+        }
+        return actualCoefficient;
     }
 
     private double getSize(Order order) {

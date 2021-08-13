@@ -4,7 +4,6 @@ import dto.ClientDto;
 import entity.Client;
 import entity.Order;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import repository.ClientRepository;
 import repository.impl.ClientRepositoryImpl;
 import service.ClientService;
@@ -13,9 +12,6 @@ import service.OrderService;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static util.ConvertUtil.fromClientToDto;
-import static util.ConvertUtil.fromDtoToClient;
 
 @Slf4j
 public class ClientServiceImpl implements ClientService {
@@ -56,23 +52,23 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client save(ClientDto clientDTO) throws SQLException {
+    public Client save(ClientDto clientDto) throws SQLException {
         List<Order> clientOrders = new ArrayList<>();
 
         List<Order> allOrders = orderService.findAll();
 
         for (Order order : allOrders) {
-            if(order.getSender().getId().equals(clientDTO.getId())){
+            if(order.getSender().getId().equals(clientDto.getId())){
                 clientOrders.add(order);
             }
         }
 
         Client clientToSave = Client.builder()
-                .id(clientDTO.getId())
-                .name(clientDTO.getName())
-                .surname(clientDTO.getSurname())
-                .passportId(clientDTO.getPassportId())
-                .phoneNumber(clientDTO.getPhoneNumber())
+                .id(clientDto.getId())
+                .name(clientDto.getName())
+                .surname(clientDto.getSurname())
+                .passportId(clientDto.getPassportId())
+                .phoneNumber(clientDto.getPhoneNumber())
                 .orders(clientOrders)
                 .build();
 
@@ -88,24 +84,20 @@ public class ClientServiceImpl implements ClientService {
         List<Order> allOrders = orderService.findAll();
 
         for (Order order : allOrders) {
-            if(order.getSender().getId().equals(clientDTO.getId())){
+            if(order.getSender().getId().equals(clientDto.getId())){
                 clientOrders.add(order);
             }
         }
 
-        Client clientToSave = Client.builder()
-                .id(clientDTO.getId())
-                .name(clientDTO.getName())
-                .surname(clientDTO.getSurname())
-                .passportId(clientDTO.getPassportId())
-                .phoneNumber(clientDTO.getPhoneNumber())
+        Client clientToUpdate = Client.builder()
+                .id(clientDto.getId())
+                .name(clientDto.getName())
+                .surname(clientDto.getSurname())
+                .passportId(clientDto.getPassportId())
+                .phoneNumber(clientDto.getPhoneNumber())
                 .orders(clientOrders)
                 .build();
 
-        Client savedClient = clientRepository.save(clientToSave);
-        savedClient.setId(savedClient.getId());
-        return savedClient;
-
-        return clientRepository.update(updatedClient);
+        return clientRepository.update(clientToUpdate);
     }
 }
