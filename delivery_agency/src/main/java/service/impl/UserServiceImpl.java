@@ -12,6 +12,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.ConvertUtil.fromDtoToUser;
+import static util.ConvertUtil.fromUserToDto;
+
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
@@ -60,25 +63,5 @@ public class UserServiceImpl implements UserService {
         User update = userRepository.update(user);
 
         return fromUserToDto(update);
-    }
-
-    private UserDto fromUserToDto(User user) {
-        return UserDto.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .surname(user.getSurname())
-                .roles(user.getRoles())
-                .workingPlace(user.getWorkingPlace())
-                .build();
-    }
-
-    private User fromDtoToUser(UserDto userDto) {
-        return User.builder()
-                .id(userDto.getId())
-                .name(userDto.getName())
-                .surname(userDto.getSurname())
-                .roles(userDto.getRoles())
-                .workingPlace(userDto.getWorkingPlace())
-                .build();
     }
 }

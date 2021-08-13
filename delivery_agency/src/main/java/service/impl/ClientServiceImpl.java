@@ -10,6 +10,9 @@ import service.ClientService;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.ConvertUtil.fromClientToDto;
+import static util.ConvertUtil.fromDtoToClient;
+
 @Slf4j
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
@@ -67,25 +70,5 @@ public class ClientServiceImpl implements ClientService {
 
         updateOnDB = clientRepository.update(client);
         return fromClientToDto(updateOnDB);
-    }
-
-    private ClientDto fromClientToDto(Client client) {
-        return ClientDto.builder()
-                .id(client.getId())
-                .name(client.getName())
-                .surname(client.getSurname())
-                .passportId(client.getPassportId())
-                .phoneNumber(client.getPhoneNumber())
-                .build();
-    }
-
-    private Client fromDtoToClient(ClientDto clientDto) {
-        return Client.builder()
-                .id(clientDto.getId())
-                .name(clientDto.getName())
-                .surname(clientDto.getSurname())
-                .passportId(clientDto.getPassportId())
-                .phoneNumber(clientDto.getPhoneNumber())
-                .build();
     }
 }

@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.ConvertUtil.fromCoefficientForPriceCalculationToDTO;
+import static util.ConvertUtil.fromDtoToCoefficientForPriceCalculation;
+
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
     private final CoefficientForPriceCalculationRepository priceCalculationRuleRepository = new CoefficientForPriceCalculationRepositoryImpl();
     private static final int INITIAL_PRISE = 40;
@@ -95,21 +98,5 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
                 * order.getParcelParameters().getWidth()) + order.getParcelParameters().getWeight();
     }
 
-    private CoefficientForPriceCalculationDto fromCoefficientForPriceCalculationToDTO(CoefficientForPriceCalculation coefficientForPriceCalculation) {
-        return CoefficientForPriceCalculationDto.builder()
-                .id(coefficientForPriceCalculation.getId())
-                .country(coefficientForPriceCalculation.getCountry())
-                .countryCoefficient(coefficientForPriceCalculation.getCountryCoefficient())
-                .parcelSizeLimit(coefficientForPriceCalculation.getParcelSizeLimit())
-                .build();
-    }
 
-    private CoefficientForPriceCalculation fromDtoToCoefficientForPriceCalculation(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
-        return CoefficientForPriceCalculation.builder()
-                .id(coefficientForPriceCalculationDto.getId())
-                .country(coefficientForPriceCalculationDto.getCountry())
-                .countryCoefficient(coefficientForPriceCalculationDto.getCountryCoefficient())
-                .parcelSizeLimit(coefficientForPriceCalculationDto.getParcelSizeLimit())
-                .build();
-    }
 }

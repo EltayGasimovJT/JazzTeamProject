@@ -2,6 +2,7 @@ package service.impl;
 
 import dto.CoefficientForPriceCalculationDto;
 import dto.OrderDto;
+import dto.OrderHistoryDto;
 import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import repository.OrderRepository;
@@ -17,6 +18,9 @@ import java.util.Collections;
 import java.util.List;
 
 import entity.OrderStateChangeType;
+
+import static util.ConvertUtil.fromDtoToOrder;
+import static util.ConvertUtil.fromOrderToDto;
 
 @Slf4j
 public class OrderServiceImpl implements OrderService {
@@ -297,37 +301,5 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("This country is not supported yet!!!" + abstractBuilding.getLocation());
         }
         return coefficientForPriceCalculation;
-    }
-
-    private OrderDto fromOrderToDto(Order order) {
-        return OrderDto.builder()
-                .id(order.getId())
-                .currentLocation(order.getCurrentLocation())
-                .destinationPlace(order.getDestinationPlace())
-                .history(order.getHistory())
-                .parcelParameters(order.getParcelParameters())
-                .price(order.getPrice())
-                .recipient(order.getRecipient())
-                .route(order.getRoute())
-                .sender(order.getSender())
-                .sendingTime(order.getSendingTime())
-                .state(order.getState())
-                .build();
-    }
-
-    private Order fromDtoToOrder(OrderDto orderDto) {
-        return Order.builder()
-                .id(orderDto.getId())
-                .currentLocation(orderDto.getCurrentLocation())
-                .destinationPlace(orderDto.getDestinationPlace())
-                .history(orderDto.getHistory())
-                .parcelParameters(orderDto.getParcelParameters())
-                .price(orderDto.getPrice())
-                .recipient(orderDto.getRecipient())
-                .route(orderDto.getRoute())
-                .sender(orderDto.getSender())
-                .sendingTime(orderDto.getSendingTime())
-                .state(orderDto.getState())
-                .build();
     }
 }

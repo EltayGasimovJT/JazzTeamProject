@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.ConvertUtil.fromDtoToVoyage;
+import static util.ConvertUtil.fromVoyageToDTO;
+
 public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 
@@ -48,25 +51,5 @@ public class VoyageServiceImpl implements VoyageService {
         return fromVoyageToDTO(update);
     }
 
-    private VoyageDto fromVoyageToDTO(Voyage voyage) {
-        return VoyageDto.builder()
-                .id(voyage.getId())
-                .dispatchedOrders(voyage.getDispatchedOrders())
-                .expectedOrders(voyage.getExpectedOrders())
-                .departurePoint(voyage.getDeparturePoint())
-                .destinationPoint(voyage.getDestinationPoint())
-                .sendingTime(voyage.getSendingTime())
-                .build();
-    }
 
-    private Voyage fromDtoToVoyage(VoyageDto voyageDto) {
-        Voyage voyage = new Voyage();
-        voyage.setId(voyageDto.getId());
-        voyage.setDeparturePoint(voyageDto.getDeparturePoint());
-        voyage.setDestinationPoint(voyageDto.getDestinationPoint());
-        voyage.setDispatchedOrders(voyageDto.getDispatchedOrders());
-        voyage.setExpectedOrders(voyageDto.getExpectedOrders());
-        voyage.setSendingTime(voyageDto.getSendingTime());
-        return voyage;
-    }
 }

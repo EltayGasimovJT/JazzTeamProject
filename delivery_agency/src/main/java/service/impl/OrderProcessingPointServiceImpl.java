@@ -1,5 +1,6 @@
 package service.impl;
 
+import dto.AbstractLocationDto;
 import dto.OrderProcessingPointDto;
 import entity.OrderProcessingPoint;
 import repository.OrderProcessingPointRepository;
@@ -9,6 +10,9 @@ import service.OrderProcessingPointService;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static util.ConvertUtil.fromDtoToOrderProcessingPoint;
+import static util.ConvertUtil.fromOrderProcessingPointToDTO;
 
 public class OrderProcessingPointServiceImpl implements OrderProcessingPointService {
     private final OrderProcessingPointRepository orderProcessingPointRepository = new OrderProcessingPointRepositoryImpl();
@@ -46,23 +50,4 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         return fromOrderProcessingPointToDTO(update);
     }
 
-    private OrderProcessingPointDto fromOrderProcessingPointToDTO(OrderProcessingPoint orderProcessingPoint) {
-        return OrderProcessingPointDto.builder()
-                .id(orderProcessingPoint.getId())
-                .dispatchedOrders(orderProcessingPoint.getDispatchedOrders())
-                .expectedOrders(orderProcessingPoint.getExpectedOrders())
-                .location(orderProcessingPoint.getLocation())
-                .warehouse(orderProcessingPoint.getWarehouse())
-                .build();
-    }
-
-    private OrderProcessingPoint fromDtoToOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setId(orderProcessingPointDto.getId());
-        orderProcessingPoint.setWarehouse(orderProcessingPointDto.getWarehouse());
-        orderProcessingPoint.setLocation(orderProcessingPointDto.getLocation());
-        orderProcessingPoint.setDispatchedOrders(orderProcessingPointDto.getDispatchedOrders());
-        orderProcessingPoint.setExpectedOrders(orderProcessingPointDto.getExpectedOrders());
-        return orderProcessingPoint;
-    }
 }

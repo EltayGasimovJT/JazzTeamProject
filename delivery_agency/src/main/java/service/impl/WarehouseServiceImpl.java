@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static util.ConvertUtil.fromDtoToWarehouse;
+import static util.ConvertUtil.fromWarehouseToDTO;
+
 public class WarehouseServiceImpl implements WarehouseService {
     private final WareHouseRepository wareHouseRepository = new WarehouseRepositoryImpl();
 
@@ -47,25 +50,4 @@ public class WarehouseServiceImpl implements WarehouseService {
         return fromWarehouseToDTO(update);
     }
 
-    private WarehouseDto fromWarehouseToDTO(Warehouse warehouse) {
-        return WarehouseDto.builder()
-                .id(warehouse.getId())
-                .dispatchedOrders(warehouse.getDispatchedOrders())
-                .expectedOrders(warehouse.getExpectedOrders())
-                .location(warehouse.getLocation())
-                .connectedWarehouses(warehouse.getConnectedWarehouses())
-                .orderProcessingPoints(warehouse.getOrderProcessingPoints())
-                .build();
-    }
-
-    private Warehouse fromDtoToWarehouse(WarehouseDto warehouseDto) {
-        Warehouse warehouse = new Warehouse();
-        warehouse.setId(warehouseDto.getId());
-        warehouse.setConnectedWarehouses(warehouseDto.getConnectedWarehouses());
-        warehouse.setExpectedOrders(warehouseDto.getExpectedOrders());
-        warehouse.setDispatchedOrders(warehouseDto.getDispatchedOrders());
-        warehouse.setLocation(warehouseDto.getLocation());
-        warehouse.setOrderProcessingPoints(warehouseDto.getOrderProcessingPoints());
-        return warehouse;
-    }
 }
