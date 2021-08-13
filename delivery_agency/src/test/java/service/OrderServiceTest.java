@@ -37,7 +37,7 @@ class OrderServiceTest {
                 .recipient(ClientDto.builder().build())
                 .destinationPlace(processingPointToTest)
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
         processingPointToTest.setLocation("Poland");
@@ -55,7 +55,7 @@ class OrderServiceTest {
                 .recipient(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
         return Stream.of(
                 Arguments.of(firstOrderToTest, BigDecimal.valueOf(72.0)),
@@ -82,7 +82,7 @@ class OrderServiceTest {
                 .destinationPlace(orderProcessingPoint)
                 .price(BigDecimal.valueOf(1))
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
         orderService.create(expected);
@@ -108,7 +108,7 @@ class OrderServiceTest {
         expected.setChangingTime(changingTime);
         OrderDto order = OrderDto.builder()
                 .id(1L)
-                .history(expected)
+                .history(Collections.singletonList(expected))
                 .parcelParameters(ParcelParametersDto.builder()
                         .height(1.0)
                         .width(1.0)
@@ -131,9 +131,9 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        OrderHistoryDto actual = orderService.findById(1).getHistory();
+        List<OrderHistoryDto> actual = orderService.findById(1).getHistory();
 
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(expected, actual.get(0));
     }
 
     @Test
@@ -156,11 +156,10 @@ class OrderServiceTest {
                 .state(OrderStateDto.builder()
                         .state("READY_TO_SEND")
                         .build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().build()))
                 .build();
 
-        expectedOrder.setHistory(OrderHistoryDto.builder()
-                .user(UserDto.builder().build())
-                .build());
+        expectedOrder.setHistory(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()));
         orderService.create(expectedOrder);
 
         OrderDto actualOrder = orderService.findById(1);
@@ -185,7 +184,7 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .recipient(ClientDto.builder().build())
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
         orderService.create(expectedOrder);
@@ -218,7 +217,7 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .recipient(recipient)
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
         orderService.create(expectedOrder);
@@ -252,7 +251,7 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .sender(ClientDto.builder().build())
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
         orderService.create(expectedOrder);
@@ -282,7 +281,7 @@ class OrderServiceTest {
                 .recipient(ClientDto.builder().build())
                 .sender(ClientDto.builder().build())
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
         List<OrderDto> expectedOrders = Collections.singletonList(
                 order
@@ -318,7 +317,7 @@ class OrderServiceTest {
                 .recipient(ClientDto.builder().build())
                 .sender(ClientDto.builder().build())
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
         orderService.create(order);
@@ -355,7 +354,7 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(firstProcessingPoint)
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .recipient(ClientDto.builder().build())
                 .build();
 
@@ -372,7 +371,7 @@ class OrderServiceTest {
                 .recipient(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .state(OrderStateDto.builder().build())
-                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .recipient(ClientDto.builder().build())
                 .build();
 

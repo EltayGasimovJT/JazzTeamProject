@@ -29,7 +29,7 @@ class VoyageServiceTest {
         String expected = "Moscow";
         voyage.setDestinationPoint(expected);
 
-        VoyageDto addVoyage = voyageService.addVoyage(voyage);
+        VoyageDto addVoyage = voyageService.save(voyage);
         String actual = addVoyage.getDestinationPoint();
 
         Assertions.assertEquals(expected, actual);
@@ -44,14 +44,14 @@ class VoyageServiceTest {
         VoyageDto thirdVoyage = new VoyageDto();
         thirdVoyage.setId(3L);
 
-        voyageService.addVoyage(firstVoyage);
-        voyageService.addVoyage(secondVoyage);
-        voyageService.addVoyage(thirdVoyage);
+        voyageService.save(firstVoyage);
+        voyageService.save(secondVoyage);
+        voyageService.save(thirdVoyage);
 
-        voyageService.deleteVoyage(firstVoyage.getId());
+        voyageService.delete(firstVoyage.getId());
 
         int expected = 2;
-        int actual = voyageService.findAllVoyages().size();
+        int actual = voyageService.findAll().size();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -62,13 +62,13 @@ class VoyageServiceTest {
         VoyageDto secondVoyage = new VoyageDto();
         VoyageDto thirdVoyage = new VoyageDto();
 
-        voyageService.addVoyage(firstVoyage);
-        voyageService.addVoyage(secondVoyage);
-        voyageService.addVoyage(thirdVoyage);
+        voyageService.save(firstVoyage);
+        voyageService.save(secondVoyage);
+        voyageService.save(thirdVoyage);
 
         int expected = 3;
 
-        int actual = voyageService.findAllVoyages().size();
+        int actual = voyageService.findAll().size();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -84,9 +84,9 @@ class VoyageServiceTest {
         expectedTime.set(Calendar.MINUTE, 30);
         voyage.setSendingTime(expectedTime);
 
-        voyageService.addVoyage(voyage);
+        voyageService.save(voyage);
 
-        Calendar actualTime = voyageService.getVoyage(1).getSendingTime();
+        Calendar actualTime = voyageService.findOne(1).getSendingTime();
 
         Assertions.assertEquals(expectedTime, actualTime);
     }
@@ -101,7 +101,7 @@ class VoyageServiceTest {
 
         expectedVoyage.setSendingTime(sendingTime);
 
-        voyageService.addVoyage(expectedVoyage);
+        voyageService.save(expectedVoyage);
 
         GregorianCalendar expectedTime = new GregorianCalendar();
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);

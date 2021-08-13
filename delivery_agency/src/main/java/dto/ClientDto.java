@@ -3,6 +3,8 @@ package dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Builder
 public class ClientDto {
@@ -11,4 +13,5 @@ public class ClientDto {
     private String surname;
     private String passportId;
     private String phoneNumber;
+    private List<OrderDto> orders;
 }

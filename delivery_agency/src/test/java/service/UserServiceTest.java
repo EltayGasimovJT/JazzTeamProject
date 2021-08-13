@@ -1,25 +1,25 @@
 package service;
 
-import dto.AbstractBuildingDto;
 import dto.OrderProcessingPointDto;
 import dto.UserDto;
 import dto.WarehouseDto;
-import entity.AbstractBuilding;
-import entity.OrderProcessingPoint;
 import entity.User;
-import entity.Warehouse;
 import lombok.SneakyThrows;
-import org.junit.Assert;
+import mappers.UserMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import service.impl.UserServiceImpl;
 
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import static util.ConvertUtil.fromUserToDto;
+
 class UserServiceTest {
     private final UserService userService = new UserServiceImpl();
+    private final ModelMapper userMapper = new ModelMapper();
 
     @Test
     void addUser() throws SQLException {
@@ -31,7 +31,8 @@ class UserServiceTest {
                 .roles(Arrays.asList("User", "Client"))
                 .build();
 
-        UserDto actual = userService.addUser(expected);
+        UserDto actual = userMapper.map(userService.addUser(expected), UserDto.class);
+
 
         Assertions.assertEquals(expected, actual);
     }
@@ -58,7 +59,7 @@ class UserServiceTest {
 
         userService.deleteUser(firstUser.getId());
 
-        List<UserDto> allUsers = userService.findAllUsers();
+        List<User> allUsers = userService.findAllUsers();
         int unexpected = 3;
 
         int actual = allUsers.size();
@@ -76,7 +77,7 @@ class UserServiceTest {
         userService.addUser(secondUser);
         userService.addUser(thirdUser);
 
-        List<UserDto> allUsers = userService.findAllUsers();
+        List<User> allUsers = userService.findAllUsers();
 
         int expected = 3;
 
@@ -103,7 +104,7 @@ class UserServiceTest {
         userService.addUser(expected);
         userService.addUser(thirdUser);
 
-        UserDto actual = userService.getUser(2);
+        User actual = userService.getUser(2);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -147,8 +148,7 @@ class UserServiceTest {
         workingPlace.setWarehouse(new WarehouseDto());
         workingPlace.setLocation("Polotsk");
 
-        userService.changeWorkingPlace(userService.getUser(user.getId()), workingPlace);
-
+        userService.changeWorkingPlace(userMapper.map(userService.getUser(user.getId()), UserDto.class), workingPlace);
 
         String actual = userService.getUser(user.getId())
                 .getWorkingPlace()

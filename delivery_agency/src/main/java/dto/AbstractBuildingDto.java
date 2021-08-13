@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public abstract class AbstractBuildingDto extends AbstractLocationDto {
     private String location;
+    private WorkingPlaceType workingPlaceType;
 }

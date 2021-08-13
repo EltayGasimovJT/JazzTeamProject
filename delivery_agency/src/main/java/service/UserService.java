@@ -2,21 +2,21 @@ package service;
 
 import dto.AbstractBuildingDto;
 import dto.UserDto;
-import entity.AbstractBuilding;
+import entity.User;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface UserService {
-    UserDto addUser(UserDto user) throws SQLException;
+    User addUser(UserDto user) throws SQLException;
 
     void deleteUser(Long id);
 
-    List<UserDto> findAllUsers() throws SQLException;
+    List<User> findAllUsers() throws SQLException;
 
-    UserDto getUser(long id) throws SQLException;
+    User getUser(long id) throws SQLException;
 
-    UserDto update(UserDto user) throws SQLException;
+    User update(UserDto user) throws SQLException;
 
-    UserDto changeWorkingPlace(UserDto userId, AbstractBuildingDto newWorkingPlace) throws SQLException;
+    User changeWorkingPlace(UserDto userId, AbstractBuildingDto newWorkingPlace) throws SQLException;
 }

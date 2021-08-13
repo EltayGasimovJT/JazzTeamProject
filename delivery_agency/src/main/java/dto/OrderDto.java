@@ -18,7 +18,7 @@ public class OrderDto {
     private BigDecimal price;
     private OrderProcessingPointDto destinationPlace;
     private AbstractBuildingDto currentLocation;
-    private OrderHistoryDto history;
+    private List<OrderHistoryDto> history;
     private Calendar sendingTime;
     private List<AbstractLocationDto> route;
 }

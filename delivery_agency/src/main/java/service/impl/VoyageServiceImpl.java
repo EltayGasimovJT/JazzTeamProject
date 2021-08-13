@@ -17,17 +17,17 @@ public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 
     @Override
-    public VoyageDto addVoyage(VoyageDto voyage) {
+    public VoyageDto save(VoyageDto voyage) {
         return fromVoyageToDTO(voyageRepository.save(fromDtoToVoyage(voyage)));
     }
 
     @Override
-    public void deleteVoyage(Long id) {
+    public void delete(Long id) {
         voyageRepository.delete(id);
     }
 
     @Override
-    public List<VoyageDto> findAllVoyages() {
+    public List<VoyageDto> findAll() {
         List<Voyage> voyages = voyageRepository.findAll();
         List<VoyageDto> voyageDtos = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class VoyageServiceImpl implements VoyageService {
     }
 
     @Override
-    public VoyageDto getVoyage(long id) {
+    public VoyageDto findOne(long id) {
         final Voyage voyage = voyageRepository.findOne(id);
         return fromVoyageToDTO(voyage);
     }

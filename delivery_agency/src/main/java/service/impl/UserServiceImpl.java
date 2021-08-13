@@ -2,27 +2,42 @@ package service.impl;
 
 import dto.AbstractBuildingDto;
 import dto.UserDto;
+import dto.WorkingPlaceType;
 import entity.AbstractBuilding;
 import entity.User;
 import lombok.extern.slf4j.Slf4j;
 import repository.UserRepository;
 import repository.impl.UserRepositoryImpl;
+import service.OrderProcessingPointService;
 import service.UserService;
+import service.WarehouseService;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
-import static util.ConvertUtil.*;
 
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
+    private final OrderProcessingPointService processingPointService = new OrderProcessingPointServiceImpl();
+    private final WarehouseService warehouseService = new WarehouseServiceImpl();
 
     @Override
-    public UserDto addUser(UserDto user) {
-        User save = userRepository.save(fromDtoToUser(user));
-        return fromUserToDto(save);
+    public User addUser(UserDto userDto) throws SQLException {
+        User user = User.builder().id(userDto.getId())
+                .name(userDto.getName())
+                .surname(userDto.getSurname())
+                .roles(userDto.getRoles())
+                .build();
+        if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
+            AbstractBuilding abstractBuilding = processingPointService.findOne(userDto.getWorkingPlace().getId());
+            user.setWorkingPlace(abstractBuilding);
+
+        } else if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
+            AbstractBuilding abstractBuilding = warehouseService.findOne(userDto.getWorkingPlace().getId());
+            user.setWorkingPlace(abstractBuilding);
+        }
+
+        return userRepository.save(user);
     }
 
     @Override
@@ -31,35 +46,38 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> findAllUsers() {
-        List<User> users = userRepository.findAll();
-        List<UserDto> resultUsers = new ArrayList<>();
-        for (User user : users) {
-            resultUsers.add(fromUserToDto(user));
-        }
-        return resultUsers;
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
-    public UserDto getUser(long id) {
-        return fromUserToDto(userRepository.findOne(id));
+    public User getUser(long id) {
+        return userRepository.findOne(id);
     }
 
     @Override
-    public UserDto update(UserDto user) throws SQLException {
-        return fromUserToDto(userRepository.update(fromDtoToUser(user)));
-    }
-
-    @Override
-    public UserDto changeWorkingPlace(UserDto userToUpdate, AbstractBuildingDto newWorkingPlace) {
-        User user = User.builder()
-                .id(userToUpdate.getId())
-                .name(userToUpdate.getName())
-                .surname(userToUpdate.getSurname())
-                .roles(userToUpdate.getRoles())
-                .workingPlace(fromDtoToAbstractBuilding(newWorkingPlace))
+    public User update(UserDto userDto) throws SQLException {
+        User user = User.builder().id(userDto.getId())
+                .name(userDto.getName())
+                .surname(userDto.getSurname())
+                .roles(userDto.getRoles())
                 .build();
 
-        return fromUserToDto(userRepository.update(user));
+        if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
+            AbstractBuilding abstractBuilding = processingPointService.findOne(userDto.getWorkingPlace().getId());
+            user.setWorkingPlace(abstractBuilding);
+
+        } else if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
+            AbstractBuilding abstractBuilding = warehouseService.findOne(userDto.getWorkingPlace().getId());
+            user.setWorkingPlace(abstractBuilding);
+        }
+        return userRepository.update(user);
+    }
+
+    @Override
+    public User changeWorkingPlace(UserDto userToUpdate, AbstractBuildingDto newWorkingPlace) throws SQLException {
+        userToUpdate.setWorkingPlace(newWorkingPlace);
+
+        return update(userToUpdate);
     }
 }

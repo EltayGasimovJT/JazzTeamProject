@@ -12,6 +12,8 @@ import validator.OrderValidator;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import entity.OrderStateChangeType;
@@ -26,7 +28,6 @@ public class OrderServiceImpl implements OrderService {
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
 
-
     @Override
     public OrderDto updateOrderCurrentLocation(long id, AbstractBuildingDto newLocation) {
         Order order = orderRepository.findOne(id);
@@ -38,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderHistory(long id, OrderHistoryDto newHistory) {
         Order order = orderRepository.findOne(id);
-        order.setHistory(fromDtoToOrderHistory(newHistory));
+        order.setHistory(Collections.singletonList(fromDtoToOrderHistory(newHistory)));
         orderRepository.update(order);
     }
 
@@ -54,7 +55,7 @@ public class OrderServiceImpl implements OrderService {
                 .changingTime(order.getSendingTime())
                 .user(User.builder().build())
                 .build();
-        order.setHistory(fromOrderHistoryToDto(orderHistory));
+        order.setHistory(Arrays.asList(fromOrderHistoryToDto(orderHistory)));
         return fromOrderToDto(orderRepository.save(fromDtoToOrder(order)));
     }
 
@@ -287,8 +288,8 @@ public class OrderServiceImpl implements OrderService {
                 .parcelSizeLimit(40)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(firstCoefficient);
-        priceCalculationRuleService.addPriceCalculationRule(secondCoefficient);
+        priceCalculationRuleService.save(firstCoefficient);
+        priceCalculationRuleService.save(secondCoefficient);
 
         if (processingPointDto.getLocation().equals(russia)) {
             coefficientForPriceCalculation = priceCalculationRuleService.findByCountry(russia);

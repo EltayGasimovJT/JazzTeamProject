@@ -18,7 +18,7 @@ public class Order {
     private BigDecimal price;
     private OrderProcessingPoint destinationPlace;
     private AbstractBuilding currentLocation;
-    private OrderHistory history;
+    private List<OrderHistory> history;
     private Calendar sendingTime;
     private List<AbstractLocation> route;
 }

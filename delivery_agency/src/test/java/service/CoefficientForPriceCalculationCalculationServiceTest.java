@@ -1,12 +1,10 @@
 package service;
 
 import dto.CoefficientForPriceCalculationDto;
-import entity.CoefficientForPriceCalculation;
 import entity.Order;
 import entity.OrderProcessingPoint;
 import entity.ParcelParameters;
 import lombok.SneakyThrows;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -102,9 +100,9 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(expectedCoefficient);
+        priceCalculationRuleService.save(expectedCoefficient);
 
-        CoefficientForPriceCalculationDto actualCoefficient = priceCalculationRuleService.getCoefficient(1L);
+        CoefficientForPriceCalculationDto actualCoefficient = priceCalculationRuleService.findOne(1L);
         Assertions.assertEquals(expectedCoefficient, actualCoefficient);
     }
 
@@ -119,13 +117,13 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
+        priceCalculationRuleService.save(coefficientForPriceCalculation);
 
-        priceCalculationRuleService.deletePriceCalculationRule(coefficientForPriceCalculation.getId());
+        priceCalculationRuleService.delete(coefficientForPriceCalculation.getId());
 
         int expectedSize = 0;
 
-        int actualSize = priceCalculationRuleService.findAllPriceCalculationRules().size();
+        int actualSize = priceCalculationRuleService.findAll().size();
         Assertions.assertEquals(expectedSize, actualSize);
     }
 
@@ -138,11 +136,11 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
+        priceCalculationRuleService.save(coefficientForPriceCalculation);
 
         int expectedSize = 1;
 
-        int actualSize = priceCalculationRuleService.findAllPriceCalculationRules().size();
+        int actualSize = priceCalculationRuleService.findAll().size();
 
         Assertions.assertEquals(expectedSize, actualSize);
     }
@@ -156,9 +154,9 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.addPriceCalculationRule(expectedCoefficient);
+        priceCalculationRuleService.save(expectedCoefficient);
 
-        CoefficientForPriceCalculationDto actualCoefficient = priceCalculationRuleService.getCoefficient(1);
+        CoefficientForPriceCalculationDto actualCoefficient = priceCalculationRuleService.findOne(1);
 
         Assertions.assertEquals(expectedCoefficient, actualCoefficient);
     }
@@ -172,7 +170,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.addPriceCalculationRule(coefficientForPriceCalculation);
+        priceCalculationRuleService.save(coefficientForPriceCalculation);
 
         coefficientForPriceCalculation.setParcelSizeLimit(52);
 

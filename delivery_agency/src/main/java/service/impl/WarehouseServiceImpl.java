@@ -17,17 +17,17 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final WareHouseRepository wareHouseRepository = new WarehouseRepositoryImpl();
 
     @Override
-    public WarehouseDto addWarehouse(WarehouseDto warehouse) {
+    public Warehouse save(WarehouseDto warehouse) {
         return fromWarehouseToDTO(wareHouseRepository.save(fromDtoToWarehouse(warehouse)));
     }
 
     @Override
-    public void deleteWarehouse(Long id) {
+    public void delete(Long id) {
         wareHouseRepository.delete(id);
     }
 
     @Override
-    public List<WarehouseDto> findAllWarehouses() {
+    public List<Warehouse> findAll() {
         List<Warehouse> warehouses = wareHouseRepository.findAll();
         List<WarehouseDto> warehouseDtos = new ArrayList<>();
 
@@ -38,13 +38,13 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public WarehouseDto getWarehouse(long id) {
-        return fromWarehouseToDTO(wareHouseRepository.findOne(id));
+    public Warehouse findOne(long id) {
+        return wareHouseRepository.findOne(id));
     }
 
     @Override
-    public WarehouseDto update(WarehouseDto warehouse) throws SQLException {
-        return fromWarehouseToDTO(wareHouseRepository.update(fromDtoToWarehouse(warehouse)));
-    }
+    public Warehouse update(WarehouseDto warehouse) throws SQLException {
 
+        return wareHouseRepository.update();
+    }
 }

@@ -2,51 +2,61 @@ package service.impl;
 
 import dto.OrderProcessingPointDto;
 import entity.OrderProcessingPoint;
+import org.modelmapper.ModelMapper;
 import repository.OrderProcessingPointRepository;
 import repository.impl.OrderProcessingPointRepositoryImpl;
 import service.OrderProcessingPointService;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-
-import static util.ConvertUtil.fromDtoToOrderProcessingPoint;
-import static util.ConvertUtil.fromOrderProcessingPointToDTO;
 
 public class OrderProcessingPointServiceImpl implements OrderProcessingPointService {
     private final OrderProcessingPointRepository orderProcessingPointRepository = new OrderProcessingPointRepositoryImpl();
 
     @Override
-    public OrderProcessingPointDto addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) {
-        OrderProcessingPoint orderProcessingPoint = fromDtoToOrderProcessingPoint(orderProcessingPointDto);
-        return fromOrderProcessingPointToDTO(orderProcessingPointRepository.save(orderProcessingPoint));
+
+    public OrderProcessingPoint save(OrderProcessingPointDto orderProcessingPointDto) {
+        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        orderProcessingPoint.setId(orderProcessingPointDto.getId());
+        orderProcessingPoint.setLocation(orderProcessingPointDto.getLocation());
+        orderProcessingPoint.setWarehouse(orderProcessingPoint.getWarehouse());
+        orderProcessingPoint.setExpectedOrders(orderProcessingPoint.getExpectedOrders());
+        orderProcessingPoint.setDispatchedOrders(orderProcessingPoint.getDispatchedOrders());
+        return orderProcessingPointRepository.save(orderProcessingPoint);
     }
 
     @Override
-    public void deleteOrderProcessingPoint(Long id) {
+    public void delete(Long id) {
         orderProcessingPointRepository.delete(id);
     }
 
     @Override
-    public List<OrderProcessingPointDto> findAllOrderProcessingPoints() {
+    public List<OrderProcessingPoint> findAll() {
         List<OrderProcessingPoint> processingPoints = orderProcessingPointRepository.findAll();
-        List<OrderProcessingPointDto> processingPointDto = new ArrayList<>();
-        for (OrderProcessingPoint processingPoint : processingPoints) {
-            OrderProcessingPointDto orderProcessingPointDto = fromOrderProcessingPointToDTO(processingPoint);
-            processingPointDto.add(orderProcessingPointDto);
+        if (processingPoints.isEmpty()) {
+            throw new IllegalArgumentException("There is no processing Points in database!!!");
         }
-        return processingPointDto;
+        return processingPoints;
     }
 
     @Override
-    public OrderProcessingPointDto getOrderProcessingPoint(long id) {
-        return fromOrderProcessingPointToDTO(orderProcessingPointRepository.findOne(id));
+    public OrderProcessingPoint findOne(long id) {
+        final OrderProcessingPoint processingPointFromRepository = orderProcessingPointRepository.findOne(id);
+        if (processingPointFromRepository == null) {
+            throw new IllegalArgumentException("There is no processing Point wih such Id!!!");
+        }
+        return processingPointFromRepository;
     }
 
     @Override
-    public OrderProcessingPointDto update(OrderProcessingPointDto orderProcessingPointDto) throws SQLException {
-        OrderProcessingPoint update = orderProcessingPointRepository.update(fromDtoToOrderProcessingPoint(orderProcessingPointDto));
-        return fromOrderProcessingPointToDTO(update);
+    public OrderProcessingPoint update(OrderProcessingPointDto orderProcessingPointDto) throws SQLException {
+        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        orderProcessingPoint.setId(orderProcessingPointDto.getId());
+        orderProcessingPoint.setLocation(orderProcessingPointDto.getLocation());
+        orderProcessingPoint.setWarehouse(orderProcessingPoint.getWarehouse());
+        orderProcessingPoint.setExpectedOrders(orderProcessingPoint.getExpectedOrders());
+        orderProcessingPoint.setDispatchedOrders(orderProcessingPoint.getDispatchedOrders());
+        return orderProcessingPointRepository.update(orderProcessingPoint);
     }
 
 }

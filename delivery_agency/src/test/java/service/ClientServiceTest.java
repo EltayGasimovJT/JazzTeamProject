@@ -69,7 +69,7 @@ class ClientServiceTest {
 
         clientService.delete(thirdClient.getId());
 
-        List<ClientDto> allClients = clientService.findAllClients();
+        List<ClientDto> allClients = clientService.findAll();
 
 
         Assertions.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
@@ -85,7 +85,7 @@ class ClientServiceTest {
         secondClient.setId(clientService.save(secondClient).getId());
         thirdClient.setId(clientService.save(thirdClient).getId());
 
-        List<ClientDto> actualClients = clientService.findAllClients();
+        List<ClientDto> actualClients = clientService.findAll();
 
 
         Assertions.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);

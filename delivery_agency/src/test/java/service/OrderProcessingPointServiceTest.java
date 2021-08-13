@@ -2,7 +2,6 @@ package service;
 
 import dto.OrderProcessingPointDto;
 import dto.WarehouseDto;
-import entity.Warehouse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -46,9 +45,9 @@ class OrderProcessingPointServiceTest {
     @ParameterizedTest
     @MethodSource("testOrderProcessingPoints")
     void addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPoint, String expectedLocation) {
-        orderProcessingPointService.addOrderProcessingPoint(orderProcessingPoint);
+        orderProcessingPointService.save(orderProcessingPoint);
 
-        String actualLocation = orderProcessingPointService.getOrderProcessingPoint(orderProcessingPoint.getId()).getLocation();
+        String actualLocation = orderProcessingPointService.findOne(orderProcessingPoint.getId()).getLocation();
         Assertions.assertEquals(expectedLocation, actualLocation);
     }
 
@@ -66,13 +65,13 @@ class OrderProcessingPointServiceTest {
         thirdProcessingPoint.setId(3L);
         thirdProcessingPoint.setWarehouse(new WarehouseDto());
 
-        orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
-        orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
-        orderProcessingPointService.addOrderProcessingPoint(thirdProcessingPoint);
+        orderProcessingPointService.save(firstProcessingPoint);
+        orderProcessingPointService.save(secondProcessingPoint);
+        orderProcessingPointService.save(thirdProcessingPoint);
 
-        orderProcessingPointService.deleteOrderProcessingPoint(firstProcessingPoint.getId());
+        orderProcessingPointService.delete(firstProcessingPoint.getId());
 
-        List<OrderProcessingPointDto> actualProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
+        List<OrderProcessingPointDto> actualProcessingPoints = orderProcessingPointService.findAll();
 
         Assertions.assertEquals(Arrays.asList(secondProcessingPoint, thirdProcessingPoint)
                 , actualProcessingPoints);
@@ -87,11 +86,11 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPointDto thirdProcessingPoint = new OrderProcessingPointDto();
         thirdProcessingPoint.setWarehouse(new WarehouseDto());
 
-        orderProcessingPointService.addOrderProcessingPoint(firstProcessingPoint);
-        orderProcessingPointService.addOrderProcessingPoint(secondProcessingPoint);
-        orderProcessingPointService.addOrderProcessingPoint(thirdProcessingPoint);
+        orderProcessingPointService.save(firstProcessingPoint);
+        orderProcessingPointService.save(secondProcessingPoint);
+        orderProcessingPointService.save(thirdProcessingPoint);
 
-        List<OrderProcessingPointDto> actualOrderProcessingPoints = orderProcessingPointService.findAllOrderProcessingPoints();
+        List<OrderProcessingPointDto> actualOrderProcessingPoints = orderProcessingPointService.findAll();
 
         Assertions.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint, thirdProcessingPoint)
                 , actualOrderProcessingPoints);
@@ -111,11 +110,11 @@ class OrderProcessingPointServiceTest {
         expected.setWarehouse(new WarehouseDto());
 
 
-        orderProcessingPointService.addOrderProcessingPoint(processingPoint);
-        orderProcessingPointService.addOrderProcessingPoint(expected);
+        orderProcessingPointService.save(processingPoint);
+        orderProcessingPointService.save(expected);
 
 
-        OrderProcessingPointDto actual = orderProcessingPointService.getOrderProcessingPoint(2);
+        OrderProcessingPointDto actual = orderProcessingPointService.findOne(2);
 
         Assertions.assertEquals(expected, actual);
     }
@@ -127,7 +126,7 @@ class OrderProcessingPointServiceTest {
         expected.setLocation("Minsk");
         expected.setWarehouse(new WarehouseDto());
 
-        orderProcessingPointService.addOrderProcessingPoint(expected);
+        orderProcessingPointService.save(expected);
 
         String newLocation = "Homel";
 

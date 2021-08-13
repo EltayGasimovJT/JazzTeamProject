@@ -16,9 +16,9 @@ class WarehouseServiceTest {
         warehouse.setId(1L);
         String expected = "Minsk";
         warehouse.setLocation(expected);
-        warehouseService.addWarehouse(warehouse);
+        warehouseService.save(warehouse);
 
-        String actual = warehouseService.getWarehouse(warehouse.getId()).getLocation();
+        String actual = warehouseService.findOne(warehouse.getId()).getLocation();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -32,15 +32,15 @@ class WarehouseServiceTest {
         WarehouseDto thirdWarehouse = new WarehouseDto();
         thirdWarehouse.setId(3L);
 
-        warehouseService.addWarehouse(firstWarehouse);
-        warehouseService.addWarehouse(secondWarehouse);
-        warehouseService.addWarehouse(thirdWarehouse);
+        warehouseService.save(firstWarehouse);
+        warehouseService.save(secondWarehouse);
+        warehouseService.save(thirdWarehouse);
 
-        warehouseService.deleteWarehouse(secondWarehouse.getId());
+        warehouseService.delete(secondWarehouse.getId());
 
         int expected = 2;
 
-        int actual = warehouseService.findAllWarehouses().size();
+        int actual = warehouseService.findAll().size();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -51,13 +51,13 @@ class WarehouseServiceTest {
         WarehouseDto secondWarehouse = new WarehouseDto();
         WarehouseDto thirdWarehouse = new WarehouseDto();
 
-        warehouseService.addWarehouse(firstWarehouse);
-        warehouseService.addWarehouse(secondWarehouse);
-        warehouseService.addWarehouse(thirdWarehouse);
+        warehouseService.save(firstWarehouse);
+        warehouseService.save(secondWarehouse);
+        warehouseService.save(thirdWarehouse);
 
         int expected = 3;
 
-        int actual = warehouseService.findAllWarehouses().size();
+        int actual = warehouseService.findAll().size();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -69,9 +69,9 @@ class WarehouseServiceTest {
         String expected = "Vitebsk";
         warehouse.setLocation(expected);
 
-        warehouseService.addWarehouse(warehouse);
+        warehouseService.save(warehouse);
 
-        String actual = warehouseService.getWarehouse(warehouse.getId()).getLocation();
+        String actual = warehouseService.findOne(warehouse.getId()).getLocation();
 
         Assertions.assertEquals(expected, actual);
     }
@@ -82,7 +82,7 @@ class WarehouseServiceTest {
         expected.setId(1L);
         expected.setLocation("Vitebsk");
 
-        warehouseService.addWarehouse(expected);
+        warehouseService.save(expected);
 
         String newLocation = "Minsk";
 

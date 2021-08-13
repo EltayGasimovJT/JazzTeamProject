@@ -22,18 +22,18 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     private static final int INITIAL_WEIGHT = 20;
 
     @Override
-    public CoefficientForPriceCalculationDto addPriceCalculationRule(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
+    public CoefficientForPriceCalculationDto save(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) {
         CoefficientForPriceCalculation coefficientForPriceCalculation = fromDtoToCoefficientForPriceCalculation(coefficientForPriceCalculationDto);
         return fromCoefficientForPriceCalculationToDTO(priceCalculationRuleRepository.save(coefficientForPriceCalculation));
     }
 
     @Override
-    public void deletePriceCalculationRule(Long id) {
+    public void delete(Long id) {
         priceCalculationRuleRepository.delete(id);
     }
 
     @Override
-    public List<CoefficientForPriceCalculationDto> findAllPriceCalculationRules()  {
+    public List<CoefficientForPriceCalculationDto> findAll()  {
         List<CoefficientForPriceCalculation> coefficientsFromRepository = priceCalculationRuleRepository.findAll();
         List<CoefficientForPriceCalculationDto> coefficientForPriceCalculationDtos = new ArrayList<>();
         for (CoefficientForPriceCalculation coefficientForPriceCalculation : coefficientsFromRepository) {
@@ -49,7 +49,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public CoefficientForPriceCalculationDto getCoefficient(long id)  {
+    public CoefficientForPriceCalculationDto findOne(long id)  {
         return fromCoefficientForPriceCalculationToDTO(priceCalculationRuleRepository.findOne(id));
     }
 
