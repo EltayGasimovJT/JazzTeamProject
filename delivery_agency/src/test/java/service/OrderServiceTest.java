@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Stream;
 
+import static entity.OrderStates.READY_TO_SEND;
+
 class OrderServiceTest {
     private final OrderService orderService = new OrderServiceImpl();
 
@@ -138,9 +140,15 @@ class OrderServiceTest {
                 .destinationPlace(orderProcessingPoint)
                 .sender(ClientDto.builder().build())
                 .recipient(ClientDto.builder().build())
-                .price(BigDecimal.valueOf(1))
+                .price(BigDecimal.valueOf(64.0))
+                .state(OrderStateDto.builder()
+                        .state("READY_TO_SEND")
+                        .build())
                 .build();
 
+        expectedOrder.setHistory(OrderHistoryDto.builder()
+                .user(UserDto.builder().build())
+                .build());
         orderService.create(expectedOrder);
 
         OrderDto actualOrder = orderService.findById(1);
@@ -345,6 +353,10 @@ class OrderServiceTest {
                 .destinationPlace(firstProcessingPoint)
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(firstProcessingPoint)
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .currentLocation(new AbstractBuildingDto())
+                .recipient(ClientDto.builder().build())
                 .build();
 
         OrderDto secondOrder = OrderDto.builder()
@@ -359,6 +371,10 @@ class OrderServiceTest {
                 .sender(ClientDto.builder().build())
                 .recipient(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
+                .state(OrderStateDto.builder().build())
+                .history(OrderHistoryDto.builder().user(UserDto.builder().build()).build())
+                .currentLocation(new AbstractBuildingDto())
+                .recipient(ClientDto.builder().build())
                 .build();
 
         orderService.create(firstOrder);

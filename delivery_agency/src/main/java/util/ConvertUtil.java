@@ -31,7 +31,12 @@ public class ConvertUtil {
                 .id(order.getId())
                 .price(order.getPrice())
                 .sendingTime(order.getSendingTime())
+                .state(fromOrderStateToDto(order.getState()))
                 .parcelParameters(fromDtoToParcelParameters(order.getParcelParameters()))
+                .sender(fromClientToDto(order.getSender()))
+                .destinationPlace(fromOrderProcessingPointToDTO(order.getDestinationPlace()))
+                .history(fromOrderHistoryToDto(order.getHistory()))
+                .recipient(fromClientToDto(order.getRecipient()))
                 .build();
     }
 
@@ -45,16 +50,24 @@ public class ConvertUtil {
     }
 
     private static ParcelParameters fromParcelParametersToDto(ParcelParametersDto parcelParameters) {
-
-        return null;
+        return ParcelParameters.builder()
+                .height(parcelParameters.getHeight())
+                .weight(parcelParameters.getWeight())
+                .width(parcelParameters.getWidth())
+                .length(parcelParameters.getLength())
+                .build();
     }
 
     public static Order fromDtoToOrder(OrderDto orderDto) {
-        Order.OrderBuilder builder = Order.builder();
-        return builder
+        return Order.builder()
                 .id(orderDto.getId())
                 .price(orderDto.getPrice())
                 .parcelParameters(fromParcelParametersToDto(orderDto.getParcelParameters()))
+                .sender(fromDtoToClient(orderDto.getSender()))
+                .recipient(fromDtoToClient(orderDto.getRecipient()))
+                .destinationPlace(fromDtoToOrderProcessingPoint(orderDto.getDestinationPlace()))
+                .history(fromDtoToOrderState(orderDto.getHistory()))
+                .state(fromDtoToOrderState(orderDto.getState()))
                 .sendingTime(orderDto.getSendingTime())
                 .build();
     }
@@ -190,16 +203,14 @@ public class ConvertUtil {
     public static OrderHistoryDto fromOrderHistoryToDto(OrderHistory history){
         return OrderHistoryDto.builder()
                 .changingTime(history.getChangingTime())
-                .order(fromOrderToDto(history.getOrder()))
                 .comment(history.getComment())
                 .user(fromUserToDto(history.getUser()))
                 .build();
     }
 
-    public static OrderHistory fromDtoToOrderHistory(OrderHistoryDto historyDto){
+    public static OrderHistory fromDtoToOrderState(OrderHistoryDto historyDto){
         return OrderHistory.builder()
                 .changingTime(historyDto.getChangingTime())
-                .order(fromDtoToOrder(historyDto.getOrder()))
                 .comment(historyDto.getComment())
                 .user(fromDtoToUser(historyDto.getUser()))
                 .build();
@@ -212,7 +223,7 @@ public class ConvertUtil {
                 .build();
     }
 
-    public static OrderState fromDtoToOrderHistory(OrderStateDto stateDto){
+    public static OrderState fromDtoToOrderState(OrderStateDto stateDto){
         return OrderState.builder()
                 .id(stateDto.getId())
                 .state(stateDto.getState())

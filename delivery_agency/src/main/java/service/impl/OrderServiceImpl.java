@@ -52,9 +52,9 @@ public class OrderServiceImpl implements OrderService {
         order.setPrice(price);
         order.setState(fromOrderStateToDto(orderState));
         OrderHistory orderHistory = OrderHistory.builder()
-                .order(fromDtoToOrder(order))
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .changingTime(order.getSendingTime())
+                .user(User.builder().build())
                 .build();
         order.setHistory(fromOrderHistoryToDto(orderHistory));
         return fromOrderToDto(orderRepository.save(fromDtoToOrder(order)));
@@ -94,7 +94,10 @@ public class OrderServiceImpl implements OrderService {
             } else {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString());
                 AbstractBuilding abstractBuilding = new Warehouse();
-                abstractBuilding.setLocation("Delivering From + " + order.getCurrentLocation().getLocation() + " to " + order.getDestinationPlace().getWarehouse().getLocation());
+                abstractBuilding.setLocation("Delivering From + "
+                        + order.getCurrentLocation().getLocation()
+                        + " to "
+                        + order.getDestinationPlace().getWarehouse().getLocation());
                 order.setCurrentLocation(abstractBuilding);
             }
             if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPointDto) {
