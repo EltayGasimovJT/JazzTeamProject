@@ -8,7 +8,8 @@ import java.util.List;
 
 public class ConvertUtil {
 
-    private ConvertUtil(){}
+    private ConvertUtil() {
+    }
 
     public static OrderProcessingPointDto fromOrderProcessingPointToDTO(OrderProcessingPoint orderProcessingPoint) {
         final OrderProcessingPointDto processingPointDto = new OrderProcessingPointDto();
@@ -72,7 +73,7 @@ public class ConvertUtil {
                 .build();
     }
 
-    public static List<Order> fromDtosToOrders(List<OrderDto> orderDtos){
+    public static List<Order> fromDtosToOrders(List<OrderDto> orderDtos) {
         List<Order> orders = new ArrayList<>();
 
         for (OrderDto orderDto : orderDtos) {
@@ -81,7 +82,7 @@ public class ConvertUtil {
         return orders;
     }
 
-    public static List<OrderDto> fromOrdersToDtos(List<Order> orders){
+    public static List<OrderDto> fromOrdersToDtos(List<Order> orders) {
         List<OrderDto> orderDtos = new ArrayList<>();
 
         for (Order order : orders) {
@@ -95,9 +96,43 @@ public class ConvertUtil {
                 .id(user.getId())
                 .name(user.getName())
                 .surname(user.getSurname())
-                .workingPlace(user.getWorkingPlace())
+                .workingPlace(fromAbstractBuildingToDto(user.getWorkingPlace()))
                 .roles(user.getRoles())
                 .build();
+    }
+
+    private static AbstractBuildingDto fromAbstractBuildingToDto(AbstractBuilding workingPlace) {
+        if (workingPlace instanceof OrderProcessingPoint) {
+            OrderProcessingPointDto abstractBuildingDto = new OrderProcessingPointDto();
+            abstractBuildingDto.setLocation(workingPlace.getLocation());
+            abstractBuildingDto.setId(workingPlace.getId());
+            abstractBuildingDto.setWarehouse(((OrderProcessingPoint) workingPlace).getWarehouse());
+            return abstractBuildingDto;
+        } else if (workingPlace instanceof Warehouse) {
+            WarehouseDto abstractBuildingDto = new WarehouseDto();
+            abstractBuildingDto.setId(workingPlace.getId());
+            abstractBuildingDto.setLocation(workingPlace.getLocation());
+            abstractBuildingDto.setOrderProcessingPoints(fromProcessingPointsToDtos(((Warehouse) workingPlace).getOrderProcessingPoints()));
+            return abstractBuildingDto;
+        }
+        return null;
+    }
+
+    private static AbstractBuilding fromDtoToAbstractBuilding(AbstractBuildingDto workingPlace) {
+        if (workingPlace instanceof OrderProcessingPointDto) {
+            OrderProcessingPoint abstractBuilding = new OrderProcessingPoint();
+            abstractBuilding.setLocation(workingPlace.getLocation());
+            abstractBuilding.setId(workingPlace.getId());
+            abstractBuilding.setWarehouse(((OrderProcessingPointDto) workingPlace).getWarehouse());
+            return abstractBuilding;
+        } else if (workingPlace instanceof WarehouseDto) {
+            Warehouse abstractBuilding = new Warehouse();
+            abstractBuilding.setId(workingPlace.getId());
+            abstractBuilding.setLocation(workingPlace.getLocation());
+            abstractBuilding.setOrderProcessingPoints(fromDtosToProcessingPoints(((WarehouseDto) workingPlace).getOrderProcessingPoints()));
+            return abstractBuilding;
+        }
+        return null;
     }
 
     public static User fromDtoToUser(UserDto userDto) {
@@ -106,7 +141,7 @@ public class ConvertUtil {
                 .name(userDto.getName())
                 .surname(userDto.getSurname())
                 .roles(userDto.getRoles())
-                .workingPlace(userDto.getWorkingPlace())
+                .workingPlace(fromDtoToAbstractBuilding(userDto.getWorkingPlace()))
                 .build();
     }
 
@@ -182,7 +217,7 @@ public class ConvertUtil {
                 .build();
     }
 
-    public static List<OrderProcessingPoint> fromDtosToProcessingPoints(List<OrderProcessingPointDto> processingPointDtos){
+    public static List<OrderProcessingPoint> fromDtosToProcessingPoints(List<OrderProcessingPointDto> processingPointDtos) {
         List<OrderProcessingPoint> processingPoints = new ArrayList<>();
 
         for (OrderProcessingPointDto processingPointDto : processingPointDtos) {
@@ -192,7 +227,7 @@ public class ConvertUtil {
         return processingPoints;
     }
 
-    public static List<OrderProcessingPointDto> fromProcessingPointsToDtos(List<OrderProcessingPoint> processingPoints){
+    public static List<OrderProcessingPointDto> fromProcessingPointsToDtos(List<OrderProcessingPoint> processingPoints) {
         List<OrderProcessingPointDto> processingPointsDtos = new ArrayList<>();
 
         for (OrderProcessingPoint processingPoint : processingPoints) {
@@ -202,7 +237,7 @@ public class ConvertUtil {
         return processingPointsDtos;
     }
 
-    public static OrderHistoryDto fromOrderHistoryToDto(OrderHistory history){
+    public static OrderHistoryDto fromOrderHistoryToDto(OrderHistory history) {
         return OrderHistoryDto.builder()
                 .changingTime(history.getChangingTime())
                 .comment(history.getComment())
@@ -210,7 +245,7 @@ public class ConvertUtil {
                 .build();
     }
 
-    public static OrderHistory fromDtoToOrderHistory(OrderHistoryDto historyDto){
+    public static OrderHistory fromDtoToOrderHistory(OrderHistoryDto historyDto) {
         return OrderHistory.builder()
                 .changingTime(historyDto.getChangingTime())
                 .comment(historyDto.getComment())
@@ -218,14 +253,14 @@ public class ConvertUtil {
                 .build();
     }
 
-    public static OrderStateDto fromOrderStateToDto(OrderState state){
+    public static OrderStateDto fromOrderStateToDto(OrderState state) {
         return OrderStateDto.builder()
                 .id(state.getId())
                 .state(state.getState())
                 .build();
     }
 
-    public static OrderState fromDtoToOrderHistory(OrderStateDto stateDto){
+    public static OrderState fromDtoToOrderHistory(OrderStateDto stateDto) {
         return OrderState.builder()
                 .id(stateDto.getId())
                 .state(stateDto.getState())
