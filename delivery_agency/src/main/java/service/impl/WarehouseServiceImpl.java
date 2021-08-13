@@ -18,8 +18,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public WarehouseDto addWarehouse(WarehouseDto warehouse) {
-        Warehouse save = wareHouseRepository.save(fromDtoToWarehouse(warehouse));
-        return fromWarehouseToDTO(save);
+        return fromWarehouseToDTO(wareHouseRepository.save(fromDtoToWarehouse(warehouse)));
     }
 
     @Override
@@ -40,14 +39,12 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public WarehouseDto getWarehouse(long id) {
-        final Warehouse warehouse = wareHouseRepository.findOne(id);
-        return fromWarehouseToDTO(warehouse);
+        return fromWarehouseToDTO(wareHouseRepository.findOne(id));
     }
 
     @Override
     public WarehouseDto update(WarehouseDto warehouse) throws SQLException {
-        final Warehouse update = wareHouseRepository.update(fromDtoToWarehouse(warehouse));
-        return fromWarehouseToDTO(update);
+        return fromWarehouseToDTO(wareHouseRepository.update(fromDtoToWarehouse(warehouse)));
     }
 
 }

@@ -35,13 +35,13 @@ public class CoefficientForPriceCalculationRepositoryImpl implements Coefficient
 
     @Override
     public CoefficientForPriceCalculation update(CoefficientForPriceCalculation update){
-        CoefficientForPriceCalculation actual = findOne(update.getId());
-        coefficientForPriceCalculations.remove(actual);
-        actual.setCountry(update.getCountry());
-        actual.setParcelSizeLimit(update.getParcelSizeLimit());
-        actual.setCountryCoefficient(update.getCountryCoefficient());
-        coefficientForPriceCalculations.add(actual);
-        return actual;
+        CoefficientForPriceCalculation coefficientForPriceCalculation = findOne(update.getId());
+        coefficientForPriceCalculations.remove(coefficientForPriceCalculation);
+        coefficientForPriceCalculation.setCountry(update.getCountry());
+        coefficientForPriceCalculation.setParcelSizeLimit(update.getParcelSizeLimit());
+        coefficientForPriceCalculation.setCountryCoefficient(update.getCountryCoefficient());
+        coefficientForPriceCalculations.add(coefficientForPriceCalculation);
+        return coefficientForPriceCalculation;
     }
 
     @Override

@@ -35,14 +35,14 @@ public class VoyageRepositoryImpl implements VoyageRepository {
 
     @Override
     public Voyage update(Voyage update) {
-        Voyage actual = findOne(update.getId());
-        voyages.remove(actual);
-        actual.setDeparturePoint(update.getDeparturePoint());
-        actual.setDestinationPoint(update.getDestinationPoint());
-        actual.setSendingTime(update.getSendingTime());
-        actual.setDispatchedOrders(update.getDispatchedOrders());
-        actual.setExpectedOrders(update.getExpectedOrders());
-        voyages.add(actual);
-        return actual;
+        Voyage voyage = findOne(update.getId());
+        voyages.remove(voyage);
+        voyage.setDeparturePoint(update.getDeparturePoint());
+        voyage.setDestinationPoint(update.getDestinationPoint());
+        voyage.setSendingTime(update.getSendingTime());
+        voyage.setDispatchedOrders(update.getDispatchedOrders());
+        voyage.setExpectedOrders(update.getExpectedOrders());
+        voyages.add(voyage);
+        return voyage;
     }
 }

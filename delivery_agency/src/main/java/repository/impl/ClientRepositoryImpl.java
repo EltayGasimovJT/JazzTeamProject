@@ -29,16 +29,16 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     @Override
     public Client update(Client update) {
-        Client actual = findOne(update.getId());
-        clients.remove(actual);
-        actual.setId(update.getId());
-        actual.setName(update.getName());
-        actual.setSurname(update.getSurname());
-        actual.setOrders(update.getOrders());
-        actual.setPassportId(update.getPassportId());
-        actual.setPhoneNumber(update.getPhoneNumber());
-        clients.add(actual);
-        return actual;
+        Client client = findOne(update.getId());
+        clients.remove(client);
+        client.setId(update.getId());
+        client.setName(update.getName());
+        client.setSurname(update.getSurname());
+        client.setOrders(update.getOrders());
+        client.setPassportId(update.getPassportId());
+        client.setPhoneNumber(update.getPhoneNumber());
+        clients.add(client);
+        return client;
     }
 
     @Override

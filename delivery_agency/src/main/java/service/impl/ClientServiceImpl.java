@@ -24,14 +24,14 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientDto> findAllClients() {
-        List<ClientDto> resultClients = new ArrayList<>();
+        List<ClientDto> resultClientDtos = new ArrayList<>();
 
-        List<Client> clients = new ArrayList<>(clientRepository.findAll());
-        for (Client client : clients) {
-            resultClients.add(fromClientToDto(client));
+        List<Client> resultClients = new ArrayList<>(clientRepository.findAll());
+        for (Client client : resultClients) {
+            resultClientDtos.add(fromClientToDto(client));
         }
 
-        return resultClients;
+        return resultClientDtos;
     }
 
     @Override
@@ -42,33 +42,31 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDto findByPassportId(String passportId) {
-        ClientDto byPassportIdDto = ClientDto.builder().build();
+        ClientDto resultClientDto = ClientDto.builder().build();
         Client clientByPassportId;
         clientByPassportId = clientRepository.findByPassportId(passportId);
-        byPassportIdDto.setId(clientByPassportId.getId());
-        byPassportIdDto.setName(clientByPassportId.getName());
-        byPassportIdDto.setSurname(clientByPassportId.getSurname());
-        byPassportIdDto.setPassportId(clientByPassportId.getPassportId());
-        byPassportIdDto.setPhoneNumber(clientByPassportId.getPhoneNumber());
-        return byPassportIdDto;
+        resultClientDto.setId(clientByPassportId.getId());
+        resultClientDto.setName(clientByPassportId.getName());
+        resultClientDto.setSurname(clientByPassportId.getSurname());
+        resultClientDto.setPassportId(clientByPassportId.getPassportId());
+        resultClientDto.setPhoneNumber(clientByPassportId.getPhoneNumber());
+        return resultClientDto;
     }
 
     @Override
     public ClientDto save(ClientDto clientDTO) {
-        Client client = fromDtoToClient(clientDTO);
+        Client savedClient = fromDtoToClient(clientDTO);
 
-        client.setId(clientRepository.save(client).getId());
+        savedClient.setId(clientRepository.save(savedClient).getId());
 
-        clientDTO.setId(client.getId());
+        clientDTO.setId(savedClient.getId());
         return clientDTO;
     }
 
     @Override
     public ClientDto update(ClientDto clientDto) {
-        Client client = fromDtoToClient(clientDto);
-        Client updateOnDB;
+        Client updatedClient = fromDtoToClient(clientDto);
 
-        updateOnDB = clientRepository.update(client);
-        return fromClientToDto(updateOnDB);
+        return fromClientToDto(clientRepository.update(updatedClient));
     }
 }

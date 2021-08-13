@@ -67,19 +67,19 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     public Order update(Order update) {
-        Order actual = findOne(update.getId());
-        orders.remove(actual);
-        actual.setHistory(update.getHistory());
-        actual.setState(update.getState());
-        actual.setCurrentLocation(update.getCurrentLocation());
-        actual.setDestinationPlace(update.getDestinationPlace());
-        actual.setParcelParameters(update.getParcelParameters());
-        actual.setRecipient(update.getRecipient());
-        actual.setSender(update.getSender());
-        actual.setSendingTime(update.getSendingTime());
-        actual.setPrice(update.getPrice());
-        actual.setRoute(update.getRoute());
-        orders.add(actual);
-        return actual;
+        Order order = findOne(update.getId());
+        orders.remove(order);
+        order.setHistory(update.getHistory());
+        order.setState(update.getState());
+        order.setCurrentLocation(update.getCurrentLocation());
+        order.setDestinationPlace(update.getDestinationPlace());
+        order.setParcelParameters(update.getParcelParameters());
+        order.setRecipient(update.getRecipient());
+        order.setSender(update.getSender());
+        order.setSendingTime(update.getSendingTime());
+        order.setPrice(update.getPrice());
+        order.setRoute(update.getRoute());
+        orders.add(order);
+        return order;
     }
 }

@@ -35,14 +35,14 @@ public class WarehouseRepositoryImpl implements WareHouseRepository {
 
     @Override
     public Warehouse update(Warehouse update)  {
-        Warehouse actual = findOne(update.getId());
-        warehouses.remove(actual);
-        actual.setLocation(update.getLocation());
-        actual.setConnectedWarehouses(update.getConnectedWarehouses());
-        actual.setOrderProcessingPoints(update.getOrderProcessingPoints());
-        actual.setDispatchedOrders(update.getDispatchedOrders());
-        actual.setExpectedOrders(update.getExpectedOrders());
-        warehouses.add(actual);
-        return actual;
+        Warehouse warehouse = findOne(update.getId());
+        warehouses.remove(warehouse);
+        warehouse.setLocation(update.getLocation());
+        warehouse.setConnectedWarehouses(update.getConnectedWarehouses());
+        warehouse.setOrderProcessingPoints(update.getOrderProcessingPoints());
+        warehouse.setDispatchedOrders(update.getDispatchedOrders());
+        warehouse.setExpectedOrders(update.getExpectedOrders());
+        warehouses.add(warehouse);
+        return warehouse;
     }
 }

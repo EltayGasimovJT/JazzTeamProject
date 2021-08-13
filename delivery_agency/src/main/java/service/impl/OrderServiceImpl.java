@@ -32,8 +32,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findOne(id);
         OrderDto orderDto = fromOrderToDto(order);
         orderDto.setCurrentLocation(newLocation);
-        Order updatedOrder = orderRepository.update(fromDtoToOrder(orderDto));
-        return fromOrderToDto(updatedOrder);
+        return fromOrderToDto(orderRepository.update(fromDtoToOrder(orderDto)));
     }
 
     @Override
@@ -76,8 +75,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public AbstractBuildingDto getCurrentOrderLocation(long id) {
-        OrderDto order = fromOrderToDto(orderRepository.findOne(id));
-        return order.getCurrentLocation();
+        return fromOrderToDto(orderRepository.findOne(id)).getCurrentLocation();
     }
 
     @Override
@@ -105,15 +103,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderDto> accept(List<OrderDto> orders) {
+    public List<OrderDto> accept(List<OrderDto> acceptedOrders) {
         List<Order> ordersToAccept = new ArrayList<>();
-        for (OrderDto order : orders) {
+        for (OrderDto order : acceptedOrders) {
             ordersToAccept.add(fromDtoToOrder(order));
         }
 
-        List<Order> acceptedOrders = orderRepository.acceptOrders(ordersToAccept);
+        List<Order> ordersFromRepository = orderRepository.acceptOrders(ordersToAccept);
 
-        List<OrderDto> orderDtos = fromOrdersToDtos(acceptedOrders);
+        List<OrderDto> orderDtos = fromOrdersToDtos(ordersFromRepository);
 
         for (OrderDto orderDto : orderDtos) {
             log.info(orderDto.toString());
@@ -131,8 +129,8 @@ public class OrderServiceImpl implements OrderService {
 
         List<OrderDto> acceptedOrdersDto = new ArrayList<>();
 
-        for (Order acceptedOrder : acceptedOrders) {
-            acceptedOrdersDto.add(fromOrderToDto(acceptedOrder));
+        for (Order order : ordersFromRepository) {
+            acceptedOrdersDto.add(fromOrderToDto(order));
         }
 
         return acceptedOrdersDto;
@@ -160,12 +158,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> findAll() throws SQLException {
         List<Order> orders = orderRepository.findAll();
-        List<OrderDto> orderDtos = new ArrayList<>();
+        List<OrderDto> resultOrderDtos = new ArrayList<>();
 
         for (Order order : orders) {
-            orderDtos.add(fromOrderToDto(order));
+            resultOrderDtos.add(fromOrderToDto(order));
         }
-        return orderDtos;
+        return resultOrderDtos;
     }
 
     @Override

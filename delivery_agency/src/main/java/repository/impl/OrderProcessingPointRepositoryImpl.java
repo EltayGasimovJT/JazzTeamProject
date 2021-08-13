@@ -35,13 +35,13 @@ public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointR
 
     @Override
     public OrderProcessingPoint update(OrderProcessingPoint update)  {
-        OrderProcessingPoint actual = findOne(update.getId());
-        processingPoints.remove(actual);
-        actual.setWarehouse(update.getWarehouse());
-        actual.setDispatchedOrders(update.getDispatchedOrders());
-        actual.setLocation(update.getLocation());
-        actual.setExpectedOrders(update.getExpectedOrders());
-        processingPoints.add(actual);
-        return actual;
+        OrderProcessingPoint orderProcessingPoint = findOne(update.getId());
+        processingPoints.remove(orderProcessingPoint);
+        orderProcessingPoint.setWarehouse(update.getWarehouse());
+        orderProcessingPoint.setDispatchedOrders(update.getDispatchedOrders());
+        orderProcessingPoint.setLocation(update.getLocation());
+        orderProcessingPoint.setExpectedOrders(update.getExpectedOrders());
+        processingPoints.add(orderProcessingPoint);
+        return orderProcessingPoint;
     }
 }

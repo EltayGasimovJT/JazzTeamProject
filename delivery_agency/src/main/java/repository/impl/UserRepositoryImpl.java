@@ -35,13 +35,13 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User update(User update) {
-        User actual = findOne(update.getId());
-        users.remove(actual);
-        actual.setName(update.getName());
-        actual.setSurname(update.getSurname());
-        actual.setWorkingPlace(update.getWorkingPlace());
-        actual.setRoles(update.getRoles());
-        users.add(actual);
-        return actual;
+        User workingPlace = findOne(update.getId());
+        users.remove(workingPlace);
+        workingPlace.setName(update.getName());
+        workingPlace.setSurname(update.getSurname());
+        workingPlace.setWorkingPlace(update.getWorkingPlace());
+        workingPlace.setRoles(update.getRoles());
+        users.add(workingPlace);
+        return workingPlace;
     }
 }

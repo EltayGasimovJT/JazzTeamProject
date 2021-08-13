@@ -33,11 +33,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDto> findAllUsers() {
         List<User> users = userRepository.findAll();
-        List<UserDto> userDtos = new ArrayList<>();
+        List<UserDto> resultUsers = new ArrayList<>();
         for (User user : users) {
-            userDtos.add(fromUserToDto(user));
+            resultUsers.add(fromUserToDto(user));
         }
-        return userDtos;
+        return resultUsers;
     }
 
     @Override
@@ -47,8 +47,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto user) throws SQLException {
-        User update = userRepository.update(fromDtoToUser(user));
-        return fromUserToDto(update);
+        return fromUserToDto(userRepository.update(fromDtoToUser(user)));
     }
 
     @Override
@@ -60,8 +59,7 @@ public class UserServiceImpl implements UserService {
                 .roles(userToUpdate.getRoles())
                 .workingPlace(fromDtoToAbstractBuilding(newWorkingPlace))
                 .build();
-        User update = userRepository.update(user);
 
-        return fromUserToDto(update);
+        return fromUserToDto(userRepository.update(user));
     }
 }

@@ -97,6 +97,4 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
                 * order.getParcelParameters().getHeight()
                 * order.getParcelParameters().getWidth()) + order.getParcelParameters().getWeight();
     }
-
-
 }
