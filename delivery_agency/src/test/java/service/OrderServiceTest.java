@@ -1,6 +1,7 @@
 package service;
 
 import dto.*;
+import entity.AbstractLocation;
 import entity.Order;
 import entity.OrderHistory;
 import lombok.SneakyThrows;
@@ -9,8 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import service.impl.OrderServiceImpl;
+import util.ConverterUtil;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -38,6 +41,7 @@ class OrderServiceTest {
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .recipient(ClientDto.builder().build())
+                .currentLocation(new OrderProcessingPointDto())
                 .destinationPlace(processingPointToTest)
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
@@ -56,6 +60,7 @@ class OrderServiceTest {
                 .destinationPlace(processingPointToTest)
                 .sender(ClientDto.builder().build())
                 .recipient(ClientDto.builder().build())
+                .currentLocation(new OrderProcessingPointDto())
                 .price(BigDecimal.valueOf(1))
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
@@ -162,6 +167,7 @@ class OrderServiceTest {
                 .destinationPlace(orderProcessingPoint)
                 .sender(ClientDto.builder().build())
                 .recipient(ClientDto.builder().build())
+                .currentLocation(new OrderProcessingPointDto())
                 .price(BigDecimal.valueOf(64.0))
                 .state(OrderStateDto.builder()
                         .state("READY_TO_SEND")
@@ -174,7 +180,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findOne(1);
 
-        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+        OrderDto actualOrderDto = modelMapper.createTypeMap(actualOrder, OrderDto.class);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
@@ -196,14 +202,17 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .recipient(ClientDto.builder().build())
                 .state(OrderStateDto.builder().build())
+                .currentLocation(new OrderProcessingPointDto())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
         orderService.create(expectedOrder);
 
-        OrderDto actualOrder = orderService.findOne(1);
+        Order actualOrder = orderService.findOne(1);
 
-        Assertions.assertEquals(expectedOrder, actualOrder);
+        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+
+        Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
 
     @Test
@@ -234,9 +243,11 @@ class OrderServiceTest {
 
         orderService.create(expectedOrder);
 
-        OrderDto actualOrder = orderService.findByRecipient(recipient);
+        Order actualOrder = orderService.findByRecipient(recipient);
 
-        Assertions.assertEquals(expectedOrder, actualOrder);
+        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+
+        Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
 
     @SneakyThrows
@@ -268,9 +279,11 @@ class OrderServiceTest {
 
         orderService.create(expectedOrder);
 
-        OrderDto actualOrder = orderService.findByRecipient(sender);
+        Order actualOrder = orderService.findByRecipient(sender);
 
-        Assertions.assertEquals(expectedOrder, actualOrder);
+        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+
+        Assertions.assertEquals(expectedOrder, actualOrderDto);
 
     }
 
@@ -303,10 +316,15 @@ class OrderServiceTest {
 
         orderService.send(expectedOrders);
 
-        List<List<OrderDto>> ordersOnTheWay = orderService.getOrdersOnTheWay();
+        List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
-        List<OrderDto> actualOrders = ordersOnTheWay.get(0);
-        Assertions.assertEquals(expectedOrders, actualOrders);
+        List<Order> actualOrders = ordersOnTheWay.get(0);
+
+        final List<OrderDto> actualOrderDtos = actualOrders.stream()
+                .map(actualOrder -> modelMapper.map(actualOrder, OrderDto.class))
+                .collect(Collectors.toList());
+
+        Assertions.assertEquals(expectedOrders, actualOrderDtos);
     }
 
     @Test
@@ -396,13 +414,17 @@ class OrderServiceTest {
 
         orderService.send(actual);
 
-        List<List<OrderDto>> ordersOnTheWay = orderService.getOrdersOnTheWay();
+        List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
 
         actual.get(0).setId(5L);
 
-        List<OrderDto> expected = ordersOnTheWay.get(0);
+        List<Order> expected = ordersOnTheWay.get(0);
 
-        Assertions.assertNotEquals(expected, actual);
+        final List<OrderDto> actualOrderDtos = expected.stream()
+                .map(actualOrder -> modelMapper.map(actualOrder, OrderDto.class))
+                .collect(Collectors.toList());
+
+        Assertions.assertNotEquals(expected, actualOrderDtos);
     }
 
     @ParameterizedTest

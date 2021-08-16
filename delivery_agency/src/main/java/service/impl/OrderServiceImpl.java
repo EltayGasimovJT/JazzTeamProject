@@ -1,6 +1,7 @@
 package service.impl;
 
 import dto.*;
+import dto.WorkingPlaceType;
 import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -13,9 +14,9 @@ import validator.OrderValidator;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 
 @Slf4j
 public class OrderServiceImpl implements OrderService {
@@ -29,7 +30,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order updateOrderCurrentLocation(long id, AbstractBuildingDto newLocation) {
         Order order = findOne(id);
-        order.setCurrentLocation(modelMapper.map(newLocation, AbstractBuilding.class));
+        if(newLocation.getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)){
+            order.setCurrentLocation(modelMapper.map(newLocation, OrderProcessingPoint.class));
+        }else if(newLocation.getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)){
+            order.setCurrentLocation(modelMapper.map(newLocation, Warehouse.class));
+        }
         return orderRepository.update(order);
     }
 

@@ -25,5 +25,7 @@ public class OrderDto {
     private List<OrderHistoryDto> history;
     private Calendar sendingTime;
     private List<AbstractLocationDto> route;
+
+    protected String type = this.getClass().getTypeName().toLowerCase();
 }
 
