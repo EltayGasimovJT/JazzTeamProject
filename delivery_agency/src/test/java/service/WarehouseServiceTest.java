@@ -1,15 +1,21 @@
-/*
 package service;
 
+import dto.OrderDto;
+import dto.OrderProcessingPointDto;
 import dto.WarehouseDto;
+import entity.Warehouse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
 import service.impl.WarehouseServiceImpl;
 
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Collections;
 
 class WarehouseServiceTest {
     private final WarehouseService warehouseService = new WarehouseServiceImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Test
     void addWarehouse() throws SQLException {
@@ -17,6 +23,9 @@ class WarehouseServiceTest {
         warehouse.setId(1L);
         String expected = "Minsk";
         warehouse.setLocation(expected);
+        warehouse.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
         warehouseService.save(warehouse);
 
         String actual = warehouseService.findOne(warehouse.getId()).getLocation();
@@ -28,10 +37,19 @@ class WarehouseServiceTest {
     void deleteWarehouse() throws SQLException {
         WarehouseDto firstWarehouse = new WarehouseDto();
         firstWarehouse.setId(1L);
+        firstWarehouse.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
         WarehouseDto secondWarehouse = new WarehouseDto();
         secondWarehouse.setId(2L);
+        secondWarehouse.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
         WarehouseDto thirdWarehouse = new WarehouseDto();
         thirdWarehouse.setId(3L);
+        thirdWarehouse.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
 
         warehouseService.save(firstWarehouse);
         warehouseService.save(secondWarehouse);
@@ -49,9 +67,17 @@ class WarehouseServiceTest {
     @Test
     void findAllWarehouses() throws SQLException {
         WarehouseDto firstWarehouse = new WarehouseDto();
+        firstWarehouse.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
         WarehouseDto secondWarehouse = new WarehouseDto();
+        secondWarehouse.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
         WarehouseDto thirdWarehouse = new WarehouseDto();
-
+        thirdWarehouse.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
         warehouseService.save(firstWarehouse);
         warehouseService.save(secondWarehouse);
         warehouseService.save(thirdWarehouse);
@@ -69,6 +95,9 @@ class WarehouseServiceTest {
         warehouse.setId(1L);
         String expected = "Vitebsk";
         warehouse.setLocation(expected);
+        warehouse.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
 
         warehouseService.save(warehouse);
 
@@ -79,18 +108,32 @@ class WarehouseServiceTest {
 
     @Test
     void update() throws SQLException {
-        WarehouseDto expected = new WarehouseDto();
-        expected.setId(1L);
-        expected.setLocation("Vitebsk");
-
-        warehouseService.save(expected);
+        WarehouseDto expectedDto = new WarehouseDto();
+        expectedDto.setId(1L);
+        expectedDto.setLocation("Vitebsk");
+        expectedDto.setOrderProcessingPoints(Collections.singletonList(
+                new OrderProcessingPointDto()
+        ));
+        warehouseService.save(expectedDto);
 
         String newLocation = "Minsk";
 
-        expected.setLocation(newLocation);
+        expectedDto.setLocation(newLocation);
 
-        WarehouseDto actual = warehouseService.update(expected);
+        expectedDto.setDispatchedOrders(Arrays.asList(
+                new OrderDto(),
+                new OrderDto()
+        ));
+        expectedDto.setExpectedOrders(
+                Arrays.asList(
+                        new OrderDto(),
+                        new OrderDto()
+        ));
 
-        Assertions.assertEquals(expected, actual);
+        Warehouse actual = warehouseService.update(expectedDto);
+
+        WarehouseDto actualDto = modelMapper.map(actual, WarehouseDto.class);
+
+        Assertions.assertEquals(expectedDto, actualDto);
     }
-}*/
+}

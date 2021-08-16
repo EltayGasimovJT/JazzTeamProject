@@ -1,22 +1,27 @@
-/*
 package service;
 
 import dto.*;
+import entity.Order;
+import entity.OrderHistory;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.modelmapper.ModelMapper;
 import service.impl.OrderServiceImpl;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class OrderServiceTest {
     private final OrderService orderService = new OrderServiceImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
+
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
@@ -66,7 +71,7 @@ class OrderServiceTest {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
         orderProcessingPoint.setWarehouse(new WarehouseDto());
-        OrderDto expected = OrderDto.builder()
+        OrderDto expectedDto = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(
                         ParcelParametersDto.builder()
@@ -81,17 +86,20 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
+                .currentLocation(new OrderProcessingPointDto())
                 .build();
 
-        orderService.create(expected);
+        orderService.create(expectedDto);
 
         orderProcessingPoint.setLocation("Poland");
 
-        orderService.updateOrderCurrentLocation(expected.getId(), orderProcessingPoint);
+        orderService.updateOrderCurrentLocation(expectedDto.getId(), orderProcessingPoint);
 
-        OrderDto actual = orderService.findOne(1);
+        Order actual = orderService.findOne(1);
 
-        Assertions.assertEquals(expected, actual);
+        OrderDto actualDto = modelMapper.map(actual, OrderDto.class);
+
+        Assertions.assertEquals(expectedDto, actualDto);
     }
 
     @Test
@@ -129,9 +137,13 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        List<OrderHistoryDto> actual = orderService.findOne(1).getHistory();
+        List<OrderHistory> actual = orderService.findOne(1).getHistory();
 
-        Assertions.assertEquals(expected, actual.get(0));
+        List<OrderHistoryDto> actualHistory = actual.stream()
+                .map(orderHistory -> modelMapper.map(orderHistory, OrderHistoryDto.class))
+                .collect(Collectors.toList());
+
+        Assertions.assertEquals(expected, actualHistory.get(0));
     }
 
     @Test
@@ -160,9 +172,11 @@ class OrderServiceTest {
         expectedOrder.setHistory(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()));
         orderService.create(expectedOrder);
 
-        OrderDto actualOrder = orderService.findOne(1);
+        Order actualOrder = orderService.findOne(1);
 
-        Assertions.assertEquals(expectedOrder, actualOrder);
+        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+
+        Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
 
     @Test
@@ -398,4 +412,4 @@ class OrderServiceTest {
 
         Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
-}*/
+}

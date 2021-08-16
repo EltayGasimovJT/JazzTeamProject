@@ -6,15 +6,18 @@ import dto.WarehouseDto;
 import entity.Order;
 import entity.OrderProcessingPoint;
 import entity.Warehouse;
+import org.modelmapper.ModelMapper;
 import repository.WarehouseRepository;
 import repository.impl.WarehouseRepositoryImpl;
 import service.WarehouseService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WarehouseServiceImpl implements WarehouseService {
     private final WarehouseRepository warehouseRepository = new WarehouseRepositoryImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public Warehouse save(WarehouseDto warehouseDto) {
@@ -52,7 +55,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public Warehouse findOne(long id) {
         Warehouse warehouseById = warehouseRepository.findOne(id);
-        if(warehouseById == null){
+        if (warehouseById == null) {
             throw new IllegalArgumentException("There is no warehouse with this Id!!!");
         }
 
@@ -87,6 +90,9 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         warehouseToUpdate.setExpectedOrders(expectedOrdersToUpdate);
         warehouseToUpdate.setDispatchedOrders(dispatchedOrdersToUpdate);
+        warehouseToUpdate.setOrderProcessingPoints(warehouse.getOrderProcessingPoints().stream().
+                map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto, OrderProcessingPoint.class))
+                .collect(Collectors.toList()));
 
         return warehouseRepository.update(warehouseToUpdate);
     }
