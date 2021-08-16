@@ -10,6 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WarehouseDto extends AbstractBuildingDto{
-    private Long id;
     private List<OrderProcessingPointDto> orderProcessingPoints;
 }

@@ -3,7 +3,6 @@ package service.impl;
 import dto.CoefficientForPriceCalculationDto;
 import dto.OrderDto;
 import entity.CoefficientForPriceCalculation;
-import entity.Order;
 import repository.CoefficientForPriceCalculationRepository;
 import repository.impl.CoefficientForPriceCalculationRepositoryImpl;
 import service.CoefficientForPriceCalculationService;

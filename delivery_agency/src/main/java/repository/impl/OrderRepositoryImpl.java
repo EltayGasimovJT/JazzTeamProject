@@ -78,7 +78,6 @@ public class OrderRepositoryImpl implements OrderRepository {
         order.setSender(update.getSender());
         order.setSendingTime(update.getSendingTime());
         order.setPrice(update.getPrice());
-        order.setRoute(update.getRoute());
         orders.add(order);
         return order;
     }

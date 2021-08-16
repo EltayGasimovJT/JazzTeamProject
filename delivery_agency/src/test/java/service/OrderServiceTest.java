@@ -1,8 +1,5 @@
 package service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.*;
 import entity.Order;
 import entity.OrderHistory;
@@ -15,7 +12,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
 import service.impl.OrderServiceImpl;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
@@ -25,7 +21,6 @@ import java.util.stream.Stream;
 class OrderServiceTest {
     private final OrderService orderService = new OrderServiceImpl();
     private final ModelMapper modelMapper = new ModelMapper();
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
@@ -153,11 +148,15 @@ class OrderServiceTest {
     }
 
     @Test
-    void create() throws SQLException, IOException {
-        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
-        orderProcessingPoint.setLocation("Russia");
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
+    void create() throws SQLException {
+        AbstractBuildingDto currentLocation = new OrderProcessingPointDto();
+        currentLocation.setId(1L);
+        currentLocation.setLocation("Russia");
+
+        OrderProcessingPointDto destinationPlace = new OrderProcessingPointDto();
+        destinationPlace.setId(2L);
+        destinationPlace.setLocation("Russia");
+
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -165,10 +164,24 @@ class OrderServiceTest {
                         .width(1.0)
                         .length(1.0)
                         .weight(20.0).build())
-                .destinationPlace(orderProcessingPoint)
-                .sender(ClientDto.builder().build())
-                .recipient(ClientDto.builder().build())
-                .currentLocation(new OrderProcessingPointDto())
+                .destinationPlace(destinationPlace)
+                .sender(ClientDto.builder()
+                        .id(1L)
+                        .passportId("125125")
+                        .phoneNumber("125125")
+                        .surname("qwtqtwqwt")
+                        .name("qaawtawt")
+                        .build()
+                )
+                .recipient(ClientDto.builder()
+                        .id(2L)
+                        .passportId("125125")
+                        .phoneNumber("145125")
+                        .surname("qwtqtwqwt")
+                        .name("qaawtawt")
+                        .build()
+                )
+                .currentLocation(currentLocation)
                 .price(BigDecimal.valueOf(64.0))
                 .state(OrderStateDto.builder()
                         .state("READY_TO_SEND")
@@ -177,13 +190,12 @@ class OrderServiceTest {
                 .build();
 
         expectedOrder.setHistory(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()));
+
         orderService.create(expectedOrder);
 
         Order actualOrder = orderService.findOne(1);
 
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        OrderDto actualOrderDto = objectMapper.readValue(objectMapper.writeValueAsBytes(actualOrder), OrderDto.class);
+        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }

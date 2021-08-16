@@ -96,7 +96,6 @@ public class OrderServiceImpl implements OrderService {
                 .history(Collections.singletonList(orderHistoryToSave))
                 .parcelParameters(modelMapper.map(order.getParcelParameters(), ParcelParameters.class))
                 .price(order.getPrice())
-                .route(Collections.singletonList(departurePoint))
                 .state(OrderState.builder()
                         .state(OrderStates.READY_TO_SEND.toString())
                         .build())

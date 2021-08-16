@@ -17,7 +17,6 @@ import java.util.List;
 @Slf4j
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
-    private final OrderService orderService = new OrderServiceImpl();
 
     @Override
     public void delete(Long id) {

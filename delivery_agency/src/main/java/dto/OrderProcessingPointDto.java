@@ -8,6 +8,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderProcessingPointDto extends AbstractBuildingDto{
-    private Long id;
     private WarehouseDto warehouse;
 }

@@ -20,5 +20,4 @@ public class Order {
     private AbstractBuilding currentLocation;
     private List<OrderHistory> history;
     private Calendar sendingTime;
-    private List<AbstractLocation> route;
 }
