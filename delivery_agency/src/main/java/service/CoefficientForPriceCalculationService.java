@@ -1,8 +1,8 @@
 package service;
 
 import dto.CoefficientForPriceCalculationDto;
+import dto.OrderDto;
 import entity.CoefficientForPriceCalculation;
-import entity.Order;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -19,7 +19,7 @@ public interface CoefficientForPriceCalculationService {
 
     CoefficientForPriceCalculation findOne(long id) throws SQLException;
 
-    BigDecimal calculatePrice(Order order, CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws IllegalArgumentException;
+    BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws IllegalArgumentException;
 
     CoefficientForPriceCalculation findByCountry(String country);
 }

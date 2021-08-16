@@ -1,50 +1,93 @@
 package service.impl;
 
+import dto.OrderDto;
+import dto.OrderProcessingPointDto;
 import dto.WarehouseDto;
+import entity.Order;
+import entity.OrderProcessingPoint;
 import entity.Warehouse;
-import repository.WareHouseRepository;
+import repository.WarehouseRepository;
 import repository.impl.WarehouseRepositoryImpl;
 import service.WarehouseService;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static util.ConvertUtil.fromDtoToWarehouse;
-import static util.ConvertUtil.fromWarehouseToDTO;
-
 public class WarehouseServiceImpl implements WarehouseService {
-    private final WareHouseRepository wareHouseRepository = new WarehouseRepositoryImpl();
+    private final WarehouseRepository warehouseRepository = new WarehouseRepositoryImpl();
 
     @Override
-    public Warehouse save(WarehouseDto warehouse) {
-        return fromWarehouseToDTO(wareHouseRepository.save(fromDtoToWarehouse(warehouse)));
+    public Warehouse save(WarehouseDto warehouseDto) {
+        Warehouse warehouseToSave = new Warehouse();
+        List<OrderProcessingPoint> processingPointsToSave = new ArrayList<>();
+
+        for (OrderProcessingPointDto orderProcessingPoint : warehouseDto.getOrderProcessingPoints()) {
+            OrderProcessingPoint orderProcessingPointToSave = new OrderProcessingPoint();
+            orderProcessingPointToSave.setId(orderProcessingPoint.getId());
+            orderProcessingPointToSave.setLocation(orderProcessingPoint.getLocation());
+        }
+
+        warehouseToSave.setId(warehouseDto.getId());
+        warehouseToSave.setLocation(warehouseDto.getLocation());
+        warehouseToSave.setOrderProcessingPoints(processingPointsToSave);
+
+        return warehouseRepository.save(warehouseToSave);
     }
 
     @Override
     public void delete(Long id) {
-        wareHouseRepository.delete(id);
+        warehouseRepository.delete(id);
     }
 
     @Override
     public List<Warehouse> findAll() {
-        List<Warehouse> warehouses = wareHouseRepository.findAll();
-        List<WarehouseDto> warehouseDtos = new ArrayList<>();
-
-        for (Warehouse warehouse : warehouses) {
-            warehouseDtos.add(fromWarehouseToDTO(warehouse));
+        List<Warehouse> warehousesFromRepository = warehouseRepository.findAll();
+        if (warehousesFromRepository.isEmpty()) {
+            throw new IllegalArgumentException("There is no warehouses on database!!!");
         }
-        return warehouseDtos;
+
+        return warehousesFromRepository;
     }
 
     @Override
     public Warehouse findOne(long id) {
-        return wareHouseRepository.findOne(id));
+        Warehouse warehouseById = warehouseRepository.findOne(id);
+        if(warehouseById == null){
+            throw new IllegalArgumentException("There is no warehouse with this Id!!!");
+        }
+
+        return warehouseById;
     }
 
     @Override
-    public Warehouse update(WarehouseDto warehouse) throws SQLException {
+    public Warehouse update(WarehouseDto warehouse) {
+        List<Order> expectedOrdersToUpdate = new ArrayList<>();
+        List<Order> dispatchedOrdersToUpdate = new ArrayList<>();
 
-        return wareHouseRepository.update();
+        for (OrderDto dispatchedOrder : warehouse.getDispatchedOrders()) {
+            Order orderToDispatch = Order.builder()
+                    .id(dispatchedOrder.getId())
+                    .build();
+
+            dispatchedOrdersToUpdate.add(orderToDispatch);
+        }
+
+        for (OrderDto expectedOrder : warehouse.getExpectedOrders()) {
+            Order expectedOrderToSave = Order.builder()
+                    .id(expectedOrder.getId())
+                    .build();
+            expectedOrdersToUpdate.add(expectedOrderToSave);
+        }
+
+        Warehouse warehouseToUpdate = warehouseRepository.findOne(warehouse.getId());
+
+        if (warehouseToUpdate == null) {
+            throw new IllegalArgumentException("There is no warehouses to update!!!");
+        }
+
+        warehouseToUpdate.setExpectedOrders(expectedOrdersToUpdate);
+        warehouseToUpdate.setDispatchedOrders(dispatchedOrdersToUpdate);
+
+        return warehouseRepository.update(warehouseToUpdate);
     }
 }

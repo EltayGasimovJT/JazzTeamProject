@@ -42,7 +42,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order create(OrderDto order) throws SQLException {
-        OrderValidator.validateOrder(order);
         BigDecimal price = calculatePrice(order);
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         order.setPrice(price);
@@ -54,54 +53,99 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         order.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
 
+        Client senderToSave = Client.builder()
+                .id(order.getSender().getId())
+                .name(order.getSender().getName())
+                .surname(order.getSender().getSurname())
+                .passportId(order.getSender().getPassportId())
+                .phoneNumber(order.getSender().getPhoneNumber())
+                .build();
+
+        Client recipientToSave = Client.builder()
+                .id(order.getRecipient().getId())
+                .name(order.getRecipient().getName())
+                .surname(order.getRecipient().getSurname())
+                .passportId(order.getRecipient().getPassportId())
+                .phoneNumber(order.getRecipient().getPhoneNumber())
+                .build();
+
+        OrderProcessingPoint departurePoint = new OrderProcessingPoint();
+        departurePoint.setId(order.getCurrentLocation().getId());
+        OrderProcessingPoint destinationPlace = new OrderProcessingPoint();
+        departurePoint.setId(order.getDestinationPlace().getId());
+        OrderHistory orderHistoryToSave = OrderHistory.builder()
+                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
+                .comment(order.getHistory().get(0).getComment())
+                .changingTime(order.getHistory().get(0).getChangingTime())
+                .build();
+
+
         Order orderToSave = Order.builder()
                 .id(order.getId())
                 .sendingTime(order.getSendingTime())
-                .sender()
-                .sendingTime()
-                .recipient()
-                .currentLocation()
-                .destinationPlace(order.getDestinationPlace())
-                .history()
-                .parcelParameters()
+                .sender(senderToSave)
+                .sendingTime(order.getSendingTime())
+                .recipient(recipientToSave)
+                .currentLocation(departurePoint)
+                .destinationPlace(destinationPlace)
+                .history(Collections.singletonList(orderHistoryToSave))
+                .parcelParameters(modelMapper.map(order.getParcelParameters(), ParcelParameters.class))
                 .price(order.getPrice())
-                .route(order.getRoute())
-                .state()
+                .route(Collections.singletonList(departurePoint))
+                .state(OrderState.builder()
+                        .state(OrderStates.READY_TO_SEND.toString())
+                        .build())
                 .build();
+        OrderValidator.validateOrder(orderToSave);
+
         return orderRepository.save(orderToSave);
     }
 
     @Override
-    public Order findOne(long id) {
-        return fromOrderToDto(orderRepository.findOne(id));
+    public Order findOne(long id) throws IllegalArgumentException {
+        Order orderById = orderRepository.findOne(id);
+
+        OrderValidator.validateOrder(orderById);
+
+        return orderById;
     }
 
     @Override
-    public Order findByRecipient(ClientDto recipient) {
-        return fromOrderToDto(orderRepository.findByRecipient(fromDtoToClient(recipient)));
+    public Order findByRecipient(ClientDto recipient) throws IllegalArgumentException {
+        Order byRecipient = orderRepository.findByRecipient(modelMapper.map(recipient, Client.class));
+        OrderValidator.validateOrder(byRecipient);
+
+        return byRecipient;
     }
 
     @Override
-    public Order findBySender(ClientDto sender) {
-        return fromOrderToDto(orderRepository.findBySender(fromDtoToClient(sender)));
+    public Order findBySender(ClientDto sender) throws IllegalArgumentException {
+        Order bySender = orderRepository.findByRecipient(modelMapper.map(sender, Client.class));
+        OrderValidator.validateOrder(bySender);
+        return bySender;
     }
 
     @Override
-    public AbstractBuilding getCurrentOrderLocation(long id) {
-        return fromOrderToDto(orderRepository.findOne(id)).getCurrentLocation();
+    public AbstractBuilding getCurrentOrderLocation(long id) throws IllegalArgumentException {
+        return orderRepository.findOne(id).getCurrentLocation();
     }
 
     @Override
     public void send(List<OrderDto> orderDtos) {
-        final List<Order> orders = fromDtosToOrders(orderDtos);
+        List<Order> orders = new ArrayList<>();
+
+        for (OrderDto orderDto : orderDtos) {
+            orders.add(modelMapper.map(orderDto, Order.class));
+        }
+
         for (Order order : orders) {
             OrderState orderState;
-            if (isFinalWarehouse(fromOrderToDto(order))) {
+            if (isFinalWarehouse(modelMapper.map(order, OrderDto.class))) {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString());
             } else {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString());
             }
-            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPointDto) {
+            if (getCurrentOrderLocation(order.getId()) instanceof OrderProcessingPoint) {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_RECEPTION.toString());
             }
             order.setState(orderState);
@@ -109,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
         }
         List<Order> ordersToSend = new ArrayList<>();
         for (OrderDto order : orderDtos) {
-            ordersToSend.add(fromDtoToOrder(order));
+            ordersToSend.add(modelMapper.map(order, Order.class));
         }
 
         orderRepository.saveSentOrders(ordersToSend);
@@ -119,34 +163,34 @@ public class OrderServiceImpl implements OrderService {
     public List<Order> accept(List<OrderDto> acceptedOrders) {
         List<Order> ordersToAccept = new ArrayList<>();
         for (OrderDto order : acceptedOrders) {
-            ordersToAccept.add(fromDtoToOrder(order));
+            ordersToAccept.add(modelMapper.map(order, Order.class));
         }
 
         List<Order> ordersFromRepository = orderRepository.acceptOrders(ordersToAccept);
 
-        List<OrderDto> orderDtos = fromOrdersToDtos(ordersFromRepository);
-
-        for (OrderDto orderDto : orderDtos) {
-            log.info(orderDto.toString());
-            OrderStateDto orderStateDto;
-            if (isFinalWarehouse(orderDto)) {
-                orderStateDto = fromOrderStateToDto(updateState(OrderStates.ON_THE_FINAL_WAREHOUSE.toString()));
-            } else {
-                orderStateDto = fromOrderStateToDto(updateState(OrderStates.ON_THE_WAREHOUSE.toString()));
-            }
-            if (getCurrentOrderLocation(orderDto.getId()).equals(orderDto.getDestinationPlace())) {
-                orderStateDto = fromOrderStateToDto(updateState(OrderStates.ORDER_COMPLETED.toString()));
-            }
-            orderDto.setState(orderStateDto);
-        }
-
-        List<OrderDto> acceptedOrdersDto = new ArrayList<>();
+        List<OrderDto> expectedOrderDtos = new ArrayList<>();
 
         for (Order order : ordersFromRepository) {
-            acceptedOrdersDto.add(fromOrderToDto(order));
+            expectedOrderDtos.add(modelMapper.map(order, OrderDto.class));
         }
 
-        return acceptedOrdersDto;
+        compareOrders(expectedOrderDtos, acceptedOrders);
+
+
+        for (OrderDto orderDto : expectedOrderDtos) {
+            OrderState orderState;
+            if (isFinalWarehouse(orderDto)) {
+                orderState = updateState(OrderStates.ON_THE_FINAL_WAREHOUSE.toString());
+            } else {
+                orderState = updateState(OrderStates.ON_THE_WAREHOUSE.toString());
+            }
+            if (getCurrentOrderLocation(orderDto.getId()).equals(orderDto.getDestinationPlace())) {
+                orderState = updateState(OrderStates.ORDER_COMPLETED.toString());
+            }
+            orderDto.setState(modelMapper.map(orderState, OrderStateDto.class));
+        }
+
+        return ordersFromRepository;
     }
 
     @Override
@@ -159,7 +203,7 @@ public class OrderServiceImpl implements OrderService {
     public void compareOrders(List<OrderDto> expectedOrders, List<OrderDto> acceptedOrders) throws IllegalArgumentException {
         for (int i = 0; i < expectedOrders.size(); i++) {
             if (!expectedOrders.get(i).equals(acceptedOrders.get(i))) {
-                throw new IllegalArgumentException("Expected List is not equal to actual!!!");
+                throw new IllegalArgumentException("Expected orders are not equal to accepted!!!");
             }
         }
     }
@@ -169,44 +213,52 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> findAll() throws SQLException {
+    public List<Order> findAll() throws IllegalArgumentException {
         List<Order> orders = orderRepository.findAll();
-        List<OrderDto> resultOrderDtos = new ArrayList<>();
 
-        for (Order order : orders) {
-            resultOrderDtos.add(fromOrderToDto(order));
-        }
-        return resultOrderDtos;
+        OrderValidator.validateOrders(orders);
+
+        return orders;
     }
 
     @Override
     public BigDecimal calculatePrice(OrderDto order) throws IllegalArgumentException, SQLException {
         CoefficientForPriceCalculationDto coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
 
-        return priceCalculationRuleService.calculatePrice(fromDtoToOrder(order), coefficientForPriceCalculation);
+        return priceCalculationRuleService.calculatePrice(order, coefficientForPriceCalculation);
     }
 
     @Override
     public List<List<Order>> getOrdersOnTheWay() {
         List<List<Order>> allSentOrders = orderRepository.getSentOrders();
-        List<List<OrderDto>> allSentOrderDtos = new ArrayList<>();
-
-        for (List<Order> sentOrders : allSentOrders) {
-            List<OrderDto> sentOrderDtos = new ArrayList<>();
-            for (Order sentOrder : sentOrders) {
-                sentOrderDtos.add(fromOrderToDto(sentOrder));
-            }
-            allSentOrderDtos.add(sentOrderDtos);
+        if (allSentOrders.isEmpty()) {
+            throw new IllegalArgumentException("There is no orders on the way!!!");
         }
 
-        return allSentOrderDtos;
+        return allSentOrders;
     }
 
     @Override
-    public Order update(OrderDto order) throws SQLException {
-        OrderValidator.validateOrder(order);
-        Order update = orderRepository.update(fromDtoToOrder(order));
-        return fromOrderToDto(update);
+    public Order update(OrderDto order) {
+        Order orderToUpdate = orderRepository.findOne(order.getId());
+        Client newRecipient = Client.builder()
+                .id(order.getRecipient().getId())
+                .name(order.getRecipient().getName())
+                .surname(order.getRecipient().getSurname())
+                .passportId(order.getRecipient().getPassportId())
+                .phoneNumber(order.getRecipient().getPhoneNumber())
+                .build();
+
+        OrderState orderState = OrderState.builder()
+                .id(order.getState().getId())
+                .state(order.getState().getState())
+                .build();
+
+        orderToUpdate.setRecipient(newRecipient);
+        orderToUpdate.setState(orderState);
+        OrderValidator.validateOrder(orderToUpdate);
+
+        return orderRepository.update(orderToUpdate);
     }
 
     @Override
@@ -277,7 +329,7 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculation getCoefficient(OrderProcessingPointDto processingPointDto) throws SQLException {
+    private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws SQLException {
         CoefficientForPriceCalculation coefficientForPriceCalculation;
 
         String russia = "Russia";
@@ -310,6 +362,6 @@ public class OrderServiceImpl implements OrderService {
         } else {
             throw new IllegalArgumentException("This country is not supported yet!!!" + processingPointDto.getLocation());
         }
-        return coefficientForPriceCalculation;
+        return modelMapper.map(coefficientForPriceCalculation, CoefficientForPriceCalculationDto.class);
     }
 }

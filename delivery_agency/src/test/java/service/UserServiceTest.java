@@ -5,30 +5,36 @@ import dto.UserDto;
 import dto.WarehouseDto;
 import entity.User;
 import lombok.SneakyThrows;
-import mappers.UserMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
+import service.impl.OrderProcessingPointServiceImpl;
 import service.impl.UserServiceImpl;
 
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import static util.ConvertUtil.fromUserToDto;
+import static dto.WorkingPlaceType.PROCESSING_POINT;
 
 class UserServiceTest {
     private final UserService userService = new UserServiceImpl();
     private final ModelMapper userMapper = new ModelMapper();
+    private final OrderProcessingPointService processingPointService = new OrderProcessingPointServiceImpl();
 
     @Test
     void addUser() throws SQLException {
+        OrderProcessingPointDto orderProcessingPointDtoToSave = new OrderProcessingPointDto();
+        orderProcessingPointDtoToSave.setId(1L);
+        orderProcessingPointDtoToSave.setWorkingPlaceType(PROCESSING_POINT);
+        orderProcessingPointDtoToSave.setWarehouse(new WarehouseDto());
         UserDto expected = UserDto
                 .builder()
                 .id(1L)
                 .name("Igor")
                 .surname("Igor")
                 .roles(Arrays.asList("User", "Client"))
+                .workingPlace(orderProcessingPointDtoToSave)
                 .build();
 
         UserDto actual = userMapper.map(userService.addUser(expected), UserDto.class);

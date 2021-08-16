@@ -1,12 +1,12 @@
 package repository.impl;
 
 import entity.Warehouse;
-import repository.WareHouseRepository;
+import repository.WarehouseRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class WarehouseRepositoryImpl implements WareHouseRepository {
+public class WarehouseRepositoryImpl implements WarehouseRepository {
     private final List<Warehouse> warehouses = new ArrayList<>();
 
     @Override

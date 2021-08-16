@@ -1,6 +1,7 @@
 package service.impl;
 
 import dto.ClientDto;
+import dto.OrderDto;
 import entity.Client;
 import entity.Order;
 import lombok.extern.slf4j.Slf4j;
@@ -55,21 +56,12 @@ public class ClientServiceImpl implements ClientService {
     public Client save(ClientDto clientDto) throws SQLException {
         List<Order> clientOrders = new ArrayList<>();
 
-        List<Order> allOrders = orderService.findAll();
-
-        for (Order order : allOrders) {
-            if(order.getSender().getId().equals(clientDto.getId())){
-                clientOrders.add(order);
-            }
-        }
-
         Client clientToSave = Client.builder()
                 .id(clientDto.getId())
                 .name(clientDto.getName())
                 .surname(clientDto.getSurname())
                 .passportId(clientDto.getPassportId())
                 .phoneNumber(clientDto.getPhoneNumber())
-                .orders(clientOrders)
                 .build();
 
         Client savedClient = clientRepository.save(clientToSave);
@@ -79,14 +71,16 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client update(ClientDto clientDto) throws SQLException {
-        List<Order> clientOrders = new ArrayList<>();
+        List<OrderDto> ordersToUpdate = clientDto.getOrders();
 
-        List<Order> allOrders = orderService.findAll();
+        List<Order> clientOrdersToUpdate = new ArrayList<>();
 
-        for (Order order : allOrders) {
-            if(order.getSender().getId().equals(clientDto.getId())){
-                clientOrders.add(order);
-            }
+        for (OrderDto orderDto : ordersToUpdate) {
+            Order orderToUpdate = Order
+                    .builder()
+                    .id(orderDto.getId())
+                    .build();
+            clientOrdersToUpdate.add(orderToUpdate);
         }
 
         Client clientToUpdate = Client.builder()
@@ -95,7 +89,7 @@ public class ClientServiceImpl implements ClientService {
                 .surname(clientDto.getSurname())
                 .passportId(clientDto.getPassportId())
                 .phoneNumber(clientDto.getPhoneNumber())
-                .orders(clientOrders)
+                .orders(clientOrdersToUpdate)
                 .build();
 
         return clientRepository.update(clientToUpdate);

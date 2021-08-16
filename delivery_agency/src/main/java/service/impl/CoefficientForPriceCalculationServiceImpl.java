@@ -1,6 +1,7 @@
 package service.impl;
 
 import dto.CoefficientForPriceCalculationDto;
+import dto.OrderDto;
 import entity.CoefficientForPriceCalculation;
 import entity.Order;
 import repository.CoefficientForPriceCalculationRepository;
@@ -63,7 +64,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public BigDecimal calculatePrice(Order order, CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws IllegalArgumentException {
+    public BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws IllegalArgumentException {
         BigDecimal resultPrice = new BigDecimal(1);
         BigDecimal size = BigDecimal.valueOf(getSize(order));
         BigDecimal parcelSizeLimit = BigDecimal.valueOf(coefficientForPriceCalculationDto.getParcelSizeLimit());
@@ -103,7 +104,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
         return actualCoefficient;
     }
 
-    private double getSize(Order order) {
+    private double getSize(OrderDto order) {
         return (order.getParcelParameters().getLength()
                 * order.getParcelParameters().getHeight()
                 * order.getParcelParameters().getWidth()) + order.getParcelParameters().getWeight();

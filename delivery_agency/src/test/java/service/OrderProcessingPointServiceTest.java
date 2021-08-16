@@ -2,21 +2,26 @@ package service;
 
 import dto.OrderProcessingPointDto;
 import dto.WarehouseDto;
+import entity.OrderProcessingPoint;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.modelmapper.ModelMapper;
 import service.impl.OrderProcessingPointServiceImpl;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
 class OrderProcessingPointServiceTest {
     private final OrderProcessingPointService orderProcessingPointService = new OrderProcessingPointServiceImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
+
 
     private static Stream<Arguments> testOrderProcessingPoints() {
         OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
@@ -71,10 +76,19 @@ class OrderProcessingPointServiceTest {
 
         orderProcessingPointService.delete(firstProcessingPoint.getId());
 
-        List<OrderProcessingPointDto> actualProcessingPoints = orderProcessingPointService.findAll();
+        List<OrderProcessingPoint> actualProcessingPoints = orderProcessingPointService.findAll();
+
+        List<OrderProcessingPointDto> actualProcessingPointDtos = new ArrayList<>();
+
+        for (OrderProcessingPoint actualProcessingPoint : actualProcessingPoints) {
+            WarehouseDto actualWarehouse = modelMapper.map(actualProcessingPoint.getWarehouse(), WarehouseDto.class);
+            OrderProcessingPointDto actualProcessingPointDto = modelMapper.map(actualProcessingPoint, OrderProcessingPointDto.class);
+            actualProcessingPointDto.setWarehouse(actualWarehouse);
+            actualProcessingPointDtos.add(actualProcessingPointDto);
+        }
 
         Assertions.assertEquals(Arrays.asList(secondProcessingPoint, thirdProcessingPoint)
-                , actualProcessingPoints);
+                , actualProcessingPointDtos);
     }
 
     @Test
@@ -90,10 +104,19 @@ class OrderProcessingPointServiceTest {
         orderProcessingPointService.save(secondProcessingPoint);
         orderProcessingPointService.save(thirdProcessingPoint);
 
-        List<OrderProcessingPointDto> actualOrderProcessingPoints = orderProcessingPointService.findAll();
+        List<OrderProcessingPoint> actualOrderProcessingPoints = orderProcessingPointService.findAll();
+
+        List<OrderProcessingPointDto> actualProcessingPointDtos = new ArrayList<>();
+
+        for (OrderProcessingPoint actualOrderProcessingPoint : actualOrderProcessingPoints) {
+            WarehouseDto actualWarehouse = modelMapper.map(actualOrderProcessingPoint.getWarehouse(), WarehouseDto.class);
+            OrderProcessingPointDto actualProcessingOrder = modelMapper.map(actualOrderProcessingPoint, OrderProcessingPointDto.class);
+            actualProcessingOrder.setWarehouse(actualWarehouse);
+            actualProcessingPointDtos.add(actualProcessingOrder);
+        }
 
         Assertions.assertEquals(Arrays.asList(firstProcessingPoint, secondProcessingPoint, thirdProcessingPoint)
-                , actualOrderProcessingPoints);
+                , actualProcessingPointDtos);
     }
 
     @SneakyThrows
@@ -104,36 +127,42 @@ class OrderProcessingPointServiceTest {
         processingPoint.setLocation("Minsk");
         processingPoint.setWarehouse(new WarehouseDto());
 
-        OrderProcessingPointDto expected = new OrderProcessingPointDto();
-        expected.setId(2L);
-        expected.setLocation("Moscow");
-        expected.setWarehouse(new WarehouseDto());
-
+        OrderProcessingPointDto expectedProcessingPointDto = new OrderProcessingPointDto();
+        expectedProcessingPointDto.setId(2L);
+        expectedProcessingPointDto.setLocation("Moscow");
+        expectedProcessingPointDto.setWarehouse(new WarehouseDto());
 
         orderProcessingPointService.save(processingPoint);
-        orderProcessingPointService.save(expected);
+        orderProcessingPointService.save(expectedProcessingPointDto);
 
+        OrderProcessingPoint actual = orderProcessingPointService.findOne(2);
 
-        OrderProcessingPointDto actual = orderProcessingPointService.findOne(2);
+        OrderProcessingPointDto actualProcessingPointDto = modelMapper.map(actual, OrderProcessingPointDto.class);
 
-        Assertions.assertEquals(expected, actual);
+        actualProcessingPointDto.setWarehouse(modelMapper.map(actual.getWarehouse(), WarehouseDto.class));
+
+        Assertions.assertEquals(expectedProcessingPointDto, actualProcessingPointDto);
     }
 
     @Test
     void update() throws SQLException {
-        OrderProcessingPointDto expected = new OrderProcessingPointDto();
-        expected.setId(1L);
-        expected.setLocation("Minsk");
-        expected.setWarehouse(new WarehouseDto());
+        OrderProcessingPointDto expectedProcessingPointDto = new OrderProcessingPointDto();
+        expectedProcessingPointDto.setId(1L);
+        expectedProcessingPointDto.setLocation("Minsk");
+        expectedProcessingPointDto.setWarehouse(new WarehouseDto());
 
-        orderProcessingPointService.save(expected);
+        orderProcessingPointService.save(expectedProcessingPointDto);
 
         String newLocation = "Homel";
 
-        expected.setLocation(newLocation);
+        expectedProcessingPointDto.setLocation(newLocation);
 
-        OrderProcessingPointDto actual = orderProcessingPointService.update(expected);
+        OrderProcessingPoint actual = orderProcessingPointService.update(expectedProcessingPointDto);
 
-        Assertions.assertEquals(expected, actual);
+        OrderProcessingPointDto actualProcessingPointDto = modelMapper.map(actual, OrderProcessingPointDto.class);
+
+        actualProcessingPointDto.setWarehouse(modelMapper.map(actual.getWarehouse(), WarehouseDto.class));
+
+        Assertions.assertEquals(expectedProcessingPointDto, actualProcessingPointDto);
     }
 }

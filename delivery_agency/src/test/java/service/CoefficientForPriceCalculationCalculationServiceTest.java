@@ -1,15 +1,17 @@
 package service;
 
 import dto.CoefficientForPriceCalculationDto;
-import entity.Order;
-import entity.OrderProcessingPoint;
-import entity.ParcelParameters;
+import dto.OrderDto;
+import dto.OrderProcessingPointDto;
+import dto.ParcelParametersDto;
+import entity.CoefficientForPriceCalculation;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.modelmapper.ModelMapper;
 import service.impl.CoefficientForPriceCalculationServiceImpl;
 
 import java.math.BigDecimal;
@@ -19,13 +21,15 @@ import java.util.stream.Stream;
 class CoefficientForPriceCalculationCalculationServiceTest {
     private final CoefficientForPriceCalculationService priceCalculationRuleService = new CoefficientForPriceCalculationServiceImpl();
 
+    private final ModelMapper modelMapper = new ModelMapper();
+
     private static Stream<Arguments> testDataForCalculate() {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
-        Order firstOrder = Order.builder()
+        OrderDto firstOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(
-                        ParcelParameters.builder()
+                        ParcelParametersDto.builder()
                                 .height(1.0)
                                 .width(1.0)
                                 .length(1.0)
@@ -44,10 +48,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         orderProcessingPoint.setLocation("Poland");
         orderProcessingPoint.setId(2L);
-        Order secondOrder = Order.builder()
+        OrderDto secondOrder = OrderDto.builder()
                 .id(2L)
                 .parcelParameters(
-                        ParcelParameters.builder()
+                        ParcelParametersDto.builder()
                                 .height(4.0)
                                 .width(10.0)
                                 .length(1.0)
@@ -64,10 +68,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(40)
                 .build();
         orderProcessingPoint.setLocation("Ukraine");
-        Order thirdOrder = Order.builder()
+        OrderDto thirdOrder = OrderDto.builder()
                 .id(3L)
                 .parcelParameters(
-                        ParcelParameters.builder()
+                        ParcelParametersDto.builder()
                                 .height(4.0)
                                 .width(5.0)
                                 .length(10.0)
@@ -92,7 +96,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
     @Test
     void addPriceCalculationRule() throws SQLException {
-        CoefficientForPriceCalculationDto expectedCoefficient = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -100,16 +104,19 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.save(expectedCoefficient);
+        priceCalculationRuleService.save(expectedCoefficientDto);
 
-        CoefficientForPriceCalculationDto actualCoefficient = priceCalculationRuleService.findOne(1L);
-        Assertions.assertEquals(expectedCoefficient, actualCoefficient);
+        CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(1L);
+
+        CoefficientForPriceCalculationDto actualCoefficientDto = modelMapper.map(actualCoefficient, CoefficientForPriceCalculationDto.class);
+
+        Assertions.assertEquals(expectedCoefficientDto, actualCoefficientDto);
     }
 
     @SneakyThrows
     @Test
     void deletePriceCalculationRule() {
-        CoefficientForPriceCalculationDto coefficientForPriceCalculation = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto firstCoefficientForPriceCalculation = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -117,13 +124,23 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.save(coefficientForPriceCalculation);
+        CoefficientForPriceCalculationDto secondCoefficientForPriceCalculation = CoefficientForPriceCalculationDto
+                .builder()
+                .id(1L)
+                .countryCoefficient(1.6)
+                .country("Belarus")
+                .parcelSizeLimit(50)
+                .build();
 
-        priceCalculationRuleService.delete(coefficientForPriceCalculation.getId());
+        priceCalculationRuleService.save(firstCoefficientForPriceCalculation);
+        priceCalculationRuleService.save(secondCoefficientForPriceCalculation);
 
-        int expectedSize = 0;
+        priceCalculationRuleService.delete(firstCoefficientForPriceCalculation.getId());
+
+        int expectedSize = 1;
 
         int actualSize = priceCalculationRuleService.findAll().size();
+
         Assertions.assertEquals(expectedSize, actualSize);
     }
 
@@ -147,18 +164,20 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
     @Test
     void getCoefficient() throws SQLException {
-        CoefficientForPriceCalculationDto expectedCoefficient = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.save(expectedCoefficient);
+        priceCalculationRuleService.save(expectedCoefficientDto);
 
-        CoefficientForPriceCalculationDto actualCoefficient = priceCalculationRuleService.findOne(1);
+        CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(1);
 
-        Assertions.assertEquals(expectedCoefficient, actualCoefficient);
+        CoefficientForPriceCalculationDto actualCoefficientDto = modelMapper.map(actualCoefficient, CoefficientForPriceCalculationDto.class);
+
+        Assertions.assertEquals(expectedCoefficientDto, actualCoefficientDto);
     }
 
     @Test
@@ -174,18 +193,20 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         coefficientForPriceCalculation.setParcelSizeLimit(52);
 
-        CoefficientForPriceCalculationDto update = priceCalculationRuleService.update(coefficientForPriceCalculation);
+        CoefficientForPriceCalculation updatedCoefficient = priceCalculationRuleService.update(coefficientForPriceCalculation);
+
+        CoefficientForPriceCalculationDto actualCoefficientDto = modelMapper.map(updatedCoefficient, CoefficientForPriceCalculationDto.class);
 
         int expectedParcelSizeLimit = 52;
 
-        int actualParcelSizeLimit = update.getParcelSizeLimit();
+        int actualParcelSizeLimit = actualCoefficientDto.getParcelSizeLimit();
 
         Assertions.assertEquals(expectedParcelSizeLimit, actualParcelSizeLimit, 0.001);
     }
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
-    void calculatePrice(Order order, CoefficientForPriceCalculationDto rule, BigDecimal expected) {
+    void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) {
         BigDecimal actual = priceCalculationRuleService.calculatePrice(order, rule);
         Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
     }

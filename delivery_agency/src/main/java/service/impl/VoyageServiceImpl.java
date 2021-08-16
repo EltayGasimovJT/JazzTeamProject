@@ -1,52 +1,83 @@
 package service.impl;
 
+import dto.OrderDto;
 import dto.VoyageDto;
+import entity.Order;
 import entity.Voyage;
 import repository.VoyageRepository;
 import repository.impl.VoyageRepositoryImpl;
 import service.VoyageService;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import static util.ConvertUtil.fromDtoToVoyage;
-import static util.ConvertUtil.fromVoyageToDTO;
 
 public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 
     @Override
-    public VoyageDto save(VoyageDto voyage) {
-        return fromVoyageToDTO(voyageRepository.save(fromDtoToVoyage(voyage)));
+    public Voyage save(VoyageDto voyage) {
+        List<Order> expectedOrdersToSave = new ArrayList<>();
+        List<Order> dispatchedOrdersToSave = new ArrayList<>();
+
+        for (OrderDto dispatchedOrder : voyage.getDispatchedOrders()) {
+            Order orderToDispatch = Order.builder()
+                    .id(dispatchedOrder.getId())
+                    .build();
+
+            dispatchedOrdersToSave.add(orderToDispatch);
+        }
+
+        for (OrderDto expectedOrder : voyage.getExpectedOrders()) {
+            Order expectedOrderToSave = Order.builder()
+                    .id(expectedOrder.getId())
+                    .build();
+            expectedOrdersToSave.add(expectedOrderToSave);
+        }
+
+        Voyage voyageToSave = new Voyage();
+        voyageToSave.setId(voyage.getId());
+        voyageToSave.setExpectedOrders(expectedOrdersToSave);
+        voyageToSave.setDispatchedOrders(dispatchedOrdersToSave);
+        voyageToSave.setDeparturePoint(voyage.getDeparturePoint());
+        voyageToSave.setDestinationPoint(voyage.getDestinationPoint());
+        voyageToSave.setSendingTime(voyage.getSendingTime());
+        return voyageRepository.save(voyageToSave);
     }
 
     @Override
     public void delete(Long id) {
+        if(voyageRepository.findOne(id) == null){
+            throw new IllegalArgumentException("There is no voyage with this Id!!! Cannot delete this voyage");
+        }
         voyageRepository.delete(id);
     }
 
     @Override
-    public List<VoyageDto> findAll() {
-        List<Voyage> voyages = voyageRepository.findAll();
-        List<VoyageDto> voyageDtos = new ArrayList<>();
+    public List<Voyage> findAll() {
+        List<Voyage> voyagesFromRepository = voyageRepository.findAll();
+        if (voyagesFromRepository.isEmpty()) {
+            throw new IllegalArgumentException("There is no Voyages in database!!!");
+        }
+        return voyagesFromRepository;
+    }
 
-        for (Voyage voyage : voyages) {
-            voyageDtos.add(fromVoyageToDTO(voyage));
+    @Override
+    public Voyage findOne(long id) {
+        Voyage voyage = voyageRepository.findOne(id);
+        if(voyageRepository.findOne(id) == null){
+            throw new IllegalArgumentException("There is no voyage with this Id!!! Cannot find this voyage");
         }
 
-        return voyageDtos;
+        return voyage;
     }
 
     @Override
-    public VoyageDto findOne(long id) {
-        final Voyage voyage = voyageRepository.findOne(id);
-        return fromVoyageToDTO(voyage);
-    }
-
-    @Override
-    public VoyageDto update(VoyageDto voyage) throws SQLException {
-        final Voyage update1 = fromDtoToVoyage(voyage);
-        return fromVoyageToDTO(voyageRepository.update(update1));
+    public Voyage update(VoyageDto voyage) {
+        Voyage voyageToUpdate = new Voyage();
+        voyageToUpdate.setId(voyage.getId());
+        voyageToUpdate.setSendingTime(voyage.getSendingTime());
+        voyageToUpdate.setDestinationPoint(voyage.getDestinationPoint());
+        voyageToUpdate.setDeparturePoint(voyage.getDeparturePoint());
+        return voyageRepository.update(voyageToUpdate);
     }
 }

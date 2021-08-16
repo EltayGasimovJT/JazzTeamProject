@@ -1,19 +1,27 @@
 package service;
 
 import dto.ClientDto;
+import dto.OrderDto;
+import entity.Client;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.modelmapper.ModelMapper;
 import service.impl.ClientServiceImpl;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class ClientServiceTest {
     private final ClientService clientService = new ClientServiceImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
+
 
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()
@@ -38,14 +46,15 @@ class ClientServiceTest {
 
     @ParameterizedTest
     @MethodSource("testClients")
-    void testAddClient(ClientDto expectedClient, String expectedPassportId) {
-        clientService.save(expectedClient);
-        ClientDto actualClient = clientService.findByPassportId(expectedPassportId);
-        Assertions.assertEquals(expectedClient, actualClient);
+    void testAddClient(ClientDto expectedClientDto, String expectedPassportId) throws SQLException {
+        clientService.save(expectedClientDto);
+        Client actualClient = clientService.findByPassportId(expectedPassportId);
+        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
 
     @Test
-    void deleteClient() {
+    void deleteClient() throws SQLException {
         ClientDto firstClient = ClientDto.builder()
                 .id(1L)
                 .name("firstClient")
@@ -62,21 +71,23 @@ class ClientServiceTest {
                 .passportId("04786533747")
                 .build();
 
-        ClientDto clientDTO = clientService.save(firstClient);
-        firstClient.setId(clientDTO.getId());
+        firstClient.setId(clientService.save(firstClient).getId());
         secondClient.setId(clientService.save(secondClient).getId());
         thirdClient.setId(clientService.save(thirdClient).getId());
 
         clientService.delete(thirdClient.getId());
 
-        List<ClientDto> allClients = clientService.findAll();
+        List<Client> actualClients = clientService.findAll();
 
+        List<ClientDto> actualClientDtos = actualClients.stream()
+                .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
+                .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
+        Assertions.assertEquals(Arrays.asList(firstClient, secondClient), actualClientDtos);
     }
 
     @Test
-    void findAllClients() {
+    void findAllClients() throws SQLException {
         ClientDto firstClient = ClientDto.builder().build();
         ClientDto secondClient = ClientDto.builder().build();
         ClientDto thirdClient = ClientDto.builder().build();
@@ -85,67 +96,73 @@ class ClientServiceTest {
         secondClient.setId(clientService.save(secondClient).getId());
         thirdClient.setId(clientService.save(thirdClient).getId());
 
-        List<ClientDto> actualClients = clientService.findAll();
+        List<Client> actualClients = clientService.findAll();
 
+        List<ClientDto> actualClientDtos = actualClients.stream()
+                .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
+                .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
+        Assertions.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClientDtos);
     }
 
     @Test
-    void findById() {
-        ClientDto client = ClientDto.builder()
+    void findById() throws SQLException {
+        ClientDto expectedClientDto = ClientDto.builder()
                 .id(1L)
                 .name("Oleg")
                 .build();
 
-        ClientDto savedClient = clientService.save(client);
+        Client savedClient = clientService.save(expectedClientDto);
 
-        ClientDto actualClient = clientService.findById(savedClient.getId());
+        Client actualClient = clientService.findById(savedClient.getId());
 
-        ClientDto expectedClient = ClientDto.builder()
-                .id(client.getId())
-                .name(client.getName())
-                .surname(client.getSurname())
-                .passportId(client.getPassportId())
-                .phoneNumber(client.getPhoneNumber())
-                .build();
+        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
 
-        Assertions.assertEquals(expectedClient, actualClient);
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
 
     @Test
-    void update() {
-        ClientDto expectedClient = ClientDto.builder()
+    void update() throws SQLException {
+        ClientDto expectedClientDto = ClientDto.builder()
                 .id(1L)
                 .name("Oleg")
+                .orders(Arrays.asList(
+                        OrderDto.builder().build(),
+                        OrderDto.builder().build(),
+                        OrderDto.builder().build()
+                ))
                 .build();
 
-        ClientDto savedClient = clientService.save(expectedClient);
+        Client savedClient = clientService.save(expectedClientDto);
 
-        expectedClient.setId(savedClient.getId());
-        expectedClient.setName("Igor");
+        expectedClientDto.setId(savedClient.getId());
+        expectedClientDto.setName("Igor");
 
-        clientService.update(expectedClient);
+        clientService.update(expectedClientDto);
 
-        ClientDto actualClient = clientService.findById(savedClient.getId());
+        Client actualClient = clientService.findById(savedClient.getId());
 
-        Assertions.assertEquals(expectedClient, actualClient);
+        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
 
     @Test
-    void findByPassportId() {
+    void findByPassportId() throws SQLException {
         String expectedPassportID = "12512515";
-        ClientDto expectedClient = ClientDto.builder()
+        ClientDto expectedClientDto = ClientDto.builder()
                 .name("Oleg")
                 .passportId(expectedPassportID)
                 .build();
 
-        ClientDto save = clientService.save(expectedClient);
+        Client save = clientService.save(expectedClientDto);
 
-        expectedClient.setId(save.getId());
+        expectedClientDto.setId(save.getId());
 
-        ClientDto actualClient = clientService.findByPassportId(expectedPassportID);
+        Client actualClient = clientService.findByPassportId(expectedPassportID);
 
-        Assertions.assertEquals(expectedClient, actualClient);
+        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
 }
