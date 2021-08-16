@@ -102,19 +102,21 @@ CREATE TABLE users
 CREATE TABLE orders
 (
     id                    bigint(10) NOT NULL primary key auto_increment,
-    sending_time          DATETIME   NOT NULL,
     price                 DECIMAL,
     order_state_id        bigint     NOT NULL,
-    parclel_parameters_id bigint     NOT NULL,
-    client_id             bigint     NOT NULL,
+    parcel_parameters_id bigint     NOT NULL,
+    sender_id             bigint     NOT NULL,
+    recipient_id          bigint     NOT NULL,
     destination_point_id  bigint     NOT NULL,
     current_location_id   bigint     NOT NULL,
     CONSTRAINT
         FOREIGN KEY (order_state_id) REFERENCES order_state (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT
-        FOREIGN KEY (parclel_parameters_id) REFERENCES parcel_parameters (id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (parcel_parameters_id) REFERENCES parcel_parameters (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT
-        FOREIGN KEY (client_id) REFERENCES clients (id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (sender_id) REFERENCES clients (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    CONSTRAINT
+        FOREIGN KEY (recipient_id) REFERENCES clients (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT
         FOREIGN KEY (destination_point_id) REFERENCES order_processing_point (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT
