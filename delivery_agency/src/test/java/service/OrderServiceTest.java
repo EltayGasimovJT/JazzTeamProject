@@ -1,7 +1,9 @@
 package service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dto.*;
-import entity.AbstractLocation;
 import entity.Order;
 import entity.OrderHistory;
 import lombok.SneakyThrows;
@@ -10,11 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import service.impl.OrderServiceImpl;
-import util.ConverterUtil;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
@@ -24,7 +25,7 @@ import java.util.stream.Stream;
 class OrderServiceTest {
     private final OrderService orderService = new OrderServiceImpl();
     private final ModelMapper modelMapper = new ModelMapper();
-
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
@@ -152,7 +153,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void create() throws SQLException {
+    void create() throws SQLException, IOException {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
         orderProcessingPoint.setWarehouse(new WarehouseDto());
@@ -180,7 +181,9 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findOne(1);
 
-        OrderDto actualOrderDto = modelMapper.createTypeMap(actualOrder, OrderDto.class);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        OrderDto actualOrderDto = objectMapper.readValue(objectMapper.writeValueAsBytes(actualOrder), OrderDto.class);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
