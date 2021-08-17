@@ -90,7 +90,6 @@ class ClientServiceTest {
         clientService.delete(thirdClientToTest.getId());
 
         List<Client> actualClients = clientService.findAll();
-
         List<ClientDto> actualClientDtos = actualClients.stream()
                 .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
                 .collect(Collectors.toList());
