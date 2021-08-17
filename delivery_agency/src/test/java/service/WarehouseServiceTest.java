@@ -1,15 +1,15 @@
 package service;
 
-import dto.OrderDto;
-import dto.OrderProcessingPointDto;
-import dto.WarehouseDto;
+import dto.*;
 import entity.Warehouse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 import service.impl.WarehouseServiceImpl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -37,16 +37,19 @@ class WarehouseServiceTest {
     void deleteWarehouse() throws SQLException {
         WarehouseDto firstWarehouse = new WarehouseDto();
         firstWarehouse.setId(1L);
+        firstWarehouse.setLocation("");
         firstWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
         WarehouseDto secondWarehouse = new WarehouseDto();
         secondWarehouse.setId(2L);
+        secondWarehouse.setLocation("");
         secondWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
         WarehouseDto thirdWarehouse = new WarehouseDto();
         thirdWarehouse.setId(3L);
+        thirdWarehouse.setLocation("");
         thirdWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
@@ -70,14 +73,17 @@ class WarehouseServiceTest {
         firstWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
+        firstWarehouse.setLocation("Moscow");
         WarehouseDto secondWarehouse = new WarehouseDto();
         secondWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
+        secondWarehouse.setLocation("Moscow");
         WarehouseDto thirdWarehouse = new WarehouseDto();
         thirdWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
+        thirdWarehouse.setLocation("Moscow");
         warehouseService.save(firstWarehouse);
         warehouseService.save(secondWarehouse);
         warehouseService.save(thirdWarehouse);
@@ -108,9 +114,45 @@ class WarehouseServiceTest {
 
     @Test
     void update() throws SQLException {
+        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
+        orderProcessingPoint.setLocation("Russia");
+        orderProcessingPoint.setWarehouse(new WarehouseDto());
+        OrderDto firstOrderToAdd = OrderDto.builder()
+                .id(1L)
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
+                .destinationPlace(orderProcessingPoint)
+                .sender(ClientDto.builder().build())
+                .price(BigDecimal.valueOf(1))
+                .currentLocation(new OrderProcessingPointDto())
+                .state(OrderStateDto.builder().build())
+                .recipient(ClientDto.builder().build())
+                .history(new ArrayList<>())
+                .build();
+        OrderDto secondOrderToAdd =OrderDto.builder()
+                .id(2L)
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
+                .destinationPlace(orderProcessingPoint)
+                .sender(ClientDto.builder().build())
+                .price(BigDecimal.valueOf(1))
+                .currentLocation(new OrderProcessingPointDto())
+                .state(OrderStateDto.builder().build())
+                .recipient(ClientDto.builder().build())
+                .history(new ArrayList<>())
+                .build();
+
         WarehouseDto expectedDto = new WarehouseDto();
         expectedDto.setId(1L);
         expectedDto.setLocation("Vitebsk");
+        expectedDto.setExpectedOrders(Arrays.asList(firstOrderToAdd, secondOrderToAdd));
+        expectedDto.setDispatchedOrders(Arrays.asList(firstOrderToAdd, secondOrderToAdd));
         expectedDto.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
@@ -120,15 +162,8 @@ class WarehouseServiceTest {
 
         expectedDto.setLocation(newLocation);
 
-        expectedDto.setDispatchedOrders(Arrays.asList(
-                new OrderDto(),
-                new OrderDto()
-        ));
-        expectedDto.setExpectedOrders(
-                Arrays.asList(
-                        new OrderDto(),
-                        new OrderDto()
-        ));
+        expectedDto.setDispatchedOrders(Collections.singletonList(secondOrderToAdd));
+        expectedDto.setExpectedOrders(Collections.singletonList(secondOrderToAdd));
 
         Warehouse actual = warehouseService.update(expectedDto);
 

@@ -1,6 +1,5 @@
 package dto;
 
-import entity.Warehouse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +11,5 @@ import java.util.List;
 @AllArgsConstructor
 public class WarehouseDto extends AbstractBuildingDto{
     private List<OrderProcessingPointDto> orderProcessingPoints;
-    private List<Warehouse> connectedWarehouses;
+    private List<WarehouseDto> connectedWarehouses;
 }
