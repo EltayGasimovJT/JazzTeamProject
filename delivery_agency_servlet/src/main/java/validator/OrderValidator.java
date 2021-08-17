@@ -3,7 +3,6 @@ package validator;
 import entity.Order;
 
 public class OrderValidator {
-
     private OrderValidator() {
 
     }
