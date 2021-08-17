@@ -144,8 +144,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
                 try (ResultSet rs = statement.executeQuery()) {
                     if (rs.next()) {
-                        Client client = getClient(rs);
-                        return client;
+                        return getClient(rs);
                     }
                 }
             }
