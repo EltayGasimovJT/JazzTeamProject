@@ -3,6 +3,7 @@ package service;
 import dto.*;
 import entity.Order;
 import entity.OrderHistory;
+import entity.WorkingPlaceType;
 import lombok.SneakyThrows;
 import mapping.OrderMapper;
 import org.junit.jupiter.api.Assertions;

@@ -2,10 +2,10 @@ package service.impl;
 
 import dto.AbstractBuildingDto;
 import dto.UserDto;
-import dto.WorkingPlaceType;
 import entity.OrderProcessingPoint;
 import entity.User;
 import entity.Warehouse;
+import entity.WorkingPlaceType;
 import lombok.extern.slf4j.Slf4j;
 import mapping.UserMapper;
 import org.modelmapper.ModelMapper;

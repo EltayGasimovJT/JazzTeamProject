@@ -15,8 +15,9 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import static dto.WorkingPlaceType.PROCESSING_POINT;
-import static dto.WorkingPlaceType.WAREHOUSE;
+import static entity.WorkingPlaceType.PROCESSING_POINT;
+import static entity.WorkingPlaceType.WAREHOUSE;
+
 
 class UserServiceTest {
     private final UserService userService = new UserServiceImpl();

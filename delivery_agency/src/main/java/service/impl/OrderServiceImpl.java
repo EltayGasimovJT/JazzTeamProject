@@ -1,7 +1,6 @@
 package service.impl;
 
 import dto.*;
-import dto.WorkingPlaceType;
 import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import mapping.OrderMapper;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Slf4j
 public class OrderServiceImpl implements OrderService {
