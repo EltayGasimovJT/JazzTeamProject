@@ -67,7 +67,7 @@ public class ClientServiceImpl implements ClientService {
     public Client update(ClientDto newClient) throws SQLException, IllegalArgumentException {
         ClientValidator.validateClient(clientRepository.findOne(newClient.getId()));
         List<Order> clientOrdersToUpdate = newClient.getOrders().stream()
-                .map(CustomModelMapper::mapOrderToDto)
+                .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList());
 
         Client clientToUpdate = Client.builder()

@@ -136,12 +136,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void send(List<OrderDto> orderDtosToSend)throws IllegalArgumentException {
         List<Order> ordersToSend = orderDtosToSend.stream()
-                .map(CustomModelMapper::mapOrderToDto)
+                .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList());
 
         for (Order order : ordersToSend) {
             OrderState orderState;
-            if (isFinalWarehouse(CustomModelMapper.mapOrderToDto(order))) {
+            if (isFinalWarehouse(CustomModelMapper.mapDtoToOrder(order))) {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString());
             } else {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString());

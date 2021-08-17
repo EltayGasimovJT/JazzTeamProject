@@ -19,10 +19,10 @@ public class VoyageServiceImpl implements VoyageService {
         Voyage voyageToSave = new Voyage();
         voyageToSave.setId(voyageDtoToSave.getId());
         voyageToSave.setExpectedOrders(voyageDtoToSave.getExpectedOrders().stream()
-                .map(CustomModelMapper::mapOrderToDto)
+                .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList()));
         voyageToSave.setDispatchedOrders(voyageDtoToSave.getDispatchedOrders().stream()
-                .map(CustomModelMapper::mapOrderToDto)
+                .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList()));
         voyageToSave.setDeparturePoint(voyageDtoToSave.getDeparturePoint());
         voyageToSave.setDestinationPoint(voyageDtoToSave.getDestinationPoint());
