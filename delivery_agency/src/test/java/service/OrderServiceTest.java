@@ -91,7 +91,7 @@ class OrderServiceTest {
                 .currentLocation(orderProcessingPoint)
                 .build();
 
-        orderService.create(expectedDto);
+        orderService.save(expectedDto);
 
         orderProcessingPoint.setLocation("Poland");
 
@@ -130,7 +130,7 @@ class OrderServiceTest {
                 .recipient(ClientDto.builder().build())
                 .build();
 
-        orderService.create(order);
+        orderService.save(order);
 
         OrderHistoryDto newOrderHistory = OrderHistoryDto.builder().user(UserDto.builder().build()).build();
 
@@ -193,7 +193,7 @@ class OrderServiceTest {
 
         expectedOrder.setHistory(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()));
 
-        orderService.create(expectedOrder);
+        orderService.save(expectedOrder);
 
         Order actualOrder = orderService.findOne(1);
 
@@ -222,7 +222,7 @@ class OrderServiceTest {
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
-        orderService.create(expectedOrder);
+        orderService.save(expectedOrder);
 
         Order actualOrder = orderService.findOne(1);
 
@@ -257,7 +257,7 @@ class OrderServiceTest {
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
-        orderService.create(expectedOrder);
+        orderService.save(expectedOrder);
 
         Order actualOrder = orderService.findByRecipient(recipient);
 
@@ -293,7 +293,7 @@ class OrderServiceTest {
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
-        orderService.create(expectedOrder);
+        orderService.save(expectedOrder);
 
         Order actualOrder = orderService.findByRecipient(sender);
 
@@ -329,7 +329,7 @@ class OrderServiceTest {
                 order
         );
 
-        orderService.create(order);
+        orderService.save(order);
 
         orderService.send(expectedOrders);
 
@@ -370,7 +370,7 @@ class OrderServiceTest {
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
 
-        orderService.create(order);
+        orderService.save(order);
 
         String actual = orderService.getState(1);
 
@@ -425,8 +425,8 @@ class OrderServiceTest {
                 .recipient(ClientDto.builder().build())
                 .build();
 
-        orderService.create(firstOrder);
-        orderService.create(secondOrder);
+        orderService.save(firstOrder);
+        orderService.save(secondOrder);
 
         List<OrderDto> actual = Arrays.asList(
                 firstOrder, secondOrder

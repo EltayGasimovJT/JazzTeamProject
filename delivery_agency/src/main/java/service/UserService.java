@@ -8,15 +8,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface UserService {
-    User save(UserDto user) throws SQLException;
+    User save(UserDto userToSave) throws SQLException;
 
-    void deleteUser(Long id);
+    void delete(Long idForDelete);
 
-    List<User> findAllUsers() throws SQLException;
+    List<User> findAll() throws SQLException;
 
-    User getUser(long id) throws SQLException;
+    User findOne(long idForSearch) throws SQLException;
 
-    User update(UserDto user) throws SQLException;
+    User update(UserDto userDtoToUpdate) throws SQLException;
 
     User changeWorkingPlace(UserDto userId, AbstractBuildingDto newWorkingPlace) throws SQLException;
 }

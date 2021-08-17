@@ -1,74 +1,56 @@
 package service.impl;
 
-import dto.OrderDto;
 import dto.VoyageDto;
-import entity.Order;
 import entity.Voyage;
+import mapping.OrderMapper;
 import repository.VoyageRepository;
 import repository.impl.VoyageRepositoryImpl;
 import service.VoyageService;
+import validator.VoyageValidator;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 
     @Override
-    public Voyage save(VoyageDto voyage) {
-        List<Order> expectedOrdersToSave = new ArrayList<>();
-        List<Order> dispatchedOrdersToSave = new ArrayList<>();
-
-        for (OrderDto dispatchedOrder : voyage.getDispatchedOrders()) {
-            Order orderToDispatch = Order.builder()
-                    .id(dispatchedOrder.getId())
-                    .build();
-
-            dispatchedOrdersToSave.add(orderToDispatch);
-        }
-
-        for (OrderDto expectedOrder : voyage.getExpectedOrders()) {
-            Order expectedOrderToSave = Order.builder()
-                    .id(expectedOrder.getId())
-                    .build();
-            expectedOrdersToSave.add(expectedOrderToSave);
-        }
-
+    public Voyage save(VoyageDto voyageDtoToSave) {
         Voyage voyageToSave = new Voyage();
-        voyageToSave.setId(voyage.getId());
-        voyageToSave.setExpectedOrders(expectedOrdersToSave);
-        voyageToSave.setDispatchedOrders(dispatchedOrdersToSave);
-        voyageToSave.setDeparturePoint(voyage.getDeparturePoint());
-        voyageToSave.setDestinationPoint(voyage.getDestinationPoint());
-        voyageToSave.setSendingTime(voyage.getSendingTime());
+        voyageToSave.setId(voyageDtoToSave.getId());
+        voyageToSave.setExpectedOrders(voyageDtoToSave.getExpectedOrders().stream()
+                .map(OrderMapper::toOrder)
+                .collect(Collectors.toList()));
+        voyageToSave.setDispatchedOrders(voyageDtoToSave.getDispatchedOrders().stream()
+                .map(OrderMapper::toOrder)
+                .collect(Collectors.toList()));
+        voyageToSave.setDeparturePoint(voyageDtoToSave.getDeparturePoint());
+        voyageToSave.setDestinationPoint(voyageDtoToSave.getDestinationPoint());
+        voyageToSave.setSendingTime(voyageDtoToSave.getSendingTime());
+        VoyageValidator.validateOnSave(voyageToSave);
+
         return voyageRepository.save(voyageToSave);
     }
 
     @Override
-    public void delete(Long id) {
-        if(voyageRepository.findOne(id) == null){
-            throw new IllegalArgumentException("There is no voyage with this Id!!! Cannot delete this voyage");
-        }
-        voyageRepository.delete(id);
+    public void delete(Long idForDelete) {
+        VoyageValidator.validateVoyage(voyageRepository.findOne(idForDelete));
+        voyageRepository.delete(idForDelete);
     }
 
     @Override
     public List<Voyage> findAll() {
         List<Voyage> voyagesFromRepository = voyageRepository.findAll();
-        if (voyagesFromRepository.isEmpty()) {
-            throw new IllegalArgumentException("There is no Voyages in database!!!");
-        }
+        VoyageValidator.validateVoyageList(voyagesFromRepository);
         return voyagesFromRepository;
     }
 
     @Override
-    public Voyage findOne(long id) {
-        Voyage voyage = voyageRepository.findOne(id);
-        if(voyageRepository.findOne(id) == null){
-            throw new IllegalArgumentException("There is no voyage with this Id!!! Cannot find this voyage");
-        }
+    public Voyage findOne(long idForSearch) {
+        Voyage foundVoyage = voyageRepository.findOne(idForSearch);
+        VoyageValidator.validateVoyage(foundVoyage);
 
-        return voyage;
+        return foundVoyage;
     }
 
     @Override
@@ -78,6 +60,8 @@ public class VoyageServiceImpl implements VoyageService {
         voyageToUpdate.setSendingTime(voyage.getSendingTime());
         voyageToUpdate.setDestinationPoint(voyage.getDestinationPoint());
         voyageToUpdate.setDeparturePoint(voyage.getDeparturePoint());
+        VoyageValidator.validateVoyage(voyageToUpdate);
+
         return voyageRepository.update(voyageToUpdate);
     }
 }

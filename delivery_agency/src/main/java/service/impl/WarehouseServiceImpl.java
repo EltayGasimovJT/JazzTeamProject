@@ -1,17 +1,15 @@
 package service.impl;
 
-import dto.OrderDto;
-import dto.OrderProcessingPointDto;
 import dto.WarehouseDto;
-import entity.Order;
 import entity.OrderProcessingPoint;
 import entity.Warehouse;
+import mapping.OrderMapper;
 import org.modelmapper.ModelMapper;
 import repository.WarehouseRepository;
 import repository.impl.WarehouseRepositoryImpl;
 import service.WarehouseService;
+import validator.WarehouseValidator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,77 +18,55 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public Warehouse save(WarehouseDto warehouseDto) {
+    public Warehouse save(WarehouseDto warehouseDtoToSave) {
         Warehouse warehouseToSave = new Warehouse();
-        List<OrderProcessingPoint> processingPointsToSave = new ArrayList<>();
 
-        for (OrderProcessingPointDto orderProcessingPoint : warehouseDto.getOrderProcessingPoints()) {
-            OrderProcessingPoint orderProcessingPointToSave = new OrderProcessingPoint();
-            orderProcessingPointToSave.setId(orderProcessingPoint.getId());
-            orderProcessingPointToSave.setLocation(orderProcessingPoint.getLocation());
-        }
+        warehouseToSave.setId(warehouseDtoToSave.getId());
+        warehouseToSave.setLocation(warehouseDtoToSave.getLocation());
+        warehouseToSave.setOrderProcessingPoints(warehouseDtoToSave.getOrderProcessingPoints()
+                .stream()
+                .map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto,OrderProcessingPoint.class))
+                .collect(Collectors.toList()));
 
-        warehouseToSave.setId(warehouseDto.getId());
-        warehouseToSave.setLocation(warehouseDto.getLocation());
-        warehouseToSave.setOrderProcessingPoints(processingPointsToSave);
-
+        WarehouseValidator.validateOnSave(warehouseToSave);
         return warehouseRepository.save(warehouseToSave);
     }
 
     @Override
-    public void delete(Long id) {
-        warehouseRepository.delete(id);
+    public void delete(Long idForDelete) {
+        WarehouseValidator.validateWarehouse(warehouseRepository.findOne(idForDelete));
+        warehouseRepository.delete(idForDelete);
     }
 
     @Override
     public List<Warehouse> findAll() {
         List<Warehouse> warehousesFromRepository = warehouseRepository.findAll();
-        if (warehousesFromRepository.isEmpty()) {
-            throw new IllegalArgumentException("There is no warehouses on database!!!");
-        }
+        WarehouseValidator.validateWarehouseList(warehousesFromRepository);
 
         return warehousesFromRepository;
     }
 
     @Override
-    public Warehouse findOne(long id) {
-        Warehouse warehouseById = warehouseRepository.findOne(id);
-        if (warehouseById == null) {
-            throw new IllegalArgumentException("There is no warehouse with this Id!!!");
-        }
+    public Warehouse findOne(long idForSearch) {
+        Warehouse foundWarehouse = warehouseRepository.findOne(idForSearch);
+        WarehouseValidator.validateWarehouse(foundWarehouse);
 
-        return warehouseById;
+        return foundWarehouse;
     }
 
     @Override
-    public Warehouse update(WarehouseDto warehouse) {
-        List<Order> expectedOrdersToUpdate = new ArrayList<>();
-        List<Order> dispatchedOrdersToUpdate = new ArrayList<>();
+    public Warehouse update(WarehouseDto warehouseDtoToUpdate) {
+        Warehouse warehouseToUpdate = warehouseRepository.findOne(warehouseDtoToUpdate.getId());
 
-        for (OrderDto dispatchedOrder : warehouse.getDispatchedOrders()) {
-            Order orderToDispatch = Order.builder()
-                    .id(dispatchedOrder.getId())
-                    .build();
+        WarehouseValidator.validateWarehouse(warehouseToUpdate);
 
-            dispatchedOrdersToUpdate.add(orderToDispatch);
-        }
-
-        for (OrderDto expectedOrder : warehouse.getExpectedOrders()) {
-            Order expectedOrderToSave = Order.builder()
-                    .id(expectedOrder.getId())
-                    .build();
-            expectedOrdersToUpdate.add(expectedOrderToSave);
-        }
-
-        Warehouse warehouseToUpdate = warehouseRepository.findOne(warehouse.getId());
-
-        if (warehouseToUpdate == null) {
-            throw new IllegalArgumentException("There is no warehouses to update!!!");
-        }
-
-        warehouseToUpdate.setExpectedOrders(expectedOrdersToUpdate);
-        warehouseToUpdate.setDispatchedOrders(dispatchedOrdersToUpdate);
-        warehouseToUpdate.setOrderProcessingPoints(warehouse.getOrderProcessingPoints().stream().
+        warehouseToUpdate.setExpectedOrders(warehouseDtoToUpdate.getExpectedOrders().stream()
+                .map(OrderMapper::toOrder)
+                .collect(Collectors.toList()));
+        warehouseToUpdate.setDispatchedOrders(warehouseDtoToUpdate.getDispatchedOrders().stream()
+                .map(OrderMapper::toOrder)
+                .collect(Collectors.toList()));
+        warehouseToUpdate.setOrderProcessingPoints(warehouseDtoToUpdate.getOrderProcessingPoints().stream().
                 map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto, OrderProcessingPoint.class))
                 .collect(Collectors.toList()));
 

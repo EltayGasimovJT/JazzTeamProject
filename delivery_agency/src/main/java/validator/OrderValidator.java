@@ -46,4 +46,10 @@ public class OrderValidator {
         }
         validateOrder(orderToValidate);
     }
+
+    public static void validateOrdersOnTheWay(List<List<Order>> ordersOnTheWayToValidate) throws IllegalArgumentException {
+        if(ordersOnTheWayToValidate.isEmpty()){
+            throw new IllegalArgumentException("There is no orders on the way!!!");
+        }
+    }
 }

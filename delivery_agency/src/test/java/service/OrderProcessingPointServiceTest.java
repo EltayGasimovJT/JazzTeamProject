@@ -60,14 +60,17 @@ class OrderProcessingPointServiceTest {
     void deleteOrderProcessingPoint() throws SQLException {
         OrderProcessingPointDto firstProcessingPoint = new OrderProcessingPointDto();
         firstProcessingPoint.setId(1L);
+        firstProcessingPoint.setLocation("Polotsk");
         firstProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderProcessingPointDto secondProcessingPoint = new OrderProcessingPointDto();
         secondProcessingPoint.setId(2L);
+        secondProcessingPoint.setLocation("Minsk");
         secondProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderProcessingPointDto thirdProcessingPoint = new OrderProcessingPointDto();
         thirdProcessingPoint.setId(3L);
+        thirdProcessingPoint.setLocation("Minsk");
         thirdProcessingPoint.setWarehouse(new WarehouseDto());
 
         orderProcessingPointService.save(firstProcessingPoint);
@@ -95,10 +98,13 @@ class OrderProcessingPointServiceTest {
     void findAllOrderProcessingPoints() throws SQLException {
         OrderProcessingPointDto firstProcessingPoint = new OrderProcessingPointDto();
         firstProcessingPoint.setWarehouse(new WarehouseDto());
+        firstProcessingPoint.setLocation("Minsk");
         OrderProcessingPointDto secondProcessingPoint = new OrderProcessingPointDto();
         secondProcessingPoint.setWarehouse(new WarehouseDto());
+        secondProcessingPoint.setLocation("Gomel");
         OrderProcessingPointDto thirdProcessingPoint = new OrderProcessingPointDto();
         thirdProcessingPoint.setWarehouse(new WarehouseDto());
+        thirdProcessingPoint.setLocation("Polotsk");
 
         orderProcessingPointService.save(firstProcessingPoint);
         orderProcessingPointService.save(secondProcessingPoint);
@@ -150,6 +156,8 @@ class OrderProcessingPointServiceTest {
         expectedProcessingPointDto.setId(1L);
         expectedProcessingPointDto.setLocation("Minsk");
         expectedProcessingPointDto.setWarehouse(new WarehouseDto());
+        expectedProcessingPointDto.setExpectedOrders(new ArrayList<>());
+        expectedProcessingPointDto.setDispatchedOrders(new ArrayList<>());
 
         orderProcessingPointService.save(expectedProcessingPointDto);
 

@@ -8,7 +8,7 @@ public class OrderProcessingPointValidator {
     private OrderProcessingPointValidator() {
     }
 
-    public static void validateProcessingPoint(OrderProcessingPoint orderProcessingPointToValidate) {
+    public static void validateProcessingPoint(OrderProcessingPoint orderProcessingPointToValidate) throws IllegalArgumentException {
         if (orderProcessingPointToValidate == null) {
             throw new IllegalArgumentException("There is no processing point with such Id!!!");
         }
@@ -20,13 +20,14 @@ public class OrderProcessingPointValidator {
         }
     }
 
-    public static void validateOnSave(OrderProcessingPoint orderProcessingPointToValidate) {
+    public static void validateOnSave(OrderProcessingPoint orderProcessingPointToValidate) throws IllegalArgumentException {
         if (orderProcessingPointToValidate == null) {
             throw new IllegalArgumentException("Processing point cannot be null!!!");
         }
+        validateProcessingPoint(orderProcessingPointToValidate);
     }
 
-    public static void validateProcessingPointList(List<OrderProcessingPoint> orderProcessingPointsToValidate) {
+    public static void validateProcessingPointList(List<OrderProcessingPoint> orderProcessingPointsToValidate) throws IllegalArgumentException {
         if (orderProcessingPointsToValidate.isEmpty()) {
             throw new IllegalArgumentException("There is no processing points on the repository!!!");
         }

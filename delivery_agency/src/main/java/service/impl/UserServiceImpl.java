@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import repository.UserRepository;
 import repository.impl.UserRepositoryImpl;
 import service.UserService;
+import validator.UserValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -22,40 +23,48 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public User save(UserDto userDto) throws SQLException {
-        User user = User.builder().id(userDto.getId())
-                .name(userDto.getName())
-                .surname(userDto.getSurname())
-                .roles(userDto.getRoles())
+    public User save(UserDto userDtoToSave) throws SQLException {
+        User userToSave = User.builder().id(userDtoToSave.getId())
+                .name(userDtoToSave.getName())
+                .surname(userDtoToSave.getSurname())
+                .roles(userDtoToSave.getRoles())
                 .build();
-        if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
-            user.setWorkingPlace(modelMapper.map(userDto.getWorkingPlace(), OrderProcessingPoint.class));
-        } else if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
-            user.setWorkingPlace(modelMapper.map(userDto.getWorkingPlace(), Warehouse.class));
+        if (userDtoToSave.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
+            userToSave.setWorkingPlace(modelMapper.map(userDtoToSave.getWorkingPlace(), OrderProcessingPoint.class));
+        } else if (userDtoToSave.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
+            userToSave.setWorkingPlace(modelMapper.map(userDtoToSave.getWorkingPlace(), Warehouse.class));
         }
 
-        return userRepository.save(user);
+        UserValidator.validateOnSave(userToSave);
+
+        return userRepository.save(userToSave);
     }
 
     @Override
-    public void deleteUser(Long id) {
-        userRepository.delete(id);
+    public void delete(Long idForDelete) {
+        UserValidator.validateUser(userRepository.findOne(idForDelete));
+        userRepository.delete(idForDelete);
     }
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public List<User> findAll() {
+        List<User> usersFromRepository = userRepository.findAll();
+        UserValidator.validateUsersList(usersFromRepository);
+        return usersFromRepository;
     }
 
     @Override
-    public User getUser(long id) {
-        return userRepository.findOne(id);
+    public User findOne(long idForSearch) {
+        User foundUser = userRepository.findOne(idForSearch);
+        UserValidator.validateUser(foundUser);
+        return foundUser;
     }
 
     @Override
-    public User update(UserDto userDto) throws SQLException {
-        User user = UserMapper.toUser(userDto);
-        return userRepository.update(user);
+    public User update(UserDto userDtoToUpdate) throws SQLException {
+        User userToUpdate = UserMapper.toUser(userDtoToUpdate);
+        UserValidator.validateUser(userToUpdate);
+        return userRepository.update(userToUpdate);
     }
 
     @Override

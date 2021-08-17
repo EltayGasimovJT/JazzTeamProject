@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface WarehouseService {
-    Warehouse save(WarehouseDto warehouse) throws SQLException;
+    Warehouse save(WarehouseDto warehouseDtoToSave) throws SQLException;
 
-    void delete(Long id);
+    void delete(Long idForDelete);
 
     List<Warehouse> findAll() throws SQLException;
 
-    Warehouse findOne(long id) throws SQLException;
+    Warehouse findOne(long idForSearch) throws SQLException;
 
-    Warehouse update(WarehouseDto warehouse) throws SQLException;
+    Warehouse update(WarehouseDto warehouseDtoToUpdate) throws SQLException;
 }

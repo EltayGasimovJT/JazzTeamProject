@@ -30,71 +30,73 @@ public class OrderServiceImpl implements OrderService {
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
 
     @Override
-    public Order updateOrderCurrentLocation(long id, AbstractBuildingDto newLocation) {
-        Order order = findOne(id);
-        if(newLocation.getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)){
+    public Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) {
+        Order order = findOne(idForLocationUpdate);
+        OrderValidator.validateOrder(order);
+        if (newLocation.getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
             order.setCurrentLocation(modelMapper.map(newLocation, OrderProcessingPoint.class));
-        }else if(newLocation.getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)){
+        } else if (newLocation.getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
             order.setCurrentLocation(modelMapper.map(newLocation, Warehouse.class));
         }
         return orderRepository.update(order);
     }
 
     @Override
-    public void updateOrderHistory(long id, OrderHistoryDto newHistory) {
-        Order order = orderRepository.findOne(id);
+    public void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory) {
+        Order order = orderRepository.findOne(idForHistoryUpdate);
+        OrderValidator.validateOrder(order);
         order.setHistory(Collections.singletonList(modelMapper.map(newHistory, OrderHistory.class)));
         orderRepository.update(order);
     }
 
     @Override
-    public Order create(OrderDto order) throws SQLException {
-        BigDecimal price = calculatePrice(order);
+    public Order save(OrderDto orderDtoToSave) throws SQLException {
+        BigDecimal price = calculatePrice(orderDtoToSave);
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
-        order.setPrice(price);
-        order.setState(modelMapper.map(orderState, OrderStateDto.class));
+        orderDtoToSave.setPrice(price);
+        orderDtoToSave.setState(modelMapper.map(orderState, OrderStateDto.class));
         OrderHistory orderHistory = OrderHistory.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .user(User.builder().build())
                 .build();
-        order.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
+        orderDtoToSave.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
 
         Client senderToSave = Client.builder()
-                .id(order.getSender().getId())
-                .name(order.getSender().getName())
-                .surname(order.getSender().getSurname())
-                .passportId(order.getSender().getPassportId())
-                .phoneNumber(order.getSender().getPhoneNumber())
+                .id(orderDtoToSave.getSender().getId())
+                .name(orderDtoToSave.getSender().getName())
+                .surname(orderDtoToSave.getSender().getSurname())
+                .passportId(orderDtoToSave.getSender().getPassportId())
+                .phoneNumber(orderDtoToSave.getSender().getPhoneNumber())
                 .build();
 
         Client recipientToSave = Client.builder()
-                .id(order.getRecipient().getId())
-                .name(order.getRecipient().getName())
-                .surname(order.getRecipient().getSurname())
-                .passportId(order.getRecipient().getPassportId())
-                .phoneNumber(order.getRecipient().getPhoneNumber())
+                .id(orderDtoToSave.getRecipient().getId())
+                .name(orderDtoToSave.getRecipient().getName())
+                .surname(orderDtoToSave.getRecipient().getSurname())
+                .passportId(orderDtoToSave.getRecipient().getPassportId())
+                .phoneNumber(orderDtoToSave.getRecipient().getPhoneNumber())
                 .build();
 
         OrderProcessingPoint departurePoint = new OrderProcessingPoint();
-        departurePoint.setId(order.getCurrentLocation().getId());
+        departurePoint.setId(orderDtoToSave.getCurrentLocation().getId());
         OrderProcessingPoint destinationPlace = new OrderProcessingPoint();
-        departurePoint.setId(order.getDestinationPlace().getId());
+        departurePoint.setId(orderDtoToSave.getDestinationPlace().getId());
 
         OrderHistory orderHistoryToSave = OrderHistory.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
-                .comment(order.getHistory().get(0).getComment())
-                .changingTime(order.getHistory().get(0).getChangingTime())
+                .comment(orderDtoToSave.getHistory().get(0).getComment())
+                .changingTime(orderDtoToSave.getHistory().get(0).getChangingTime())
                 .build();
 
         Order orderToSave = Order.builder()
-                .id(order.getId())
+                .id(orderDtoToSave.getId())
                 .sender(senderToSave)
                 .recipient(recipientToSave)
                 .currentLocation(departurePoint)
                 .destinationPlace(destinationPlace)
                 .history(Collections.singletonList(orderHistoryToSave))
-                .parcelParameters(modelMapper.map(order.getParcelParameters(), ParcelParameters.class))
-                .price(order.getPrice())
+                .parcelParameters(modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class))
+                .price(orderDtoToSave.getPrice())
                 .state(OrderState.builder()
                         .state(OrderStates.READY_TO_SEND.toString())
                         .build())
@@ -105,8 +107,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order findOne(long id) throws IllegalArgumentException {
-        Order orderById = orderRepository.findOne(id);
+    public Order findOne(long idForSearch) throws IllegalArgumentException {
+        Order orderById = orderRepository.findOne(idForSearch);
 
         OrderValidator.validateOrder(orderById);
 
@@ -114,28 +116,30 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order findByRecipient(ClientDto recipient) throws IllegalArgumentException {
-        Order byRecipient = orderRepository.findByRecipient(modelMapper.map(recipient, Client.class));
+    public Order findByRecipient(ClientDto recipientForSearch) throws IllegalArgumentException {
+        Order byRecipient = orderRepository.findByRecipient(modelMapper.map(recipientForSearch, Client.class));
         OrderValidator.validateOrder(byRecipient);
 
         return byRecipient;
     }
 
     @Override
-    public Order findBySender(ClientDto sender) throws IllegalArgumentException {
-        Order bySender = orderRepository.findByRecipient(modelMapper.map(sender, Client.class));
+    public Order findBySender(ClientDto senderForSearch) throws IllegalArgumentException {
+        Order bySender = orderRepository.findByRecipient(modelMapper.map(senderForSearch, Client.class));
         OrderValidator.validateOrder(bySender);
         return bySender;
     }
 
     @Override
-    public AbstractBuilding getCurrentOrderLocation(long id) throws IllegalArgumentException {
-        return orderRepository.findOne(id).getCurrentLocation();
+    public AbstractBuilding getCurrentOrderLocation(long idForFindCurrentLocation) throws IllegalArgumentException {
+        Order foundOrder = orderRepository.findOne(idForFindCurrentLocation);
+        OrderValidator.validateOrder(foundOrder);
+        return foundOrder.getCurrentLocation();
     }
 
     @Override
-    public void send(List<OrderDto> orderDtos) {
-        List<Order> ordersToSend = orderDtos.stream()
+    public void send(List<OrderDto> orderDtosToSend) {
+        List<Order> ordersToSend = orderDtosToSend.stream()
                 .map(OrderMapper::toOrder)
                 .collect(Collectors.toList());
 
@@ -156,13 +160,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> accept(List<OrderDto> acceptedOrders) {
+    public List<Order> accept(List<OrderDto> orderDtosToAccept) {
         List<Order> ordersToAccept = new ArrayList<>();
-        for (OrderDto order : acceptedOrders) {
+        for (OrderDto order : orderDtosToAccept) {
             ordersToAccept.add(modelMapper.map(order, Order.class));
         }
 
         List<Order> ordersFromRepository = orderRepository.acceptOrders(ordersToAccept);
+
+        OrderValidator.validateOrders(ordersFromRepository);
 
         List<OrderDto> expectedOrderDtos = new ArrayList<>();
 
@@ -170,8 +176,7 @@ public class OrderServiceImpl implements OrderService {
             expectedOrderDtos.add(modelMapper.map(order, OrderDto.class));
         }
 
-        compareOrders(expectedOrderDtos, acceptedOrders);
-
+        compareOrders(expectedOrderDtos, orderDtosToAccept);
 
         for (OrderDto orderDto : expectedOrderDtos) {
             OrderState orderState;
@@ -190,8 +195,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String getState(long id) {
-        Order order = orderRepository.findOne(id);
+    public String getState(long idForStateFind) {
+        Order order = orderRepository.findOne(idForStateFind);
+        OrderValidator.validateOrder(order);
         return order.getState().getState();
     }
 
@@ -218,36 +224,35 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BigDecimal calculatePrice(OrderDto order) throws IllegalArgumentException, SQLException {
-        CoefficientForPriceCalculationDto coefficientForPriceCalculation = getCoefficient(order.getDestinationPlace());
+    public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException, SQLException {
+        CoefficientForPriceCalculationDto coefficientForPriceCalculation = getCoefficient(orderForCalculate.getDestinationPlace());
 
-        return priceCalculationRuleService.calculatePrice(order, coefficientForPriceCalculation);
+        return priceCalculationRuleService.calculatePrice(orderForCalculate, coefficientForPriceCalculation);
     }
 
     @Override
     public List<List<Order>> getOrdersOnTheWay() {
         List<List<Order>> allSentOrders = orderRepository.getSentOrders();
-        if (allSentOrders.isEmpty()) {
-            throw new IllegalArgumentException("There is no orders on the way!!!");
-        }
+        OrderValidator.validateOrdersOnTheWay(allSentOrders);
 
         return allSentOrders;
     }
 
     @Override
-    public Order update(OrderDto order) {
-        Order orderToUpdate = orderRepository.findOne(order.getId());
+    public Order update(OrderDto orderDtoToUpdate) {
+        Order orderToUpdate = orderRepository.findOne(orderDtoToUpdate.getId());
+        OrderValidator.validateOrder(orderToUpdate);
         Client newRecipient = Client.builder()
-                .id(order.getRecipient().getId())
-                .name(order.getRecipient().getName())
-                .surname(order.getRecipient().getSurname())
-                .passportId(order.getRecipient().getPassportId())
-                .phoneNumber(order.getRecipient().getPhoneNumber())
+                .id(orderDtoToUpdate.getRecipient().getId())
+                .name(orderDtoToUpdate.getRecipient().getName())
+                .surname(orderDtoToUpdate.getRecipient().getSurname())
+                .passportId(orderDtoToUpdate.getRecipient().getPassportId())
+                .phoneNumber(orderDtoToUpdate.getRecipient().getPhoneNumber())
                 .build();
 
         OrderState orderState = OrderState.builder()
-                .id(order.getState().getId())
-                .state(order.getState().getState())
+                .id(orderDtoToUpdate.getState().getId())
+                .state(orderDtoToUpdate.getState().getState())
                 .build();
 
         orderToUpdate.setRecipient(newRecipient);
@@ -258,8 +263,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void delete(Long id) {
-        orderRepository.delete(id);
+    public void delete(Long idForDelete) {
+        orderRepository.delete(idForDelete);
     }
 
     private OrderState updateState(String state) {

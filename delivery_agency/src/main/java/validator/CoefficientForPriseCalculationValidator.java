@@ -27,9 +27,10 @@ public class CoefficientForPriseCalculationValidator {
         if (coefficientFroValidate == null) {
             throw new IllegalArgumentException("Coefficient cannot be null!!!");
         }
+        validateCoefficient(coefficientFroValidate);
     }
 
-    public static void validateCoefficientList(List<CoefficientForPriceCalculation> coefficientsForValidate){
+    public static void validateCoefficientList(List<CoefficientForPriceCalculation> coefficientsForValidate) throws IllegalArgumentException {
         if(coefficientsForValidate.isEmpty()){
             throw new IllegalArgumentException("There is no coefficients on the repository!!!");
         }

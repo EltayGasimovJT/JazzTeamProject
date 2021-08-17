@@ -2,7 +2,6 @@ package service;
 
 import dto.OrderProcessingPointDto;
 import dto.UserDto;
-import dto.WarehouseDto;
 import entity.User;
 import lombok.SneakyThrows;
 import mapping.UserMapper;
@@ -52,16 +51,25 @@ class UserServiceTest {
         UserDto firstUser = UserDto
                 .builder()
                 .id(1L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
         UserDto secondUser = UserDto
                 .builder()
                 .id(2L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
         UserDto thirdUser = UserDto
                 .builder()
                 .id(3L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
 
@@ -69,9 +77,9 @@ class UserServiceTest {
         userService.save(secondUser);
         userService.save(thirdUser);
 
-        userService.deleteUser(firstUser.getId());
+        userService.delete(firstUser.getId());
 
-        List<User> allUsers = userService.findAllUsers();
+        List<User> allUsers = userService.findAll();
         int unexpected = 3;
 
         int actual = allUsers.size();
@@ -86,12 +94,24 @@ class UserServiceTest {
         orderProcessingPointDtoToSave.setWorkingPlaceType(PROCESSING_POINT);
 
         UserDto firstUser = UserDto.builder()
+                .id(1L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
         UserDto secondUser = UserDto.builder()
+                .id(2L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
         UserDto thirdUser = UserDto.builder()
+                .id(3L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
 
@@ -99,7 +119,7 @@ class UserServiceTest {
         userService.save(secondUser);
         userService.save(thirdUser);
 
-        List<User> allUsers = userService.findAllUsers();
+        List<User> allUsers = userService.findAll();
 
         int expected = 3;
 
@@ -116,16 +136,25 @@ class UserServiceTest {
         UserDto firstUser = UserDto
                 .builder()
                 .id(1L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
         UserDto expected = UserDto
                 .builder()
                 .id(2L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
         UserDto thirdUser = UserDto
                 .builder()
                 .id(3L)
+                .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
 
@@ -133,7 +162,7 @@ class UserServiceTest {
         userService.save(expected);
         userService.save(thirdUser);
 
-        UserDto actual = UserMapper.toDto(userService.getUser(2));
+        UserDto actual = UserMapper.toDto(userService.findOne(2));
 
         Assertions.assertEquals(expected, actual);
     }
@@ -146,6 +175,8 @@ class UserServiceTest {
         UserDto user = UserDto
                 .builder()
                 .id(1L)
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .name("Vlad")
                 .workingPlace(orderProcessingPointDtoToSave)
                 .build();
@@ -157,6 +188,8 @@ class UserServiceTest {
         UserDto newUser = UserDto
                 .builder()
                 .id(1L)
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToSave)
                 .name(expected)
                 .build();
@@ -174,8 +207,10 @@ class UserServiceTest {
         UserDto user = UserDto
                 .builder()
                 .id(1L)
-                .workingPlace(workingPlace)
                 .name("Vlad")
+                .surname("Vlad")
+                .roles(Arrays.asList("user", "Admin"))
+                .workingPlace(workingPlace)
                 .build();
 
         userService.save(user);
@@ -185,9 +220,9 @@ class UserServiceTest {
         workingPlace.setWorkingPlaceType(WAREHOUSE);
 
 
-        userService.changeWorkingPlace(UserMapper.toDto(userService.getUser(user.getId())), workingPlace);
+        userService.changeWorkingPlace(UserMapper.toDto(userService.findOne(user.getId())), workingPlace);
 
-        String actual = userService.getUser(user.getId())
+        String actual = userService.findOne(user.getId())
                 .getWorkingPlace()
                 .getLocation();
 
