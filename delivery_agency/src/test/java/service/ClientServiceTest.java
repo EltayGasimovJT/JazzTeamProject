@@ -26,14 +26,20 @@ class ClientServiceTest {
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()
                 .name("client1")
+                .surname("igor")
+                .phoneNumber("125125")
                 .passportId("23612613616")
                 .build();
         ClientDto secondClientToTest = ClientDto.builder()
                 .name("client2")
+                .surname("igor")
+                .phoneNumber("125125")
                 .passportId("16714714713")
                 .build();
         ClientDto thirdClientToTest = ClientDto.builder()
                 .name("client3")
+                .surname("igor")
+                .phoneNumber("125125")
                 .passportId("04786533747")
                 .build();
 
@@ -58,16 +64,22 @@ class ClientServiceTest {
         ClientDto firstClient = ClientDto.builder()
                 .id(1L)
                 .name("firstClient")
+                .surname("igor")
+                .phoneNumber("125125")
                 .passportId("23612613616")
                 .build();
         ClientDto secondClient = ClientDto.builder()
                 .id(2L)
                 .name("secondClient")
+                .surname("igor")
+                .phoneNumber("125125")
                 .passportId("16714714713")
                 .build();
         ClientDto thirdClient = ClientDto.builder()
                 .id(3L)
                 .name("thirdClient")
+                .surname("igor")
+                .phoneNumber("125125")
                 .passportId("04786533747")
                 .build();
 
@@ -88,9 +100,27 @@ class ClientServiceTest {
 
     @Test
     void findAllClients() throws SQLException {
-        ClientDto firstClient = ClientDto.builder().build();
-        ClientDto secondClient = ClientDto.builder().build();
-        ClientDto thirdClient = ClientDto.builder().build();
+        ClientDto firstClient = ClientDto.builder()
+                .id(1L)
+                .name("firstClient")
+                .surname("Vasya")
+                .phoneNumber("125125")
+                .passportId("23612613616")
+                .build();
+        ClientDto secondClient = ClientDto.builder()
+                .id(2L)
+                .name("secondClient")
+                .surname("Gleb")
+                .phoneNumber("125125")
+                .passportId("23612613616")
+                .build();
+        ClientDto thirdClient = ClientDto.builder()
+                .id(3L)
+                .name("thirdClient")
+                .surname("igor")
+                .phoneNumber("125125")
+                .passportId("23612613616")
+                .build();
 
         firstClient.setId(clientService.save(firstClient).getId());
         secondClient.setId(clientService.save(secondClient).getId());
@@ -109,7 +139,10 @@ class ClientServiceTest {
     void findById() throws SQLException {
         ClientDto expectedClientDto = ClientDto.builder()
                 .id(1L)
-                .name("Oleg")
+                .name("firstClient")
+                .surname("Vasya")
+                .phoneNumber("125125")
+                .passportId("23612613616")
                 .build();
 
         Client savedClient = clientService.save(expectedClientDto);
@@ -126,11 +159,10 @@ class ClientServiceTest {
         ClientDto expectedClientDto = ClientDto.builder()
                 .id(1L)
                 .name("Oleg")
-                .orders(Arrays.asList(
-                        OrderDto.builder().build(),
-                        OrderDto.builder().build(),
-                        OrderDto.builder().build()
-                ))
+                .surname("Vasya")
+                .phoneNumber("125125")
+                .passportId("23612613616")
+                .orders(new ArrayList<>())
                 .build();
 
         Client savedClient = clientService.save(expectedClientDto);
@@ -151,7 +183,10 @@ class ClientServiceTest {
     void findByPassportId() throws SQLException {
         String expectedPassportID = "12512515";
         ClientDto expectedClientDto = ClientDto.builder()
+                .id(1L)
                 .name("Oleg")
+                .surname("Vasya")
+                .phoneNumber("125125")
                 .passportId(expectedPassportID)
                 .build();
 

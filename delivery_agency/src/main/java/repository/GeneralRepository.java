@@ -3,13 +3,13 @@ package repository;
 import java.util.List;
 
 public interface GeneralRepository<T> {
-    T save(T t);
+    T save(T toSave);
 
-    void delete(Long id);
+    void delete(Long idForDelete);
 
     List<T> findAll();
 
-    T findOne(Long id);
+    T findOne(Long idForSearch);
 
     T update(T update);
 }

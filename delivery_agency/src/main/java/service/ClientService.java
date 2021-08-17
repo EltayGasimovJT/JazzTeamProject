@@ -7,15 +7,15 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface ClientService {
-    void delete(Long id);
+    void delete(Long idForDelete);
 
     List<Client> findAll() throws IllegalArgumentException;
 
-    Client findById(long id) throws IllegalArgumentException;
+    Client findById(long idForSearch) throws IllegalArgumentException;
 
-    Client findByPassportId(String passportId);
+    Client findByPassportId(String passportIdForSearch) throws IllegalArgumentException;
 
-    Client save(ClientDto clientDTO) throws SQLException;
+    Client save(ClientDto clientDtoToSave) throws SQLException, IllegalArgumentException;
 
-    Client update(ClientDto clientDTO) throws SQLException;
+    Client update(ClientDto newClient) throws SQLException, IllegalArgumentException;
 }

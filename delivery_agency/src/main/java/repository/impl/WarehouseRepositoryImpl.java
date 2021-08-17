@@ -10,14 +10,14 @@ public class WarehouseRepositoryImpl implements WarehouseRepository {
     private final List<Warehouse> warehouses = new ArrayList<>();
 
     @Override
-    public Warehouse save(Warehouse warehouse) {
-        warehouses.add(warehouse);
-        return warehouse;
+    public Warehouse save(Warehouse warehouseToSave) {
+        warehouses.add(warehouseToSave);
+        return warehouseToSave;
     }
 
     @Override
-    public void delete(Long id) {
-        warehouses.remove(findOne(id));
+    public void delete(Long idForDelete) {
+        warehouses.remove(findOne(idForDelete));
     }
 
     @Override
@@ -26,23 +26,23 @@ public class WarehouseRepositoryImpl implements WarehouseRepository {
     }
 
     @Override
-    public Warehouse findOne(Long id) {
+    public Warehouse findOne(Long idForSearch) {
         return warehouses.stream()
-                .filter(warehouse -> warehouse.getId().equals(id))
+                .filter(warehouse -> warehouse.getId().equals(idForSearch))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public Warehouse update(Warehouse update)  {
-        Warehouse warehouse = findOne(update.getId());
-        warehouses.remove(warehouse);
-        warehouse.setLocation(update.getLocation());
-        warehouse.setConnectedWarehouses(update.getConnectedWarehouses());
-        warehouse.setOrderProcessingPoints(update.getOrderProcessingPoints());
-        warehouse.setDispatchedOrders(update.getDispatchedOrders());
-        warehouse.setExpectedOrders(update.getExpectedOrders());
-        warehouses.add(warehouse);
-        return warehouse;
+    public Warehouse update(Warehouse newWarehouse)  {
+        Warehouse warehouseToUpdate = findOne(newWarehouse.getId());
+        warehouses.remove(warehouseToUpdate);
+        warehouseToUpdate.setLocation(newWarehouse.getLocation());
+        warehouseToUpdate.setConnectedWarehouses(newWarehouse.getConnectedWarehouses());
+        warehouseToUpdate.setOrderProcessingPoints(newWarehouse.getOrderProcessingPoints());
+        warehouseToUpdate.setDispatchedOrders(newWarehouse.getDispatchedOrders());
+        warehouseToUpdate.setExpectedOrders(newWarehouse.getExpectedOrders());
+        warehouses.add(warehouseToUpdate);
+        return warehouseToUpdate;
     }
 }

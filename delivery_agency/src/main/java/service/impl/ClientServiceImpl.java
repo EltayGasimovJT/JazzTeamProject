@@ -1,95 +1,83 @@
 package service.impl;
 
 import dto.ClientDto;
-import dto.OrderDto;
 import entity.Client;
 import entity.Order;
 import lombok.extern.slf4j.Slf4j;
+import mapping.OrderMapper;
 import repository.ClientRepository;
 import repository.impl.ClientRepositoryImpl;
 import service.ClientService;
-import service.OrderService;
+import validator.ClientValidator;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
 
     @Override
-    public void delete(Long id) {
-        clientRepository.delete(id);
+    public void delete(Long idForDelete) throws IllegalArgumentException {
+        ClientValidator.validateClient(clientRepository.findOne(idForDelete));
+        clientRepository.delete(idForDelete);
     }
 
     @Override
     public List<Client> findAll() throws IllegalArgumentException {
-        List<Client> resultClients = new ArrayList<>(clientRepository.findAll());
-        if (resultClients.isEmpty()) {
-            throw new IllegalArgumentException("There is no clients in database!!!");
-        }
-        return resultClients;
+        List<Client> foundClientsFromRepository = clientRepository.findAll();
+        ClientValidator.validateClientList(foundClientsFromRepository);
+        return foundClientsFromRepository;
     }
 
     @Override
-    public Client findById(long id) throws IllegalArgumentException {
-        Client actualClient = clientRepository.findOne(id);
-        if (actualClient == null) {
-            throw new IllegalArgumentException("There is no client with this Id!!!");
-        }
-        return actualClient;
+    public Client findById(long idForSearch) throws IllegalArgumentException {
+        Client foundClientFromRepository = clientRepository.findOne(idForSearch);
+        ClientValidator.validateClient(foundClientFromRepository);
+        return foundClientFromRepository;
     }
 
     @Override
-    public Client findByPassportId(String passportId) {
-        Client clientByPassportId;
-        clientByPassportId = clientRepository.findByPassportId(passportId);
-        if (clientByPassportId == null) {
-            throw new IllegalArgumentException("There is no client with this passportId!!!");
-        }
-        return clientByPassportId;
+    public Client findByPassportId(String passportIdForSearch) throws IllegalArgumentException {
+        Client foundClientFromRepository = clientRepository.findByPassportId(passportIdForSearch);
+        ClientValidator.validateClient(foundClientFromRepository);
+        return foundClientFromRepository;
     }
 
     @Override
-    public Client save(ClientDto clientDto) throws SQLException {
-        List<Order> clientOrders = new ArrayList<>();
-
+    public Client save(ClientDto clientDtoToSave) throws SQLException, IllegalArgumentException {
         Client clientToSave = Client.builder()
-                .id(clientDto.getId())
-                .name(clientDto.getName())
-                .surname(clientDto.getSurname())
-                .passportId(clientDto.getPassportId())
-                .phoneNumber(clientDto.getPhoneNumber())
+                .id(clientDtoToSave.getId())
+                .name(clientDtoToSave.getName())
+                .surname(clientDtoToSave.getSurname())
+                .passportId(clientDtoToSave.getPassportId())
+                .phoneNumber(clientDtoToSave.getPhoneNumber())
                 .build();
 
+        ClientValidator.validateClient(clientToSave);
+
         Client savedClient = clientRepository.save(clientToSave);
+
         savedClient.setId(savedClient.getId());
         return savedClient;
     }
 
     @Override
-    public Client update(ClientDto clientDto) throws SQLException {
-        List<OrderDto> ordersToUpdate = clientDto.getOrders();
-
-        List<Order> clientOrdersToUpdate = new ArrayList<>();
-
-        for (OrderDto orderDto : ordersToUpdate) {
-            Order orderToUpdate = Order
-                    .builder()
-                    .id(orderDto.getId())
-                    .build();
-            clientOrdersToUpdate.add(orderToUpdate);
-        }
+    public Client update(ClientDto newClient) throws SQLException {
+        List<Order> clientOrdersToUpdate = newClient.getOrders().stream()
+                .map(OrderMapper::toOrder)
+                .collect(Collectors.toList());
 
         Client clientToUpdate = Client.builder()
-                .id(clientDto.getId())
-                .name(clientDto.getName())
-                .surname(clientDto.getSurname())
-                .passportId(clientDto.getPassportId())
-                .phoneNumber(clientDto.getPhoneNumber())
+                .id(newClient.getId())
+                .name(newClient.getName())
+                .surname(newClient.getSurname())
+                .passportId(newClient.getPassportId())
+                .phoneNumber(newClient.getPhoneNumber())
                 .orders(clientOrdersToUpdate)
                 .build();
+        ClientValidator.validateClient(clientToUpdate);
 
         return clientRepository.update(clientToUpdate);
     }
