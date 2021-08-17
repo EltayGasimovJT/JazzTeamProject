@@ -3,7 +3,7 @@ package service.impl;
 import dto.OrderProcessingPointDto;
 import entity.OrderProcessingPoint;
 import entity.Warehouse;
-import mapping.OrderMapper;
+import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
 import repository.OrderProcessingPointRepository;
 import repository.impl.OrderProcessingPointRepositoryImpl;
@@ -60,10 +60,10 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         orderProcessingPointUpdate.setLocation(processingPointDtoToUpdate.getLocation());
         orderProcessingPointUpdate.setWarehouse(modelMapper.map(processingPointDtoToUpdate.getWarehouse(), Warehouse.class));
         orderProcessingPointUpdate.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
-                .map(OrderMapper::toOrder)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList()));
         orderProcessingPointUpdate.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
-                .map(OrderMapper::toOrder)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList()));
         return orderProcessingPointRepository.update(orderProcessingPointUpdate);
     }

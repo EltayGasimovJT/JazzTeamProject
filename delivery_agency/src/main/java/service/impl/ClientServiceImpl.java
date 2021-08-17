@@ -4,7 +4,7 @@ import dto.ClientDto;
 import entity.Client;
 import entity.Order;
 import lombok.extern.slf4j.Slf4j;
-import mapping.OrderMapper;
+import mapping.CustomModelMapper;
 import repository.ClientRepository;
 import repository.impl.ClientRepositoryImpl;
 import service.ClientService;
@@ -67,7 +67,7 @@ public class ClientServiceImpl implements ClientService {
     public Client update(ClientDto newClient) throws SQLException, IllegalArgumentException {
         ClientValidator.validateClient(clientRepository.findOne(newClient.getId()));
         List<Order> clientOrdersToUpdate = newClient.getOrders().stream()
-                .map(OrderMapper::toOrder)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList());
 
         Client clientToUpdate = Client.builder()

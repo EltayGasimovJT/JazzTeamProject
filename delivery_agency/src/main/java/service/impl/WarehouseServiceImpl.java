@@ -3,7 +3,7 @@ package service.impl;
 import dto.WarehouseDto;
 import entity.OrderProcessingPoint;
 import entity.Warehouse;
-import mapping.OrderMapper;
+import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
 import repository.WarehouseRepository;
 import repository.impl.WarehouseRepositoryImpl;
@@ -61,10 +61,10 @@ public class WarehouseServiceImpl implements WarehouseService {
         WarehouseValidator.validateWarehouse(warehouseToUpdate);
 
         warehouseToUpdate.setExpectedOrders(warehouseDtoToUpdate.getExpectedOrders().stream()
-                .map(OrderMapper::toOrder)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList()));
         warehouseToUpdate.setDispatchedOrders(warehouseDtoToUpdate.getDispatchedOrders().stream()
-                .map(OrderMapper::toOrder)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList()));
         warehouseToUpdate.setOrderProcessingPoints(warehouseDtoToUpdate.getOrderProcessingPoints().stream().
                 map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto, OrderProcessingPoint.class))

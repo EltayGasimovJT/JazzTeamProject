@@ -7,14 +7,14 @@ import org.modelmapper.ModelMapper;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class OrderMapper {
+public class CustomModelMapper {
     private static ModelMapper modelMapper = new ModelMapper();
 
-    private OrderMapper() {
+    private CustomModelMapper() {
 
     }
 
-    public static OrderDto toDto(Order orderToConvert) {
+    public static OrderDto mapOrderToDto(Order orderToConvert) {
         List<OrderHistoryDto> historiesToConvert = orderToConvert.getHistory().stream()
                 .map(history -> modelMapper.map(history, OrderHistoryDto.class))
                 .collect(Collectors.toList());
@@ -37,7 +37,7 @@ public class OrderMapper {
         return convertedToDto;
     }
 
-    public static Order toOrder(OrderDto orderDtoToConvert) {
+    public static Order mapOrderToDto(OrderDto orderDtoToConvert) {
         List<OrderHistory> historiesToConvert = orderDtoToConvert.getHistory().stream()
                 .map(history -> modelMapper.map(history, OrderHistory.class))
                 .collect(Collectors.toList());
@@ -58,5 +58,35 @@ public class OrderMapper {
             convertedToOrder.setCurrentLocation(modelMapper.map(orderDtoToConvert.getCurrentLocation(), Warehouse.class));
         }
         return convertedToOrder;
+    }
+
+    public static UserDto mapUserToDto(User userToConvert) {
+        UserDto convertedToDto = UserDto.builder()
+                .id(userToConvert.getId())
+                .name(userToConvert.getName())
+                .surname(userToConvert.getSurname())
+                .roles(userToConvert.getRoles())
+                .build();
+        if (userToConvert.getWorkingPlace() instanceof OrderProcessingPoint) {
+            convertedToDto.setWorkingPlace(modelMapper.map(userToConvert.getWorkingPlace(), OrderProcessingPointDto.class));
+        } else if (userToConvert.getWorkingPlace() instanceof Warehouse) {
+            convertedToDto.setWorkingPlace(modelMapper.map(userToConvert.getWorkingPlace(), WarehouseDto.class));
+        }
+        return convertedToDto;
+    }
+
+    public static User mapDtoToUser(UserDto userDtoToConvert) {
+        User convertedToUser = User.builder()
+                .id(userDtoToConvert.getId())
+                .name(userDtoToConvert.getName())
+                .surname(userDtoToConvert.getSurname())
+                .roles(userDtoToConvert.getRoles())
+                .build();
+        if (userDtoToConvert.getWorkingPlace() instanceof OrderProcessingPointDto) {
+            convertedToUser.setWorkingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class));
+        } else if (userDtoToConvert.getWorkingPlace() instanceof WarehouseDto) {
+            convertedToUser.setWorkingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), Warehouse.class));
+        }
+        return convertedToUser;
     }
 }

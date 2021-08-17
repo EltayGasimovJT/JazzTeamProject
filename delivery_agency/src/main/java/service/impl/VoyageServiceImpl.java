@@ -2,7 +2,7 @@ package service.impl;
 
 import dto.VoyageDto;
 import entity.Voyage;
-import mapping.OrderMapper;
+import mapping.CustomModelMapper;
 import repository.VoyageRepository;
 import repository.impl.VoyageRepositoryImpl;
 import service.VoyageService;
@@ -19,10 +19,10 @@ public class VoyageServiceImpl implements VoyageService {
         Voyage voyageToSave = new Voyage();
         voyageToSave.setId(voyageDtoToSave.getId());
         voyageToSave.setExpectedOrders(voyageDtoToSave.getExpectedOrders().stream()
-                .map(OrderMapper::toOrder)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList()));
         voyageToSave.setDispatchedOrders(voyageDtoToSave.getDispatchedOrders().stream()
-                .map(OrderMapper::toOrder)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList()));
         voyageToSave.setDeparturePoint(voyageDtoToSave.getDeparturePoint());
         voyageToSave.setDestinationPoint(voyageDtoToSave.getDestinationPoint());

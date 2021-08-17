@@ -3,7 +3,7 @@ package service.impl;
 import dto.*;
 import entity.*;
 import lombok.extern.slf4j.Slf4j;
-import mapping.OrderMapper;
+import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
 import repository.OrderRepository;
 import repository.impl.OrderRepositoryImpl;
@@ -136,12 +136,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void send(List<OrderDto> orderDtosToSend)throws IllegalArgumentException {
         List<Order> ordersToSend = orderDtosToSend.stream()
-                .map(OrderMapper::toOrder)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList());
 
         for (Order order : ordersToSend) {
             OrderState orderState;
-            if (isFinalWarehouse(OrderMapper.toDto(order))) {
+            if (isFinalWarehouse(CustomModelMapper.mapOrderToDto(order))) {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString());
             } else {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString());

@@ -7,7 +7,7 @@ import entity.User;
 import entity.Warehouse;
 import entity.WorkingPlaceType;
 import lombok.extern.slf4j.Slf4j;
-import mapping.UserMapper;
+import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
 import repository.UserRepository;
 import repository.impl.UserRepositoryImpl;
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(UserDto userDtoToUpdate) throws SQLException {
-        User userToUpdate = UserMapper.toUser(userDtoToUpdate);
+        User userToUpdate = CustomModelMapper.mapDtoToUser(userDtoToUpdate);
         UserValidator.validateUser(userToUpdate);
         return userRepository.update(userToUpdate);
     }

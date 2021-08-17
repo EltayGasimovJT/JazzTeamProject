@@ -4,11 +4,9 @@ import dto.OrderProcessingPointDto;
 import dto.UserDto;
 import entity.User;
 import lombok.SneakyThrows;
-import mapping.UserMapper;
+import mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
-import service.impl.OrderProcessingPointServiceImpl;
 import service.impl.UserServiceImpl;
 
 import java.sql.SQLException;
@@ -35,7 +33,7 @@ class UserServiceTest {
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
-        UserDto actual = UserMapper.toDto(userService.save(expected));
+        UserDto actual = CustomModelMapper.mapUserToDto(userService.save(expected));
 
         Assertions.assertEquals(expected, actual);
     }
@@ -160,7 +158,7 @@ class UserServiceTest {
         userService.save(expected);
         userService.save(thirdUser);
 
-        UserDto actual = UserMapper.toDto(userService.findOne(2));
+        UserDto actual = CustomModelMapper.mapUserToDto(userService.findOne(2));
 
         Assertions.assertEquals(expected, actual);
     }
@@ -218,7 +216,7 @@ class UserServiceTest {
         workingPlaceToTest.setWorkingPlaceType(WAREHOUSE);
 
 
-        userService.changeWorkingPlace(UserMapper.toDto(userService.findOne(user.getId())), workingPlaceToTest);
+        userService.changeWorkingPlace(CustomModelMapper.mapUserToDto(userService.findOne(user.getId())), workingPlaceToTest);
 
         String actual = userService.findOne(user.getId())
                 .getWorkingPlace()

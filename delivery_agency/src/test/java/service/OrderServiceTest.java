@@ -5,7 +5,7 @@ import entity.Order;
 import entity.OrderHistory;
 import entity.WorkingPlaceType;
 import lombok.SneakyThrows;
-import mapping.OrderMapper;
+import mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -100,7 +100,7 @@ class OrderServiceTest {
 
         Order actual = orderService.findOne(1);
 
-        OrderDto actualDto = OrderMapper.toDto(actual);
+        OrderDto actualDto = CustomModelMapper.mapOrderToDto(actual);
 
         Assertions.assertEquals(expectedDto, actualDto);
     }
@@ -200,7 +200,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findOne(1);
 
-        OrderDto actualOrderDto = OrderMapper.toDto(actualOrder);
+        OrderDto actualOrderDto = CustomModelMapper.mapOrderToDto(actualOrder);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
@@ -229,7 +229,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findOne(1);
 
-        OrderDto actualOrderDto = OrderMapper.toDto(actualOrder);
+        OrderDto actualOrderDto = CustomModelMapper.mapOrderToDto(actualOrder);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
@@ -264,7 +264,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findByRecipient(recipientToTest);
 
-        OrderDto actualOrderDto = OrderMapper.toDto(actualOrder);
+        OrderDto actualOrderDto = CustomModelMapper.mapOrderToDto(actualOrder);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
@@ -300,7 +300,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findByRecipient(senderToTest);
 
-        OrderDto actualOrderDto = OrderMapper.toDto(actualOrder);
+        OrderDto actualOrderDto = CustomModelMapper.mapOrderToDto(actualOrder);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
 
@@ -341,7 +341,7 @@ class OrderServiceTest {
         List<Order> actualOrders = ordersOnTheWay.get(0);
 
         final List<OrderDto> actualOrderDtos = actualOrders.stream()
-                .map(OrderMapper::toDto)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList());
 
         String actualOrderState = actualOrderDtos.get(0).getState().getState();
@@ -444,7 +444,7 @@ class OrderServiceTest {
         List<Order> expected = ordersOnTheWay.get(0);
 
         final List<OrderDto> actualOrderDtos = expected.stream()
-                .map(OrderMapper::toDto)
+                .map(CustomModelMapper::mapOrderToDto)
                 .collect(Collectors.toList());
 
         Assertions.assertNotEquals(expected, actualOrderDtos);
