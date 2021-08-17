@@ -25,19 +25,19 @@ class ClientServiceTest {
 
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()
-                .name("client1")
+                .name("Igor")
                 .surname("igor")
                 .phoneNumber("125125")
                 .passportId("23612613616")
                 .build();
         ClientDto secondClientToTest = ClientDto.builder()
-                .name("client2")
+                .name("Alex")
                 .surname("igor")
                 .phoneNumber("125125")
                 .passportId("16714714713")
                 .build();
         ClientDto thirdClientToTest = ClientDto.builder()
-                .name("client3")
+                .name("Eltay")
                 .surname("igor")
                 .phoneNumber("125125")
                 .passportId("04786533747")
@@ -61,21 +61,21 @@ class ClientServiceTest {
 
     @Test
     void deleteClient() throws SQLException {
-        ClientDto firstClient = ClientDto.builder()
+        ClientDto firstClientToTest = ClientDto.builder()
                 .id(1L)
                 .name("firstClient")
                 .surname("igor")
                 .phoneNumber("125125")
                 .passportId("23612613616")
                 .build();
-        ClientDto secondClient = ClientDto.builder()
+        ClientDto secondClientToTest = ClientDto.builder()
                 .id(2L)
                 .name("secondClient")
                 .surname("igor")
                 .phoneNumber("125125")
                 .passportId("16714714713")
                 .build();
-        ClientDto thirdClient = ClientDto.builder()
+        ClientDto thirdClientToTest = ClientDto.builder()
                 .id(3L)
                 .name("thirdClient")
                 .surname("igor")
@@ -83,11 +83,11 @@ class ClientServiceTest {
                 .passportId("04786533747")
                 .build();
 
-        firstClient.setId(clientService.save(firstClient).getId());
-        secondClient.setId(clientService.save(secondClient).getId());
-        thirdClient.setId(clientService.save(thirdClient).getId());
+        firstClientToTest.setId(clientService.save(firstClientToTest).getId());
+        secondClientToTest.setId(clientService.save(secondClientToTest).getId());
+        thirdClientToTest.setId(clientService.save(thirdClientToTest).getId());
 
-        clientService.delete(thirdClient.getId());
+        clientService.delete(thirdClientToTest.getId());
 
         List<Client> actualClients = clientService.findAll();
 
@@ -95,26 +95,26 @@ class ClientServiceTest {
                 .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(firstClient, secondClient), actualClientDtos);
+        Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest), actualClientDtos);
     }
 
     @Test
     void findAllClients() throws SQLException {
-        ClientDto firstClient = ClientDto.builder()
+        ClientDto firstClientToTest = ClientDto.builder()
                 .id(1L)
                 .name("firstClient")
                 .surname("Vasya")
                 .phoneNumber("125125")
                 .passportId("23612613616")
                 .build();
-        ClientDto secondClient = ClientDto.builder()
+        ClientDto secondClientToTest = ClientDto.builder()
                 .id(2L)
                 .name("secondClient")
                 .surname("Gleb")
                 .phoneNumber("125125")
                 .passportId("23612613616")
                 .build();
-        ClientDto thirdClient = ClientDto.builder()
+        ClientDto thirdClientToTest = ClientDto.builder()
                 .id(3L)
                 .name("thirdClient")
                 .surname("igor")
@@ -122,9 +122,9 @@ class ClientServiceTest {
                 .passportId("23612613616")
                 .build();
 
-        firstClient.setId(clientService.save(firstClient).getId());
-        secondClient.setId(clientService.save(secondClient).getId());
-        thirdClient.setId(clientService.save(thirdClient).getId());
+        firstClientToTest.setId(clientService.save(firstClientToTest).getId());
+        secondClientToTest.setId(clientService.save(secondClientToTest).getId());
+        thirdClientToTest.setId(clientService.save(thirdClientToTest).getId());
 
         List<Client> actualClients = clientService.findAll();
 
@@ -132,7 +132,7 @@ class ClientServiceTest {
                 .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClientDtos);
+        Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest, thirdClientToTest), actualClientDtos);
     }
 
     @Test

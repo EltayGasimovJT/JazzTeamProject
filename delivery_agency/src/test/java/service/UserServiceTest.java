@@ -18,24 +18,21 @@ import java.util.List;
 import static entity.WorkingPlaceType.PROCESSING_POINT;
 import static entity.WorkingPlaceType.WAREHOUSE;
 
-
 class UserServiceTest {
     private final UserService userService = new UserServiceImpl();
-    private final ModelMapper userMapper = new ModelMapper();
-    private final OrderProcessingPointService processingPointService = new OrderProcessingPointServiceImpl();
 
     @Test
     void addUser() throws SQLException {
-        OrderProcessingPointDto orderProcessingPointDtoToSave = new OrderProcessingPointDto();
-        orderProcessingPointDtoToSave.setId(1L);
-        orderProcessingPointDtoToSave.setWorkingPlaceType(PROCESSING_POINT);
+        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
+        orderProcessingPointDtoToTest.setId(1L);
+        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
         UserDto expected = UserDto
                 .builder()
                 .id(1L)
                 .name("Igor")
                 .surname("Igor")
                 .roles(Arrays.asList("User", "Client"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
         UserDto actual = UserMapper.toDto(userService.save(expected));
@@ -46,16 +43,16 @@ class UserServiceTest {
     @SneakyThrows
     @Test
     void deleteUser() {
-        OrderProcessingPointDto orderProcessingPointDtoToSave = new OrderProcessingPointDto();
-        orderProcessingPointDtoToSave.setId(1L);
-        orderProcessingPointDtoToSave.setWorkingPlaceType(PROCESSING_POINT);
+        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
+        orderProcessingPointDtoToTest.setId(1L);
+        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
         UserDto firstUser = UserDto
                 .builder()
                 .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         UserDto secondUser = UserDto
                 .builder()
@@ -63,7 +60,7 @@ class UserServiceTest {
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         UserDto thirdUser = UserDto
                 .builder()
@@ -71,7 +68,7 @@ class UserServiceTest {
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
         userService.save(firstUser);
@@ -90,30 +87,30 @@ class UserServiceTest {
 
     @Test
     void findAllUsers() throws SQLException {
-        OrderProcessingPointDto orderProcessingPointDtoToSave = new OrderProcessingPointDto();
-        orderProcessingPointDtoToSave.setId(1L);
-        orderProcessingPointDtoToSave.setWorkingPlaceType(PROCESSING_POINT);
+        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
+        orderProcessingPointDtoToTest.setId(1L);
+        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
 
         UserDto firstUser = UserDto.builder()
                 .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         UserDto secondUser = UserDto.builder()
                 .id(2L)
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         UserDto thirdUser = UserDto.builder()
                 .id(3L)
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
         userService.save(firstUser);
@@ -131,16 +128,16 @@ class UserServiceTest {
 
     @Test
     void getUser() throws SQLException {
-        OrderProcessingPointDto orderProcessingPointDtoToSave = new OrderProcessingPointDto();
-        orderProcessingPointDtoToSave.setId(1L);
-        orderProcessingPointDtoToSave.setWorkingPlaceType(PROCESSING_POINT);
+        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
+        orderProcessingPointDtoToTest.setId(1L);
+        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
         UserDto firstUser = UserDto
                 .builder()
                 .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         UserDto expected = UserDto
                 .builder()
@@ -148,7 +145,7 @@ class UserServiceTest {
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         UserDto thirdUser = UserDto
                 .builder()
@@ -156,7 +153,7 @@ class UserServiceTest {
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
         userService.save(firstUser);
@@ -170,28 +167,28 @@ class UserServiceTest {
 
     @Test
     void update() throws SQLException {
-        OrderProcessingPointDto orderProcessingPointDtoToSave = new OrderProcessingPointDto();
-        orderProcessingPointDtoToSave.setId(1L);
-        orderProcessingPointDtoToSave.setWorkingPlaceType(PROCESSING_POINT);
+        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
+        orderProcessingPointDtoToTest.setId(1L);
+        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
         UserDto user = UserDto
                 .builder()
                 .id(1L)
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
                 .name("Vlad")
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         userService.save(user);
 
         String expected = "Victor";
 
-        orderProcessingPointDtoToSave.setId(2L);
+        orderProcessingPointDtoToTest.setId(2L);
         UserDto newUser = UserDto
                 .builder()
                 .id(1L)
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(orderProcessingPointDtoToSave)
+                .workingPlace(orderProcessingPointDtoToTest)
                 .name(expected)
                 .build();
 
@@ -202,26 +199,26 @@ class UserServiceTest {
 
     @Test
     void changeWorkingPlace() throws SQLException {
-        OrderProcessingPointDto workingPlace = new OrderProcessingPointDto();
-        workingPlace.setLocation("Minsk");
-        workingPlace.setWorkingPlaceType(PROCESSING_POINT);
+        OrderProcessingPointDto workingPlaceToTest = new OrderProcessingPointDto();
+        workingPlaceToTest.setLocation("Minsk");
+        workingPlaceToTest.setWorkingPlaceType(PROCESSING_POINT);
         UserDto user = UserDto
                 .builder()
                 .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
                 .roles(Arrays.asList("user", "Admin"))
-                .workingPlace(workingPlace)
+                .workingPlace(workingPlaceToTest)
                 .build();
 
         userService.save(user);
 
-        String expected = workingPlace.getLocation();
-        workingPlace.setLocation("Polotsk");
-        workingPlace.setWorkingPlaceType(WAREHOUSE);
+        String expected = workingPlaceToTest.getLocation();
+        workingPlaceToTest.setLocation("Polotsk");
+        workingPlaceToTest.setWorkingPlaceType(WAREHOUSE);
 
 
-        userService.changeWorkingPlace(UserMapper.toDto(userService.findOne(user.getId())), workingPlace);
+        userService.changeWorkingPlace(UserMapper.toDto(userService.findOne(user.getId())), workingPlaceToTest);
 
         String actual = userService.findOne(user.getId())
                 .getWorkingPlace()

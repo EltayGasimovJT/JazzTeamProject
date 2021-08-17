@@ -23,17 +23,17 @@ class VoyageServiceTest {
     private final ModelMapper modelMapper = new ModelMapper();
 
     public static Stream<Arguments> ordersAndProcessingPointsForTest() {
-        OrderProcessingPointDto processingPoint = new OrderProcessingPointDto();
-        processingPoint.setLocation("Russia");
-        processingPoint.setWarehouse(new WarehouseDto());
-        OrderDto firstOrderToAdd = OrderDto.builder()
+        OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
+        processingPointToTest.setLocation("Russia");
+        processingPointToTest.setWarehouse(new WarehouseDto());
+        OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
                         .height(1.0)
                         .width(1.0)
                         .length(1.0)
                         .weight(20.0).build())
-                .destinationPlace(processingPoint)
+                .destinationPlace(processingPointToTest)
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(new OrderProcessingPointDto())
@@ -43,76 +43,76 @@ class VoyageServiceTest {
                 .build();
 
         return Stream.of(
-                Arguments.of(firstOrderToAdd)
+                Arguments.of(firstOrderToTest)
         );
     }
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void addVoyage(OrderDto orderToSave) throws SQLException {
+    void addVoyage(OrderDto orderToTest) throws SQLException {
         GregorianCalendar sendingTime = new GregorianCalendar();
         sendingTime.set(Calendar.HOUR_OF_DAY, 12);
         sendingTime.set(Calendar.MINUTE, 30);
 
-        VoyageDto voyage = new VoyageDto();
-        voyage.setId(1L);
-        voyage.setSendingTime(sendingTime);
-        voyage.setDispatchedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave));
-        voyage.setExpectedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave));
-        voyage.setDeparturePoint("Minsk");
+        VoyageDto voyageToTest = new VoyageDto();
+        voyageToTest.setId(1L);
+        voyageToTest.setSendingTime(sendingTime);
+        voyageToTest.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        voyageToTest.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        voyageToTest.setDeparturePoint("Minsk");
         String expected = "Moscow";
-        voyage.setDestinationPoint(expected);
+        voyageToTest.setDestinationPoint(expected);
 
-        Voyage addVoyage = voyageService.save(voyage);
+        Voyage savedVoyage = voyageService.save(voyageToTest);
 
-        String actual = addVoyage.getDestinationPoint();
+        String actual = savedVoyage.getDestinationPoint();
 
         Assertions.assertEquals(expected, actual);
     }
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void deleteVoyage(OrderDto orderToSave) throws SQLException {
-        VoyageDto firstVoyage = new VoyageDto();
-        firstVoyage.setId(1L);
-        firstVoyage.setDestinationPoint("Moskov");
-        firstVoyage.setDeparturePoint("Pskov");
-        firstVoyage.setDispatchedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave));
-        firstVoyage.setExpectedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave));
-        VoyageDto secondVoyage = new VoyageDto();
-        secondVoyage.setId(2L);
-        secondVoyage.setDestinationPoint("Moskov");
-        secondVoyage.setDeparturePoint("Pskov");
-        secondVoyage.setExpectedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave));
-        secondVoyage.setDispatchedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave));
-        VoyageDto thirdVoyage = new VoyageDto();
-        thirdVoyage.setId(3L);
-        thirdVoyage.setDestinationPoint("Moskov");
-        thirdVoyage.setDeparturePoint("Pskov");
-        thirdVoyage.setDispatchedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave));
-        thirdVoyage.setExpectedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave));
+    void deleteVoyage(OrderDto orderToTest) throws SQLException {
+        VoyageDto firstVoyageToTest = new VoyageDto();
+        firstVoyageToTest.setId(1L);
+        firstVoyageToTest.setDestinationPoint("Moskov");
+        firstVoyageToTest.setDeparturePoint("Pskov");
+        firstVoyageToTest.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        firstVoyageToTest.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        VoyageDto secondVoyageToTest = new VoyageDto();
+        secondVoyageToTest.setId(2L);
+        secondVoyageToTest.setDestinationPoint("Moskov");
+        secondVoyageToTest.setDeparturePoint("Pskov");
+        secondVoyageToTest.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        secondVoyageToTest.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        VoyageDto thirdVoyageToTest = new VoyageDto();
+        thirdVoyageToTest.setId(3L);
+        thirdVoyageToTest.setDestinationPoint("Moskov");
+        thirdVoyageToTest.setDeparturePoint("Pskov");
+        thirdVoyageToTest.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        thirdVoyageToTest.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
 
-        voyageService.save(firstVoyage);
-        voyageService.save(secondVoyage);
-        voyageService.save(thirdVoyage);
+        voyageService.save(firstVoyageToTest);
+        voyageService.save(secondVoyageToTest);
+        voyageService.save(thirdVoyageToTest);
 
-        voyageService.delete(firstVoyage.getId());
+        voyageService.delete(firstVoyageToTest.getId());
 
         int expected = 2;
         int actual = voyageService.findAll().size();
@@ -122,39 +122,39 @@ class VoyageServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void findAllVoyages(OrderDto orderToSave) throws SQLException {
+    void findAllVoyages(OrderDto orderToTest) throws SQLException {
         VoyageDto firstVoyage = new VoyageDto();
         firstVoyage.setDispatchedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave
+                orderToTest,
+                orderToTest
         ));
         firstVoyage.setDestinationPoint("Moskov");
         firstVoyage.setDeparturePoint("Pskov");
         firstVoyage.setExpectedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave
+                orderToTest,
+                orderToTest
         ));
         VoyageDto secondVoyage = new VoyageDto();
         secondVoyage.setExpectedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave
+                orderToTest,
+                orderToTest
         ));
         secondVoyage.setDestinationPoint("Moskov");
         secondVoyage.setDeparturePoint("Pskov");
         secondVoyage.setDispatchedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave
+                orderToTest,
+                orderToTest
         ));
         VoyageDto thirdVoyage = new VoyageDto();
         thirdVoyage.setDestinationPoint("Moskov");
         thirdVoyage.setDeparturePoint("Pskov");
         thirdVoyage.setDispatchedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave
+                orderToTest,
+                orderToTest
         ));
         thirdVoyage.setExpectedOrders(Arrays.asList(
-                orderToSave,
-                orderToSave
+                orderToTest,
+                orderToTest
         ));
 
         voyageService.save(firstVoyage);
@@ -170,43 +170,43 @@ class VoyageServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void getVoyage(OrderDto orderDtoToSave) throws SQLException {
-        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
-        orderProcessingPoint.setLocation("Russia");
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
-        VoyageDto voyage = new VoyageDto();
-        voyage.setId(1L);
-        voyage.setDispatchedOrders(Arrays.asList(
+    void getVoyage(OrderDto orderDtoToTest) throws SQLException {
+        OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
+        orderProcessingPointToTest.setLocation("Russia");
+        orderProcessingPointToTest.setWarehouse(new WarehouseDto());
+        VoyageDto voyageToTest = new VoyageDto();
+        voyageToTest.setId(1L);
+        voyageToTest.setDispatchedOrders(Arrays.asList(
                         new OrderDto(),
                         new OrderDto()
                 )
         );
-        voyage.setExpectedOrders(Arrays.asList(
+        voyageToTest.setExpectedOrders(Arrays.asList(
                         new OrderDto(),
                         new OrderDto()
                 )
         );
-        voyage.setDestinationPoint("Moskov");
-        voyage.setDeparturePoint("Pskov");
-        voyage.setDestinationPoint("Moskov");
-        voyage.setDeparturePoint("Pskov");
-        voyage.setDispatchedOrders(Arrays.asList(
-                        orderDtoToSave,
-                        orderDtoToSave
+        voyageToTest.setDestinationPoint("Moskov");
+        voyageToTest.setDeparturePoint("Pskov");
+        voyageToTest.setDestinationPoint("Moskov");
+        voyageToTest.setDeparturePoint("Pskov");
+        voyageToTest.setDispatchedOrders(Arrays.asList(
+                        orderDtoToTest,
+                        orderDtoToTest
                 )
         );
-        voyage.setExpectedOrders(Arrays.asList(
-                        orderDtoToSave,
-                        orderDtoToSave
+        voyageToTest.setExpectedOrders(Arrays.asList(
+                        orderDtoToTest,
+                        orderDtoToTest
                 )
         );
         GregorianCalendar expectedTime = new GregorianCalendar();
 
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);
         expectedTime.set(Calendar.MINUTE, 30);
-        voyage.setSendingTime(expectedTime);
+        voyageToTest.setSendingTime(expectedTime);
 
-        voyageService.save(voyage);
+        voyageService.save(voyageToTest);
 
         Calendar actualTime = voyageService.findOne(1).getSendingTime();
 

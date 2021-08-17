@@ -24,8 +24,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     private final ModelMapper modelMapper = new ModelMapper();
 
     private static Stream<Arguments> testDataForCalculate() {
-        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
-        orderProcessingPoint.setLocation("Russia");
+        OrderProcessingPointDto destinationPlaceToTest = new OrderProcessingPointDto();
+        destinationPlaceToTest.setLocation("Russia");
         OrderDto firstOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(
@@ -35,10 +35,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                                 .length(1.0)
                                 .weight(20.0).build()
                 )
-                .destinationPlace(orderProcessingPoint)
+                .destinationPlace(destinationPlaceToTest)
                 .build();
 
-        CoefficientForPriceCalculationDto firstCoefficient = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto firstCoefficientToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -46,8 +46,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        orderProcessingPoint.setLocation("Poland");
-        orderProcessingPoint.setId(2L);
+        destinationPlaceToTest.setLocation("Poland");
+        destinationPlaceToTest.setId(2L);
         OrderDto secondOrder = OrderDto.builder()
                 .id(2L)
                 .parcelParameters(
@@ -57,17 +57,17 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                                 .length(1.0)
                                 .weight(20.0).build()
                 )
-                .destinationPlace(orderProcessingPoint)
+                .destinationPlace(destinationPlaceToTest)
                 .build();
 
-        CoefficientForPriceCalculationDto secondCoefficient = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto secondCoefficientToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(2L)
                 .countryCoefficient(1.8)
                 .country("Poland")
                 .parcelSizeLimit(40)
                 .build();
-        orderProcessingPoint.setLocation("Ukraine");
+        destinationPlaceToTest.setLocation("Ukraine");
         OrderDto thirdOrder = OrderDto.builder()
                 .id(3L)
                 .parcelParameters(
@@ -76,10 +76,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                                 .width(5.0)
                                 .length(10.0)
                                 .weight(30.0).build())
-                .destinationPlace(orderProcessingPoint)
+                .destinationPlace(destinationPlaceToTest)
                 .build();
 
-        CoefficientForPriceCalculationDto thirdCoefficient = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto thirdCoefficientToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .countryCoefficient(1.5)
                 .country("Ukraine")
@@ -88,9 +88,9 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .build();
 
         return Stream.of(
-                Arguments.of(firstOrder, firstCoefficient, BigDecimal.valueOf(64.0)),
-                Arguments.of(secondOrder, secondCoefficient, BigDecimal.valueOf(108.0)),
-                Arguments.of(thirdOrder, thirdCoefficient, BigDecimal.valueOf(342.0))
+                Arguments.of(firstOrder, firstCoefficientToTest, BigDecimal.valueOf(64.0)),
+                Arguments.of(secondOrder, secondCoefficientToTest, BigDecimal.valueOf(108.0)),
+                Arguments.of(thirdOrder, thirdCoefficientToTest, BigDecimal.valueOf(342.0))
         );
     }
 
@@ -116,7 +116,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     @SneakyThrows
     @Test
     void deletePriceCalculationRule() {
-        CoefficientForPriceCalculationDto firstCoefficientForPriceCalculation = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto firstCoefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -124,7 +124,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        CoefficientForPriceCalculationDto secondCoefficientForPriceCalculation = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto secondCoefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -132,10 +132,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.save(firstCoefficientForPriceCalculation);
-        priceCalculationRuleService.save(secondCoefficientForPriceCalculation);
+        priceCalculationRuleService.save(firstCoefficientForPriceCalculationToTest);
+        priceCalculationRuleService.save(secondCoefficientForPriceCalculationToTest);
 
-        priceCalculationRuleService.delete(firstCoefficientForPriceCalculation.getId());
+        priceCalculationRuleService.delete(firstCoefficientForPriceCalculationToTest.getId());
 
         int expectedSize = 1;
 
@@ -146,14 +146,14 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
     @Test
     void findAllPriceCalculationRules() throws SQLException {
-        CoefficientForPriceCalculationDto coefficientForPriceCalculation = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.save(coefficientForPriceCalculation);
+        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
         int expectedSize = 1;
 
@@ -182,18 +182,18 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
     @Test
     void update() throws SQLException {
-        CoefficientForPriceCalculationDto coefficientForPriceCalculation = CoefficientForPriceCalculationDto
+        CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.save(coefficientForPriceCalculation);
+        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
-        coefficientForPriceCalculation.setParcelSizeLimit(52);
+        coefficientForPriceCalculationToTest.setParcelSizeLimit(52);
 
-        CoefficientForPriceCalculation updatedCoefficient = priceCalculationRuleService.update(coefficientForPriceCalculation);
+        CoefficientForPriceCalculation updatedCoefficient = priceCalculationRuleService.update(coefficientForPriceCalculationToTest);
 
         CoefficientForPriceCalculationDto actualCoefficientDto = modelMapper.map(updatedCoefficient, CoefficientForPriceCalculationDto.class);
 

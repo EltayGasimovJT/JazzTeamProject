@@ -19,46 +19,46 @@ class WarehouseServiceTest {
 
     @Test
     void addWarehouse() throws SQLException {
-        WarehouseDto warehouse = new WarehouseDto();
-        warehouse.setId(1L);
+        WarehouseDto warehouseToTest = new WarehouseDto();
+        warehouseToTest.setId(1L);
         String expected = "Minsk";
-        warehouse.setLocation(expected);
-        warehouse.setOrderProcessingPoints(Collections.singletonList(
+        warehouseToTest.setLocation(expected);
+        warehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        warehouseService.save(warehouse);
+        warehouseService.save(warehouseToTest);
 
-        String actual = warehouseService.findOne(warehouse.getId()).getLocation();
+        String actual = warehouseService.findOne(warehouseToTest.getId()).getLocation();
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void deleteWarehouse() throws SQLException {
-        WarehouseDto firstWarehouse = new WarehouseDto();
-        firstWarehouse.setId(1L);
-        firstWarehouse.setLocation("");
-        firstWarehouse.setOrderProcessingPoints(Collections.singletonList(
+        WarehouseDto firstWarehouseToTest = new WarehouseDto();
+        firstWarehouseToTest.setId(1L);
+        firstWarehouseToTest.setLocation("");
+        firstWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        WarehouseDto secondWarehouse = new WarehouseDto();
-        secondWarehouse.setId(2L);
-        secondWarehouse.setLocation("");
-        secondWarehouse.setOrderProcessingPoints(Collections.singletonList(
+        WarehouseDto secondWarehouseToTest = new WarehouseDto();
+        secondWarehouseToTest.setId(2L);
+        secondWarehouseToTest.setLocation("");
+        secondWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        WarehouseDto thirdWarehouse = new WarehouseDto();
-        thirdWarehouse.setId(3L);
-        thirdWarehouse.setLocation("");
-        thirdWarehouse.setOrderProcessingPoints(Collections.singletonList(
+        WarehouseDto thirdWarehouseToTest = new WarehouseDto();
+        thirdWarehouseToTest.setId(3L);
+        thirdWarehouseToTest.setLocation("");
+        thirdWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
 
-        warehouseService.save(firstWarehouse);
-        warehouseService.save(secondWarehouse);
-        warehouseService.save(thirdWarehouse);
+        warehouseService.save(firstWarehouseToTest);
+        warehouseService.save(secondWarehouseToTest);
+        warehouseService.save(thirdWarehouseToTest);
 
-        warehouseService.delete(secondWarehouse.getId());
+        warehouseService.delete(secondWarehouseToTest.getId());
 
         int expected = 2;
 
@@ -69,11 +69,11 @@ class WarehouseServiceTest {
 
     @Test
     void findAllWarehouses() throws SQLException {
-        WarehouseDto firstWarehouse = new WarehouseDto();
-        firstWarehouse.setOrderProcessingPoints(Collections.singletonList(
+        WarehouseDto firstWarehouseToTest = new WarehouseDto();
+        firstWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        firstWarehouse.setLocation("Moscow");
+        firstWarehouseToTest.setLocation("Moscow");
         WarehouseDto secondWarehouse = new WarehouseDto();
         secondWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
@@ -84,7 +84,7 @@ class WarehouseServiceTest {
                 new OrderProcessingPointDto()
         ));
         thirdWarehouse.setLocation("Moscow");
-        warehouseService.save(firstWarehouse);
+        warehouseService.save(firstWarehouseToTest);
         warehouseService.save(secondWarehouse);
         warehouseService.save(thirdWarehouse);
 
@@ -97,34 +97,34 @@ class WarehouseServiceTest {
 
     @Test
     void getWarehouse() throws SQLException {
-        WarehouseDto warehouse = new WarehouseDto();
-        warehouse.setId(1L);
+        WarehouseDto warehouseToTest = new WarehouseDto();
+        warehouseToTest.setId(1L);
         String expected = "Vitebsk";
-        warehouse.setLocation(expected);
-        warehouse.setOrderProcessingPoints(Collections.singletonList(
+        warehouseToTest.setLocation(expected);
+        warehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
 
-        warehouseService.save(warehouse);
+        warehouseService.save(warehouseToTest);
 
-        String actual = warehouseService.findOne(warehouse.getId()).getLocation();
+        String actual = warehouseService.findOne(warehouseToTest.getId()).getLocation();
 
         Assertions.assertEquals(expected, actual);
     }
 
     @Test
     void update() throws SQLException {
-        OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
-        orderProcessingPoint.setLocation("Russia");
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
-        OrderDto firstOrderToAdd = OrderDto.builder()
+        OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
+        orderProcessingPointToTest.setLocation("Russia");
+        orderProcessingPointToTest.setWarehouse(new WarehouseDto());
+        OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
                         .height(1.0)
                         .width(1.0)
                         .length(1.0)
                         .weight(20.0).build())
-                .destinationPlace(orderProcessingPoint)
+                .destinationPlace(orderProcessingPointToTest)
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(new OrderProcessingPointDto())
@@ -132,14 +132,14 @@ class WarehouseServiceTest {
                 .recipient(ClientDto.builder().build())
                 .history(new ArrayList<>())
                 .build();
-        OrderDto secondOrderToAdd =OrderDto.builder()
+        OrderDto secondOrderToTest = OrderDto.builder()
                 .id(2L)
                 .parcelParameters(ParcelParametersDto.builder()
                         .height(1.0)
                         .width(1.0)
                         .length(1.0)
                         .weight(20.0).build())
-                .destinationPlace(orderProcessingPoint)
+                .destinationPlace(orderProcessingPointToTest)
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(new OrderProcessingPointDto())
@@ -151,8 +151,8 @@ class WarehouseServiceTest {
         WarehouseDto expectedDto = new WarehouseDto();
         expectedDto.setId(1L);
         expectedDto.setLocation("Vitebsk");
-        expectedDto.setExpectedOrders(Arrays.asList(firstOrderToAdd, secondOrderToAdd));
-        expectedDto.setDispatchedOrders(Arrays.asList(firstOrderToAdd, secondOrderToAdd));
+        expectedDto.setExpectedOrders(Arrays.asList(firstOrderToTest, secondOrderToTest));
+        expectedDto.setDispatchedOrders(Arrays.asList(firstOrderToTest, secondOrderToTest));
         expectedDto.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
@@ -162,8 +162,8 @@ class WarehouseServiceTest {
 
         expectedDto.setLocation(newLocation);
 
-        expectedDto.setDispatchedOrders(Collections.singletonList(secondOrderToAdd));
-        expectedDto.setExpectedOrders(Collections.singletonList(secondOrderToAdd));
+        expectedDto.setDispatchedOrders(Collections.singletonList(secondOrderToTest));
+        expectedDto.setExpectedOrders(Collections.singletonList(secondOrderToTest));
 
         Warehouse actual = warehouseService.update(expectedDto);
 
