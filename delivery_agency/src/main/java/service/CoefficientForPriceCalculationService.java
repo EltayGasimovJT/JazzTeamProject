@@ -9,17 +9,17 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface CoefficientForPriceCalculationService {
-    CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException;
+    CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws SQLException;
 
-    void delete(Long id) throws SQLException;
+    void delete(Long idForDelete) throws SQLException;
 
     List<CoefficientForPriceCalculation> findAll() throws SQLException;
 
-    CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException;
+    CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientDtoForUpdate) throws SQLException;
 
-    CoefficientForPriceCalculation findOne(long id) throws SQLException;
+    CoefficientForPriceCalculation findOne(long idForSearch) throws SQLException;
 
-    BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws IllegalArgumentException;
+    BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException;
 
-    CoefficientForPriceCalculation findByCountry(String country);
+    CoefficientForPriceCalculation findByCountry(String countryForSearch);
 }

@@ -55,7 +55,7 @@ public class ClientServiceImpl implements ClientService {
                 .phoneNumber(clientDtoToSave.getPhoneNumber())
                 .build();
 
-        ClientValidator.validateClient(clientToSave);
+        ClientValidator.validateOnSave(clientToSave);
 
         Client savedClient = clientRepository.save(clientToSave);
 
@@ -65,6 +65,7 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client update(ClientDto newClient) throws SQLException {
+        ClientValidator.validateClient(clientRepository.findOne(newClient.getId()));
         List<Order> clientOrdersToUpdate = newClient.getOrders().stream()
                 .map(OrderMapper::toOrder)
                 .collect(Collectors.toList());
@@ -77,7 +78,6 @@ public class ClientServiceImpl implements ClientService {
                 .phoneNumber(newClient.getPhoneNumber())
                 .orders(clientOrdersToUpdate)
                 .build();
-        ClientValidator.validateClient(clientToUpdate);
 
         return clientRepository.update(clientToUpdate);
     }

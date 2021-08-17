@@ -10,33 +10,40 @@ public class OrderValidator {
 
     }
 
-    public static void validateOrder(Order order) throws IllegalArgumentException {
-        if (order == null) {
+    public static void validateOrder(Order orderToValidate) throws IllegalArgumentException {
+        if (orderToValidate == null) {
             throw new IllegalArgumentException("There is not Order with this Id!!!");
         }
-        if (order.getSender() == null && order.getRecipient() == null) {
+        if (orderToValidate.getSender() == null && orderToValidate.getRecipient() == null) {
             throw new IllegalArgumentException("The order must have recipient and sender!!!");
         }
-        if (order.getPrice().doubleValue() < 0) {
-            throw new IllegalArgumentException("Order price cannot be negative!!!" + order.getPrice().doubleValue());
+        if (orderToValidate.getPrice().doubleValue() < 0) {
+            throw new IllegalArgumentException("Order price cannot be negative!!!" + orderToValidate.getPrice().doubleValue());
         }
-        if (order.getDestinationPlace() == null) {
+        if (orderToValidate.getDestinationPlace() == null) {
             throw new IllegalArgumentException("The order must have a destination place!!!");
         }
-        if (order.getState() == null) {
+        if (orderToValidate.getState() == null) {
             throw new IllegalArgumentException("Order must have state!!!");
         }
-        if (order.getParcelParameters() == null) {
+        if (orderToValidate.getParcelParameters() == null) {
             throw new IllegalArgumentException("The order must have parameters!!!");
         }
-        if (order.getCurrentLocation() == null) {
+        if (orderToValidate.getCurrentLocation() == null) {
             throw new IllegalArgumentException("The order must have current location!!!");
         }
     }
 
     public static void validateOrders(List<Order> orders) throws IllegalArgumentException {
         if (orders.isEmpty()) {
-            throw new IllegalArgumentException("There is no orders in database!!!");
+            throw new IllegalArgumentException("There is no orders on the repository!!!");
         }
+    }
+
+    public static void validateOnSave(Order orderToValidate) throws IllegalArgumentException {
+        if (orderToValidate == null) {
+            throw new IllegalArgumentException("Order cannot be null!!!");
+        }
+        validateOrder(orderToValidate);
     }
 }
