@@ -187,6 +187,8 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(64.0))
                 .state(OrderStateDto.builder()
                         .state("READY_TO_SEND")
+                        .rolesAllowedPutToState(Arrays.asList("Admin", "Pick up worker"))
+                        .rolesAllowedWithdrawFromState(Arrays.asList("Admin", "Pick up worker"))
                         .build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().build()))
                 .build();

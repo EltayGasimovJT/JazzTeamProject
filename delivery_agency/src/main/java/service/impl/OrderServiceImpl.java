@@ -97,9 +97,7 @@ public class OrderServiceImpl implements OrderService {
                 .history(Collections.singletonList(orderHistoryToSave))
                 .parcelParameters(modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class))
                 .price(orderDtoToSave.getPrice())
-                .state(OrderState.builder()
-                        .state(OrderStates.READY_TO_SEND.toString())
-                        .build())
+                .state(orderState)
                 .build();
         OrderValidator.validateOrder(orderToSave);
 
