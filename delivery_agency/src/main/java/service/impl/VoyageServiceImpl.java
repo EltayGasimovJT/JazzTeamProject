@@ -15,7 +15,7 @@ public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 
     @Override
-    public Voyage save(VoyageDto voyageDtoToSave) {
+    public Voyage save(VoyageDto voyageDtoToSave) throws IllegalArgumentException {
         Voyage voyageToSave = new Voyage();
         voyageToSave.setId(voyageDtoToSave.getId());
         voyageToSave.setExpectedOrders(voyageDtoToSave.getExpectedOrders().stream()
@@ -33,20 +33,20 @@ public class VoyageServiceImpl implements VoyageService {
     }
 
     @Override
-    public void delete(Long idForDelete) {
+    public void delete(Long idForDelete) throws IllegalArgumentException {
         VoyageValidator.validateVoyage(voyageRepository.findOne(idForDelete));
         voyageRepository.delete(idForDelete);
     }
 
     @Override
-    public List<Voyage> findAll() {
+    public List<Voyage> findAll() throws IllegalArgumentException {
         List<Voyage> voyagesFromRepository = voyageRepository.findAll();
         VoyageValidator.validateVoyageList(voyagesFromRepository);
         return voyagesFromRepository;
     }
 
     @Override
-    public Voyage findOne(long idForSearch) {
+    public Voyage findOne(long idForSearch) throws IllegalArgumentException {
         Voyage foundVoyage = voyageRepository.findOne(idForSearch);
         VoyageValidator.validateVoyage(foundVoyage);
 
@@ -54,7 +54,7 @@ public class VoyageServiceImpl implements VoyageService {
     }
 
     @Override
-    public Voyage update(VoyageDto voyage) {
+    public Voyage update(VoyageDto voyage) throws IllegalArgumentException {
         Voyage voyageToUpdate = new Voyage();
         voyageToUpdate.setId(voyage.getId());
         voyageToUpdate.setSendingTime(voyage.getSendingTime());

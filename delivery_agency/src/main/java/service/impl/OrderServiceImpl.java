@@ -30,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
 
     @Override
-    public Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) {
+    public Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) throws IllegalArgumentException {
         Order order = findOne(idForLocationUpdate);
         OrderValidator.validateOrder(order);
         if (newLocation.getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory) {
+    public void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory) throws IllegalArgumentException {
         Order order = orderRepository.findOne(idForHistoryUpdate);
         OrderValidator.validateOrder(order);
         order.setHistory(Collections.singletonList(modelMapper.map(newHistory, OrderHistory.class)));
@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order save(OrderDto orderDtoToSave) throws SQLException {
+    public Order save(OrderDto orderDtoToSave) throws SQLException, IllegalArgumentException {
         BigDecimal price = calculatePrice(orderDtoToSave);
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         orderDtoToSave.setPrice(price);
@@ -77,10 +77,10 @@ public class OrderServiceImpl implements OrderService {
                 .phoneNumber(orderDtoToSave.getRecipient().getPhoneNumber())
                 .build();
 
-        OrderProcessingPoint departurePoint = new OrderProcessingPoint();
-        departurePoint.setId(orderDtoToSave.getCurrentLocation().getId());
-        OrderProcessingPoint destinationPlace = new OrderProcessingPoint();
-        departurePoint.setId(orderDtoToSave.getDestinationPlace().getId());
+        OrderProcessingPoint departurePointToSave = new OrderProcessingPoint();
+        departurePointToSave.setId(orderDtoToSave.getCurrentLocation().getId());
+        OrderProcessingPoint destinationPlaceToSave = new OrderProcessingPoint();
+        departurePointToSave.setId(orderDtoToSave.getDestinationPlace().getId());
 
         OrderHistory orderHistoryToSave = OrderHistory.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
@@ -92,8 +92,8 @@ public class OrderServiceImpl implements OrderService {
                 .id(orderDtoToSave.getId())
                 .sender(senderToSave)
                 .recipient(recipientToSave)
-                .currentLocation(departurePoint)
-                .destinationPlace(destinationPlace)
+                .currentLocation(departurePointToSave)
+                .destinationPlace(destinationPlaceToSave)
                 .history(Collections.singletonList(orderHistoryToSave))
                 .parcelParameters(modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class))
                 .price(orderDtoToSave.getPrice())
@@ -106,26 +106,26 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findOne(long idForSearch) throws IllegalArgumentException {
-        Order orderById = orderRepository.findOne(idForSearch);
+        Order foundOrder = orderRepository.findOne(idForSearch);
 
-        OrderValidator.validateOrder(orderById);
+        OrderValidator.validateOrder(foundOrder);
 
-        return orderById;
+        return foundOrder;
     }
 
     @Override
     public Order findByRecipient(ClientDto recipientForSearch) throws IllegalArgumentException {
-        Order byRecipient = orderRepository.findByRecipient(modelMapper.map(recipientForSearch, Client.class));
-        OrderValidator.validateOrder(byRecipient);
+        Order foundOrder = orderRepository.findByRecipient(modelMapper.map(recipientForSearch, Client.class));
+        OrderValidator.validateOrder(foundOrder);
 
-        return byRecipient;
+        return foundOrder;
     }
 
     @Override
     public Order findBySender(ClientDto senderForSearch) throws IllegalArgumentException {
-        Order bySender = orderRepository.findByRecipient(modelMapper.map(senderForSearch, Client.class));
-        OrderValidator.validateOrder(bySender);
-        return bySender;
+        Order foundOrder = orderRepository.findByRecipient(modelMapper.map(senderForSearch, Client.class));
+        OrderValidator.validateOrder(foundOrder);
+        return foundOrder;
     }
 
     @Override
@@ -136,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void send(List<OrderDto> orderDtosToSend) {
+    public void send(List<OrderDto> orderDtosToSend)throws IllegalArgumentException {
         List<Order> ordersToSend = orderDtosToSend.stream()
                 .map(OrderMapper::toOrder)
                 .collect(Collectors.toList());
@@ -158,21 +158,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> accept(List<OrderDto> orderDtosToAccept) {
-        List<Order> ordersToAccept = new ArrayList<>();
-        for (OrderDto order : orderDtosToAccept) {
-            ordersToAccept.add(modelMapper.map(order, Order.class));
-        }
+    public List<Order> accept(List<OrderDto> orderDtosToAccept) throws IllegalArgumentException{
+        List<Order> ordersToAccept = orderDtosToAccept.stream()
+                .map(orderDto -> modelMapper.map(orderDto, Order.class))
+                .collect(Collectors.toList());
 
         List<Order> ordersFromRepository = orderRepository.acceptOrders(ordersToAccept);
 
         OrderValidator.validateOrders(ordersFromRepository);
 
-        List<OrderDto> expectedOrderDtos = new ArrayList<>();
-
-        for (Order order : ordersFromRepository) {
-            expectedOrderDtos.add(modelMapper.map(order, OrderDto.class));
-        }
+        List<OrderDto> expectedOrderDtos = ordersFromRepository.stream()
+                .map(order -> modelMapper.map(order, OrderDto.class))
+                .collect(Collectors.toList());
 
         compareOrders(expectedOrderDtos, orderDtosToAccept);
 
@@ -193,10 +190,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String getState(long idForStateFind) {
-        Order order = orderRepository.findOne(idForStateFind);
-        OrderValidator.validateOrder(order);
-        return order.getState().getState();
+    public String getState(long idForStateFind) throws IllegalArgumentException {
+        Order foundOrder = orderRepository.findOne(idForStateFind);
+        OrderValidator.validateOrder(foundOrder);
+        return foundOrder.getState().getState();
     }
 
     @Override
@@ -208,28 +205,28 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private boolean isFinalWarehouse(OrderDto order) {
-        return order.getDestinationPlace().equals(order.getCurrentLocation());
+    private boolean isFinalWarehouse(OrderDto orderToCheck) throws IllegalArgumentException{
+        return orderToCheck.getDestinationPlace().equals(orderToCheck.getCurrentLocation());
     }
 
     @Override
     public List<Order> findAll() throws IllegalArgumentException {
-        List<Order> orders = orderRepository.findAll();
+        List<Order> ordersFromRepository = orderRepository.findAll();
 
-        OrderValidator.validateOrders(orders);
+        OrderValidator.validateOrders(ordersFromRepository);
 
-        return orders;
+        return ordersFromRepository;
     }
 
     @Override
     public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException, SQLException {
-        CoefficientForPriceCalculationDto coefficientForPriceCalculation = getCoefficient(orderForCalculate.getDestinationPlace());
+        CoefficientForPriceCalculationDto coefficientForCalculate = getCoefficient(orderForCalculate.getDestinationPlace());
 
-        return priceCalculationRuleService.calculatePrice(orderForCalculate, coefficientForPriceCalculation);
+        return priceCalculationRuleService.calculatePrice(orderForCalculate, coefficientForCalculate);
     }
 
     @Override
-    public List<List<Order>> getOrdersOnTheWay() {
+    public List<List<Order>> getOrdersOnTheWay() throws IllegalArgumentException{
         List<List<Order>> allSentOrders = orderRepository.getSentOrders();
         OrderValidator.validateOrdersOnTheWay(allSentOrders);
 
@@ -237,7 +234,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order update(OrderDto orderDtoToUpdate) {
+    public Order update(OrderDto orderDtoToUpdate) throws IllegalArgumentException{
         Order orderToUpdate = orderRepository.findOne(orderDtoToUpdate.getId());
         OrderValidator.validateOrder(orderToUpdate);
         Client newRecipient = Client.builder()
@@ -261,7 +258,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void delete(Long idForDelete) {
+    public void delete(Long idForDelete) throws IllegalArgumentException{
+        OrderValidator.validateOrder(orderRepository.findOne(idForDelete));
         orderRepository.delete(idForDelete);
     }
 
@@ -328,7 +326,7 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws SQLException {
+    private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws SQLException, IllegalArgumentException {
         CoefficientForPriceCalculation coefficientForPriceCalculation;
 
         String russia = "Russia";

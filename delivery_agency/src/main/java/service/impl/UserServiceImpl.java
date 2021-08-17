@@ -41,20 +41,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long idForDelete) {
+    public void delete(Long idForDelete) throws IllegalArgumentException {
         UserValidator.validateUser(userRepository.findOne(idForDelete));
         userRepository.delete(idForDelete);
     }
 
     @Override
-    public List<User> findAll() {
+    public List<User> findAll() throws IllegalArgumentException {
         List<User> usersFromRepository = userRepository.findAll();
         UserValidator.validateUsersList(usersFromRepository);
         return usersFromRepository;
     }
 
     @Override
-    public User findOne(long idForSearch) {
+    public User findOne(long idForSearch) throws IllegalArgumentException {
         User foundUser = userRepository.findOne(idForSearch);
         UserValidator.validateUser(foundUser);
         return foundUser;
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changeWorkingPlace(UserDto userToUpdate, AbstractBuildingDto newWorkingPlace) throws SQLException {
+    public User changeWorkingPlace(UserDto userToUpdate, AbstractBuildingDto newWorkingPlace) throws SQLException, IllegalArgumentException {
         userToUpdate.setWorkingPlace(newWorkingPlace);
 
         return update(userToUpdate);

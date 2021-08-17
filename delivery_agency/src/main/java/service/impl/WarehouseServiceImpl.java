@@ -18,7 +18,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public Warehouse save(WarehouseDto warehouseDtoToSave) {
+    public Warehouse save(WarehouseDto warehouseDtoToSave) throws IllegalArgumentException {
         Warehouse warehouseToSave = new Warehouse();
 
         warehouseToSave.setId(warehouseDtoToSave.getId());
@@ -33,13 +33,13 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public void delete(Long idForDelete) {
+    public void delete(Long idForDelete) throws IllegalArgumentException {
         WarehouseValidator.validateWarehouse(warehouseRepository.findOne(idForDelete));
         warehouseRepository.delete(idForDelete);
     }
 
     @Override
-    public List<Warehouse> findAll() {
+    public List<Warehouse> findAll() throws IllegalArgumentException {
         List<Warehouse> warehousesFromRepository = warehouseRepository.findAll();
         WarehouseValidator.validateWarehouseList(warehousesFromRepository);
 
@@ -47,7 +47,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Warehouse findOne(long idForSearch) {
+    public Warehouse findOne(long idForSearch) throws IllegalArgumentException {
         Warehouse foundWarehouse = warehouseRepository.findOne(idForSearch);
         WarehouseValidator.validateWarehouse(foundWarehouse);
 
@@ -55,7 +55,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Warehouse update(WarehouseDto warehouseDtoToUpdate) {
+    public Warehouse update(WarehouseDto warehouseDtoToUpdate) throws IllegalArgumentException {
         Warehouse warehouseToUpdate = warehouseRepository.findOne(warehouseDtoToUpdate.getId());
 
         WarehouseValidator.validateWarehouse(warehouseToUpdate);
