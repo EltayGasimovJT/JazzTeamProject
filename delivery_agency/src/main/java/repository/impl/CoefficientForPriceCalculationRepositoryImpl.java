@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CoefficientForPriceCalculationRepositoryImpl implements CoefficientForPriceCalculationRepository {
-    private List<CoefficientForPriceCalculation> coefficientForPriceCalculations = new ArrayList<>();
+    private final List<CoefficientForPriceCalculation> coefficientForPriceCalculations = new ArrayList<>();
 
     @Override
     public CoefficientForPriceCalculation save(CoefficientForPriceCalculation coefficientToSave) {

@@ -42,9 +42,9 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Client findByPassportId(String passportId) throws IllegalArgumentException {
+    public Client findByPassportId(String passportIdForSearch) throws IllegalArgumentException {
         return clients.stream()
-                .filter(client -> client.getPassportId().equals(passportId))
+                .filter(client -> client.getPassportId().equals(passportIdForSearch))
                 .findFirst()
                 .orElse(null);
     }
