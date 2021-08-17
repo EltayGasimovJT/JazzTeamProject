@@ -141,7 +141,7 @@ public class OrderServiceImpl implements OrderService {
 
         for (Order order : ordersToSend) {
             OrderState orderState;
-            if (isFinalWarehouse(CustomModelMapper.mapDtoToOrder(order))) {
+            if (isFinalWarehouse(CustomModelMapper.mapOrderToDto(order))) {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString());
             } else {
                 orderState = updateState(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString());

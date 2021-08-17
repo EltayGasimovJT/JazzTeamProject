@@ -14,7 +14,7 @@ public class CustomModelMapper {
 
     }
 
-    public static OrderDto mapDtoToOrder(Order orderToConvert) {
+    public static OrderDto mapOrderToDto(Order orderToConvert) {
         List<OrderHistoryDto> historiesToConvert = orderToConvert.getHistory().stream()
                 .map(history -> modelMapper.map(history, OrderHistoryDto.class))
                 .collect(Collectors.toList());
