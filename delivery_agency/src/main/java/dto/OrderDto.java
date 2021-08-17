@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.List;
 
 @Builder
@@ -23,6 +22,5 @@ public class OrderDto {
     private OrderProcessingPointDto destinationPlace;
     private AbstractBuildingDto currentLocation;
     private List<OrderHistoryDto> history;
-    private Calendar sendingTime;
 }
 

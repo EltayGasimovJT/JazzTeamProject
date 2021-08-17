@@ -4,6 +4,7 @@ import dto.*;
 import entity.Order;
 import entity.OrderHistory;
 import lombok.SneakyThrows;
+import mapping.OrderMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -71,7 +72,7 @@ class OrderServiceTest {
     void updateOrderCurrentLocation() throws SQLException {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
+        orderProcessingPoint.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
         OrderDto expectedDto = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(
@@ -87,7 +88,7 @@ class OrderServiceTest {
                 .price(BigDecimal.valueOf(1))
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
-                .currentLocation(new OrderProcessingPointDto())
+                .currentLocation(orderProcessingPoint)
                 .build();
 
         orderService.create(expectedDto);
@@ -98,7 +99,7 @@ class OrderServiceTest {
 
         Order actual = orderService.findOne(1);
 
-        OrderDto actualDto = modelMapper.map(actual, OrderDto.class);
+        OrderDto actualDto = OrderMapper.toDto(actual);
 
         Assertions.assertEquals(expectedDto, actualDto);
     }
@@ -108,7 +109,7 @@ class OrderServiceTest {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
         orderProcessingPoint.setWarehouse(new WarehouseDto());
-        OrderHistoryDto expected = OrderHistoryDto.builder().user(UserDto.builder().build()).build();
+        OrderHistoryDto expected = OrderHistoryDto.builder().build();
         GregorianCalendar changingTime = new GregorianCalendar();
         changingTime.set(Calendar.HOUR_OF_DAY, 15);
         changingTime.set(Calendar.MINUTE, 35);
@@ -124,6 +125,7 @@ class OrderServiceTest {
                 .destinationPlace(orderProcessingPoint)
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
+                .currentLocation(new OrderProcessingPointDto())
                 .state(OrderStateDto.builder().build())
                 .recipient(ClientDto.builder().build())
                 .build();
@@ -195,7 +197,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findOne(1);
 
-        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+        OrderDto actualOrderDto = OrderMapper.toDto(actualOrder);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
@@ -204,7 +206,6 @@ class OrderServiceTest {
     void findById() throws SQLException {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -225,7 +226,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findOne(1);
 
-        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+        OrderDto actualOrderDto = OrderMapper.toDto(actualOrder);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
@@ -239,7 +240,6 @@ class OrderServiceTest {
 
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
@@ -252,6 +252,7 @@ class OrderServiceTest {
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .recipient(recipient)
+                .currentLocation(new OrderProcessingPointDto())
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
@@ -260,7 +261,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findByRecipient(recipient);
 
-        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+        OrderDto actualOrderDto = OrderMapper.toDto(actualOrder);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
     }
@@ -275,7 +276,6 @@ class OrderServiceTest {
 
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setLocation("Russia");
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderDto expectedOrder = OrderDto.builder()
                 .id(1L)
@@ -286,6 +286,7 @@ class OrderServiceTest {
                         .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
                 .recipient(sender)
+                .currentLocation(orderProcessingPoint)
                 .price(BigDecimal.valueOf(1))
                 .sender(ClientDto.builder().build())
                 .state(OrderStateDto.builder().build())
@@ -296,7 +297,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findByRecipient(sender);
 
-        OrderDto actualOrderDto = modelMapper.map(actualOrder, OrderDto.class);
+        OrderDto actualOrderDto = OrderMapper.toDto(actualOrder);
 
         Assertions.assertEquals(expectedOrder, actualOrderDto);
 
@@ -307,7 +308,6 @@ class OrderServiceTest {
         OrderProcessingPointDto orderProcessingPoint = new OrderProcessingPointDto();
         orderProcessingPoint.setId(1L);
         orderProcessingPoint.setLocation("Russia");
-        orderProcessingPoint.setWarehouse(new WarehouseDto());
 
         OrderDto order = OrderDto.builder()
                 .id(1L)
@@ -318,11 +318,13 @@ class OrderServiceTest {
                         .weight(20.0).build())
                 .destinationPlace(orderProcessingPoint)
                 .price(BigDecimal.valueOf(1))
+                .currentLocation(orderProcessingPoint)
                 .recipient(ClientDto.builder().build())
                 .sender(ClientDto.builder().build())
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
+
         List<OrderDto> expectedOrders = Collections.singletonList(
                 order
         );
@@ -336,10 +338,13 @@ class OrderServiceTest {
         List<Order> actualOrders = ordersOnTheWay.get(0);
 
         final List<OrderDto> actualOrderDtos = actualOrders.stream()
-                .map(actualOrder -> modelMapper.map(actualOrder, OrderDto.class))
+                .map(OrderMapper::toDto)
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(expectedOrders, actualOrderDtos);
+        String actualOrderState = actualOrderDtos.get(0).getState().getState();
+        String expectedOrderState = "ON_THE_WAY_TO_THE_RECEPTION";
+
+        Assertions.assertEquals(expectedOrderState, actualOrderState);
     }
 
     @Test
@@ -436,7 +441,7 @@ class OrderServiceTest {
         List<Order> expected = ordersOnTheWay.get(0);
 
         final List<OrderDto> actualOrderDtos = expected.stream()
-                .map(actualOrder -> modelMapper.map(actualOrder, OrderDto.class))
+                .map(OrderMapper::toDto)
                 .collect(Collectors.toList());
 
         Assertions.assertNotEquals(expected, actualOrderDtos);

@@ -1,14 +1,17 @@
 package entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.List;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Order {
     private Long id;
     private OrderState state;
@@ -19,5 +22,4 @@ public class Order {
     private OrderProcessingPoint destinationPlace;
     private AbstractBuilding currentLocation;
     private List<OrderHistory> history;
-    private Calendar sendingTime;
 }

@@ -10,14 +10,14 @@ public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointR
     private final List<OrderProcessingPoint> processingPoints = new ArrayList<>();
 
     @Override
-    public OrderProcessingPoint save(OrderProcessingPoint orderProcessingPoint) {
-        processingPoints.add(orderProcessingPoint);
-        return orderProcessingPoint;
+    public OrderProcessingPoint save(OrderProcessingPoint processingPointToSave) {
+        processingPoints.add(processingPointToSave);
+        return processingPointToSave;
     }
 
     @Override
-    public void delete(Long id) {
-        processingPoints.remove(findOne(id));
+    public void delete(Long idForDelete) {
+        processingPoints.remove(findOne(idForDelete));
     }
 
     @Override
@@ -26,22 +26,22 @@ public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointR
     }
 
     @Override
-    public OrderProcessingPoint findOne(Long id) {
+    public OrderProcessingPoint findOne(Long idForSearch) {
         return processingPoints.stream()
-                .filter(processingPoint -> processingPoint.getId().equals(id))
+                .filter(processingPoint -> processingPoint.getId().equals(idForSearch))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public OrderProcessingPoint update(OrderProcessingPoint update)  {
-        OrderProcessingPoint orderProcessingPoint = findOne(update.getId());
-        processingPoints.remove(orderProcessingPoint);
-        orderProcessingPoint.setWarehouse(update.getWarehouse());
-        orderProcessingPoint.setDispatchedOrders(update.getDispatchedOrders());
-        orderProcessingPoint.setLocation(update.getLocation());
-        orderProcessingPoint.setExpectedOrders(update.getExpectedOrders());
-        processingPoints.add(orderProcessingPoint);
-        return orderProcessingPoint;
+    public OrderProcessingPoint update(OrderProcessingPoint newProcessingPoint)  {
+        OrderProcessingPoint processingPointToUpdate = findOne(newProcessingPoint.getId());
+        processingPoints.remove(processingPointToUpdate);
+        processingPointToUpdate.setWarehouse(newProcessingPoint.getWarehouse());
+        processingPointToUpdate.setDispatchedOrders(newProcessingPoint.getDispatchedOrders());
+        processingPointToUpdate.setLocation(newProcessingPoint.getLocation());
+        processingPointToUpdate.setExpectedOrders(newProcessingPoint.getExpectedOrders());
+        processingPoints.add(processingPointToUpdate);
+        return processingPointToUpdate;
     }
 }

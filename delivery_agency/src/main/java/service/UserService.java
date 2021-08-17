@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface UserService {
-    User addUser(UserDto user) throws SQLException;
+    User save(UserDto user) throws SQLException;
 
     void deleteUser(Long id);
 

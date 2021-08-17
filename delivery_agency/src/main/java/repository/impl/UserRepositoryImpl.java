@@ -10,14 +10,14 @@ public class UserRepositoryImpl implements UserRepository {
     private final List<User> users = new ArrayList<>();
 
     @Override
-    public User save(User user) {
-        users.add(user);
-        return user;
+    public User save(User userToSave) {
+        users.add(userToSave);
+        return userToSave;
     }
 
     @Override
-    public void delete(Long id) {
-        users.remove(findOne(id));
+    public void delete(Long idForDelete) {
+        users.remove(findOne(idForDelete));
     }
 
     @Override
@@ -26,22 +26,22 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findOne(Long id) {
+    public User findOne(Long idForSearch) {
         return users.stream()
-                .filter(user -> user.getId().equals(id))
+                .filter(user -> user.getId().equals(idForSearch))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public User update(User update) {
-        User workingPlace = findOne(update.getId());
-        users.remove(workingPlace);
-        workingPlace.setName(update.getName());
-        workingPlace.setSurname(update.getSurname());
-        workingPlace.setWorkingPlace(update.getWorkingPlace());
-        workingPlace.setRoles(update.getRoles());
-        users.add(workingPlace);
-        return workingPlace;
+    public User update(User newUser) {
+        User userToUpdate = findOne(newUser.getId());
+        users.remove(userToUpdate);
+        userToUpdate.setName(newUser.getName());
+        userToUpdate.setSurname(newUser.getSurname());
+        userToUpdate.setWorkingPlace(newUser.getWorkingPlace());
+        userToUpdate.setRoles(newUser.getRoles());
+        users.add(userToUpdate);
+        return userToUpdate;
     }
 }

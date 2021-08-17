@@ -12,9 +12,9 @@ public class ClientRepositoryImpl implements ClientRepository {
     private final List<Client> clients = new ArrayList<>();
 
     @Override
-    public Client save(Client client) {
-        clients.add(client);
-        return client;
+    public Client save(Client clientToSave) {
+        clients.add(clientToSave);
+        return clientToSave;
     }
 
     @Override
@@ -23,22 +23,22 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public void delete(Long id) {
-        clients.remove(findOne(id));
+    public void delete(Long idForDelete) {
+        clients.remove(findOne(idForDelete));
     }
 
     @Override
-    public Client update(Client update) {
-        Client client = findOne(update.getId());
-        clients.remove(client);
-        client.setId(update.getId());
-        client.setName(update.getName());
-        client.setSurname(update.getSurname());
-        client.setOrders(update.getOrders());
-        client.setPassportId(update.getPassportId());
-        client.setPhoneNumber(update.getPhoneNumber());
-        clients.add(client);
-        return client;
+    public Client update(Client newClient) {
+        Client clientToUpdate = findOne(newClient.getId());
+        clients.remove(clientToUpdate);
+        clientToUpdate.setId(newClient.getId());
+        clientToUpdate.setName(newClient.getName());
+        clientToUpdate.setSurname(newClient.getSurname());
+        clientToUpdate.setOrders(newClient.getOrders());
+        clientToUpdate.setPassportId(newClient.getPassportId());
+        clientToUpdate.setPhoneNumber(newClient.getPhoneNumber());
+        clients.add(clientToUpdate);
+        return clientToUpdate;
     }
 
     @Override
@@ -50,9 +50,9 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
-    public Client findOne(Long id) {
+    public Client findOne(Long idForSearch) {
         return clients.stream()
-                .filter(client -> client.getId().equals(id))
+                .filter(client -> client.getId().equals(idForSearch))
                 .findFirst()
                 .orElse(null);
     }

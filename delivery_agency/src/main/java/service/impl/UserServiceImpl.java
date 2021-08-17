@@ -3,17 +3,15 @@ package service.impl;
 import dto.AbstractBuildingDto;
 import dto.UserDto;
 import dto.WorkingPlaceType;
-import entity.AbstractBuilding;
 import entity.OrderProcessingPoint;
 import entity.User;
 import entity.Warehouse;
 import lombok.extern.slf4j.Slf4j;
+import mapping.UserMapper;
 import org.modelmapper.ModelMapper;
 import repository.UserRepository;
 import repository.impl.UserRepositoryImpl;
-import service.OrderProcessingPointService;
 import service.UserService;
-import service.WarehouseService;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -21,23 +19,19 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
-    private final OrderProcessingPointService processingPointService = new OrderProcessingPointServiceImpl();
-    private final WarehouseService warehouseService = new WarehouseServiceImpl();
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public User addUser(UserDto userDto) throws SQLException {
+    public User save(UserDto userDto) throws SQLException {
         User user = User.builder().id(userDto.getId())
                 .name(userDto.getName())
                 .surname(userDto.getSurname())
                 .roles(userDto.getRoles())
                 .build();
         if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
-            AbstractBuilding abstractBuilding = modelMapper.map(userDto.getWorkingPlace(), OrderProcessingPoint.class);
-            user.setWorkingPlace(abstractBuilding);
+            user.setWorkingPlace(modelMapper.map(userDto.getWorkingPlace(), OrderProcessingPoint.class));
         } else if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
-            AbstractBuilding abstractBuilding = modelMapper.map(userDto.getWorkingPlace(), Warehouse.class);
-            user.setWorkingPlace(abstractBuilding);
+            user.setWorkingPlace(modelMapper.map(userDto.getWorkingPlace(), Warehouse.class));
         }
 
         return userRepository.save(user);
@@ -60,20 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(UserDto userDto) throws SQLException {
-        User user = User.builder().id(userDto.getId())
-                .name(userDto.getName())
-                .surname(userDto.getSurname())
-                .roles(userDto.getRoles())
-                .build();
-
-        if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
-            AbstractBuilding abstractBuilding = processingPointService.findOne(userDto.getWorkingPlace().getId());
-            user.setWorkingPlace(abstractBuilding);
-
-        } else if (userDto.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
-            AbstractBuilding abstractBuilding = warehouseService.findOne(userDto.getWorkingPlace().getId());
-            user.setWorkingPlace(abstractBuilding);
-        }
+        User user = UserMapper.toUser(userDto);
         return userRepository.update(user);
     }
 
