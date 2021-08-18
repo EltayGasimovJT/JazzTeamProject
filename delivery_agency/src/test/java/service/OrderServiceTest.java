@@ -110,7 +110,7 @@ class OrderServiceTest {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setLocation("Russia");
         orderProcessingPointToTest.setWarehouse(new WarehouseDto());
-        OrderHistoryDto expected = OrderHistoryDto.builder().build();
+        OrderHistoryDto expected = OrderHistoryDto.builder().user(UserDto.builder().build()).build();
         GregorianCalendar changingTimeToTest = new GregorianCalendar();
         changingTimeToTest.set(Calendar.HOUR_OF_DAY, 15);
         changingTimeToTest.set(Calendar.MINUTE, 35);

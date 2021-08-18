@@ -55,7 +55,9 @@ public class OrderServiceImpl implements OrderService {
         orderDtoToSave.setState(modelMapper.map(orderState, OrderStateDto.class));
         OrderHistory orderHistory = OrderHistory.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
-                .user(User.builder().build())
+                .user(CustomModelMapper.mapDtoToUser(orderDtoToSave.getHistory().get(0).getUser()))
+                .changingTime(orderDtoToSave.getHistory().get(0).getChangingTime())
+                .comment(orderDtoToSave.getHistory().get(0).getComment())
                 .build();
         orderDtoToSave.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
 
@@ -80,19 +82,13 @@ public class OrderServiceImpl implements OrderService {
         OrderProcessingPoint destinationPlaceToSave = new OrderProcessingPoint();
         departurePointToSave.setId(orderDtoToSave.getDestinationPlace().getId());
 
-        OrderHistory orderHistoryToSave = OrderHistory.builder()
-                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
-                .comment(orderDtoToSave.getHistory().get(0).getComment())
-                .changingTime(orderDtoToSave.getHistory().get(0).getChangingTime())
-                .build();
-
         Order orderToSave = Order.builder()
                 .id(orderDtoToSave.getId())
                 .sender(senderToSave)
                 .recipient(recipientToSave)
                 .currentLocation(departurePointToSave)
                 .destinationPlace(destinationPlaceToSave)
-                .history(Collections.singletonList(orderHistoryToSave))
+                .history(Collections.singletonList(orderHistory))
                 .parcelParameters(modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class))
                 .price(orderDtoToSave.getPrice())
                 .state(orderState)
