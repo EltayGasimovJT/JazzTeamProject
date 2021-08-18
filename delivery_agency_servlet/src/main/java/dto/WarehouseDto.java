@@ -1,13 +1,15 @@
 package dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
-@Builder
-public class WarehouseDto {
-    private Long id;
+@NoArgsConstructor
+@AllArgsConstructor
+public class WarehouseDto extends AbstractBuildingDto{
     private List<OrderProcessingPointDto> orderProcessingPoints;
+    private List<WarehouseDto> connectedWarehouses;
 }

@@ -1,24 +1,25 @@
 package service;
 
 import dto.CoefficientForPriceCalculationDto;
-import entity.Order;
+import dto.OrderDto;
+import entity.CoefficientForPriceCalculation;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.List;
 
 public interface CoefficientForPriceCalculationService {
-    CoefficientForPriceCalculationDto addPriceCalculationRule(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException;
+    CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws SQLException;
 
-    void deletePriceCalculationRule(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException;
+    void delete(Long idForDelete) throws SQLException;
 
-    List<CoefficientForPriceCalculationDto> findAllPriceCalculationRules() throws SQLException;
+    List<CoefficientForPriceCalculation> findAll() throws SQLException;
 
-    CoefficientForPriceCalculationDto update(CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws SQLException;
+    CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientDtoForUpdate) throws SQLException;
 
-    CoefficientForPriceCalculationDto getCoefficient(long id) throws SQLException;
+    CoefficientForPriceCalculation findOne(long idForSearch) throws SQLException;
 
-    BigDecimal calculatePrice(Order order, CoefficientForPriceCalculationDto coefficientForPriceCalculationDto) throws IllegalArgumentException;
+    BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException;
 
-    CoefficientForPriceCalculationDto findByCountry(String country);
+    CoefficientForPriceCalculation findByCountry(String countryForSearch);
 }

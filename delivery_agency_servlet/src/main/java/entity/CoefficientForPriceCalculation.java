@@ -5,17 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+public class CoefficientForPriceCalculation {
     private Long id;
-    private String name;
-    private String surname;
-    private String passportId;
-    private String phoneNumber;
-    private List<Order> orders;
+    private Integer parcelSizeLimit;
+    private String country;
+    private Double countryCoefficient;
 }

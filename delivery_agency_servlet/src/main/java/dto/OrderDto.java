@@ -1,14 +1,17 @@
 package dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.List;
 
-@Data
 @Builder
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDto {
     private Long id;
     private OrderStateDto state;
@@ -17,9 +20,7 @@ public class OrderDto {
     private ClientDto recipient;
     private BigDecimal price;
     private OrderProcessingPointDto destinationPlace;
-    private AbstractLocationDto currentLocation;
-    private OrderHistoryDto history;
-    private Calendar sendingTime;
-    private List<AbstractLocationDto> route;
+    private AbstractBuildingDto currentLocation;
+    private List<OrderHistoryDto> history;
 }
 

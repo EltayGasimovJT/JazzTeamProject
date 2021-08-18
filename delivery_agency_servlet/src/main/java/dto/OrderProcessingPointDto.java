@@ -1,18 +1,12 @@
 package dto;
 
-import entity.Order;
-import entity.Warehouse;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.List;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
-public class OrderProcessingPointDto {
-    private Long id;
-    private String location;
-    private Warehouse warehouse;
-    private List<Order> expectedOrders;
-    private List<Order> dispatchedOrders;
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderProcessingPointDto extends AbstractBuildingDto{
+    private WarehouseDto warehouse;
 }

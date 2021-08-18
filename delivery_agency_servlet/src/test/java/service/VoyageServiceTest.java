@@ -1,117 +1,253 @@
 package service;
 
-import entity.Order;
+import dto.*;
 import entity.Voyage;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.modelmapper.ModelMapper;
 import service.impl.VoyageServiceImpl;
 
+import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.stream.Stream;
 
 class VoyageServiceTest {
     private final VoyageService voyageService = new VoyageServiceImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
 
-    @Test
-    void addVoyage() throws SQLException {
+    public static Stream<Arguments> ordersAndProcessingPointsForTest() {
+        OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
+        processingPointToTest.setLocation("Russia");
+        processingPointToTest.setWarehouse(new WarehouseDto());
+        OrderDto firstOrderToTest = OrderDto.builder()
+                .id(1L)
+                .parcelParameters(ParcelParametersDto.builder()
+                        .height(1.0)
+                        .width(1.0)
+                        .length(1.0)
+                        .weight(20.0).build())
+                .destinationPlace(processingPointToTest)
+                .sender(ClientDto.builder().build())
+                .price(BigDecimal.valueOf(1))
+                .currentLocation(new OrderProcessingPointDto())
+                .state(OrderStateDto.builder().build())
+                .recipient(ClientDto.builder().build())
+                .history(new ArrayList<>())
+                .build();
+
+        return Stream.of(
+                Arguments.of(firstOrderToTest)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("ordersAndProcessingPointsForTest")
+    void addVoyage(OrderDto orderToTest) throws SQLException {
         GregorianCalendar sendingTime = new GregorianCalendar();
         sendingTime.set(Calendar.HOUR_OF_DAY, 12);
         sendingTime.set(Calendar.MINUTE, 30);
 
-        Voyage voyage = new Voyage();
-        voyage.setId(1L);
-        voyage.setExpectedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
-        voyage.setDispatchedOrders(Arrays.asList(Order.builder().build(), Order.builder().build()));
-        voyage.setSendingTime(sendingTime);
-        voyage.setDeparturePoint("Minsk");
+        VoyageDto voyageToTest = new VoyageDto();
+        voyageToTest.setId(1L);
+        voyageToTest.setSendingTime(sendingTime);
+        voyageToTest.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        voyageToTest.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        voyageToTest.setDeparturePoint("Minsk");
         String expected = "Moscow";
-        voyage.setDestinationPoint(expected);
+        voyageToTest.setDestinationPoint(expected);
 
-        Voyage addedVoyage = voyageService.addVoyage(voyage);
-        String actual = addedVoyage.getDestinationPoint();
+        Voyage savedVoyage = voyageService.save(voyageToTest);
+
+        String actual = savedVoyage.getDestinationPoint();
 
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test
-    void deleteVoyage() throws SQLException {
-        Voyage firstVoyage = new Voyage();
-        firstVoyage.setId(1L);
-        Voyage secondVoyage = new Voyage();
-        secondVoyage.setId(2L);
-        Voyage thirdVoyage = new Voyage();
-        thirdVoyage.setId(3L);
+    @ParameterizedTest
+    @MethodSource("ordersAndProcessingPointsForTest")
+    void deleteVoyage(OrderDto orderToTest) throws SQLException {
+        VoyageDto firstVoyageToTest = new VoyageDto();
+        firstVoyageToTest.setId(1L);
+        firstVoyageToTest.setDestinationPoint("Moskov");
+        firstVoyageToTest.setDeparturePoint("Pskov");
+        firstVoyageToTest.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        firstVoyageToTest.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        VoyageDto secondVoyageToTest = new VoyageDto();
+        secondVoyageToTest.setId(2L);
+        secondVoyageToTest.setDestinationPoint("Moskov");
+        secondVoyageToTest.setDeparturePoint("Pskov");
+        secondVoyageToTest.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        secondVoyageToTest.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        VoyageDto thirdVoyageToTest = new VoyageDto();
+        thirdVoyageToTest.setId(3L);
+        thirdVoyageToTest.setDestinationPoint("Moskov");
+        thirdVoyageToTest.setDeparturePoint("Pskov");
+        thirdVoyageToTest.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
+        thirdVoyageToTest.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest));
 
-        voyageService.addVoyage(firstVoyage);
-        voyageService.addVoyage(secondVoyage);
-        voyageService.addVoyage(thirdVoyage);
+        voyageService.save(firstVoyageToTest);
+        voyageService.save(secondVoyageToTest);
+        voyageService.save(thirdVoyageToTest);
 
-        voyageService.deleteVoyage(firstVoyage);
+        voyageService.delete(firstVoyageToTest.getId());
 
         int expected = 2;
-        int actual = voyageService.findAllVoyages().size();
+        int actual = voyageService.findAll().size();
 
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test
-    void findAllVoyages() throws SQLException {
-        Voyage firstVoyage = new Voyage();
-        Voyage secondVoyage = new Voyage();
-        Voyage thirdVoyage = new Voyage();
+    @ParameterizedTest
+    @MethodSource("ordersAndProcessingPointsForTest")
+    void findAllVoyages(OrderDto orderToTest) throws SQLException {
+        VoyageDto firstVoyage = new VoyageDto();
+        firstVoyage.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest
+        ));
+        firstVoyage.setDestinationPoint("Moskov");
+        firstVoyage.setDeparturePoint("Pskov");
+        firstVoyage.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest
+        ));
+        VoyageDto secondVoyage = new VoyageDto();
+        secondVoyage.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest
+        ));
+        secondVoyage.setDestinationPoint("Moskov");
+        secondVoyage.setDeparturePoint("Pskov");
+        secondVoyage.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest
+        ));
+        VoyageDto thirdVoyage = new VoyageDto();
+        thirdVoyage.setDestinationPoint("Moskov");
+        thirdVoyage.setDeparturePoint("Pskov");
+        thirdVoyage.setDispatchedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest
+        ));
+        thirdVoyage.setExpectedOrders(Arrays.asList(
+                orderToTest,
+                orderToTest
+        ));
 
-        voyageService.addVoyage(firstVoyage);
-        voyageService.addVoyage(secondVoyage);
-        voyageService.addVoyage(thirdVoyage);
+        voyageService.save(firstVoyage);
+        voyageService.save(secondVoyage);
+        voyageService.save(thirdVoyage);
 
         int expected = 3;
 
-        int actual = voyageService.findAllVoyages().size();
+        int actual = voyageService.findAll().size();
 
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test
-    void getVoyage() throws SQLException {
-        Voyage voyage = new Voyage();
-        voyage.setId(1L);
-
+    @ParameterizedTest
+    @MethodSource("ordersAndProcessingPointsForTest")
+    void getVoyage(OrderDto orderDtoToTest) throws SQLException {
+        OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
+        orderProcessingPointToTest.setLocation("Russia");
+        orderProcessingPointToTest.setWarehouse(new WarehouseDto());
+        VoyageDto voyageToTest = new VoyageDto();
+        voyageToTest.setId(1L);
+        voyageToTest.setDispatchedOrders(Arrays.asList(
+                        new OrderDto(),
+                        new OrderDto()
+                )
+        );
+        voyageToTest.setExpectedOrders(Arrays.asList(
+                        new OrderDto(),
+                        new OrderDto()
+                )
+        );
+        voyageToTest.setDestinationPoint("Moskov");
+        voyageToTest.setDeparturePoint("Pskov");
+        voyageToTest.setDestinationPoint("Moskov");
+        voyageToTest.setDeparturePoint("Pskov");
+        voyageToTest.setDispatchedOrders(Arrays.asList(
+                        orderDtoToTest,
+                        orderDtoToTest
+                )
+        );
+        voyageToTest.setExpectedOrders(Arrays.asList(
+                        orderDtoToTest,
+                        orderDtoToTest
+                )
+        );
         GregorianCalendar expectedTime = new GregorianCalendar();
 
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);
         expectedTime.set(Calendar.MINUTE, 30);
-        voyage.setSendingTime(expectedTime);
+        voyageToTest.setSendingTime(expectedTime);
 
-        voyageService.addVoyage(voyage);
+        voyageService.save(voyageToTest);
 
-        Calendar actualTime = voyageService.getVoyage(1).getSendingTime();
+        Calendar actualTime = voyageService.findOne(1).getSendingTime();
 
         Assertions.assertEquals(expectedTime, actualTime);
     }
 
-    @Test
-    void update() throws SQLException {
-        Voyage voyage = new Voyage();
-        voyage.setId(1L);
+    @ParameterizedTest
+    @MethodSource("ordersAndProcessingPointsForTest")
+    void update(OrderDto orderToSave) throws SQLException {
+        VoyageDto expectedVoyage = new VoyageDto();
+        expectedVoyage.setId(1L);
+        expectedVoyage.setDestinationPoint("Moskov");
+        expectedVoyage.setDeparturePoint("Pskov");
+        expectedVoyage.setDispatchedOrders(Arrays.asList(
+                        orderToSave,
+                        orderToSave
+                )
+        );
+        expectedVoyage.setExpectedOrders(Arrays.asList(
+                        orderToSave,
+                        orderToSave
+                )
+        );
         GregorianCalendar sendingTime = new GregorianCalendar();
         sendingTime.set(Calendar.HOUR_OF_DAY, 12);
         sendingTime.set(Calendar.MINUTE, 30);
 
-        voyage.setSendingTime(sendingTime);
+        expectedVoyage.setSendingTime(sendingTime);
 
-        voyageService.addVoyage(voyage);
+        voyageService.save(expectedVoyage);
 
         GregorianCalendar expectedTime = new GregorianCalendar();
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);
         expectedTime.set(Calendar.MINUTE, 30);
 
-        voyage.setSendingTime(expectedTime);
+        expectedVoyage.setSendingTime(expectedTime);
 
-        Calendar actualTime = voyageService.update(voyage).getSendingTime();
+        Voyage actualVoyage = voyageService.update(expectedVoyage);
 
-        Assertions.assertEquals(expectedTime, actualTime);
+        VoyageDto actualDto = modelMapper.map(actualVoyage, VoyageDto.class);
+
+        Assertions.assertEquals(expectedVoyage, actualDto);
     }
 }

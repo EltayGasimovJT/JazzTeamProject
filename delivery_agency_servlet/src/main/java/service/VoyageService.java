@@ -1,18 +1,19 @@
 package service;
 
+import dto.VoyageDto;
 import entity.Voyage;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface VoyageService {
-    Voyage addVoyage(Voyage voyage) throws SQLException;
+    Voyage save(VoyageDto voyageDtoToSave) throws SQLException;
 
-    void deleteVoyage(Voyage voyage) throws SQLException;
+    void delete(Long idForDelete) throws SQLException;
 
-    List<Voyage> findAllVoyages() throws SQLException;
+    List<Voyage> findAll() throws SQLException;
 
-    Voyage getVoyage(long id) throws SQLException;
+    Voyage findOne(long idForSearch) throws SQLException;
 
-    Voyage update(Voyage voyage) throws SQLException;
+    Voyage update(VoyageDto voyageToUpdate) throws SQLException;
 }

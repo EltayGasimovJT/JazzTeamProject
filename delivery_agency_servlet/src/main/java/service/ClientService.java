@@ -1,19 +1,21 @@
 package service;
 
 import dto.ClientDto;
+import entity.Client;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ClientService {
-    void delete(Long id) throws IllegalArgumentException;
+    void delete(Long idForDelete) throws SQLException;
 
-    List<ClientDto> findAllClients();
+    List<Client> findAll() throws IllegalArgumentException, SQLException;
 
-    ClientDto findById(long id);
+    Client findById(long idForSearch) throws IllegalArgumentException, SQLException;
 
-    ClientDto findByPassportId(String passportId);
+    Client findByPassportId(String passportIdForSearch) throws IllegalArgumentException, SQLException;
 
-    ClientDto save(ClientDto clientDTO) throws IllegalArgumentException;
+    Client save(ClientDto clientDtoToSave) throws SQLException, IllegalArgumentException;
 
-    ClientDto update(ClientDto clientDTO) throws IllegalArgumentException;
+    Client update(ClientDto newClient) throws SQLException, IllegalArgumentException;
 }

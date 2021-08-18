@@ -2,64 +2,71 @@ package service.impl;
 
 import dto.OrderProcessingPointDto;
 import entity.OrderProcessingPoint;
+import entity.Warehouse;
+import mapping.CustomModelMapper;
+import org.modelmapper.ModelMapper;
 import repository.OrderProcessingPointRepository;
 import repository.impl.OrderProcessingPointRepositoryImpl;
 import service.OrderProcessingPointService;
+import validator.OrderProcessingPointValidator;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class OrderProcessingPointServiceImpl implements OrderProcessingPointService {
     private final OrderProcessingPointRepository orderProcessingPointRepository = new OrderProcessingPointRepositoryImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
+
 
     @Override
-    public OrderProcessingPointDto addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) throws SQLException {
-        OrderProcessingPoint orderProcessingPoint = fromDtoToOrderProcessingPoint(orderProcessingPointDto);
-        return fromOrderProcessingPointToDTO(orderProcessingPointRepository.save(orderProcessingPoint));
-    }
+    public OrderProcessingPoint save(OrderProcessingPointDto processingPointDtoToSave) throws IllegalArgumentException, SQLException {
+        OrderProcessingPoint orderProcessingPointToSave = new OrderProcessingPoint();
+        orderProcessingPointToSave.setId(processingPointDtoToSave.getId());
+        orderProcessingPointToSave.setLocation(processingPointDtoToSave.getLocation());
+        Warehouse warehouseToSave = new Warehouse();
+        warehouseToSave.setId(processingPointDtoToSave.getWarehouse().getId());
+        warehouseToSave.setLocation(processingPointDtoToSave.getWarehouse().getLocation());
+        orderProcessingPointToSave.setWarehouse(warehouseToSave);
+        OrderProcessingPointValidator.validateOnSave(orderProcessingPointToSave);
 
-    @Override
-    public void deleteOrderProcessingPoint(Long id) throws SQLException {
-        orderProcessingPointRepository.delete(id);
-    }
-
-    @Override
-    public List<OrderProcessingPointDto> findAllOrderProcessingPoints() throws SQLException {
-        List<OrderProcessingPoint> processingPoints = orderProcessingPointRepository.findAll();
-        List<OrderProcessingPointDto> processingPointDto = new ArrayList<>();
-        for (OrderProcessingPoint processingPoint : processingPoints) {
-            OrderProcessingPointDto orderProcessingPointDto = fromOrderProcessingPointToDTO(processingPoint);
-            processingPointDto.add(orderProcessingPointDto);
-        }
-        return processingPointDto;
+        return orderProcessingPointRepository.save(orderProcessingPointToSave);
     }
 
     @Override
-    public OrderProcessingPointDto getOrderProcessingPoint(long id) throws SQLException {
-        return fromOrderProcessingPointToDTO(orderProcessingPointRepository.findOne(id));
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
+        OrderProcessingPointValidator.validateProcessingPoint(orderProcessingPointRepository.findOne(idForDelete));
+        orderProcessingPointRepository.delete(idForDelete);
     }
 
     @Override
-    public OrderProcessingPointDto update(OrderProcessingPointDto orderProcessingPointDto) throws SQLException {
-        OrderProcessingPoint update = orderProcessingPointRepository.update(fromDtoToOrderProcessingPoint(orderProcessingPointDto));
-        return fromOrderProcessingPointToDTO(update);
+    public List<OrderProcessingPoint> findAll() throws IllegalArgumentException, SQLException {
+        List<OrderProcessingPoint> processingPointsFromRepository = orderProcessingPointRepository.findAll();
+        OrderProcessingPointValidator.validateProcessingPointList(processingPointsFromRepository);
+        return processingPointsFromRepository;
     }
 
-    private OrderProcessingPointDto fromOrderProcessingPointToDTO(OrderProcessingPoint orderProcessingPoint) {
-        return OrderProcessingPointDto.builder()
-                .id(orderProcessingPoint.getId())
-                .warehouse(orderProcessingPoint.getWarehouse())
-                .build();
+    @Override
+    public OrderProcessingPoint findOne(long idForSearch) throws IllegalArgumentException, SQLException {
+        OrderProcessingPoint foundProcessingPoint = orderProcessingPointRepository.findOne(idForSearch);
+        OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
+        return foundProcessingPoint;
     }
 
-    private OrderProcessingPoint fromDtoToOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) {
-        OrderProcessingPoint orderProcessingPoint = new OrderProcessingPoint();
-        orderProcessingPoint.setId(orderProcessingPointDto.getId());
-        orderProcessingPoint.setWarehouse(orderProcessingPointDto.getWarehouse());
-        orderProcessingPoint.setLocation(orderProcessingPointDto.getLocation());
-        orderProcessingPoint.setDispatchedOrders(orderProcessingPointDto.getDispatchedOrders());
-        orderProcessingPoint.setExpectedOrders(orderProcessingPointDto.getExpectedOrders());
-        return orderProcessingPoint;
+    @Override
+    public OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate) throws IllegalArgumentException, SQLException {
+        OrderProcessingPointValidator.validateProcessingPoint(orderProcessingPointRepository.findOne(processingPointDtoToUpdate.getId()));
+        OrderProcessingPoint orderProcessingPointUpdate = new OrderProcessingPoint();
+        orderProcessingPointUpdate.setId(processingPointDtoToUpdate.getId());
+        orderProcessingPointUpdate.setLocation(processingPointDtoToUpdate.getLocation());
+        orderProcessingPointUpdate.setWarehouse(modelMapper.map(processingPointDtoToUpdate.getWarehouse(), Warehouse.class));
+        orderProcessingPointUpdate.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
+                .map(CustomModelMapper::mapDtoToOrder)
+                .collect(Collectors.toList()));
+        orderProcessingPointUpdate.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
+                .map(CustomModelMapper::mapDtoToOrder)
+                .collect(Collectors.toList()));
+        return orderProcessingPointRepository.update(orderProcessingPointUpdate);
     }
+
 }

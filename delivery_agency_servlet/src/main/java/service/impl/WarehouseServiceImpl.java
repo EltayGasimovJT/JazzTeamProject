@@ -1,38 +1,69 @@
 package service.impl;
 
+import dto.WarehouseDto;
+import entity.OrderProcessingPoint;
 import entity.Warehouse;
-import repository.WareHouseRepository;
+import mapping.CustomModelMapper;
+import org.modelmapper.ModelMapper;
+import repository.WarehouseRepository;
 import repository.impl.WarehouseRepositoryImpl;
 import service.WarehouseService;
+import validator.WarehouseValidator;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class WarehouseServiceImpl implements WarehouseService {
-    private final WareHouseRepository wareHouseRepository = new WarehouseRepositoryImpl();
+    private final WarehouseRepository warehouseRepository = new WarehouseRepositoryImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public Warehouse addWarehouse(Warehouse warehouse) throws SQLException {
-        return wareHouseRepository.save(warehouse);
+    public Warehouse save(WarehouseDto warehouseDtoToSave) throws IllegalArgumentException, SQLException {
+        Warehouse warehouseToSave = CustomModelMapper.mapDtoToWarehouse(warehouseDtoToSave);
+
+        WarehouseValidator.validateOnSave(warehouseToSave);
+        return warehouseRepository.save(warehouseToSave);
     }
 
     @Override
-    public void deleteWarehouse(Warehouse warehouse) throws SQLException {
-        wareHouseRepository.delete(warehouse.getId());
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
+        WarehouseValidator.validateWarehouse(warehouseRepository.findOne(idForDelete));
+        warehouseRepository.delete(idForDelete);
     }
 
     @Override
-    public List<Warehouse> findAllWarehouses() throws SQLException {
-        return wareHouseRepository.findAll();
+    public List<Warehouse> findAll() throws IllegalArgumentException, SQLException {
+        List<Warehouse> warehousesFromRepository = warehouseRepository.findAll();
+        WarehouseValidator.validateWarehouseList(warehousesFromRepository);
+
+        return warehousesFromRepository;
     }
 
     @Override
-    public Warehouse getWarehouse(long id) throws SQLException {
-        return wareHouseRepository.findOne(id);
+    public Warehouse findOne(long idForSearch) throws IllegalArgumentException, SQLException {
+        Warehouse foundWarehouse = warehouseRepository.findOne(idForSearch);
+        WarehouseValidator.validateWarehouse(foundWarehouse);
+
+        return foundWarehouse;
     }
 
     @Override
-    public Warehouse update(Warehouse warehouse) throws SQLException {
-        return wareHouseRepository.update(warehouse);
+    public Warehouse update(WarehouseDto warehouseDtoToUpdate) throws IllegalArgumentException, SQLException {
+        Warehouse warehouseToUpdate = warehouseRepository.findOne(warehouseDtoToUpdate.getId());
+
+        WarehouseValidator.validateWarehouse(warehouseToUpdate);
+
+        warehouseToUpdate.setExpectedOrders(warehouseDtoToUpdate.getExpectedOrders().stream()
+                .map(CustomModelMapper::mapDtoToOrder)
+                .collect(Collectors.toList()));
+        warehouseToUpdate.setDispatchedOrders(warehouseDtoToUpdate.getDispatchedOrders().stream()
+                .map(CustomModelMapper::mapDtoToOrder)
+                .collect(Collectors.toList()));
+        warehouseToUpdate.setOrderProcessingPoints(warehouseDtoToUpdate.getOrderProcessingPoints().stream().
+                map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto, OrderProcessingPoint.class))
+                .collect(Collectors.toList()));
+
+        return warehouseRepository.update(warehouseToUpdate);
     }
 }

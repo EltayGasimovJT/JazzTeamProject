@@ -1,11 +1,18 @@
 package service.impl;
 
-import entity.AbstractBuilding;
+import dto.AbstractBuildingDto;
+import dto.UserDto;
+import entity.OrderProcessingPoint;
 import entity.User;
+import entity.Warehouse;
+import entity.WorkingPlaceType;
 import lombok.extern.slf4j.Slf4j;
+import mapping.CustomModelMapper;
+import org.modelmapper.ModelMapper;
 import repository.UserRepository;
 import repository.impl.UserRepositoryImpl;
 import service.UserService;
+import validator.UserValidator;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,44 +20,57 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public User addUser(User user) throws SQLException {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public void deleteUser(User user) throws SQLException {
-        userRepository.delete(user.getId());
-    }
-
-    @Override
-    public List<User> findAllUsers() throws SQLException {
-        for (User user : userRepository.findAll()) {
-            log.info(user.toString());
-        }
-        return userRepository.findAll();
-    }
-
-    @Override
-    public User getUser(long id) throws SQLException {
-        return userRepository.findOne(id);
-    }
-
-    @Override
-    public User update(User user) throws SQLException {
-        return userRepository.update(user);
-    }
-
-    @Override
-    public User changeWorkingPlace(User userToUpdate, AbstractBuilding newWorkingPlace) throws SQLException {
-        User user = User.builder()
-                .id(userToUpdate.getId())
-                .name(userToUpdate.getName())
-                .surname(userToUpdate.getSurname())
-                .roles(userToUpdate.getRoles())
-                .workingPlace(newWorkingPlace)
+    public User save(UserDto userDtoToSave) throws SQLException {
+        User userToSave = User.builder().id(userDtoToSave.getId())
+                .name(userDtoToSave.getName())
+                .surname(userDtoToSave.getSurname())
+                .roles(userDtoToSave.getRoles())
                 .build();
-        return userRepository.update(user);
+        if (userDtoToSave.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
+            userToSave.setWorkingPlace(modelMapper.map(userDtoToSave.getWorkingPlace(), OrderProcessingPoint.class));
+        } else if (userDtoToSave.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
+            userToSave.setWorkingPlace(modelMapper.map(userDtoToSave.getWorkingPlace(), Warehouse.class));
+        }
+
+        UserValidator.validateOnSave(userToSave);
+
+        return userRepository.save(userToSave);
+    }
+
+    @Override
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
+        UserValidator.validateUser(userRepository.findOne(idForDelete));
+        userRepository.delete(idForDelete);
+    }
+
+    @Override
+    public List<User> findAll() throws IllegalArgumentException, SQLException {
+        List<User> usersFromRepository = userRepository.findAll();
+        UserValidator.validateUsersList(usersFromRepository);
+        return usersFromRepository;
+    }
+
+    @Override
+    public User findOne(long idForSearch) throws IllegalArgumentException, SQLException {
+        User foundUser = userRepository.findOne(idForSearch);
+        UserValidator.validateUser(foundUser);
+        return foundUser;
+    }
+
+    @Override
+    public User update(UserDto userDtoToUpdate) throws SQLException {
+        User userToUpdate = CustomModelMapper.mapDtoToUser(userDtoToUpdate);
+        UserValidator.validateUser(userToUpdate);
+        return userRepository.update(userToUpdate);
+    }
+
+    @Override
+    public User changeWorkingPlace(UserDto userToUpdate, AbstractBuildingDto newWorkingPlace) throws SQLException, IllegalArgumentException {
+        userToUpdate.setWorkingPlace(newWorkingPlace);
+
+        return update(userToUpdate);
     }
 }

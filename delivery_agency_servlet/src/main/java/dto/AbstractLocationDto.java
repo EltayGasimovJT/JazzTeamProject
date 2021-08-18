@@ -1,12 +1,16 @@
 package dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.List;
 
 @Data
-@Builder
-public class AbstractLocationDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public abstract class AbstractLocationDto {
+    private Long id;
     private List<OrderDto> expectedOrders;
     private List<OrderDto> dispatchedOrders;
 }

@@ -1,6 +1,5 @@
-package dto;
+package entity;
 
-import entity.WorkingPlaceType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class AbstractBuildingDto extends AbstractLocationDto {
+public abstract class AbstractBuilding extends AbstractLocation {
     private String location;
     private WorkingPlaceType workingPlaceType;
 }

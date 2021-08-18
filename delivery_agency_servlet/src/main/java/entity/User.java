@@ -11,11 +11,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+public class User {
     private Long id;
     private String name;
     private String surname;
-    private String passportId;
-    private String phoneNumber;
-    private List<Order> orders;
+    private AbstractBuilding workingPlace;
+    private List<String> roles;
 }

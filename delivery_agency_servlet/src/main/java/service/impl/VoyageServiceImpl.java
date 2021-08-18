@@ -1,38 +1,68 @@
 package service.impl;
 
+import dto.VoyageDto;
 import entity.Voyage;
+import mapping.CustomModelMapper;
 import repository.VoyageRepository;
 import repository.impl.VoyageRepositoryImpl;
 import service.VoyageService;
+import validator.VoyageValidator;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 
     @Override
-    public Voyage addVoyage(Voyage voyage) throws SQLException {
-        return voyageRepository.save(voyage);
+    public Voyage save(VoyageDto voyageDtoToSave) throws IllegalArgumentException, SQLException {
+        Voyage voyageToSave = new Voyage();
+        voyageToSave.setId(voyageDtoToSave.getId());
+        voyageToSave.setExpectedOrders(voyageDtoToSave.getExpectedOrders().stream()
+                .map(CustomModelMapper::mapDtoToOrder)
+                .collect(Collectors.toList()));
+        voyageToSave.setDispatchedOrders(voyageDtoToSave.getDispatchedOrders().stream()
+                .map(CustomModelMapper::mapDtoToOrder)
+                .collect(Collectors.toList()));
+        voyageToSave.setDeparturePoint(voyageDtoToSave.getDeparturePoint());
+        voyageToSave.setDestinationPoint(voyageDtoToSave.getDestinationPoint());
+        voyageToSave.setSendingTime(voyageDtoToSave.getSendingTime());
+        VoyageValidator.validateOnSave(voyageToSave);
+
+        return voyageRepository.save(voyageToSave);
     }
 
     @Override
-    public void deleteVoyage(Voyage voyage) throws SQLException {
-        voyageRepository.delete(voyage.getId());
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
+        VoyageValidator.validateVoyage(voyageRepository.findOne(idForDelete));
+        voyageRepository.delete(idForDelete);
     }
 
     @Override
-    public List<Voyage> findAllVoyages() throws SQLException {
-        return voyageRepository.findAll();
+    public List<Voyage> findAll() throws IllegalArgumentException, SQLException {
+        List<Voyage> voyagesFromRepository = voyageRepository.findAll();
+        VoyageValidator.validateVoyageList(voyagesFromRepository);
+        return voyagesFromRepository;
     }
 
     @Override
-    public Voyage getVoyage(long id) throws SQLException {
-        return voyageRepository.findOne(id);
+    public Voyage findOne(long idForSearch) throws IllegalArgumentException, SQLException {
+        Voyage foundVoyage = voyageRepository.findOne(idForSearch);
+        VoyageValidator.validateVoyage(foundVoyage);
+
+        return foundVoyage;
     }
 
     @Override
-    public Voyage update(Voyage voyage) throws SQLException {
-        return voyageRepository.update(voyage);
+    public Voyage update(VoyageDto voyage) throws IllegalArgumentException, SQLException {
+        Voyage voyageToUpdate = new Voyage();
+        voyageToUpdate.setId(voyage.getId());
+        voyageToUpdate.setSendingTime(voyage.getSendingTime());
+        voyageToUpdate.setDestinationPoint(voyage.getDestinationPoint());
+        voyageToUpdate.setDeparturePoint(voyage.getDeparturePoint());
+        VoyageValidator.validateVoyage(voyageToUpdate);
+
+        return voyageRepository.update(voyageToUpdate);
     }
 }

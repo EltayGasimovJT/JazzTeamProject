@@ -1,15 +1,17 @@
 package entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Calendar;
-import java.util.List;
 
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderHistory {
-    private Order order;
     private User user;
     private String comment;
     private Calendar changingTime;

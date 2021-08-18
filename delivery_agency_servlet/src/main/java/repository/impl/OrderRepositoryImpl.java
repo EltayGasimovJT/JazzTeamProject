@@ -12,28 +12,28 @@ public class OrderRepositoryImpl implements OrderRepository {
     private final List<List<Order>> ordersOnTheWay = new ArrayList<>();
 
     @Override
-    public Order findByRecipient(Client recipient) {
+    public Order findByRecipient(Client recipientForSearch) {
         return orders.stream()
-                .filter(order1 -> order1.getRecipient().getId().equals(recipient.getId()))
+                .filter(order -> order.getRecipient().getId().equals(recipientForSearch.getId()))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public Order findBySender(Client sender) {
+    public Order findBySender(Client senderForSearch) {
         return null;
     }
 
     @Override
-    public List<Order> saveSentOrders(List<Order> orders) {
-        this.ordersOnTheWay.add(orders);
-        return orders;
+    public List<Order> saveSentOrders(List<Order> ordersToSend) {
+        this.ordersOnTheWay.add(ordersToSend);
+        return ordersToSend;
     }
 
     @Override
-    public List<Order> acceptOrders(List<Order> orders) {
-        this.ordersOnTheWay.remove(orders);
-        return orders;
+    public List<Order> acceptOrders(List<Order> ordersToAccept) {
+        this.ordersOnTheWay.remove(ordersToAccept);
+        return ordersToAccept;
     }
 
     @Override
@@ -42,14 +42,14 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Order save(Order order) {
-        orders.add(order);
-        return order;
+    public Order save(Order orderToSave) {
+        orders.add(orderToSave);
+        return orderToSave;
     }
 
     @Override
-    public void delete(Long id) {
-        orders.remove(findOne(id));
+    public void delete(Long idForDelete) {
+        orders.remove(findOne(idForDelete));
     }
 
     @Override
@@ -58,28 +58,26 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
-    public Order findOne(Long id){
+    public Order findOne(Long idForSearch){
         return orders.stream()
-                .filter(order -> order.getId().equals(id))
+                .filter(order -> order.getId().equals(idForSearch))
                 .findFirst()
                 .orElse(null);
     }
 
     @Override
-    public Order update(Order update) {
-        Order actual = findOne(update.getId());
-        orders.remove(actual);
-        actual.setHistory(update.getHistory());
-        actual.setState(update.getState());
-        actual.setCurrentLocation(update.getCurrentLocation());
-        actual.setDestinationPlace(update.getDestinationPlace());
-        actual.setParcelParameters(update.getParcelParameters());
-        actual.setRecipient(update.getRecipient());
-        actual.setSender(update.getSender());
-        actual.setSendingTime(update.getSendingTime());
-        actual.setPrice(update.getPrice());
-        actual.setRoute(update.getRoute());
-        orders.add(actual);
-        return actual;
+    public Order update(Order newOrder) {
+        Order orderToSave = findOne(newOrder.getId());
+        orders.remove(orderToSave);
+        orderToSave.setHistory(newOrder.getHistory());
+        orderToSave.setState(newOrder.getState());
+        orderToSave.setCurrentLocation(newOrder.getCurrentLocation());
+        orderToSave.setDestinationPlace(newOrder.getDestinationPlace());
+        orderToSave.setParcelParameters(newOrder.getParcelParameters());
+        orderToSave.setRecipient(newOrder.getRecipient());
+        orderToSave.setSender(newOrder.getSender());
+        orderToSave.setPrice(newOrder.getPrice());
+        orders.add(orderToSave);
+        return orderToSave;
     }
 }

@@ -1,18 +1,19 @@
 package service;
 
 import dto.OrderProcessingPointDto;
+import entity.OrderProcessingPoint;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface OrderProcessingPointService {
-    OrderProcessingPointDto addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPointDto) throws SQLException;
+    OrderProcessingPoint save(OrderProcessingPointDto processingPointDtoToSave) throws SQLException;
 
-    void deleteOrderProcessingPoint(Long id) throws SQLException;
+    void delete(Long idForDelete) throws SQLException;
 
-    List<OrderProcessingPointDto> findAllOrderProcessingPoints() throws SQLException;
+    List<OrderProcessingPoint> findAll() throws SQLException;
 
-    OrderProcessingPointDto getOrderProcessingPoint(long id) throws SQLException;
+    OrderProcessingPoint findOne(long idForSearch) throws SQLException;
 
-    OrderProcessingPointDto update(OrderProcessingPointDto orderProcessingPointDto) throws SQLException;
+    OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate) throws SQLException;
 }

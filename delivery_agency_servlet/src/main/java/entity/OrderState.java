@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Client {
+public class OrderState {
     private Long id;
-    private String name;
-    private String surname;
-    private String passportId;
-    private String phoneNumber;
-    private List<Order> orders;
+    private String state;
+    private List<String> rolesAllowedWithdrawFromState;
+    private List<String> rolesAllowedPutToState;
 }
