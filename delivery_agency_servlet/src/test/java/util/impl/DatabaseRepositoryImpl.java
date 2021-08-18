@@ -20,7 +20,6 @@ public class DatabaseRepositoryImpl implements DatabaseRepository {
                     Statement statement = connection.createStatement()
             ) {
                 statement.execute(query);
-                connection.commit();
             }
         }
     }

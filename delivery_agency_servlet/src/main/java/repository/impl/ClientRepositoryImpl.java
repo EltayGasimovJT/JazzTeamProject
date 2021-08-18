@@ -35,6 +35,7 @@ public class ClientRepositoryImpl implements ClientRepository {
                 try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                     if (generatedKeys.next() && findOne(generatedKeys.getLong(1)) != null) {
                         client.setId(generatedKeys.getLong(1));
+                        client.setOrders(new ArrayList<>());
                     } else {
                         throw new SQLException("Creating client failed, no ID obtained.");
                     }

@@ -66,9 +66,6 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client update(ClientDto newClient) throws IllegalArgumentException, SQLException {
         ClientValidator.validateClient(clientRepository.findOne(newClient.getId()));
-        List<Order> clientOrdersToUpdate = newClient.getOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList());
 
         Client clientToUpdate = Client.builder()
                 .id(newClient.getId())
@@ -76,7 +73,6 @@ public class ClientServiceImpl implements ClientService {
                 .surname(newClient.getSurname())
                 .passportId(newClient.getPassportId())
                 .phoneNumber(newClient.getPhoneNumber())
-                .orders(clientOrdersToUpdate)
                 .build();
 
         return clientRepository.update(clientToUpdate);
