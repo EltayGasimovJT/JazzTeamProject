@@ -97,7 +97,6 @@ public class ClientRepositoryImpl implements ClientRepository {
                 statement.setLong(5, update.getId());
                 int affectedRows = statement.executeUpdate();
                 if (affectedRows == 0) {
-                    connection.rollback();
                     throw new SQLException("Creating user information failed, no rows affected.");
                 }
                 return update;
