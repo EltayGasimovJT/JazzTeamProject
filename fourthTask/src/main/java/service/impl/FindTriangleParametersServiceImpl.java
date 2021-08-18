@@ -10,8 +10,7 @@ public class FindTriangleParametersServiceImpl implements FindTriangleParameters
         double secondPointPow = Math.pow(x.getY() - y.getY(), 2);
 
         double toAbs = Math.sqrt(firstPointPow + secondPointPow);
-        double result = Math.abs(toAbs);
 
-        return result;
+        return Math.abs(toAbs);
     }
 }

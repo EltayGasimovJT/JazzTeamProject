@@ -1,18 +1,39 @@
 package entity;
 
 
+import lombok.extern.slf4j.Slf4j;
+import validator.PortValidator;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public class Port {
+    private final int containersCapacity;
+    private int currentShipsInDock;
     private int dockQty;
-    private int containersCapacity;
     private int currentContainersQty;
     private int counter;
-
     List<Thread> ships = new ArrayList<>();
 
+    {
+        currentShipsInDock = 0;
+    }
+
+    public Port() {
+        containersCapacity = 0;
+    }
+
+    public int getDockQty() {
+        return dockQty;
+    }
+
+    public void setDockQty(int dockQty) {
+        this.dockQty = dockQty;
+    }
+
     public Port(int dockQty, int containersCapacity, int currentContainersQty) {
+        PortValidator.isPortCanBeCreated(dockQty, containersCapacity, currentContainersQty);
         this.dockQty = dockQty;
         this.containersCapacity = containersCapacity;
         this.currentContainersQty = currentContainersQty;
@@ -20,6 +41,10 @@ public class Port {
 
     public int getContainersCapacity() {
         return containersCapacity;
+    }
+
+    public int getCurrentShipsInDock() {
+        return currentShipsInDock;
     }
 
     public int getCurrentContainersQty() {
@@ -34,17 +59,24 @@ public class Port {
         currentContainersQty--;
     }
 
-    public synchronized void askPermission() {
+    public synchronized void askPermissionForTheShip(Ship ship) throws IllegalArgumentException {
+        PortValidator.isShipsContainersMoreThanPortCapacity(this, ship);
         while (dockQty == 0) {
             try {
                 wait();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                log.error(e.getMessage());
+                ship.interrupt();
             }
         }
-        ships.add(Thread.currentThread());
 
-        System.out.println(Thread.currentThread().getName() + " has received permission");
+        if (ship.getContainersToUpload() > containersCapacity || ship.getContainersToTake() > containersCapacity) {
+            ship.interrupt();
+            throw new IllegalArgumentException("Out of port capacity!!!");
+        }
+        ships.add(ship);
+
+        log.info(ship.getName() + " has received permission");
         dockQty--;
     }
 
@@ -52,27 +84,29 @@ public class Port {
         return counter;
     }
 
-    public void increment(){
-        this.counter++;
+    public void incrementCountOfCurrentShips() {
+        currentShipsInDock++;
     }
 
-    public synchronized void returnPermission() {
+    public void increment() {
+        counter++;
+    }
 
-        try {
-            Thread.sleep(100);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+    public void decrementCountOfCurrentShips() {
+        currentShipsInDock--;
+    }
 
-        System.out.println(Thread.currentThread().getName() + " is leaving dock");
+    public synchronized void returnPermission(Ship ship) {
+        log.info(Thread.currentThread().getName() +
+                " is leaving dock. Current containers Qty in Port: "
+                + currentContainersQty);
 
-        System.out.println("Current containers Qty in Port: " + currentContainersQty);
-
-        if (ships.contains(Thread.currentThread())) {
+        if (ships.contains(ship)) {
             dockQty++;
         }
-        ships.remove(Thread.currentThread());
-
+        currentShipsInDock--;
+        ships.remove(ship);
+        ship.interrupt();
         notifyAll();
     }
 }
