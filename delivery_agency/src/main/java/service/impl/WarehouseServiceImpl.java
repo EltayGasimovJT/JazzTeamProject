@@ -19,14 +19,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public Warehouse save(WarehouseDto warehouseDtoToSave) throws IllegalArgumentException {
-        Warehouse warehouseToSave = new Warehouse();
-
-        warehouseToSave.setId(warehouseDtoToSave.getId());
-        warehouseToSave.setLocation(warehouseDtoToSave.getLocation());
-        warehouseToSave.setOrderProcessingPoints(warehouseDtoToSave.getOrderProcessingPoints()
-                .stream()
-                .map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto,OrderProcessingPoint.class))
-                .collect(Collectors.toList()));
+        Warehouse warehouseToSave = CustomModelMapper.mapDtoToWarehouse(warehouseDtoToSave);
 
         WarehouseValidator.validateOnSave(warehouseToSave);
         return warehouseRepository.save(warehouseToSave);

@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public abstract class AbstractBuilding extends AbstractLocation {
     private String location;
+    private WorkingPlaceType workingPlaceType;
 }

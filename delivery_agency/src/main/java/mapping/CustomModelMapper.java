@@ -89,4 +89,70 @@ public class CustomModelMapper {
         }
         return convertedToUser;
     }
+
+    public static Warehouse mapDtoToWarehouse(WarehouseDto warehouseDtoToConvert) {
+        Warehouse convertedToWarehouse = new Warehouse();
+        convertedToWarehouse.setId(warehouseDtoToConvert.getId());
+        convertedToWarehouse.setLocation(warehouseDtoToConvert.getLocation());
+        convertedToWarehouse.setWorkingPlaceType(warehouseDtoToConvert.getWorkingPlaceType());
+        convertedToWarehouse.setDispatchedOrders(
+                warehouseDtoToConvert
+                        .getDispatchedOrders()
+                        .stream()
+                        .map(CustomModelMapper::mapDtoToOrder)
+                        .collect(Collectors.toList()));
+        convertedToWarehouse.setExpectedOrders(
+                warehouseDtoToConvert
+                        .getExpectedOrders()
+                        .stream()
+                        .map(CustomModelMapper::mapDtoToOrder)
+                        .collect(Collectors.toList())
+        );
+        convertedToWarehouse.setConnectedWarehouses(
+                warehouseDtoToConvert.getConnectedWarehouses()
+                        .stream()
+                        .map(warehouseDto -> modelMapper.map(warehouseDto, Warehouse.class))
+                        .collect(Collectors.toList())
+        );
+        convertedToWarehouse.setOrderProcessingPoints(
+                warehouseDtoToConvert.getOrderProcessingPoints()
+                        .stream()
+                        .map(processingPointToConvert -> modelMapper.map(processingPointToConvert, OrderProcessingPoint.class))
+                        .collect(Collectors.toList())
+        );
+        return convertedToWarehouse;
+    }
+
+    public static WarehouseDto mapWarehouseToDto(Warehouse warehouseToConvert) {
+        WarehouseDto convertedToDto = new WarehouseDto();
+        convertedToDto.setId(warehouseToConvert.getId());
+        convertedToDto.setLocation(warehouseToConvert.getLocation());
+        convertedToDto.setWorkingPlaceType(warehouseToConvert.getWorkingPlaceType());
+        convertedToDto.setDispatchedOrders(
+                warehouseToConvert
+                        .getDispatchedOrders()
+                        .stream()
+                        .map(CustomModelMapper::mapOrderToDto)
+                        .collect(Collectors.toList()));
+        convertedToDto.setExpectedOrders(
+                warehouseToConvert
+                        .getExpectedOrders()
+                        .stream()
+                        .map(CustomModelMapper::mapOrderToDto)
+                        .collect(Collectors.toList())
+        );
+        convertedToDto.setConnectedWarehouses(
+                warehouseToConvert.getConnectedWarehouses()
+                        .stream()
+                        .map(warehouseDto -> modelMapper.map(warehouseDto, WarehouseDto.class))
+                        .collect(Collectors.toList())
+        );
+        convertedToDto.setOrderProcessingPoints(
+                warehouseToConvert.getOrderProcessingPoints()
+                        .stream()
+                        .map(processingPointToConvert -> modelMapper.map(processingPointToConvert, OrderProcessingPointDto.class))
+                        .collect(Collectors.toList())
+        );
+        return convertedToDto;
+    }
 }
