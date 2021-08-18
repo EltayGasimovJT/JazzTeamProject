@@ -25,21 +25,14 @@ public class ClientFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
-
         if (((HttpServletRequest) servletRequest).getMethod().equals("GET")) {
-            List<ClientDto> clients = new ArrayList<>();
             try {
-                clients.addAll(
-                        clientService.findAll()
+                clientService.findAll()
                         .stream()
                         .map(client -> modelMapper.map(client, ClientDto.class))
-                        .collect(Collectors.toList())
-                );
-            } catch (SQLException e) {
-                log.error(e.getMessage());
-            }
-            if (clients.isEmpty()) {
-                response.sendError(HttpServletResponse.SC_CONFLICT, "There is no clients to show!!!");
+                        .collect(Collectors.toList());
+            } catch (IllegalArgumentException | SQLException e) {
+                response.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
             }
         }
 
