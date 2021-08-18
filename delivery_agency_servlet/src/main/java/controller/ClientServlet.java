@@ -58,19 +58,13 @@ public class ClientServlet extends HttpServlet {
         resp.setContentType(CONTENT_TYPE_JSON);
         resp.setCharacterEncoding(ENCODING);
 
-        ClientDto savedClient = null;
-
-        try {
-            savedClient = modelMapper.map(clientService.save(clientDTO), ClientDto.class);
-        } catch (IllegalArgumentException | SQLException e) {
-            try {
-                resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
-            } catch (IOException ex) {
-                log.error(e.getMessage());
-            }
-        }
-
         try (PrintWriter out = resp.getWriter()) {
+            ClientDto savedClient = new ClientDto();
+            try {
+                savedClient = modelMapper.map(clientService.save(clientDTO), ClientDto.class);
+            } catch (IllegalArgumentException | SQLException e) {
+                resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+            }
             String toJson = new Gson().toJson(savedClient);
             out.println(toJson);
             out.flush();
@@ -87,14 +81,18 @@ public class ClientServlet extends HttpServlet {
         resp.setCharacterEncoding(ENCODING);
 
         try (PrintWriter out = resp.getWriter()) {
-            ClientDto update = modelMapper.map(clientService.update(clientDTO), ClientDto.class);
-
-            String toJson = new Gson().toJson(update);
+            ClientDto updatedClient = new ClientDto();
+            try {
+                updatedClient = modelMapper.map(clientService.update(clientDTO), ClientDto.class);
+            } catch (IllegalArgumentException | SQLException e) {
+                resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+            }
+            String toJson = new Gson().toJson(updatedClient);
             out.println(toJson);
             out.flush();
         } catch (IOException e) {
             log.error(e.getMessage());
-        } catch (IllegalArgumentException | SQLException e) {
+        } catch (IllegalArgumentException e) {
             try {
                 resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
             } catch (IOException ex) {
@@ -107,11 +105,15 @@ public class ClientServlet extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) {
         try (PrintWriter out = resp.getWriter()) {
             long id = Long.parseLong(req.getParameter("id"));
+            try {
                 clientService.delete(id);
+            } catch (IllegalArgumentException | SQLException e) {
+                resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
+            }
             out.println("<h2>The client was successfully deleted <h2>");
         } catch (IOException | JSONException e) {
             log.error(e.getMessage());
-        } catch (IllegalArgumentException | SQLException e) {
+        } catch (IllegalArgumentException e) {
             try {
                 resp.sendError(HttpServletResponse.SC_CONFLICT, e.getMessage());
             } catch (IOException ex) {

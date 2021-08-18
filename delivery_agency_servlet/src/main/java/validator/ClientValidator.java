@@ -11,7 +11,7 @@ public class ClientValidator {
 
     public static void validateClient(Client clientToValidate) throws IllegalArgumentException {
         if (clientToValidate == null) {
-            throw new IllegalArgumentException("There is no client with such Id!!!");
+            throw new IllegalArgumentException("There is no client with such Id!!! ");
         }
         if (clientToValidate.getPassportId() == null) {
             throw new IllegalArgumentException("PassportId cannot be null!!!");
@@ -39,5 +39,11 @@ public class ClientValidator {
             throw new IllegalArgumentException("Client cannot be null!!!");
         }
         validateClient(clientToValidate);
+    }
+
+    public static void validatePassportIdOnSave(Client clientToValidate) throws IllegalArgumentException {
+        if (clientToValidate != null) {
+            throw new IllegalArgumentException("Client with this passportId already exists!!! " + clientToValidate.getPassportId());
+        }
     }
 }

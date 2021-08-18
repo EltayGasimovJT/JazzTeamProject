@@ -2,9 +2,7 @@ package service.impl;
 
 import dto.ClientDto;
 import entity.Client;
-import entity.Order;
 import lombok.extern.slf4j.Slf4j;
-import mapping.CustomModelMapper;
 import repository.ClientRepository;
 import repository.impl.ClientRepositoryImpl;
 import service.ClientService;
@@ -12,7 +10,6 @@ import validator.ClientValidator;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class ClientServiceImpl implements ClientService {
@@ -49,13 +46,13 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Client save(ClientDto clientDtoToSave) throws IllegalArgumentException, SQLException {
         Client clientToSave = Client.builder()
-                .id(clientDtoToSave.getId())
                 .name(clientDtoToSave.getName())
                 .surname(clientDtoToSave.getSurname())
                 .passportId(clientDtoToSave.getPassportId())
                 .phoneNumber(clientDtoToSave.getPhoneNumber())
                 .build();
 
+        ClientValidator.validatePassportIdOnSave(clientRepository.findByPassportId(clientDtoToSave.getPassportId()));
         ClientValidator.validateOnSave(clientToSave);
 
         Client savedClient = clientRepository.save(clientToSave);
