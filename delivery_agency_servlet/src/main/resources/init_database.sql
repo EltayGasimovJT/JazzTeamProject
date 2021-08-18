@@ -1,3 +1,5 @@
+create database jazzteamproject;
+
 USE jazzteamproject;
 
 show tables;
