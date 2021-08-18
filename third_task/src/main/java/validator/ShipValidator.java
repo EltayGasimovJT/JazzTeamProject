@@ -11,8 +11,8 @@ public class ShipValidator {
                 || capacity < containersToUpload
                 || capacity < containersToTake + containersToUpload
                 || capacity <= 0
-                || containersToTake <= 0
-                || containersToUpload <= 0) {
+                || containersToTake < 0
+                || containersToUpload < 0) {
             throw new IllegalArgumentException("Invalid ship parameters");
         }
     }

@@ -12,14 +12,14 @@ public class ThreadTest {
 
     @Test
     public void testCorrectThreadsProcessing() throws InterruptedException {
-        Port port = new Port(2, 500, 100);
+        Port port = new Port(2, 5000, 100);
 
         List<Ship> ships = Arrays
                 .asList(
-                        new Ship("Ship " + 1, 20, 0,500, port),
-                        new Ship("Ship " + 2, 20, 0,500, port),
-                        new Ship("Ship " + 3, 0, 30,500, port),
-                        new Ship("Ship " + 4, 0, 30,500, port)
+                        new Ship("Ship " + 1, 600, 0,500, port),
+                        new Ship("Ship " + 2, 600, 0,500, port),
+                        new Ship("Ship " + 3, 600, 30,500, port),
+                        new Ship("Ship " + 4, 600, 30,500, port)
                 );
 
         ships.get(0).start();
@@ -31,10 +31,10 @@ public class ThreadTest {
         Assert.assertSame(Thread.State.NEW, ships.get(3).getState());
 
         Assert.assertEquals(100, port.getCurrentContainersQty());
-        Assert.assertEquals(20, ships.get(0).getContainersToTake());
-        Assert.assertEquals(0, ships.get(0).getContainersToUpload());
-        Assert.assertEquals(0, ships.get(1).getContainersToUpload());
-        Assert.assertEquals(20, ships.get(1).getContainersToTake());
+        Assert.assertEquals(0, ships.get(0).getContainersToTake());
+        Assert.assertEquals(500, ships.get(0).getContainersToUpload());
+        Assert.assertEquals(500, ships.get(1).getContainersToUpload());
+        Assert.assertEquals(0, ships.get(1).getContainersToTake());
 
         ships.get(2).start();
 
@@ -47,7 +47,7 @@ public class ThreadTest {
 
         ships.get(3).start();
 
-        Assert.assertEquals(90, port.getCurrentContainersQty());
+        Assert.assertEquals(249, port.getCurrentContainersQty());
         Assert.assertEquals(0, ships.get(0).getContainersToTake());
         Assert.assertEquals(0, ships.get(1).getContainersToTake());
 
