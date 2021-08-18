@@ -16,6 +16,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <sonar.projectKey>secondTask</sonar.projectKey>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
