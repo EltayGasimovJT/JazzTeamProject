@@ -3,8 +3,9 @@ package service.impl;
 import dto.CoefficientForPriceCalculationDto;
 import dto.OrderDto;
 import entity.CoefficientForPriceCalculation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import repository.CoefficientForPriceCalculationRepository;
-import repository.impl.CoefficientForPriceCalculationRepositoryImpl;
 import service.CoefficientForPriceCalculationService;
 import validator.CoefficientForPriseCalculationValidator;
 
@@ -13,10 +14,16 @@ import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.List;
 
+@Service(value = "coefficientForPriceCalculationService")
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
-    private final CoefficientForPriceCalculationRepository priceCalculationRuleRepository = new CoefficientForPriceCalculationRepositoryImpl();
+    private final CoefficientForPriceCalculationRepository priceCalculationRuleRepository;
     private static final int INITIAL_PRISE = 40;
     private static final int INITIAL_WEIGHT = 20;
+
+    @Autowired
+    public CoefficientForPriceCalculationServiceImpl(CoefficientForPriceCalculationRepository priceCalculationRuleRepository) {
+        this.priceCalculationRuleRepository = priceCalculationRuleRepository;
+    }
 
     @Override
     public CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws IllegalArgumentException {
@@ -33,7 +40,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException{
+    public void delete(Long idForDelete) throws IllegalArgumentException {
         CoefficientForPriseCalculationValidator.validateCoefficient(priceCalculationRuleRepository.findOne(idForDelete));
         priceCalculationRuleRepository.delete(idForDelete);
     }
@@ -60,7 +67,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public CoefficientForPriceCalculation findOne(long idForSearch) throws IllegalArgumentException{
+    public CoefficientForPriceCalculation findOne(long idForSearch) throws IllegalArgumentException {
         CoefficientForPriceCalculation foundCoefficient = priceCalculationRuleRepository.findOne(idForSearch);
 
         CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
@@ -101,7 +108,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public CoefficientForPriceCalculation findByCountry(String countryForSearch) throws IllegalArgumentException{
+    public CoefficientForPriceCalculation findByCountry(String countryForSearch) throws IllegalArgumentException {
         CoefficientForPriceCalculation foundCoefficient = priceCalculationRuleRepository.findByCountry(countryForSearch);
         CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
 

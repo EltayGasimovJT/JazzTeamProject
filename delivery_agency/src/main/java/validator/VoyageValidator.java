@@ -11,26 +11,26 @@ public class VoyageValidator {
 
     public static void validateOnSave(Voyage voyageToValidate) throws IllegalArgumentException {
         if (voyageToValidate == null) {
-            throw new IllegalArgumentException("Cannot save Voyage, because its null!!!");
+            throw new IllegalArgumentException("Cannot save Voyage, because its null");
         }
         validateVoyage(voyageToValidate);
     }
 
     public static void validateVoyage(Voyage voyageToValidate) throws IllegalArgumentException {
         if (voyageToValidate == null) {
-            throw new IllegalArgumentException("There is no voyage with such Id!!!");
+            throw new IllegalArgumentException("There is no voyage with such Id");
         }
         if (voyageToValidate.getDeparturePoint() == null) {
-            throw new IllegalArgumentException("Voyage must have departure point!!!");
+            throw new IllegalArgumentException("Voyage must have departure point");
         }
         if (voyageToValidate.getDestinationPoint() == null) {
-            throw new IllegalArgumentException("Voyage must have destination point!!!");
+            throw new IllegalArgumentException("Voyage must have destination point");
         }
     }
 
     public static void validateVoyageList(List<Voyage> voyagesToValidate) throws IllegalArgumentException {
         if (voyagesToValidate.isEmpty()) {
-            throw new IllegalArgumentException("There is no voyages on the repository!!!");
+            throw new IllegalArgumentException("There is no voyages on the repository");
         }
     }
 }

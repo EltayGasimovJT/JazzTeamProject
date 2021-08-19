@@ -1,11 +1,13 @@
 package repository.impl;
 
 import entity.Warehouse;
+import org.springframework.stereotype.Repository;
 import repository.WarehouseRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository(value = "warehouseRepository")
 public class WarehouseRepositoryImpl implements WarehouseRepository {
     private final List<Warehouse> warehouses = new ArrayList<>();
 
