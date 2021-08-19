@@ -5,6 +5,7 @@ import entity.OrderProcessingPoint;
 import entity.Warehouse;
 import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import repository.WarehouseRepository;
 import repository.impl.WarehouseRepositoryImpl;
 import service.WarehouseService;
@@ -13,6 +14,7 @@ import validator.WarehouseValidator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service(value = "warehouseService")
 public class WarehouseServiceImpl implements WarehouseService {
     private final WarehouseRepository warehouseRepository = new WarehouseRepositoryImpl();
     private final ModelMapper modelMapper = new ModelMapper();

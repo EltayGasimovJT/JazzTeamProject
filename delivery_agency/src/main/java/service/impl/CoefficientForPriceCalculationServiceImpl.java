@@ -3,6 +3,7 @@ package service.impl;
 import dto.CoefficientForPriceCalculationDto;
 import dto.OrderDto;
 import entity.CoefficientForPriceCalculation;
+import org.springframework.stereotype.Service;
 import repository.CoefficientForPriceCalculationRepository;
 import repository.impl.CoefficientForPriceCalculationRepositoryImpl;
 import service.CoefficientForPriceCalculationService;
@@ -13,6 +14,7 @@ import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.List;
 
+@Service(value = "coefficientForPriceCalculationService")
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
     private final CoefficientForPriceCalculationRepository priceCalculationRuleRepository = new CoefficientForPriceCalculationRepositoryImpl();
     private static final int INITIAL_PRISE = 40;

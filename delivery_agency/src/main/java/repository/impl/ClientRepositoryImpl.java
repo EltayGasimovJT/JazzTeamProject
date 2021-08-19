@@ -2,12 +2,14 @@ package repository.impl;
 
 import entity.Client;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
 import repository.ClientRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
+@Repository(value = "clientRepository")
 public class ClientRepositoryImpl implements ClientRepository {
     private final List<Client> clients = new ArrayList<>();
 

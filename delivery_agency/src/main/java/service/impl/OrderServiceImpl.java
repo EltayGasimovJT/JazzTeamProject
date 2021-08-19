@@ -5,6 +5,7 @@ import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import repository.OrderRepository;
 import repository.impl.OrderRepositoryImpl;
 import service.CoefficientForPriceCalculationService;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Service(value = "orderService")
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository = new OrderRepositoryImpl();
     private final ModelMapper modelMapper = new ModelMapper();

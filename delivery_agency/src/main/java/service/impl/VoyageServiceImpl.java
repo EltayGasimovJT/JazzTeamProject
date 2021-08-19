@@ -3,6 +3,7 @@ package service.impl;
 import dto.VoyageDto;
 import entity.Voyage;
 import mapping.CustomModelMapper;
+import org.springframework.stereotype.Service;
 import repository.VoyageRepository;
 import repository.impl.VoyageRepositoryImpl;
 import service.VoyageService;
@@ -11,6 +12,7 @@ import validator.VoyageValidator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service(value = "voyageService")
 public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 

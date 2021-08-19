@@ -2,11 +2,13 @@ package repository.impl;
 
 import entity.Client;
 import entity.Order;
+import org.springframework.stereotype.Repository;
 import repository.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository(value = "orderRepository")
 public class OrderRepositoryImpl implements OrderRepository {
     private final List<Order> orders = new ArrayList<>();
     private final List<List<Order>> ordersOnTheWay = new ArrayList<>();

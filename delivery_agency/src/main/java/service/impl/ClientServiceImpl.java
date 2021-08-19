@@ -5,6 +5,7 @@ import entity.Client;
 import entity.Order;
 import lombok.extern.slf4j.Slf4j;
 import mapping.CustomModelMapper;
+import org.springframework.stereotype.Service;
 import repository.ClientRepository;
 import repository.impl.ClientRepositoryImpl;
 import service.ClientService;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
+@Service(value = "clientService")
 public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository = new ClientRepositoryImpl();
 

@@ -9,6 +9,7 @@ import entity.WorkingPlaceType;
 import lombok.extern.slf4j.Slf4j;
 import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
 import repository.UserRepository;
 import repository.impl.UserRepositoryImpl;
 import service.UserService;
@@ -18,6 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
+@Service(value = "userService")
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository = new UserRepositoryImpl();
     private final ModelMapper modelMapper = new ModelMapper();
