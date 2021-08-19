@@ -1,26 +1,30 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
+import lombok.SneakyThrows;
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
-import org.jazzteam.eltay.gasimov.service.impl.CoefficientForPriceCalculationServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.stream.Stream;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class CoefficientForPriceCalculationCalculationServiceTest {
-    private final CoefficientForPriceCalculationService priceCalculationRuleService;
+    @Autowired
+    private CoefficientForPriceCalculationService priceCalculationRuleService;
 
     private final ModelMapper modelMapper = new ModelMapper();
 
@@ -95,6 +99,13 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         );
     }
 
+    @ParameterizedTest
+    @MethodSource("testDataForCalculate")
+    void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) {
+        BigDecimal actual = priceCalculationRuleService.calculatePrice(order, rule);
+        Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
+    }
+
     @Test
     void addPriceCalculationRule() throws SQLException {
         CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
@@ -104,6 +115,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
+        priceCalculationRuleService.clear();
 
         priceCalculationRuleService.save(expectedCoefficientDto);
 
@@ -132,6 +144,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Belarus")
                 .parcelSizeLimit(50)
                 .build();
+        priceCalculationRuleService.clear();
 
         priceCalculationRuleService.save(firstCoefficientForPriceCalculationToTest);
         priceCalculationRuleService.save(secondCoefficientForPriceCalculationToTest);
@@ -154,6 +167,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
+        priceCalculationRuleService.clear();
+
         priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
         int expectedSize = 1;
@@ -172,6 +187,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
+        priceCalculationRuleService.clear();
+
         priceCalculationRuleService.save(expectedCoefficientDto);
 
         CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(1);
@@ -190,6 +207,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
+        priceCalculationRuleService.clear();
+
         priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
         coefficientForPriceCalculationToTest.setParcelSizeLimit(52);
@@ -205,10 +224,5 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         Assertions.assertEquals(expectedParcelSizeLimit, actualParcelSizeLimit, 0.001);
     }
 
-    @ParameterizedTest
-    @MethodSource("testDataForCalculate")
-    void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) {
-        BigDecimal actual = priceCalculationRuleService.calculatePrice(order, rule);
-        Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
-    }
-}*/
+
+}

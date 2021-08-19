@@ -1,4 +1,3 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
@@ -9,6 +8,9 @@ import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.jazzteam.eltay.gasimov.service.impl.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -17,8 +19,11 @@ import java.util.List;
 import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.PROCESSING_POINT;
 import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.WAREHOUSE;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class UserServiceTest {
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Test
     void addUser() throws SQLException {
@@ -33,6 +38,8 @@ class UserServiceTest {
                 .roles(Arrays.asList("User", "Client"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
+
+        userService.clear();
 
         UserDto actual = CustomModelMapper.mapUserToDto(userService.save(expected));
 
@@ -69,6 +76,7 @@ class UserServiceTest {
                 .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
+        userService.clear();
 
         userService.save(firstUser);
         userService.save(secondUser);
@@ -111,6 +119,7 @@ class UserServiceTest {
                 .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
+        userService.clear();
 
         userService.save(firstUser);
         userService.save(secondUser);
@@ -154,6 +163,7 @@ class UserServiceTest {
                 .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
+        userService.clear();
 
         userService.save(firstUser);
         userService.save(expected);
@@ -177,6 +187,8 @@ class UserServiceTest {
                 .name("Vlad")
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
+        userService.clear();
+
         userService.save(user);
 
         String expected = "Victor";
@@ -209,6 +221,7 @@ class UserServiceTest {
                 .roles(Arrays.asList("user", "Admin"))
                 .workingPlace(workingPlaceToTest)
                 .build();
+        userService.clear();
 
         userService.save(user);
 
@@ -226,4 +239,3 @@ class UserServiceTest {
         Assertions.assertNotEquals(expected, actual);
     }
 }
-*/

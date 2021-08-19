@@ -15,4 +15,6 @@ public interface OrderRepository extends GeneralRepository<Order> {
     List<Order> acceptOrders(List<Order> ordersToAccepted);
 
     List<List<Order>> getSentOrders();
+
+    void clearOrdersOnTheWay();
 }

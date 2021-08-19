@@ -261,6 +261,11 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.delete(idForDelete);
     }
 
+    @Override
+    public void clear() {
+        orderRepository.clear();
+    }
+
     private OrderState updateState(String state) {
         List<String> newRolesAllowedPutToState = new ArrayList<>();
         List<String> newRolesAllowedToWithdrawFromState = new ArrayList<>();

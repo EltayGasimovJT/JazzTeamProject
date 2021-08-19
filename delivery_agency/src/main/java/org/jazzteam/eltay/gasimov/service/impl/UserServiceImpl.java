@@ -76,4 +76,9 @@ public class UserServiceImpl implements UserService {
 
         return update(userToUpdate);
     }
+
+    @Override
+    public void clear() {
+        userRepository.clear();
+    }
 }

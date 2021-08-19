@@ -84,4 +84,9 @@ public class ClientServiceImpl implements ClientService {
 
         return clientRepository.update(clientToUpdate);
     }
+
+    @Override
+    public void clear() {
+        clientRepository.clear();
+    }
 }

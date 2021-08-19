@@ -44,6 +44,11 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
+    public void clearOrdersOnTheWay() {
+        ordersOnTheWay.clear();
+    }
+
+    @Override
     public Order save(Order orderToSave) {
         orders.add(orderToSave);
         return orderToSave;
@@ -81,5 +86,10 @@ public class OrderRepositoryImpl implements OrderRepository {
         orderToSave.setPrice(newOrder.getPrice());
         orders.add(orderToSave);
         return orderToSave;
+    }
+
+    @Override
+    public void clear() {
+        orders.clear();
     }
 }

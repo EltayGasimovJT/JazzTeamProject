@@ -46,4 +46,9 @@ public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointR
         processingPoints.add(processingPointToUpdate);
         return processingPointToUpdate;
     }
+
+    @Override
+    public void clear() {
+        processingPoints.clear();
+    }
 }

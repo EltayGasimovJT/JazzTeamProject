@@ -47,6 +47,11 @@ public class CoefficientForPriceCalculationRepositoryImpl implements Coefficient
     }
 
     @Override
+    public void clear() {
+        coefficientForPriceCalculations.clear();
+    }
+
+    @Override
     public CoefficientForPriceCalculation findByCountry(String countryForSearch) {
         return coefficientForPriceCalculations.stream()
                 .filter(priceCalculationRule -> priceCalculationRule.getCountry().equals(countryForSearch))

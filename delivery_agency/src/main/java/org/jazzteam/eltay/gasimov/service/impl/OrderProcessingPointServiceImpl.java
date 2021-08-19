@@ -71,4 +71,9 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         return orderProcessingPointRepository.update(orderProcessingPointUpdate);
     }
 
+    @Override
+    public void clear() {
+        orderProcessingPointRepository.clear();
+    }
+
 }

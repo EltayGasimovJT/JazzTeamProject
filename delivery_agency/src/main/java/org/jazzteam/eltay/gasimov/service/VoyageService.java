@@ -16,4 +16,6 @@ public interface VoyageService {
     Voyage findOne(long idForSearch) throws SQLException;
 
     Voyage update(VoyageDto voyageToUpdate) throws SQLException;
+
+    void clear();
 }

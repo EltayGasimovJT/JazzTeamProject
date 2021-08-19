@@ -22,4 +22,6 @@ public interface CoefficientForPriceCalculationService {
     BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException;
 
     CoefficientForPriceCalculation findByCountry(String countryForSearch);
+
+    void clear();
 }

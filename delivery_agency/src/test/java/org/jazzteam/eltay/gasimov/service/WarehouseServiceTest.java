@@ -1,4 +1,3 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.*;
@@ -8,8 +7,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.modelmapper.ModelMapper;
-import org.jazzteam.eltay.gasimov.service.impl.WarehouseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -18,9 +18,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class WarehouseServiceTest {
-    private final WarehouseService warehouseService;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private WarehouseService warehouseService;
 
     public static Stream<Arguments> ordersAndProcessingPointToTest() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
@@ -60,7 +62,7 @@ class WarehouseServiceTest {
                 new OrderProcessingPointDto()
         ));
         warehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
-
+        warehouseService.clear();
         warehouseService.save(warehouseToTest);
 
         String actual = warehouseService.findOne(warehouseToTest.getId()).getLocation();
@@ -98,6 +100,7 @@ class WarehouseServiceTest {
         thirdWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
+        warehouseService.clear();
 
         warehouseService.save(firstWarehouseToTest);
         warehouseService.save(secondWarehouseToTest);
@@ -139,6 +142,8 @@ class WarehouseServiceTest {
         thirdWarehouse.setDispatchedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
         thirdWarehouse.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
         thirdWarehouse.setLocation("Moscow");
+        warehouseService.clear();
+
         warehouseService.save(firstWarehouseToTest);
         warehouseService.save(secondWarehouse);
         warehouseService.save(thirdWarehouse);
@@ -163,6 +168,7 @@ class WarehouseServiceTest {
                 new OrderProcessingPointDto()
         ));
         warehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
+        warehouseService.clear();
 
         warehouseService.save(warehouseToTest);
 
@@ -183,6 +189,8 @@ class WarehouseServiceTest {
         expectedDto.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
+        warehouseService.clear();
+
         warehouseService.save(expectedDto);
 
         String newLocation = "Minsk";
@@ -199,4 +207,3 @@ class WarehouseServiceTest {
         Assertions.assertEquals(expectedDto, actualDto);
     }
 }
-*/

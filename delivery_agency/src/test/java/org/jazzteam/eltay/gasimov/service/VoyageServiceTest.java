@@ -1,4 +1,3 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.*;
@@ -10,6 +9,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
 import org.jazzteam.eltay.gasimov.service.impl.VoyageServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -19,9 +21,12 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.stream.Stream;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class VoyageServiceTest {
-    private final VoyageService voyageService;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private VoyageService voyageService;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     public static Stream<Arguments> ordersAndProcessingPointsForTest() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
@@ -68,6 +73,8 @@ class VoyageServiceTest {
         String expected = "Moscow";
         voyageToTest.setDestinationPoint(expected);
 
+        voyageService.clear();
+
         Voyage savedVoyage = voyageService.save(voyageToTest);
 
         String actual = savedVoyage.getDestinationPoint();
@@ -108,6 +115,7 @@ class VoyageServiceTest {
         thirdVoyageToTest.setExpectedOrders(Arrays.asList(
                 orderToTest,
                 orderToTest));
+        voyageService.clear();
 
         voyageService.save(firstVoyageToTest);
         voyageService.save(secondVoyageToTest);
@@ -157,6 +165,7 @@ class VoyageServiceTest {
                 orderToTest,
                 orderToTest
         ));
+        voyageService.clear();
 
         voyageService.save(firstVoyage);
         voyageService.save(secondVoyage);
@@ -206,6 +215,7 @@ class VoyageServiceTest {
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);
         expectedTime.set(Calendar.MINUTE, 30);
         voyageToTest.setSendingTime(expectedTime);
+        voyageService.clear();
 
         voyageService.save(voyageToTest);
 
@@ -236,6 +246,7 @@ class VoyageServiceTest {
         sendingTime.set(Calendar.MINUTE, 30);
 
         expectedVoyage.setSendingTime(sendingTime);
+        voyageService.clear();
 
         voyageService.save(expectedVoyage);
 
@@ -252,4 +263,3 @@ class VoyageServiceTest {
         Assertions.assertEquals(expectedVoyage, actualDto);
     }
 }
-*/

@@ -47,4 +47,9 @@ public class VoyageRepositoryImpl implements VoyageRepository {
         voyages.add(voyageToUpdate);
         return voyageToUpdate;
     }
+
+    @Override
+    public void clear() {
+        voyages.clear();
+    }
 }

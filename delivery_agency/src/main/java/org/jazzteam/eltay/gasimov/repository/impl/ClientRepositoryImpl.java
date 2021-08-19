@@ -44,6 +44,11 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
+    public void clear() {
+        clients.clear();
+    }
+
+    @Override
     public Client findByPassportId(String passportIdForSearch) throws IllegalArgumentException {
         return clients.stream()
                 .filter(client -> client.getPassportId().equals(passportIdForSearch))

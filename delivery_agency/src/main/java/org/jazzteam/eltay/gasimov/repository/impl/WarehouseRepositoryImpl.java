@@ -47,4 +47,9 @@ public class WarehouseRepositoryImpl implements WarehouseRepository {
         warehouses.add(warehouseToUpdate);
         return warehouseToUpdate;
     }
+
+    @Override
+    public void clear() {
+        warehouses.clear();
+    }
 }

@@ -46,4 +46,9 @@ public class UserRepositoryImpl implements UserRepository {
         users.add(userToUpdate);
         return userToUpdate;
     }
+
+    @Override
+    public void clear() {
+        users.clear();
+    }
 }

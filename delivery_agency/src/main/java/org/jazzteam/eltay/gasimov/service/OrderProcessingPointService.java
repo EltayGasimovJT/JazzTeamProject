@@ -16,4 +16,6 @@ public interface OrderProcessingPointService {
     OrderProcessingPoint findOne(long idForSearch) throws SQLException;
 
     OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate) throws SQLException;
+
+    void clear();
 }

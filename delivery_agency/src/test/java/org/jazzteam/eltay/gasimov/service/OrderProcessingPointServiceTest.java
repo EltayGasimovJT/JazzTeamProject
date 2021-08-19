@@ -1,17 +1,18 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
+import lombok.SneakyThrows;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
-import lombok.SneakyThrows;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
-import org.jazzteam.eltay.gasimov.service.impl.OrderProcessingPointServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,9 +20,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class OrderProcessingPointServiceTest {
-    private final OrderProcessingPointService orderProcessingPointService;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private OrderProcessingPointService orderProcessingPointService;
+
+    private final ModelMapper modelMapper = new ModelMapper();
 
 
     private static Stream<Arguments> testOrderProcessingPoints() {
@@ -50,6 +55,7 @@ class OrderProcessingPointServiceTest {
     @ParameterizedTest
     @MethodSource("testOrderProcessingPoints")
     void addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPoint, String expectedLocation) throws SQLException {
+        orderProcessingPointService.clear();
         orderProcessingPointService.save(orderProcessingPoint);
 
         String actualLocation = orderProcessingPointService.findOne(orderProcessingPoint.getId()).getLocation();
@@ -72,6 +78,7 @@ class OrderProcessingPointServiceTest {
         thirdProcessingPointTest.setId(3L);
         thirdProcessingPointTest.setLocation("Minsk");
         thirdProcessingPointTest.setWarehouse(new WarehouseDto());
+        orderProcessingPointService.clear();
 
         orderProcessingPointService.save(firstProcessingPointToTest);
         orderProcessingPointService.save(secondProcessingPointTest);
@@ -105,6 +112,7 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPointDto thirdProcessingPointTest = new OrderProcessingPointDto();
         thirdProcessingPointTest.setWarehouse(new WarehouseDto());
         thirdProcessingPointTest.setLocation("Polotsk");
+        orderProcessingPointService.clear();
 
         orderProcessingPointService.save(firstProcessingPointTest);
         orderProcessingPointService.save(secondProcessingPointTest);
@@ -137,6 +145,7 @@ class OrderProcessingPointServiceTest {
         expectedProcessingPointDto.setId(2L);
         expectedProcessingPointDto.setLocation("Moscow");
         expectedProcessingPointDto.setWarehouse(new WarehouseDto());
+        orderProcessingPointService.clear();
 
         orderProcessingPointService.save(processingPointToTest);
         orderProcessingPointService.save(expectedProcessingPointDto);
@@ -158,6 +167,7 @@ class OrderProcessingPointServiceTest {
         expectedProcessingPointDto.setWarehouse(new WarehouseDto());
         expectedProcessingPointDto.setExpectedOrders(new ArrayList<>());
         expectedProcessingPointDto.setDispatchedOrders(new ArrayList<>());
+        orderProcessingPointService.clear();
 
         orderProcessingPointService.save(expectedProcessingPointDto);
 
@@ -173,4 +183,4 @@ class OrderProcessingPointServiceTest {
 
         Assertions.assertEquals(expectedProcessingPointDto, actualProcessingPointDto);
     }
-}*/
+}

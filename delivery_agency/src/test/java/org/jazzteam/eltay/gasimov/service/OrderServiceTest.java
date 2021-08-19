@@ -1,4 +1,3 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.*;
@@ -14,6 +13,9 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
 import org.jazzteam.eltay.gasimov.service.impl.OrderServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
@@ -21,9 +23,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class OrderServiceTest {
-    private final OrderService orderService;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private OrderService orderService;
+    private final ModelMapper modelMapper = new ModelMapper();
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
@@ -93,6 +98,8 @@ class OrderServiceTest {
                 .currentLocation(orderProcessingPointToTest)
                 .build();
 
+        orderService.clear();
+
         orderService.save(expectedDto);
 
         orderProcessingPointToTest.setLocation("Poland");
@@ -131,6 +138,7 @@ class OrderServiceTest {
                 .state(OrderStateDto.builder().build())
                 .recipient(ClientDto.builder().build())
                 .build();
+        orderService.clear();
 
         orderService.save(order);
 
@@ -195,6 +203,7 @@ class OrderServiceTest {
                 .history(Collections.singletonList(OrderHistoryDto.builder().build()))
                 .build();
 
+        orderService.clear();
         expectedOrder.setHistory(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()));
 
         orderService.save(expectedOrder);
@@ -225,6 +234,7 @@ class OrderServiceTest {
                 .currentLocation(new OrderProcessingPointDto())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
+        orderService.clear();
 
         orderService.save(expectedOrder);
 
@@ -260,6 +270,7 @@ class OrderServiceTest {
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
+        orderService.clear();
 
         orderService.save(expectedOrder);
 
@@ -296,6 +307,7 @@ class OrderServiceTest {
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
+        orderService.clear();
 
         orderService.save(expectedOrder);
 
@@ -332,6 +344,7 @@ class OrderServiceTest {
         List<OrderDto> expectedOrders = Collections.singletonList(
                 orderToTest
         );
+        orderService.clear();
 
         orderService.save(orderToTest);
 
@@ -373,6 +386,7 @@ class OrderServiceTest {
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .build();
+        orderService.clear();
 
         orderService.save(orderToTest);
 
@@ -428,6 +442,7 @@ class OrderServiceTest {
                 .history(Collections.singletonList(OrderHistoryDto.builder().user(UserDto.builder().build()).build()))
                 .recipient(ClientDto.builder().build())
                 .build();
+        orderService.clear();
 
         orderService.save(firstOrderToTest);
         orderService.save(secondOrderToTest);
@@ -454,9 +469,10 @@ class OrderServiceTest {
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
     void calculatePrice(OrderDto order, BigDecimal expectedPrice) throws SQLException {
+        orderService.clear();
+
         BigDecimal actualPrice = orderService.calculatePrice(order);
 
         Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
 }
-*/

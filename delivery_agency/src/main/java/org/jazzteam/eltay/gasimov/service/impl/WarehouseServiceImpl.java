@@ -68,4 +68,9 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         return warehouseRepository.update(warehouseToUpdate);
     }
+
+    @Override
+    public void clear() {
+        warehouseRepository.clear();
+    }
 }

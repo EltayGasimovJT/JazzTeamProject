@@ -111,6 +111,11 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
         return foundCoefficient;
     }
 
+    @Override
+    public void clear() {
+        priceCalculationRuleRepository.clear();
+    }
+
     private double getSize(OrderDto order) {
         return (order.getParcelParameters().getLength()
                 * order.getParcelParameters().getHeight()

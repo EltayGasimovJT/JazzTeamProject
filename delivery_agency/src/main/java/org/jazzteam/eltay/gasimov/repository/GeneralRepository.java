@@ -12,4 +12,6 @@ public interface GeneralRepository<T> {
     T findOne(Long idForSearch);
 
     T update(T update);
+
+    void clear();
 }

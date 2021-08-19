@@ -67,4 +67,9 @@ public class VoyageServiceImpl implements VoyageService {
 
         return voyageRepository.update(voyageToUpdate);
     }
+
+    @Override
+    public void clear() {
+        voyageRepository.clear();
+    }
 }
