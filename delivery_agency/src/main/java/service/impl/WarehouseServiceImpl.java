@@ -5,19 +5,25 @@ import entity.OrderProcessingPoint;
 import entity.Warehouse;
 import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.WarehouseRepository;
-import repository.impl.WarehouseRepositoryImpl;
 import service.WarehouseService;
 import validator.WarehouseValidator;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service(value = "warehouseService")
+@Service(value =  "warehouseService")
 public class WarehouseServiceImpl implements WarehouseService {
-    private final WarehouseRepository warehouseRepository = new WarehouseRepositoryImpl();
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final WarehouseRepository warehouseRepository;
+    private final ModelMapper modelMapper;
+
+    @Autowired
+    public WarehouseServiceImpl(WarehouseRepository warehouseRepository, ModelMapper modelMapper) {
+        this.warehouseRepository = warehouseRepository;
+        this.modelMapper = modelMapper;
+    }
 
     @Override
     public Warehouse save(WarehouseDto warehouseDtoToSave) throws IllegalArgumentException {

@@ -5,9 +5,9 @@ import entity.OrderProcessingPoint;
 import entity.Warehouse;
 import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.OrderProcessingPointRepository;
-import repository.impl.OrderProcessingPointRepositoryImpl;
 import service.OrderProcessingPointService;
 import validator.OrderProcessingPointValidator;
 
@@ -16,8 +16,13 @@ import java.util.stream.Collectors;
 
 @Service(value = "orderProcessingPointService")
 public class OrderProcessingPointServiceImpl implements OrderProcessingPointService {
-    private final OrderProcessingPointRepository orderProcessingPointRepository = new OrderProcessingPointRepositoryImpl();
-    private final ModelMapper modelMapper = new ModelMapper();
+    private final OrderProcessingPointRepository orderProcessingPointRepository;
+    private final ModelMapper modelMapper;
+    @Autowired
+    public OrderProcessingPointServiceImpl(OrderProcessingPointRepository orderProcessingPointRepository, ModelMapper modelMapper) {
+        this.orderProcessingPointRepository = orderProcessingPointRepository;
+        this.modelMapper = modelMapper;
+    }
 
 
     @Override

@@ -5,9 +5,9 @@ import entity.Client;
 import entity.Order;
 import lombok.extern.slf4j.Slf4j;
 import mapping.CustomModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.ClientRepository;
-import repository.impl.ClientRepositoryImpl;
 import service.ClientService;
 import validator.ClientValidator;
 
@@ -18,7 +18,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service(value = "clientService")
 public class ClientServiceImpl implements ClientService {
-    private final ClientRepository clientRepository = new ClientRepositoryImpl();
+    private final ClientRepository clientRepository;
+
+    @Autowired
+    public ClientServiceImpl(ClientRepository clientRepository) {
+        this.clientRepository = clientRepository;
+    }
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {

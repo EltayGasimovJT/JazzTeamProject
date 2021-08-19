@@ -7,7 +7,7 @@ import repository.UserRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository("userRepository")
+@Repository(value = "userRepository")
 public class UserRepositoryImpl implements UserRepository {
     private final List<User> users = new ArrayList<>();
 
