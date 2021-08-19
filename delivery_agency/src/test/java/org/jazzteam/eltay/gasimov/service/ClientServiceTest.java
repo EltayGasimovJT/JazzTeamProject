@@ -1,4 +1,3 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
@@ -10,10 +9,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.org.jazzteam.eltay.gasimov.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.jazzteam.eltay.gasimov.service.impl.ClientServiceImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,11 +23,9 @@ import java.util.stream.Stream;
 @AutoConfigureMockMvc
 class ClientServiceTest {
     @Autowired
-    @Qualifier(value = "clientService")
     private ClientService clientService;
-    @Autowired
-    @Qualifier(value = "customModelMapper")
-    private ModelMapper modelMapper;
+
+    private final ModelMapper modelMapper = new ModelMapper();
 
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()
@@ -208,4 +203,4 @@ class ClientServiceTest {
 
         Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
-}*/
+}
