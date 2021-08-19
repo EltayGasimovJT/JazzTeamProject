@@ -3,12 +3,10 @@ package org.jazzteam.eltay.gasimov.service;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.Voyage;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
-import org.jazzteam.eltay.gasimov.service.impl.VoyageServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,7 +24,8 @@ import java.util.stream.Stream;
 class VoyageServiceTest {
     @Autowired
     private VoyageService voyageService;
-    private final ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private ModelMapper modelMapper;
 
     public static Stream<Arguments> ordersAndProcessingPointsForTest() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();

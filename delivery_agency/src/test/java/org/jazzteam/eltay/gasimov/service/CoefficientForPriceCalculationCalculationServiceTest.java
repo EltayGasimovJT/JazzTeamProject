@@ -25,8 +25,8 @@ import java.util.stream.Stream;
 class CoefficientForPriceCalculationCalculationServiceTest {
     @Autowired
     private CoefficientForPriceCalculationService priceCalculationRuleService;
-
-    private final ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private ModelMapper modelMapper;
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto destinationPlaceToTest = new OrderProcessingPointDto();

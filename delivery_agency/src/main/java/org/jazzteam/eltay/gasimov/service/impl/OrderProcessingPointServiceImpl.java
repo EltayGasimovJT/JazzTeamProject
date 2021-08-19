@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 public class OrderProcessingPointServiceImpl implements OrderProcessingPointService {
     @Autowired
     private OrderProcessingPointRepository orderProcessingPointRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @Override

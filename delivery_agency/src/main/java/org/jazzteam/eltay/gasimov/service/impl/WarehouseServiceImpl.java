@@ -4,12 +4,12 @@ import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.jazzteam.eltay.gasimov.repository.WarehouseRepository;
 import org.jazzteam.eltay.gasimov.service.WarehouseService;
 import org.jazzteam.eltay.gasimov.validator.WarehouseValidator;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 public class WarehouseServiceImpl implements WarehouseService {
     @Autowired
     private WarehouseRepository warehouseRepository;
-    private final ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public Warehouse save(WarehouseDto warehouseDtoToSave) throws IllegalArgumentException {

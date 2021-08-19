@@ -25,7 +25,8 @@ class ClientServiceTest {
     @Autowired
     private ClientService clientService;
 
-    private final ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private ModelMapper modelMapper;
 
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()

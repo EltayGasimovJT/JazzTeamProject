@@ -25,8 +25,8 @@ import java.util.stream.Stream;
 class OrderProcessingPointServiceTest {
     @Autowired
     private OrderProcessingPointService orderProcessingPointService;
-
-    private final ModelMapper modelMapper = new ModelMapper();
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     private static Stream<Arguments> testOrderProcessingPoints() {
