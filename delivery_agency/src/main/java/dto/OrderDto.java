@@ -23,3 +23,4 @@ public class OrderDto {
     private AbstractBuildingDto currentLocation;
     private List<OrderHistoryDto> history;
 }
+

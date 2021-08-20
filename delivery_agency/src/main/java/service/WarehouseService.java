@@ -9,7 +9,7 @@ import java.util.List;
 public interface WarehouseService {
     Warehouse save(WarehouseDto warehouseDtoToSave) throws SQLException;
 
-    void delete(Long idForDelete);
+    void delete(Long idForDelete) throws SQLException;
 
     List<Warehouse> findAll() throws SQLException;
 

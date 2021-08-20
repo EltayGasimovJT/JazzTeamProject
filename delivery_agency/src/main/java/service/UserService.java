@@ -10,7 +10,7 @@ import java.util.List;
 public interface UserService {
     User save(UserDto userToSave) throws SQLException;
 
-    void delete(Long idForDelete);
+    void delete(Long idForDelete) throws SQLException;
 
     List<User> findAll() throws SQLException;
 

@@ -9,7 +9,7 @@ import java.util.List;
 public interface VoyageService {
     Voyage save(VoyageDto voyageDtoToSave) throws SQLException;
 
-    void delete(Long idForDelete);
+    void delete(Long idForDelete) throws SQLException;
 
     List<Voyage> findAll() throws SQLException;
 

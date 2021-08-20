@@ -10,6 +10,7 @@ import repository.impl.OrderProcessingPointRepositoryImpl;
 import service.OrderProcessingPointService;
 import validator.OrderProcessingPointValidator;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
 
 
     @Override
-    public OrderProcessingPoint save(OrderProcessingPointDto processingPointDtoToSave) throws IllegalArgumentException {
+    public OrderProcessingPoint save(OrderProcessingPointDto processingPointDtoToSave) throws IllegalArgumentException, SQLException {
         OrderProcessingPoint orderProcessingPointToSave = new OrderProcessingPoint();
         orderProcessingPointToSave.setId(processingPointDtoToSave.getId());
         orderProcessingPointToSave.setLocation(processingPointDtoToSave.getLocation());
@@ -33,27 +34,27 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException {
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
         OrderProcessingPointValidator.validateProcessingPoint(orderProcessingPointRepository.findOne(idForDelete));
         orderProcessingPointRepository.delete(idForDelete);
     }
 
     @Override
-    public List<OrderProcessingPoint> findAll() throws IllegalArgumentException {
+    public List<OrderProcessingPoint> findAll() throws IllegalArgumentException, SQLException {
         List<OrderProcessingPoint> processingPointsFromRepository = orderProcessingPointRepository.findAll();
         OrderProcessingPointValidator.validateProcessingPointList(processingPointsFromRepository);
         return processingPointsFromRepository;
     }
 
     @Override
-    public OrderProcessingPoint findOne(long idForSearch) throws IllegalArgumentException {
+    public OrderProcessingPoint findOne(long idForSearch) throws IllegalArgumentException, SQLException {
         OrderProcessingPoint foundProcessingPoint = orderProcessingPointRepository.findOne(idForSearch);
         OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
         return foundProcessingPoint;
     }
 
     @Override
-    public OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate) throws IllegalArgumentException {
+    public OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate) throws IllegalArgumentException, SQLException {
         OrderProcessingPointValidator.validateProcessingPoint(orderProcessingPointRepository.findOne(processingPointDtoToUpdate.getId()));
         OrderProcessingPoint orderProcessingPointUpdate = new OrderProcessingPoint();
         orderProcessingPointUpdate.setId(processingPointDtoToUpdate.getId());

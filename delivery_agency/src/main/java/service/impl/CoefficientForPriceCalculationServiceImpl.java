@@ -19,7 +19,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     private static final int INITIAL_WEIGHT = 20;
 
     @Override
-    public CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws IllegalArgumentException {
+    public CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws IllegalArgumentException, SQLException {
         CoefficientForPriceCalculation coefficientToSave = CoefficientForPriceCalculation.builder()
                 .id(coefficientDtoToSave.getId())
                 .country(coefficientDtoToSave.getCountry())
@@ -33,13 +33,13 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException{
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
         CoefficientForPriseCalculationValidator.validateCoefficient(priceCalculationRuleRepository.findOne(idForDelete));
         priceCalculationRuleRepository.delete(idForDelete);
     }
 
     @Override
-    public List<CoefficientForPriceCalculation> findAll() throws IllegalArgumentException {
+    public List<CoefficientForPriceCalculation> findAll() throws IllegalArgumentException, SQLException {
         List<CoefficientForPriceCalculation> coefficientsFromRepository = priceCalculationRuleRepository.findAll();
         CoefficientForPriseCalculationValidator.validateCoefficientList(coefficientsFromRepository);
         return coefficientsFromRepository;
@@ -60,7 +60,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public CoefficientForPriceCalculation findOne(long idForSearch) throws IllegalArgumentException{
+    public CoefficientForPriceCalculation findOne(long idForSearch) throws IllegalArgumentException, SQLException {
         CoefficientForPriceCalculation foundCoefficient = priceCalculationRuleRepository.findOne(idForSearch);
 
         CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);

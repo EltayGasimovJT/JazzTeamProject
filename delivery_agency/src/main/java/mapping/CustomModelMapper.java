@@ -10,9 +10,7 @@ import java.util.stream.Collectors;
 public class CustomModelMapper {
     private static ModelMapper modelMapper = new ModelMapper();
 
-    private CustomModelMapper() {
-
-    }
+    private CustomModelMapper(){}
 
     public static OrderDto mapOrderToDto(Order orderToConvert) {
         List<OrderHistoryDto> historiesToConvert = orderToConvert.getHistory().stream()
@@ -154,5 +152,9 @@ public class CustomModelMapper {
                         .collect(Collectors.toList())
         );
         return convertedToDto;
+    }
+
+    public static void setModelMapper(ModelMapper modelMapper) {
+        CustomModelMapper.modelMapper = modelMapper;
     }
 }

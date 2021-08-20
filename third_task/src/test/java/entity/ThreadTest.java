@@ -17,10 +17,10 @@ public class ThreadTest {
 
         List<Ship> ships = Arrays
                 .asList(
-                        new Ship("Ship " + 1, 260, 0, port),
-                        new Ship("Ship " + 2, 0, 300, port),
-                        new Ship("Ship " + 3, 260, 0, port),
-                        new Ship("Ship " + 4, 0, 300, port)
+                        new Ship("Ship " + 1, 500, 0, 260,  port),
+                        new Ship("Ship " + 2, 500, 300, 0, port),
+                        new Ship("Ship " + 3, 500, 0, 260, port),
+                        new Ship("Ship " + 4, 500, 300, 0,port)
                 );
 
 
@@ -28,7 +28,7 @@ public class ThreadTest {
             ship.start();
         }
 
-        Assert.assertEquals(2, port.getCurrentShipsInDock());
+        Assert.assertEquals(0, port.getCurrentShipsInDock());
 
         for (Ship ship : ships) {
             ship.join();

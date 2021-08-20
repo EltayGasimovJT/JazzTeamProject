@@ -8,6 +8,7 @@ import repository.impl.VoyageRepositoryImpl;
 import service.VoyageService;
 import validator.VoyageValidator;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ public class VoyageServiceImpl implements VoyageService {
     private final VoyageRepository voyageRepository = new VoyageRepositoryImpl();
 
     @Override
-    public Voyage save(VoyageDto voyageDtoToSave) throws IllegalArgumentException {
+    public Voyage save(VoyageDto voyageDtoToSave) throws IllegalArgumentException, SQLException {
         Voyage voyageToSave = new Voyage();
         voyageToSave.setId(voyageDtoToSave.getId());
         voyageToSave.setExpectedOrders(voyageDtoToSave.getExpectedOrders().stream()
@@ -33,20 +34,20 @@ public class VoyageServiceImpl implements VoyageService {
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException {
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
         VoyageValidator.validateVoyage(voyageRepository.findOne(idForDelete));
         voyageRepository.delete(idForDelete);
     }
 
     @Override
-    public List<Voyage> findAll() throws IllegalArgumentException {
+    public List<Voyage> findAll() throws IllegalArgumentException, SQLException {
         List<Voyage> voyagesFromRepository = voyageRepository.findAll();
         VoyageValidator.validateVoyageList(voyagesFromRepository);
         return voyagesFromRepository;
     }
 
     @Override
-    public Voyage findOne(long idForSearch) throws IllegalArgumentException {
+    public Voyage findOne(long idForSearch) throws IllegalArgumentException, SQLException {
         Voyage foundVoyage = voyageRepository.findOne(idForSearch);
         VoyageValidator.validateVoyage(foundVoyage);
 
@@ -54,7 +55,7 @@ public class VoyageServiceImpl implements VoyageService {
     }
 
     @Override
-    public Voyage update(VoyageDto voyage) throws IllegalArgumentException {
+    public Voyage update(VoyageDto voyage) throws IllegalArgumentException, SQLException {
         Voyage voyageToUpdate = new Voyage();
         voyageToUpdate.setId(voyage.getId());
         voyageToUpdate.setSendingTime(voyage.getSendingTime());

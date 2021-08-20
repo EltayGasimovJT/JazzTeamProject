@@ -210,4 +210,5 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         BigDecimal actual = priceCalculationRuleService.calculatePrice(order, rule);
         Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
     }
+
 }

@@ -41,20 +41,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException {
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
         UserValidator.validateUser(userRepository.findOne(idForDelete));
         userRepository.delete(idForDelete);
     }
 
     @Override
-    public List<User> findAll() throws IllegalArgumentException {
+    public List<User> findAll() throws IllegalArgumentException, SQLException {
         List<User> usersFromRepository = userRepository.findAll();
         UserValidator.validateUsersList(usersFromRepository);
         return usersFromRepository;
     }
 
     @Override
-    public User findOne(long idForSearch) throws IllegalArgumentException {
+    public User findOne(long idForSearch) throws IllegalArgumentException, SQLException {
         User foundUser = userRepository.findOne(idForSearch);
         UserValidator.validateUser(foundUser);
         return foundUser;

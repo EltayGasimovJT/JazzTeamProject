@@ -1,8 +1,7 @@
 package service;
 
+
 import dto.ClientDto;
-import dto.OrderDto;
-import entity.Client;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,6 +9,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.modelmapper.ModelMapper;
 import service.impl.ClientServiceImpl;
+import util.DatabaseService;
+import util.impl.DatabaseServiceImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,183 +21,185 @@ import java.util.stream.Stream;
 
 class ClientServiceTest {
     private final ClientService clientService = new ClientServiceImpl();
+    private final DatabaseService databaseService = new DatabaseServiceImpl();
     private final ModelMapper modelMapper = new ModelMapper();
-
 
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()
                 .name("Igor")
                 .surname("igor")
                 .phoneNumber("125125")
-                .passportId("23612613616")
+                .passportId("13612613616")
+                .orders(new ArrayList<>())
                 .build();
         ClientDto secondClientToTest = ClientDto.builder()
                 .name("Alex")
                 .surname("igor")
                 .phoneNumber("125125")
-                .passportId("16714714713")
+                .passportId("23667513616")
+                .orders(new ArrayList<>())
                 .build();
         ClientDto thirdClientToTest = ClientDto.builder()
                 .name("Eltay")
                 .surname("igor")
                 .phoneNumber("125125")
-                .passportId("04786533747")
+                .passportId("33612633616")
+                .orders(new ArrayList<>())
                 .build();
 
         return Stream.of(
-                Arguments.of(firstClientToTest, "23612613616"),
-                Arguments.of(secondClientToTest, "16714714713"),
-                Arguments.of(thirdClientToTest, "04786533747")
+                Arguments.of(firstClientToTest),
+                Arguments.of(secondClientToTest),
+                Arguments.of(thirdClientToTest)
         );
     }
 
     @ParameterizedTest
     @MethodSource("testClients")
-    void testAddClient(ClientDto expectedClientDto, String expectedPassportId) throws SQLException {
-        clientService.save(expectedClientDto);
-        Client actualClient = clientService.findByPassportId(expectedPassportId);
-        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
-        Assertions.assertEquals(expectedClientDto, actualClientDto);
+    void testAddClient(ClientDto expectedClient) throws SQLException {
+        ClientDto actualClient = modelMapper.map(clientService.save(expectedClient), ClientDto.class);
+        expectedClient.setId(actualClient.getId());
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
     void deleteClient() throws SQLException {
-        ClientDto firstClientToTest = ClientDto.builder()
-                .id(1L)
-                .name("firstClient")
+        ClientDto firstClient = ClientDto.builder()
+                .name("Eltay")
+                .surname("igor")
+                .phoneNumber("125125")
+                .passportId("23623613616")
+                .build();
+        ClientDto secondClient = ClientDto.builder()
+                .name("Alex")
                 .surname("igor")
                 .phoneNumber("125125")
                 .passportId("23612613616")
                 .build();
-        ClientDto secondClientToTest = ClientDto.builder()
-                .id(2L)
-                .name("secondClient")
+        ClientDto thirdClient = ClientDto.builder()
+                .name("Igor")
                 .surname("igor")
                 .phoneNumber("125125")
-                .passportId("16714714713")
-                .build();
-        ClientDto thirdClientToTest = ClientDto.builder()
-                .id(3L)
-                .name("thirdClient")
-                .surname("igor")
-                .phoneNumber("125125")
-                .passportId("04786533747")
+                .passportId("23672613616")
                 .build();
 
-        firstClientToTest.setId(clientService.save(firstClientToTest).getId());
-        secondClientToTest.setId(clientService.save(secondClientToTest).getId());
-        thirdClientToTest.setId(clientService.save(thirdClientToTest).getId());
+        databaseService.truncateTables();
 
-        clientService.delete(thirdClientToTest.getId());
+        ClientDto clientDTO = modelMapper.map(clientService.save(firstClient), ClientDto.class);
+        firstClient.setId(clientDTO.getId());
+        secondClient.setId(clientService.save(secondClient).getId());
+        thirdClient.setId(clientService.save(thirdClient).getId());
 
-        List<Client> actualClients = clientService.findAll();
-        List<ClientDto> actualClientDtos = actualClients.stream()
-                .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
+        clientService.delete(thirdClient.getId());
+
+        List<ClientDto> allClients = clientService.findAll().stream()
+                .map(client -> modelMapper.map(client, ClientDto.class))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest), actualClientDtos);
+        Assertions.assertEquals(Arrays.asList(firstClient, secondClient), allClients);
     }
 
     @Test
     void findAllClients() throws SQLException {
-        ClientDto firstClientToTest = ClientDto.builder()
-                .id(1L)
-                .name("firstClient")
-                .surname("Vasya")
-                .phoneNumber("125125")
-                .passportId("23612613616")
-                .build();
-        ClientDto secondClientToTest = ClientDto.builder()
-                .id(2L)
-                .name("secondClient")
-                .surname("Gleb")
-                .phoneNumber("125125")
-                .passportId("23612613616")
-                .build();
-        ClientDto thirdClientToTest = ClientDto.builder()
-                .id(3L)
-                .name("thirdClient")
+        ClientDto firstClient = ClientDto.builder()
+                .name("Eltay")
                 .surname("igor")
                 .phoneNumber("125125")
-                .passportId("23612613616")
+                .passportId("13623783616")
+                .build();
+        ClientDto secondClient = ClientDto.builder()
+                .name("Eltay")
+                .surname("igor")
+                .phoneNumber("125125")
+                .passportId("33623613616")
+                .build();
+        ClientDto thirdClient = ClientDto.builder()
+                .name("Eltay")
+                .surname("igor")
+                .phoneNumber("125125")
+                .passportId("23623613616")
                 .build();
 
-        firstClientToTest.setId(clientService.save(firstClientToTest).getId());
-        secondClientToTest.setId(clientService.save(secondClientToTest).getId());
-        thirdClientToTest.setId(clientService.save(thirdClientToTest).getId());
+        databaseService.truncateTables();
 
-        List<Client> actualClients = clientService.findAll();
+        firstClient.setId(clientService.save(firstClient).getId());
+        secondClient.setId(clientService.save(secondClient).getId());
+        thirdClient.setId(clientService.save(thirdClient).getId());
 
-        List<ClientDto> actualClientDtos = actualClients.stream()
-                .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
+        List<ClientDto> actualClients = clientService.findAll().stream()
+                .map(client -> modelMapper.map(client, ClientDto.class))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest, thirdClientToTest), actualClientDtos);
+        Assertions.assertEquals(Arrays.asList(firstClient, secondClient, thirdClient), actualClients);
     }
 
     @Test
     void findById() throws SQLException {
-        ClientDto expectedClientDto = ClientDto.builder()
-                .id(1L)
-                .name("firstClient")
-                .surname("Vasya")
+        ClientDto client = ClientDto.builder()
+                .name("Eltay")
+                .surname("igor")
                 .phoneNumber("125125")
-                .passportId("23612613616")
+                .passportId("23623613616")
                 .build();
 
-        Client savedClient = clientService.save(expectedClientDto);
+        databaseService.truncateTables();
 
-        Client actualClient = clientService.findById(savedClient.getId());
+        ClientDto savedClient = modelMapper.map(clientService.save(client), ClientDto.class);
 
-        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+        ClientDto actualClient = modelMapper.map(clientService.findById(savedClient.getId()), ClientDto.class);
 
-        Assertions.assertEquals(expectedClientDto, actualClientDto);
+        ClientDto expectedClient = ClientDto.builder()
+                .id(actualClient.getId())
+                .name(actualClient.getName())
+                .surname(actualClient.getSurname())
+                .passportId(actualClient.getPassportId())
+                .phoneNumber(actualClient.getPhoneNumber())
+                .build();
+
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
     void update() throws SQLException {
-        ClientDto expectedClientDto = ClientDto.builder()
-                .id(1L)
-                .name("Oleg")
-                .surname("Vasya")
+        ClientDto expectedClient = ClientDto.builder()
+                .name("Eltay")
+                .surname("igor")
                 .phoneNumber("125125")
-                .passportId("23612613616")
-                .orders(new ArrayList<>())
+                .passportId("23623613616")
                 .build();
 
-        Client savedClient = clientService.save(expectedClientDto);
+        databaseService.truncateTables();
 
-        expectedClientDto.setId(savedClient.getId());
-        expectedClientDto.setName("Igor");
+        ClientDto savedClient = modelMapper.map(clientService.save(expectedClient), ClientDto.class);
 
-        clientService.update(expectedClientDto);
+        expectedClient.setId(savedClient.getId());
+        expectedClient.setName("Igor");
 
-        Client actualClient = clientService.findById(savedClient.getId());
+        clientService.update(expectedClient);
 
-        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+        ClientDto actualClient = modelMapper.map(clientService.findById(savedClient.getId()), ClientDto.class);
 
-        Assertions.assertEquals(expectedClientDto, actualClientDto);
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 
     @Test
     void findByPassportId() throws SQLException {
-        String expectedPassportID = "12512515";
-        ClientDto expectedClientDto = ClientDto.builder()
-                .id(1L)
-                .name("Oleg")
-                .surname("Vasya")
+        String expectedPassportID = "23623613616";
+        ClientDto expectedClient = ClientDto.builder()
+                .name("Eltay")
+                .surname("igor")
                 .phoneNumber("125125")
-                .passportId(expectedPassportID)
+                .passportId("23623613616")
                 .build();
 
-        Client save = clientService.save(expectedClientDto);
+        databaseService.truncateTables();
 
-        expectedClientDto.setId(save.getId());
+        ClientDto save = modelMapper.map(clientService.save(expectedClient), ClientDto.class);
 
-        Client actualClient = clientService.findByPassportId(expectedPassportID);
+        expectedClient.setId(save.getId());
 
-        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+        ClientDto actualClient = modelMapper.map(clientService.findByPassportId(expectedPassportID), ClientDto.class);
 
-        Assertions.assertEquals(expectedClientDto, actualClientDto);
+        Assertions.assertEquals(expectedClient, actualClient);
     }
 }
