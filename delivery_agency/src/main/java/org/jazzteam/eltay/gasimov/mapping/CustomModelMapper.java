@@ -3,12 +3,13 @@ package org.jazzteam.eltay.gasimov.mapping;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component(value = "modelMapper")
+@Component(value = "customModelMapper")
 public class CustomModelMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 

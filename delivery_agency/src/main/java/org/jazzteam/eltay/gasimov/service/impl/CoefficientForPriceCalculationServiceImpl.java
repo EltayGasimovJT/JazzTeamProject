@@ -18,6 +18,7 @@ import java.util.List;
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
     @Autowired
     private CoefficientForPriceCalculationRepository priceCalculationRuleRepository;
+
     private static final int INITIAL_PRISE = 40;
     private static final int INITIAL_WEIGHT = 20;
 
