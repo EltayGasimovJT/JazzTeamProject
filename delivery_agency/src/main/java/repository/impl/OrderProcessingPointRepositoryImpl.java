@@ -1,13 +1,12 @@
 package repository.impl;
 
+
 import entity.OrderProcessingPoint;
-import org.springframework.stereotype.Repository;
 import repository.OrderProcessingPointRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository(value = "orderProcessingPointRepository")
 public class OrderProcessingPointRepositoryImpl implements OrderProcessingPointRepository {
     private final List<OrderProcessingPoint> processingPoints = new ArrayList<>();
 

@@ -1,13 +1,11 @@
 package repository.impl;
 
 import entity.User;
-import org.springframework.stereotype.Repository;
 import repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository(value = "userRepository")
 public class UserRepositoryImpl implements UserRepository {
     private final List<User> users = new ArrayList<>();
 

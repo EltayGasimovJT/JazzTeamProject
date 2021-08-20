@@ -5,9 +5,8 @@ import entity.*;
 import lombok.extern.slf4j.Slf4j;
 import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import repository.OrderRepository;
+import repository.impl.OrderRepositoryImpl;
 import service.CoefficientForPriceCalculationService;
 import service.OrderService;
 import validator.OrderValidator;
@@ -20,24 +19,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
-@Service(value = "orderService")
 public class OrderServiceImpl implements OrderService {
-    private final OrderRepository orderRepository;
-    private final ModelMapper modelMapper;
-    private final CoefficientForPriceCalculationService priceCalculationRuleService;
+    private final OrderRepository orderRepository = new OrderRepositoryImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
+    private final CoefficientForPriceCalculationService priceCalculationRuleService = new CoefficientForPriceCalculationServiceImpl();
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
 
-    @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper, CoefficientForPriceCalculationService priceCalculationRuleService) {
-        this.orderRepository = orderRepository;
-        this.modelMapper = modelMapper;
-        this.priceCalculationRuleService = priceCalculationRuleService;
-    }
-
     @Override
-    public Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) throws IllegalArgumentException {
+    public Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) throws IllegalArgumentException, SQLException {
         Order order = findOne(idForLocationUpdate);
         OrderValidator.validateOrder(order);
         if (newLocation.getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
@@ -49,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory) throws IllegalArgumentException {
+    public void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory) throws IllegalArgumentException, SQLException {
         Order order = orderRepository.findOne(idForHistoryUpdate);
         OrderValidator.validateOrder(order);
         order.setHistory(Collections.singletonList(modelMapper.map(newHistory, OrderHistory.class)));
@@ -108,7 +99,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order findOne(long idForSearch) throws IllegalArgumentException {
+    public Order findOne(long idForSearch) throws IllegalArgumentException, SQLException {
         Order foundOrder = orderRepository.findOne(idForSearch);
 
         OrderValidator.validateOrder(foundOrder);
@@ -132,14 +123,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public AbstractBuilding getCurrentOrderLocation(long idForFindCurrentLocation) throws IllegalArgumentException {
+    public AbstractBuilding getCurrentOrderLocation(long idForFindCurrentLocation) throws IllegalArgumentException, SQLException {
         Order foundOrder = orderRepository.findOne(idForFindCurrentLocation);
         OrderValidator.validateOrder(foundOrder);
         return foundOrder.getCurrentLocation();
     }
 
     @Override
-    public void send(List<OrderDto> orderDtosToSend) throws IllegalArgumentException {
+    public void send(List<OrderDto> orderDtosToSend) throws IllegalArgumentException, SQLException {
         List<Order> ordersToSend = orderDtosToSend.stream()
                 .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList());
@@ -161,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> accept(List<OrderDto> orderDtosToAccept) throws IllegalArgumentException {
+    public List<Order> accept(List<OrderDto> orderDtosToAccept) throws IllegalArgumentException{
         List<Order> ordersToAccept = orderDtosToAccept.stream()
                 .map(orderDto -> modelMapper.map(orderDto, Order.class))
                 .collect(Collectors.toList());
@@ -193,7 +184,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public String getState(long idForStateFind) throws IllegalArgumentException {
+    public String getState(long idForStateFind) throws IllegalArgumentException, SQLException {
         Order foundOrder = orderRepository.findOne(idForStateFind);
         OrderValidator.validateOrder(foundOrder);
         return foundOrder.getState().getState();
@@ -208,12 +199,12 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private boolean isFinalWarehouse(OrderDto orderToCheck) throws IllegalArgumentException {
+    private boolean isFinalWarehouse(OrderDto orderToCheck) throws IllegalArgumentException{
         return orderToCheck.getDestinationPlace().equals(orderToCheck.getCurrentLocation());
     }
 
     @Override
-    public List<Order> findAll() throws IllegalArgumentException {
+    public List<Order> findAll() throws IllegalArgumentException, SQLException {
         List<Order> ordersFromRepository = orderRepository.findAll();
 
         OrderValidator.validateOrders(ordersFromRepository);
@@ -229,7 +220,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<List<Order>> getOrdersOnTheWay() throws IllegalArgumentException {
+    public List<List<Order>> getOrdersOnTheWay() throws IllegalArgumentException{
         List<List<Order>> allSentOrders = orderRepository.getSentOrders();
         OrderValidator.validateOrdersOnTheWay(allSentOrders);
 
@@ -237,7 +228,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order update(OrderDto orderDtoToUpdate) throws IllegalArgumentException {
+    public Order update(OrderDto orderDtoToUpdate) throws IllegalArgumentException, SQLException {
         Order orderToUpdate = orderRepository.findOne(orderDtoToUpdate.getId());
         OrderValidator.validateOrder(orderToUpdate);
         Client newRecipient = Client.builder()
@@ -261,7 +252,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException {
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
         OrderValidator.validateOrder(orderRepository.findOne(idForDelete));
         orderRepository.delete(idForDelete);
     }

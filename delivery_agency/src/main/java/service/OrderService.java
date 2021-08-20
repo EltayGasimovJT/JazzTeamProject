@@ -1,5 +1,6 @@
 package service;
 
+
 import dto.AbstractBuildingDto;
 import dto.ClientDto;
 import dto.OrderDto;
@@ -42,5 +43,5 @@ public interface OrderService {
 
    Order update(OrderDto orderDtoToUpdate) throws SQLException;
 
-   void delete(Long idForDelete);
+   void delete(Long idForDelete) throws SQLException;
 }

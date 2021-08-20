@@ -5,28 +5,21 @@ import entity.OrderProcessingPoint;
 import entity.Warehouse;
 import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import repository.WarehouseRepository;
+import repository.impl.WarehouseRepositoryImpl;
 import service.WarehouseService;
 import validator.WarehouseValidator;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service(value =  "warehouseService")
 public class WarehouseServiceImpl implements WarehouseService {
-    private final WarehouseRepository warehouseRepository;
-    private final ModelMapper modelMapper;
-
-    @Autowired
-    public WarehouseServiceImpl(WarehouseRepository warehouseRepository, ModelMapper modelMapper) {
-        this.warehouseRepository = warehouseRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final WarehouseRepository warehouseRepository = new WarehouseRepositoryImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public Warehouse save(WarehouseDto warehouseDtoToSave) throws IllegalArgumentException {
+    public Warehouse save(WarehouseDto warehouseDtoToSave) throws IllegalArgumentException, SQLException {
         Warehouse warehouseToSave = CustomModelMapper.mapDtoToWarehouse(warehouseDtoToSave);
 
         WarehouseValidator.validateOnSave(warehouseToSave);
@@ -34,13 +27,13 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException {
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
         WarehouseValidator.validateWarehouse(warehouseRepository.findOne(idForDelete));
         warehouseRepository.delete(idForDelete);
     }
 
     @Override
-    public List<Warehouse> findAll() throws IllegalArgumentException {
+    public List<Warehouse> findAll() throws IllegalArgumentException, SQLException {
         List<Warehouse> warehousesFromRepository = warehouseRepository.findAll();
         WarehouseValidator.validateWarehouseList(warehousesFromRepository);
 
@@ -48,7 +41,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Warehouse findOne(long idForSearch) throws IllegalArgumentException {
+    public Warehouse findOne(long idForSearch) throws IllegalArgumentException, SQLException {
         Warehouse foundWarehouse = warehouseRepository.findOne(idForSearch);
         WarehouseValidator.validateWarehouse(foundWarehouse);
 
@@ -56,7 +49,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Warehouse update(WarehouseDto warehouseDtoToUpdate) throws IllegalArgumentException {
+    public Warehouse update(WarehouseDto warehouseDtoToUpdate) throws IllegalArgumentException, SQLException {
         Warehouse warehouseToUpdate = warehouseRepository.findOne(warehouseDtoToUpdate.getId());
 
         WarehouseValidator.validateWarehouse(warehouseToUpdate);

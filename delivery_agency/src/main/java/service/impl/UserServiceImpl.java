@@ -9,9 +9,8 @@ import entity.WorkingPlaceType;
 import lombok.extern.slf4j.Slf4j;
 import mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import repository.UserRepository;
+import repository.impl.UserRepositoryImpl;
 import service.UserService;
 import validator.UserValidator;
 
@@ -19,15 +18,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 @Slf4j
-@Service(value = "userService")
 public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final UserRepository userRepository = new UserRepositoryImpl();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Override
     public User save(UserDto userDtoToSave) throws SQLException {
@@ -48,20 +41,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException {
+    public void delete(Long idForDelete) throws IllegalArgumentException, SQLException {
         UserValidator.validateUser(userRepository.findOne(idForDelete));
         userRepository.delete(idForDelete);
     }
 
     @Override
-    public List<User> findAll() throws IllegalArgumentException {
+    public List<User> findAll() throws IllegalArgumentException, SQLException {
         List<User> usersFromRepository = userRepository.findAll();
         UserValidator.validateUsersList(usersFromRepository);
         return usersFromRepository;
     }
 
     @Override
-    public User findOne(long idForSearch) throws IllegalArgumentException {
+    public User findOne(long idForSearch) throws IllegalArgumentException, SQLException {
         User foundUser = userRepository.findOne(idForSearch);
         UserValidator.validateUser(foundUser);
         return foundUser;
