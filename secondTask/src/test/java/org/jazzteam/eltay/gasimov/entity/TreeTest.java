@@ -1,6 +1,6 @@
 package org.jazzteam.eltay.gasimov.entity;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -40,7 +40,7 @@ public class TreeTest {
 
         int actual = tree.getRoot().getCountOfLeaves();
 
-        Assert.assertEquals(expected, actual, 0.001);
+        Assertions.assertEquals(expected, actual, 0.001);
     }
 
     @ParameterizedTest
@@ -48,6 +48,6 @@ public class TreeTest {
     public void checkTreeConstructor(int[] testArraysForTreeCreation, Tree expectedTree) {
         Tree actualTree = new Tree(testArraysForTreeCreation);
 
-        Assert.assertEquals(expectedTree, actualTree);
+        Assertions.assertEquals(expectedTree, actualTree);
     }
 }

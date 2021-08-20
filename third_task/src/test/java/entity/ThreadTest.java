@@ -1,8 +1,10 @@
 package entity;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
-import org.junit.Test;
+import org.jazzteam.eltay.gasimov.entity.Port;
+import org.jazzteam.eltay.gasimov.entity.Ship;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,16 +27,16 @@ public class ThreadTest {
         ships.get(0).start();
         ships.get(1).start();
 
-        Assert.assertSame(Thread.State.RUNNABLE, ships.get(0).getState());
-        Assert.assertSame(Thread.State.RUNNABLE, ships.get(1).getState());
-        Assert.assertSame(Thread.State.NEW, ships.get(2).getState());
-        Assert.assertSame(Thread.State.NEW, ships.get(3).getState());
+        Assertions.assertSame(Thread.State.RUNNABLE, ships.get(0).getState());
+        Assertions.assertSame(Thread.State.RUNNABLE, ships.get(1).getState());
+        Assertions.assertSame(Thread.State.NEW, ships.get(2).getState());
+        Assertions.assertSame(Thread.State.NEW, ships.get(3).getState());
 
-        Assert.assertEquals(100, port.getCurrentContainersQty());
-        Assert.assertEquals(0, ships.get(0).getContainersToTake());
-        Assert.assertEquals(500, ships.get(0).getContainersToUpload());
-        Assert.assertEquals(500, ships.get(1).getContainersToUpload());
-        Assert.assertEquals(0, ships.get(1).getContainersToTake());
+        Assertions.assertEquals(100, port.getCurrentContainersQty());
+        Assertions.assertEquals(0, ships.get(0).getContainersToTake());
+        Assertions.assertEquals(500, ships.get(0).getContainersToUpload());
+        Assertions.assertEquals(500, ships.get(1).getContainersToUpload());
+        Assertions.assertEquals(0, ships.get(1).getContainersToTake());
 
         ships.get(2).start();
 
@@ -47,18 +49,18 @@ public class ThreadTest {
 
         ships.get(3).start();
 
-        Assert.assertEquals(249, port.getCurrentContainersQty());
-        Assert.assertEquals(0, ships.get(0).getContainersToTake());
-        Assert.assertEquals(0, ships.get(1).getContainersToTake());
+        Assertions.assertEquals(249, port.getCurrentContainersQty());
+        Assertions.assertEquals(0, ships.get(0).getContainersToTake());
+        Assertions.assertEquals(0, ships.get(1).getContainersToTake());
 
-        Assert.assertSame(Thread.State.TERMINATED, ships.get(0).getState());
-        Assert.assertSame(Thread.State.TERMINATED, ships.get(1).getState());
-        Assert.assertSame(Thread.State.TERMINATED, ships.get(2).getState());
-        Assert.assertSame(Thread.State.RUNNABLE, ships.get(3).getState());
+        Assertions.assertSame(Thread.State.TERMINATED, ships.get(0).getState());
+        Assertions.assertSame(Thread.State.TERMINATED, ships.get(1).getState());
+        Assertions.assertSame(Thread.State.TERMINATED, ships.get(2).getState());
+        Assertions.assertSame(Thread.State.RUNNABLE, ships.get(3).getState());
 
-        Assert.assertEquals(90, port.getCurrentContainersQty());
-        Assert.assertEquals(0, ships.get(2).getContainersToTake());
-        Assert.assertEquals(30, ships.get(3).getContainersToUpload());
+        Assertions.assertEquals(90, port.getCurrentContainersQty());
+        Assertions.assertEquals(0, ships.get(2).getContainersToTake());
+        Assertions.assertEquals(30, ships.get(3).getContainersToUpload());
 
         try {
             Thread.sleep(700);
@@ -67,11 +69,11 @@ public class ThreadTest {
             Thread.currentThread().interrupt();
         }
 
-        Assert.assertEquals(120, port.getCurrentContainersQty());
-        Assert.assertEquals(0, ships.get(2).getContainersToTake());
-        Assert.assertEquals(0, ships.get(3).getContainersToUpload());
+        Assertions.assertEquals(120, port.getCurrentContainersQty());
+        Assertions.assertEquals(0, ships.get(2).getContainersToTake());
+        Assertions.assertEquals(0, ships.get(3).getContainersToUpload());
 
-        Assert.assertSame(Thread.State.TERMINATED, ships.get(2).getState());
-        Assert.assertSame(Thread.State.TERMINATED, ships.get(3).getState());
+        Assertions.assertSame(Thread.State.TERMINATED, ships.get(2).getState());
+        Assertions.assertSame(Thread.State.TERMINATED, ships.get(3).getState());
     }
 }

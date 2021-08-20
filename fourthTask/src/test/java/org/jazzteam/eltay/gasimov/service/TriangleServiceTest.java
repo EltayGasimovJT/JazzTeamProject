@@ -3,6 +3,7 @@ package org.jazzteam.eltay.gasimov.service;
 import org.jazzteam.eltay.gasimov.entity.Point;
 import org.jazzteam.eltay.gasimov.entity.Triangle;
 import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -59,6 +60,6 @@ public class TriangleServiceTest {
 
         boolean actual = TriangleService.isBelongsToTriangle(point, triangle);
 
-        Assert.assertEquals(actual, true);
+        Assertions.assertTrue(actual);
     }
 }

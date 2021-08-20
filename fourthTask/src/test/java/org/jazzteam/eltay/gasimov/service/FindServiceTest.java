@@ -1,11 +1,11 @@
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.entity.Point;
-import org.junit.Assert;
+import org.jazzteam.eltay.gasimov.service.impl.FindTriangleParametersServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.jazzteam.eltay.gasimov.service.impl.FindTriangleParametersServiceImpl;
 
 import java.util.stream.Stream;
 
@@ -22,6 +22,6 @@ public class FindServiceTest {
         FindTriangleParametersService findService = new FindTriangleParametersServiceImpl();
         double actual = findService.findSide(point1, point2);
 
-        Assert.assertEquals(expected, actual, 0.001);
+        Assertions.assertEquals(expected, actual, 0.001);
     }
 }
