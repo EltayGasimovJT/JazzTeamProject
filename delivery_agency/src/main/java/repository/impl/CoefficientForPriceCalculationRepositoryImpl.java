@@ -1,11 +1,13 @@
 package repository.impl;
 
 import entity.CoefficientForPriceCalculation;
+import org.springframework.stereotype.Repository;
 import repository.CoefficientForPriceCalculationRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository(value = "coefficientForPriceCalculationRepository")
 public class CoefficientForPriceCalculationRepositoryImpl implements CoefficientForPriceCalculationRepository {
     private final List<CoefficientForPriceCalculation> coefficientForPriceCalculations = new ArrayList<>();
 

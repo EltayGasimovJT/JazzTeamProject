@@ -3,16 +3,16 @@ package mapping;
 import dto.*;
 import entity.*;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class CustomModelMapper {
-    private static ModelMapper modelMapper = new ModelMapper();
+    private static ModelMapper modelMapper;
 
-    private CustomModelMapper() {
-
-    }
+    private CustomModelMapper(){}
 
     public static OrderDto mapOrderToDto(Order orderToConvert) {
         List<OrderHistoryDto> historiesToConvert = orderToConvert.getHistory().stream()
@@ -154,5 +154,9 @@ public class CustomModelMapper {
                         .collect(Collectors.toList())
         );
         return convertedToDto;
+    }
+
+    public static void setModelMapper(ModelMapper modelMapper) {
+        CustomModelMapper.modelMapper = modelMapper;
     }
 }

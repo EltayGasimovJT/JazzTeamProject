@@ -1,11 +1,13 @@
 package repository.impl;
 
 import entity.Voyage;
+import org.springframework.stereotype.Repository;
 import repository.VoyageRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Repository(value = "voyageRepository")
 public class VoyageRepositoryImpl implements VoyageRepository {
     private final List<Voyage> voyages = new ArrayList<>();
 
