@@ -6,24 +6,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
-@Builder
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "users")
-public class User {
+@Table(name = "orderStateChangeType")
+public class OrderStateChangedType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "name")
-    private String name;
-    @Column(name = "surname")
-    private String surname;
-    @ManyToOne
-    private AbstractBuilding workingPlace;
-
-    private List<String> roles;
+    @Column(name = "changedState")
+    private String changedState;
 }

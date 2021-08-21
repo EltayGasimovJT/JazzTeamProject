@@ -38,6 +38,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
+
         CoefficientForPriseCalculationValidator.validateCoefficient(priceCalculationRuleRepository.findOne(idForDelete));
         priceCalculationRuleRepository.delete(idForDelete);
     }
@@ -60,7 +61,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
                 .parcelSizeLimit(coefficientDtoForUpdate.getParcelSizeLimit())
                 .build();
 
-        return priceCalculationRuleRepository.update(coefficientForUpdate);
+        return priceCalculationRuleRepository.save(coefficientForUpdate);
     }
 
     @Override

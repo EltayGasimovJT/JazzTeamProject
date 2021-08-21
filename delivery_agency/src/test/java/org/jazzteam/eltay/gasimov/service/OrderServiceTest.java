@@ -150,7 +150,7 @@ class OrderServiceTest {
 
         orderService.updateOrderHistory(1, newOrderHistory);
 
-        List<OrderHistory> actual = orderService.findOne(1).getHistory();
+        Set<OrderHistory> actual = orderService.findOne(1).getHistory();
 
         List<OrderHistoryDto> actualHistory = actual.stream()
                 .map(orderHistory -> modelMapper.map(orderHistory, OrderHistoryDto.class))

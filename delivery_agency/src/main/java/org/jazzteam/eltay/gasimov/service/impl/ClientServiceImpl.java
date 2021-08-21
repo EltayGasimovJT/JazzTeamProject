@@ -13,6 +13,8 @@ import org.jazzteam.eltay.gasimov.validator.ClientValidator;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,8 +25,10 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
-        ClientValidator.validateClient(clientRepository.findOne(idForDelete));
-        clientRepository.delete(idForDelete);
+        Optional<Client> foundClientFromRepository = clientRepository.findById(idForDelete);
+        Client foundClient = foundClientFromRepository.orElseGet(Client::new);
+        ClientValidator.validateClient(foundClient);
+        clientRepository.deleteById(idForDelete);
     }
 
     @Override
@@ -36,9 +40,11 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client findById(long idForSearch) throws IllegalArgumentException {
-        Client foundClientFromRepository = clientRepository.findOne(idForSearch);
-        ClientValidator.validateClient(foundClientFromRepository);
-        return foundClientFromRepository;
+        Optional<Client> foundClientFromRepository = clientRepository.findById(idForSearch);
+        Client foundClient = foundClientFromRepository.orElseGet(Client::new);
+
+        ClientValidator.validateClient(foundClient);
+        return foundClient;
     }
 
     @Override
@@ -49,7 +55,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client save(ClientDto clientDtoToSave) throws SQLException, IllegalArgumentException {
+    public Client save(ClientDto clientDtoToSave) throws IllegalArgumentException {
         Client clientToSave = Client.builder()
                 .id(clientDtoToSave.getId())
                 .name(clientDtoToSave.getName())
@@ -68,10 +74,12 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client update(ClientDto newClient) throws SQLException, IllegalArgumentException {
-        ClientValidator.validateClient(clientRepository.findOne(newClient.getId()));
-        List<Order> clientOrdersToUpdate = newClient.getOrders().stream()
+        Optional<Client> foundClientFromRepo = clientRepository.findById(newClient.getId());
+        Client foundClient = foundClientFromRepo.orElseGet(Client::new);
+        ClientValidator.validateClient(foundClient);
+        Set<Order> clientOrdersToUpdate = newClient.getOrders().stream()
                 .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         Client clientToUpdate = Client.builder()
                 .id(newClient.getId())
@@ -82,11 +90,7 @@ public class ClientServiceImpl implements ClientService {
                 .orders(clientOrdersToUpdate)
                 .build();
 
-        return clientRepository.update(clientToUpdate);
+        return clientRepository.save(clientToUpdate);
     }
 
-    @Override
-    public void clear() {
-        clientRepository.clear();
-    }
 }

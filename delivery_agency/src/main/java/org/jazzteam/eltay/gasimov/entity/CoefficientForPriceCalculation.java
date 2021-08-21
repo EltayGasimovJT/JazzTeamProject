@@ -15,9 +15,12 @@ import javax.persistence.*;
 @Table(name = "coefficientForPriceCalculation")
 public class CoefficientForPriceCalculation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "parcelSizeLimit")
     private Integer parcelSizeLimit;
+    @Column(name = "country")
     private String country;
+    @Column(name = "countryCoefficient")
     private Double countryCoefficient;
 }

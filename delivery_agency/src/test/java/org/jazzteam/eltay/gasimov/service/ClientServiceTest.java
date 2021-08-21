@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -170,7 +171,7 @@ class ClientServiceTest {
                 .surname("Vasya")
                 .phoneNumber("125125")
                 .passportId("23612613616")
-                .orders(new ArrayList<>())
+                .orders(new HashSet<>())
                 .build();
         clientService.clear();
 

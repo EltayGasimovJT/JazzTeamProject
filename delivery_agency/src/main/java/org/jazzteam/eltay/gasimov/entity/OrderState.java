@@ -5,15 +5,23 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
+@Table(name = "orderState")
 public class OrderState {
+    @Id
+    @GeneratedValue
     private Long id;
+    @Column(name = "state")
     private String state;
-    private List<String> rolesAllowedWithdrawFromState;
-    private List<String> rolesAllowedPutToState;
+    @ManyToMany(mappedBy = "roles")
+    private Set<String> rolesAllowedWithdrawFromState;
+    @ManyToMany
+    private Set<String> rolesAllowedPutToState;
 }

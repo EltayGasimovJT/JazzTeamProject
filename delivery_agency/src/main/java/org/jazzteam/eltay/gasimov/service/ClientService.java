@@ -18,6 +18,4 @@ public interface ClientService {
     Client save(ClientDto clientDtoToSave) throws SQLException, IllegalArgumentException;
 
     Client update(ClientDto newClient) throws SQLException, IllegalArgumentException;
-
-    void clear();
 }
