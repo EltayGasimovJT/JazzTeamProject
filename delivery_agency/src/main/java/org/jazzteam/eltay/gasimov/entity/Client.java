@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @Builder
 @Data
@@ -17,5 +17,5 @@ public class Client {
     private String surname;
     private String passportId;
     private String phoneNumber;
-    private List<Order> orders;
+    private Set<Order> orders;
 }
