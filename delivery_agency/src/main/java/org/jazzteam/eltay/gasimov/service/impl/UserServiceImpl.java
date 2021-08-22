@@ -2,10 +2,7 @@ package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
-import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
-import org.jazzteam.eltay.gasimov.entity.User;
-import org.jazzteam.eltay.gasimov.entity.Warehouse;
-import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
+import org.jazzteam.eltay.gasimov.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.modelmapper.ModelMapper;
@@ -17,6 +14,7 @@ import org.jazzteam.eltay.gasimov.validator.UserValidator;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service(value = "userService")
@@ -46,8 +44,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
-        UserValidator.validateUser(userRepository.findOne(idForDelete));
-        userRepository.delete(idForDelete);
+        Optional<User> foundClientFromRepository = userRepository.findById(idForDelete);
+        User orderToUpdate = foundClientFromRepository.orElseGet(User::new);
+        UserValidator.validateUser(orderToUpdate);
+        userRepository.deleteById(idForDelete);
     }
 
     @Override
@@ -59,7 +59,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findOne(long idForSearch) throws IllegalArgumentException {
-        User foundUser = userRepository.findOne(idForSearch);
+        Optional<User> foundClientFromRepository = userRepository.findById(idForSearch);
+        User foundUser = foundClientFromRepository.orElseGet(User::new);
         UserValidator.validateUser(foundUser);
         return foundUser;
     }
@@ -68,7 +69,7 @@ public class UserServiceImpl implements UserService {
     public User update(UserDto userDtoToUpdate) throws SQLException {
         User userToUpdate = CustomModelMapper.mapDtoToUser(userDtoToUpdate);
         UserValidator.validateUser(userToUpdate);
-        return userRepository.update(userToUpdate);
+        return userRepository.save(userToUpdate);
     }
 
     @Override
@@ -76,10 +77,5 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setWorkingPlace(newWorkingPlace);
 
         return update(userToUpdate);
-    }
-
-    @Override
-    public void clear() {
-        userRepository.clear();
     }
 }

@@ -23,5 +23,4 @@ public interface CoefficientForPriceCalculationService {
 
     CoefficientForPriceCalculation findByCountry(String countryForSearch);
 
-    void clear();
 }

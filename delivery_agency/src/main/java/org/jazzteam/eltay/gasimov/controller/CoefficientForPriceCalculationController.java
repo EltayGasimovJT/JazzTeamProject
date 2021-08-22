@@ -1,45 +1,47 @@
 package org.jazzteam.eltay.gasimov.controller;
 
+import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
 import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
-import org.jazzteam.eltay.gasimov.repository.CoefficientForPriceCalculationRepository;
+import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 public class CoefficientForPriceCalculationController {
     @Autowired
-    private CoefficientForPriceCalculationRepository coefficientRepository;
+    private CoefficientForPriceCalculationService calculationService;
 
     @PostMapping(path = "/addCoefficient")
     public @ResponseBody
     String addNewUser(@RequestParam String country
             , @RequestParam Double countryCoefficient
             , @RequestParam Integer parcelSizeLimit
-            , Map<String, Object> model) {
+            , Map<String, Object> model) throws SQLException {
 
-        CoefficientForPriceCalculation coefficientToSave = CoefficientForPriceCalculation
+        CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto
                 .builder()
                 .country(country)
                 .countryCoefficient(countryCoefficient)
                 .parcelSizeLimit(parcelSizeLimit)
                 .build();
 
-        coefficientRepository.save(coefficientToSave);
+        calculationService.save(coefficientToSave);
 
-        List<CoefficientForPriceCalculation> all = coefficientRepository.findAll();
+        List<CoefficientForPriceCalculation> all = calculationService.findAll();
         model.put("coefficients", all);
 
-        return coefficientRepository.findAll().toString();
+        return calculationService.findAll().toString();
     }
 
     @GetMapping(path = "/coefficients")
     public @ResponseBody
-    Iterable<CoefficientForPriceCalculation> getAllUsers() {
-        return coefficientRepository.findAll();
+    Iterable<CoefficientForPriceCalculation> getAllUsers() throws SQLException {
+        return calculationService.findAll();
     }
 
     @GetMapping(path = "/addCoefficient")

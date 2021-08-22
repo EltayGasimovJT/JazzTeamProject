@@ -1,22 +1,21 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.*;
-import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.jazzteam.eltay.gasimov.repository.OrderRepository;
+import org.jazzteam.eltay.gasimov.repository.VoyageRepository;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
 import org.jazzteam.eltay.gasimov.validator.OrderValidator;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,6 +27,9 @@ public class OrderServiceImpl implements OrderService {
     private CoefficientForPriceCalculationService priceCalculationRuleService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private VoyageRepository voyageRepository;
+
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
@@ -41,15 +43,18 @@ public class OrderServiceImpl implements OrderService {
         } else if (newLocation.getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
             order.setCurrentLocation(modelMapper.map(newLocation, Warehouse.class));
         }
-        return orderRepository.update(order);
+        return orderRepository.save(order);
     }
 
     @Override
     public void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory) throws IllegalArgumentException {
-        Order order = orderRepository.findOne(idForHistoryUpdate);
-        OrderValidator.validateOrder(order);
-        order.setHistory(Collections.singletonList(modelMapper.map(newHistory, OrderHistory.class)));
-        orderRepository.update(order);
+        Optional<Order> foundClientFromRepository = orderRepository.findById(idForHistoryUpdate);
+        Order foundOrder = foundClientFromRepository.orElseGet(Order::new);
+        OrderValidator.validateOrder(foundOrder);
+        Set<OrderHistory> histories = foundOrder.getHistory();
+        histories.add(modelMapper.map(newHistory, OrderHistory.class));
+        foundOrder.setHistory(histories);
+        orderRepository.save(foundOrder);
     }
 
     @Override
@@ -59,9 +64,8 @@ public class OrderServiceImpl implements OrderService {
         orderDtoToSave.setPrice(price);
         orderDtoToSave.setState(modelMapper.map(orderState, OrderStateDto.class));
         OrderHistory orderHistory = OrderHistory.builder()
-                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
+                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND.toString())
                 .user(CustomModelMapper.mapDtoToUser(orderDtoToSave.getHistory().get(0).getUser()))
-                .changingTime(orderDtoToSave.getHistory().get(0).getChangingTime())
                 .comment(orderDtoToSave.getHistory().get(0).getComment())
                 .build();
         orderDtoToSave.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
@@ -82,6 +86,10 @@ public class OrderServiceImpl implements OrderService {
                 .phoneNumber(orderDtoToSave.getRecipient().getPhoneNumber())
                 .build();
 
+        Set<OrderHistory> historiesToSave = orderDtoToSave.getHistory().stream()
+                .map(orderHistoryDto -> modelMapper.map(orderHistoryDto, OrderHistory.class))
+                .collect(Collectors.toSet());
+
         OrderProcessingPoint departurePointToSave = new OrderProcessingPoint();
         departurePointToSave.setId(orderDtoToSave.getCurrentLocation().getId());
         OrderProcessingPoint destinationPlaceToSave = new OrderProcessingPoint();
@@ -93,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
                 .recipient(recipientToSave)
                 .currentLocation(departurePointToSave)
                 .destinationPlace(destinationPlaceToSave)
-                .history(Collections.singletonList(orderHistory))
+                .history(historiesToSave)
                 .parcelParameters(modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class))
                 .price(orderDtoToSave.getPrice())
                 .state(orderState)
@@ -105,7 +113,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findOne(long idForSearch) throws IllegalArgumentException {
-        Order foundOrder = orderRepository.findOne(idForSearch);
+        Optional<Order> foundClientFromRepository = orderRepository.findById(idForSearch);
+        Order foundOrder = foundClientFromRepository.orElseGet(Order::new);
 
         OrderValidator.validateOrder(foundOrder);
 
@@ -129,7 +138,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public AbstractBuilding getCurrentOrderLocation(long idForFindCurrentLocation) throws IllegalArgumentException {
-        Order foundOrder = orderRepository.findOne(idForFindCurrentLocation);
+        Optional<Order> foundClientFromRepository = orderRepository.findById(idForFindCurrentLocation);
+        Order foundOrder = foundClientFromRepository.orElseGet(Order::new);
         OrderValidator.validateOrder(foundOrder);
         return foundOrder.getCurrentLocation();
     }
@@ -139,6 +149,8 @@ public class OrderServiceImpl implements OrderService {
         List<Order> ordersToSend = orderDtosToSend.stream()
                 .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList());
+        Optional<Voyage> foundVoyage = voyageRepository.findById(orderDtosToSend.get(0).getCurrentLocation().getId());
+        Voyage voyageToSave = foundVoyage.orElseGet(Voyage::new);
 
         for (Order order : ordersToSend) {
             OrderState orderState;
@@ -153,7 +165,7 @@ public class OrderServiceImpl implements OrderService {
             order.setState(orderState);
         }
 
-        orderRepository.saveSentOrders(ordersToSend);
+        voyageToSave.setDispatchedOrders(ordersToSend);
     }
 
     @Override
@@ -162,7 +174,9 @@ public class OrderServiceImpl implements OrderService {
                 .map(orderDto -> modelMapper.map(orderDto, Order.class))
                 .collect(Collectors.toList());
 
-        List<Order> ordersFromRepository = orderRepository.acceptOrders(ordersToAccept);
+        Optional<Voyage> foundVoyage = voyageRepository.findById(orderDtosToAccept.get(0).getCurrentLocation().getId());
+        Voyage voyageToSave = foundVoyage.orElseGet(Voyage::new);
+        List<Order> ordersFromRepository = voyageToSave.getDispatchedOrders();
 
         OrderValidator.validateOrders(ordersFromRepository);
 
@@ -190,7 +204,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String getState(long idForStateFind) throws IllegalArgumentException {
-        Order foundOrder = orderRepository.findOne(idForStateFind);
+        Optional<Order> foundClientFromRepository = orderRepository.findById(idForStateFind);
+        Order foundOrder = foundClientFromRepository.orElseGet(Order::new);
         OrderValidator.validateOrder(foundOrder);
         return foundOrder.getState().getState();
     }
@@ -224,17 +239,11 @@ public class OrderServiceImpl implements OrderService {
         return priceCalculationRuleService.calculatePrice(orderForCalculate, coefficientForCalculate);
     }
 
-    @Override
-    public List<List<Order>> getOrdersOnTheWay() throws IllegalArgumentException {
-        List<List<Order>> allSentOrders = orderRepository.getSentOrders();
-        OrderValidator.validateOrdersOnTheWay(allSentOrders);
-
-        return allSentOrders;
-    }
 
     @Override
     public Order update(OrderDto orderDtoToUpdate) throws IllegalArgumentException {
-        Order orderToUpdate = orderRepository.findOne(orderDtoToUpdate.getId());
+        Optional<Order> foundClientFromRepository = orderRepository.findById(orderDtoToUpdate.getId());
+        Order orderToUpdate = foundClientFromRepository.orElseGet(Order::new);
         OrderValidator.validateOrder(orderToUpdate);
         Client newRecipient = Client.builder()
                 .id(orderDtoToUpdate.getRecipient().getId())
@@ -253,18 +262,15 @@ public class OrderServiceImpl implements OrderService {
         orderToUpdate.setState(orderState);
         OrderValidator.validateOrder(orderToUpdate);
 
-        return orderRepository.update(orderToUpdate);
+        return orderRepository.save(orderToUpdate);
     }
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
-        OrderValidator.validateOrder(orderRepository.findOne(idForDelete));
-        orderRepository.delete(idForDelete);
-    }
-
-    @Override
-    public void clear() {
-        orderRepository.clear();
+        Optional<Order> foundClientFromRepository = orderRepository.findById(idForDelete);
+        Order orderToUpdate = foundClientFromRepository.orElseGet(Order::new);
+        OrderValidator.validateOrder(orderToUpdate);
+        orderRepository.deleteById(idForDelete);
     }
 
     private OrderState updateState(String state) {
@@ -325,8 +331,8 @@ public class OrderServiceImpl implements OrderService {
             newRolesAllowedPutToState.add(ROLE_ADMIN);
             newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
         }
-        orderState.setRolesAllowedPutToState(newRolesAllowedPutToState);
-        orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
+        //orderState.setRolesAllowedPutToState(newRolesAllowedPutToState);
+       // orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
         return orderState;
     }
 

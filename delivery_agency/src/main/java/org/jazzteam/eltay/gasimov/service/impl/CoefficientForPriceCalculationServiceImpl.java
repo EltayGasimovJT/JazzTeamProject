@@ -2,6 +2,7 @@ package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
+import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Service(value = "coefficientForPriceCalculationService")
 public class CoefficientForPriceCalculationServiceImpl implements CoefficientForPriceCalculationService {
@@ -38,9 +40,10 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
-
-        CoefficientForPriseCalculationValidator.validateCoefficient(priceCalculationRuleRepository.findOne(idForDelete));
-        priceCalculationRuleRepository.delete(idForDelete);
+        Optional<CoefficientForPriceCalculation> foundCoefficientOptional = priceCalculationRuleRepository.findById(idForDelete);
+        CoefficientForPriceCalculation foundCoefficient = foundCoefficientOptional.orElseGet(CoefficientForPriceCalculation::new);
+        CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
+        priceCalculationRuleRepository.delete(foundCoefficient);
     }
 
     @Override
@@ -52,7 +55,9 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
 
     @Override
     public CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientDtoForUpdate) throws SQLException, IllegalArgumentException {
-        CoefficientForPriseCalculationValidator.validateCoefficient(priceCalculationRuleRepository.findOne(coefficientDtoForUpdate.getId()));
+        Optional<CoefficientForPriceCalculation> foundCoefficientOptional = priceCalculationRuleRepository.findById(coefficientDtoForUpdate.getId());
+        CoefficientForPriceCalculation foundCoefficient = foundCoefficientOptional.orElseGet(CoefficientForPriceCalculation::new);
+        CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
 
         CoefficientForPriceCalculation coefficientForUpdate = CoefficientForPriceCalculation.builder()
                 .id(coefficientDtoForUpdate.getId())
@@ -66,7 +71,8 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
 
     @Override
     public CoefficientForPriceCalculation findOne(long idForSearch) throws IllegalArgumentException {
-        CoefficientForPriceCalculation foundCoefficient = priceCalculationRuleRepository.findOne(idForSearch);
+        Optional<CoefficientForPriceCalculation> foundCoefficientOptional = priceCalculationRuleRepository.findById(idForSearch);
+        CoefficientForPriceCalculation foundCoefficient = foundCoefficientOptional.orElseGet(CoefficientForPriceCalculation::new);
 
         CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
 
@@ -111,11 +117,6 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
         CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
 
         return foundCoefficient;
-    }
-
-    @Override
-    public void clear() {
-        priceCalculationRuleRepository.clear();
     }
 
     private double getSize(OrderDto order) {

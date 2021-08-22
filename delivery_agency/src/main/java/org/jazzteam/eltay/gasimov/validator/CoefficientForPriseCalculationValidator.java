@@ -32,7 +32,7 @@ public class CoefficientForPriseCalculationValidator {
 
     public static void validateCoefficientList(List<CoefficientForPriceCalculation> coefficientsForValidate) throws IllegalArgumentException {
         if(coefficientsForValidate.isEmpty()){
-            throw new IllegalArgumentException("There is no coefficients on the org.jazzteam.eltay.gasimov.repository");
+            throw new IllegalArgumentException("There is no coefficients on the repository");
         }
     }
 }

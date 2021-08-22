@@ -16,6 +16,4 @@ public interface WarehouseService {
     Warehouse findOne(long idForSearch) throws SQLException;
 
     Warehouse update(WarehouseDto warehouseDtoToUpdate) throws SQLException;
-
-    void clear();
 }

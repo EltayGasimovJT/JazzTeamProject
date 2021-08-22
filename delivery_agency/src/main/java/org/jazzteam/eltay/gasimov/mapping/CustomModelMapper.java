@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component(value = "customModelMapper")
@@ -39,9 +40,9 @@ public class CustomModelMapper {
     }
 
     public static Order mapDtoToOrder(OrderDto orderDtoToConvert) {
-        List<OrderHistory> historiesToConvert = orderDtoToConvert.getHistory().stream()
+        Set<OrderHistory> historiesToConvert = orderDtoToConvert.getHistory().stream()
                 .map(history -> modelMapper.map(history, OrderHistory.class))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         Order convertedToOrder = Order.builder()
                 .id(orderDtoToConvert.getId())
@@ -109,12 +110,7 @@ public class CustomModelMapper {
                         .map(CustomModelMapper::mapDtoToOrder)
                         .collect(Collectors.toList())
         );
-        convertedToWarehouse.setConnectedWarehouses(
-                warehouseDtoToConvert.getConnectedWarehouses()
-                        .stream()
-                        .map(warehouseDto -> modelMapper.map(warehouseDto, Warehouse.class))
-                        .collect(Collectors.toList())
-        );
+
         convertedToWarehouse.setOrderProcessingPoints(
                 warehouseDtoToConvert.getOrderProcessingPoints()
                         .stream()
@@ -142,12 +138,7 @@ public class CustomModelMapper {
                         .map(CustomModelMapper::mapOrderToDto)
                         .collect(Collectors.toList())
         );
-        convertedToDto.setConnectedWarehouses(
-                warehouseToConvert.getConnectedWarehouses()
-                        .stream()
-                        .map(warehouseDto -> modelMapper.map(warehouseDto, WarehouseDto.class))
-                        .collect(Collectors.toList())
-        );
+
         convertedToDto.setOrderProcessingPoints(
                 warehouseToConvert.getOrderProcessingPoints()
                         .stream()

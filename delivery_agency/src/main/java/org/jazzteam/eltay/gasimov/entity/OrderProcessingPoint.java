@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -15,5 +16,6 @@ import javax.persistence.Table;
 @Table(name = "orderProcessingPoint")
 public class OrderProcessingPoint extends AbstractBuilding {
     @ManyToOne
+    @JoinColumn(name = "warehouseId")
     private Warehouse warehouse;
 }

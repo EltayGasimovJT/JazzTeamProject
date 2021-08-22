@@ -24,6 +24,9 @@ public class User {
     private String surname;
     @ManyToOne
     private AbstractBuilding workingPlace;
-
-    private List<String> roles;
+    @ManyToMany
+    @JoinTable(name = "userRoles", joinColumns = {
+            @JoinColumn(name = "userId")
+    }, inverseJoinColumns = {@JoinColumn(name = "roleId")})
+    private List<UserRoles> roles;
 }

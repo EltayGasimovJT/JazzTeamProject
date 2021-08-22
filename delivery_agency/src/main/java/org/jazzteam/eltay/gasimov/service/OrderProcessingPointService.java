@@ -17,5 +17,4 @@ public interface OrderProcessingPointService {
 
     OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate) throws SQLException;
 
-    void clear();
 }

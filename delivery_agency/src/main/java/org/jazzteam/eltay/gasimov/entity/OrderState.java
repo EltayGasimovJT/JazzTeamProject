@@ -20,8 +20,14 @@ public class OrderState {
     private Long id;
     @Column(name = "state")
     private String state;
-    @ManyToMany(mappedBy = "roles")
-    private Set<String> rolesAllowedWithdrawFromState;
     @ManyToMany
-    private Set<String> rolesAllowedPutToState;
+    @JoinTable(name = "rolesAllowedWithdrawFromState", joinColumns = {
+            @JoinColumn(name = "orderStateId")
+    }, inverseJoinColumns = {@JoinColumn(name = "roleId")})
+    private Set<UserRoles> rolesAllowedWithdrawFromState;
+    @ManyToMany
+    @JoinTable(name = "rolesAllowedPutToState", joinColumns = {
+            @JoinColumn(name = "orderStateId")
+    }, inverseJoinColumns = {@JoinColumn(name = "roleId")})
+    private Set<UserRoles> rolesAllowedPutToState;
 }

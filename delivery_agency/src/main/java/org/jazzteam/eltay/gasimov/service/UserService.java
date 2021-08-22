@@ -19,7 +19,4 @@ public interface UserService {
     User update(UserDto userDtoToUpdate) throws SQLException;
 
     User changeWorkingPlace(UserDto userId, AbstractBuildingDto newWorkingPlace) throws SQLException;
-
-    void clear();
-
 }

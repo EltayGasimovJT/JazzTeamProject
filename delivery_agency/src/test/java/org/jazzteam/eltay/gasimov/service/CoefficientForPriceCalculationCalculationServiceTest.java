@@ -115,7 +115,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.clear();
+
 
         priceCalculationRuleService.save(expectedCoefficientDto);
 
@@ -131,7 +131,6 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     void deletePriceCalculationRule() {
         CoefficientForPriceCalculationDto firstCoefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
-                .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
@@ -139,17 +138,15 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         CoefficientForPriceCalculationDto secondCoefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
-                .id(1L)
                 .countryCoefficient(1.6)
                 .country("Belarus")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.clear();
 
-        priceCalculationRuleService.save(firstCoefficientForPriceCalculationToTest);
+        CoefficientForPriceCalculation save = priceCalculationRuleService.save(firstCoefficientForPriceCalculationToTest);
         priceCalculationRuleService.save(secondCoefficientForPriceCalculationToTest);
 
-        priceCalculationRuleService.delete(firstCoefficientForPriceCalculationToTest.getId());
+        priceCalculationRuleService.delete(save.getId());
 
         int expectedSize = 1;
 
@@ -167,7 +164,6 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.clear();
 
         priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
@@ -187,7 +183,6 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.clear();
 
         priceCalculationRuleService.save(expectedCoefficientDto);
 
@@ -207,7 +202,6 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
-        priceCalculationRuleService.clear();
 
         priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 

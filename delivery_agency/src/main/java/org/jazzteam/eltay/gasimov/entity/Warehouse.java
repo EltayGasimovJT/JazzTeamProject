@@ -17,5 +17,4 @@ import java.util.List;
 public class Warehouse extends AbstractBuilding {
     @OneToMany
     private List<OrderProcessingPoint> orderProcessingPoints;
-    private List<Warehouse> connectedWarehouses;
 }

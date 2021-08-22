@@ -38,11 +38,7 @@ public interface OrderService {
 
    BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException, SQLException;
 
-   List<List<Order>> getOrdersOnTheWay();
-
    Order update(OrderDto orderDtoToUpdate) throws SQLException;
 
    void delete(Long idForDelete);
-
-   void clear();
 }

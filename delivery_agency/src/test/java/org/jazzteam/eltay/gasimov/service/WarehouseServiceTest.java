@@ -1,3 +1,4 @@
+/*
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.*;
@@ -62,7 +63,6 @@ class WarehouseServiceTest {
                 new OrderProcessingPointDto()
         ));
         warehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
-        warehouseService.clear();
         warehouseService.save(warehouseToTest);
 
         String actual = warehouseService.findOne(warehouseToTest.getId()).getLocation();
@@ -100,7 +100,6 @@ class WarehouseServiceTest {
         thirdWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        warehouseService.clear();
 
         warehouseService.save(firstWarehouseToTest);
         warehouseService.save(secondWarehouseToTest);
@@ -142,7 +141,6 @@ class WarehouseServiceTest {
         thirdWarehouse.setDispatchedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
         thirdWarehouse.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
         thirdWarehouse.setLocation("Moscow");
-        warehouseService.clear();
 
         warehouseService.save(firstWarehouseToTest);
         warehouseService.save(secondWarehouse);
@@ -168,7 +166,6 @@ class WarehouseServiceTest {
                 new OrderProcessingPointDto()
         ));
         warehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
-        warehouseService.clear();
 
         warehouseService.save(warehouseToTest);
 
@@ -189,7 +186,6 @@ class WarehouseServiceTest {
         expectedDto.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        warehouseService.clear();
 
         warehouseService.save(expectedDto);
 
@@ -207,3 +203,4 @@ class WarehouseServiceTest {
         Assertions.assertEquals(expectedDto, actualDto);
     }
 }
+*/

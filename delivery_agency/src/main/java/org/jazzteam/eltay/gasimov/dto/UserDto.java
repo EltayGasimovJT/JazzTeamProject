@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jazzteam.eltay.gasimov.entity.UserRoles;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -25,5 +26,5 @@ public class UserDto {
     @NotEmpty(message = "User must have working place")
     private AbstractBuildingDto workingPlace;
     @NotEmpty(message = "User must have at least one role")
-    private List<String> roles;
+    private List<UserRoles> roles;
 }

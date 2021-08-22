@@ -1,6 +1,7 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.VoyageDto;
+import org.jazzteam.eltay.gasimov.entity.User;
 import org.jazzteam.eltay.gasimov.entity.Voyage;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.jazzteam.eltay.gasimov.service.VoyageService;
 import org.jazzteam.eltay.gasimov.validator.VoyageValidator;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service(value = "voyageService")
@@ -37,8 +39,10 @@ public class VoyageServiceImpl implements VoyageService {
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
-        VoyageValidator.validateVoyage(voyageRepository.findOne(idForDelete));
-        voyageRepository.delete(idForDelete);
+        Optional<Voyage> foundClientFromRepository = voyageRepository.findById(idForDelete);
+        Voyage foundVoyage = foundClientFromRepository.orElseGet(Voyage::new);
+        VoyageValidator.validateVoyage(foundVoyage);
+        voyageRepository.deleteById(idForDelete);
     }
 
     @Override
@@ -50,7 +54,8 @@ public class VoyageServiceImpl implements VoyageService {
 
     @Override
     public Voyage findOne(long idForSearch) throws IllegalArgumentException {
-        Voyage foundVoyage = voyageRepository.findOne(idForSearch);
+        Optional<Voyage> foundClientFromRepository = voyageRepository.findById(idForSearch);
+        Voyage foundVoyage = foundClientFromRepository.orElseGet(Voyage::new);
         VoyageValidator.validateVoyage(foundVoyage);
 
         return foundVoyage;
@@ -65,11 +70,6 @@ public class VoyageServiceImpl implements VoyageService {
         voyageToUpdate.setDeparturePoint(voyage.getDeparturePoint());
         VoyageValidator.validateVoyage(voyageToUpdate);
 
-        return voyageRepository.update(voyageToUpdate);
-    }
-
-    @Override
-    public void clear() {
-        voyageRepository.clear();
+        return voyageRepository.save(voyageToUpdate);
     }
 }

@@ -26,7 +26,7 @@ public class Client {
     private String passportId;
     @Column(name = "phoneNumber")
     private String phoneNumber;
-    @OneToMany(mappedBy = "clients", cascade = CascadeType.ALL, fetch = FetchType.LAZY,
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY,
             orphanRemoval = true)
     private Set<Order> orders;
 }

@@ -1,6 +1,7 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
+import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
@@ -12,6 +13,7 @@ import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
 import org.jazzteam.eltay.gasimov.validator.OrderProcessingPointValidator;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service(value = "orderProcessingPointService")
@@ -38,8 +40,10 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
-        OrderProcessingPointValidator.validateProcessingPoint(orderProcessingPointRepository.findOne(idForDelete));
-        orderProcessingPointRepository.delete(idForDelete);
+        Optional<OrderProcessingPoint> foundClientFromRepository = orderProcessingPointRepository.findById(idForDelete);
+        OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
+        OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
+        orderProcessingPointRepository.deleteById(idForDelete);
     }
 
     @Override
@@ -51,14 +55,17 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
 
     @Override
     public OrderProcessingPoint findOne(long idForSearch) throws IllegalArgumentException {
-        OrderProcessingPoint foundProcessingPoint = orderProcessingPointRepository.findOne(idForSearch);
+        Optional<OrderProcessingPoint> foundClientFromRepository = orderProcessingPointRepository.findById(idForSearch);
+        OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
         OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
         return foundProcessingPoint;
     }
 
     @Override
     public OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate) throws IllegalArgumentException {
-        OrderProcessingPointValidator.validateProcessingPoint(orderProcessingPointRepository.findOne(processingPointDtoToUpdate.getId()));
+        Optional<OrderProcessingPoint> foundClientFromRepository = orderProcessingPointRepository.findById(processingPointDtoToUpdate.getId());
+        OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
+        OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
         OrderProcessingPoint orderProcessingPointUpdate = new OrderProcessingPoint();
         orderProcessingPointUpdate.setId(processingPointDtoToUpdate.getId());
         orderProcessingPointUpdate.setLocation(processingPointDtoToUpdate.getLocation());
@@ -69,12 +76,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         orderProcessingPointUpdate.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
                 .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList()));
-        return orderProcessingPointRepository.update(orderProcessingPointUpdate);
-    }
-
-    @Override
-    public void clear() {
-        orderProcessingPointRepository.clear();
+        return orderProcessingPointRepository.save(orderProcessingPointUpdate);
     }
 
 }
