@@ -1,7 +1,9 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
+import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
+import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.entity.*;
 import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
@@ -31,9 +33,9 @@ public class UserServiceImpl implements UserService {
                 .surname(userDtoToSave.getSurname())
                 .roles(userDtoToSave.getRoles())
                 .build();
-        if (userDtoToSave.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.PROCESSING_POINT)) {
+        if (userDtoToSave.getWorkingPlace().equals(WorkingPlaceType.PROCESSING_POINT)) {
             userToSave.setWorkingPlace(modelMapper.map(userDtoToSave.getWorkingPlace(), OrderProcessingPoint.class));
-        } else if (userDtoToSave.getWorkingPlace().getWorkingPlaceType().equals(WorkingPlaceType.WAREHOUSE)) {
+        } else if (userDtoToSave.getWorkingPlace().equals(WorkingPlaceType.WAREHOUSE)) {
             userToSave.setWorkingPlace(modelMapper.map(userDtoToSave.getWorkingPlace(), Warehouse.class));
         }
 
@@ -74,7 +76,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User changeWorkingPlace(UserDto userToUpdate, AbstractBuildingDto newWorkingPlace) throws SQLException, IllegalArgumentException {
-        userToUpdate.setWorkingPlace(newWorkingPlace);
+        if (newWorkingPlace instanceof OrderProcessingPointDto) {
+            userToUpdate.setWorkingPlace(WorkingPlaceType.PROCESSING_POINT);
+        } else if (newWorkingPlace instanceof WarehouseDto) {
+            userToUpdate.setWorkingPlace(WorkingPlaceType.WAREHOUSE);
+        }
 
         return update(userToUpdate);
     }

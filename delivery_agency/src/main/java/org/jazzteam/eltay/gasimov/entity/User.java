@@ -22,9 +22,9 @@ public class User {
     private String name;
     @Column(name = "surname")
     private String surname;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private AbstractBuilding workingPlace;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "userRoles", joinColumns = {
             @JoinColumn(name = "userId")
     }, inverseJoinColumns = {@JoinColumn(name = "roleId")})

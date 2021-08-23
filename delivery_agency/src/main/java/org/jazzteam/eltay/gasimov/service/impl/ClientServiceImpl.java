@@ -12,6 +12,7 @@ import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.validator.ClientValidator;
 
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -77,9 +78,12 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> foundClientFromRepo = clientRepository.findById(newClient.getId());
         Client foundClient = foundClientFromRepo.orElseGet(Client::new);
         ClientValidator.validateClient(foundClient);
-        Set<Order> clientOrdersToUpdate = newClient.getOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toSet());
+        Set<Order> clientOrdersToUpdate = new HashSet<>();
+        if (newClient.getOrders() != null) {
+            clientOrdersToUpdate = newClient.getOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toSet());
+        }
 
         Client clientToUpdate = Client.builder()
                 .id(newClient.getId())

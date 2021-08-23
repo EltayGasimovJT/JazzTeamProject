@@ -16,6 +16,7 @@ import java.util.Calendar;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderHistoryDto {
+    private Long id;
     @NotEmpty(message = "OrderHistory must have user, who worked with")
     private UserDto user;
     @NotBlank(message = "Comment cannot be null")

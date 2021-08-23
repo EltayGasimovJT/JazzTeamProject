@@ -39,5 +39,6 @@ public class Order {
     @JoinColumn(name = "currentLocationId")
     private AbstractBuilding currentLocation;
     @OneToMany
+    @JoinColumn
     private Set<OrderHistory> history;
 }

@@ -5,48 +5,51 @@ import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 public class CoefficientForPriceCalculationController {
     @Autowired
     private CoefficientForPriceCalculationService calculationService;
 
-    @PostMapping(path = "/addCoefficient")
+    @PostMapping(path = "/coefficients")
     public @ResponseBody
-    String addNewUser(@RequestParam String country
-            , @RequestParam Double countryCoefficient
-            , @RequestParam Integer parcelSizeLimit
-            , Map<String, Object> model) throws SQLException {
+    CoefficientForPriceCalculation addNewCoefficient(@RequestBody CoefficientForPriceCalculationDto coefficient) throws SQLException {
 
         CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto
                 .builder()
-                .country(country)
-                .countryCoefficient(countryCoefficient)
-                .parcelSizeLimit(parcelSizeLimit)
+                .country(coefficient.getCountry())
+                .countryCoefficient(coefficient.getCountryCoefficient())
+                .parcelSizeLimit(coefficient.getParcelSizeLimit())
                 .build();
 
-        calculationService.save(coefficientToSave);
-
-        List<CoefficientForPriceCalculation> all = calculationService.findAll();
-        model.put("coefficients", all);
-
-        return calculationService.findAll().toString();
+        return calculationService.save(coefficientToSave);
     }
 
     @GetMapping(path = "/coefficients")
     public @ResponseBody
-    Iterable<CoefficientForPriceCalculation> getAllUsers() throws SQLException {
+    Iterable<CoefficientForPriceCalculation> findAllCoefficients() throws SQLException {
         return calculationService.findAll();
     }
 
-    @GetMapping(path = "/addCoefficient")
-    public ModelAndView getSaved(){
-        return new ModelAndView("saved");
+    @DeleteMapping(path = "/coefficients/{id}")
+    public void deleteCoefficient(@PathVariable Long id) throws SQLException {
+        calculationService.delete(id);
+    }
 
+    @PutMapping("/coefficients")
+    public CoefficientForPriceCalculation updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) throws SQLException {
+        if (calculationService.findOne(newCoefficient.getId()) == null) {
+            return calculationService.save(newCoefficient);
+        } else {
+            CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto.builder()
+                    .id(newCoefficient.getId())
+                    .country(newCoefficient.getCountry())
+                    .countryCoefficient(newCoefficient.getCountryCoefficient())
+                    .parcelSizeLimit(newCoefficient.getParcelSizeLimit())
+                    .build();
+            return calculationService.update(coefficientToSave);
+        }
     }
 }

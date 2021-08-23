@@ -3,7 +3,6 @@ package org.jazzteam.eltay.gasimov.mapping;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -70,9 +69,9 @@ public class CustomModelMapper {
                 .roles(userToConvert.getRoles())
                 .build();
         if (userToConvert.getWorkingPlace() instanceof OrderProcessingPoint) {
-            convertedToDto.setWorkingPlace(modelMapper.map(userToConvert.getWorkingPlace(), OrderProcessingPointDto.class));
+            convertedToDto.setWorkingPlace(WorkingPlaceType.PROCESSING_POINT);
         } else if (userToConvert.getWorkingPlace() instanceof Warehouse) {
-            convertedToDto.setWorkingPlace(modelMapper.map(userToConvert.getWorkingPlace(), WarehouseDto.class));
+            convertedToDto.setWorkingPlace(WorkingPlaceType.WAREHOUSE);
         }
         return convertedToDto;
     }
@@ -84,9 +83,9 @@ public class CustomModelMapper {
                 .surname(userDtoToConvert.getSurname())
                 .roles(userDtoToConvert.getRoles())
                 .build();
-        if (userDtoToConvert.getWorkingPlace() instanceof OrderProcessingPointDto) {
+        if (userDtoToConvert.getWorkingPlace().equals(WorkingPlaceType.PROCESSING_POINT)) {
             convertedToUser.setWorkingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class));
-        } else if (userDtoToConvert.getWorkingPlace() instanceof WarehouseDto) {
+        } else if (userDtoToConvert.getWorkingPlace().equals(WorkingPlaceType.WAREHOUSE)) {
             convertedToUser.setWorkingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), Warehouse.class));
         }
         return convertedToUser;

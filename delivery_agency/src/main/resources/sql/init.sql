@@ -169,7 +169,7 @@ CREATE TABLE rolesAllowedPutToState
     roleId        bigint NOT NULL,
     PRIMARY KEY (orderStateId, roleId),
     CONSTRAINT
-        FOREIGN KEY (orderStateId) REFERENCES order_state (id) ON UPDATE CASCADE ON DELETE CASCADE,
+        FOREIGN KEY (orderStateId) REFERENCES orderState (id) ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT
         FOREIGN KEY (roleId) REFERENCES roles (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
