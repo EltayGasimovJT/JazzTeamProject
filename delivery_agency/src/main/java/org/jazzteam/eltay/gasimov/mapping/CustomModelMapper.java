@@ -13,7 +13,8 @@ import java.util.stream.Collectors;
 public class CustomModelMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 
-    private CustomModelMapper(){}
+    private CustomModelMapper() {
+    }
 
     public static OrderDto mapOrderToDto(Order orderToConvert) {
         List<OrderHistoryDto> historiesToConvert = orderToConvert.getHistory().stream()
@@ -95,27 +96,32 @@ public class CustomModelMapper {
         Warehouse convertedToWarehouse = new Warehouse();
         convertedToWarehouse.setId(warehouseDtoToConvert.getId());
         convertedToWarehouse.setLocation(warehouseDtoToConvert.getLocation());
-        convertedToWarehouse.setWorkingPlaceType(warehouseDtoToConvert.getWorkingPlaceType());
-        convertedToWarehouse.setDispatchedOrders(
-                warehouseDtoToConvert
-                        .getDispatchedOrders()
-                        .stream()
-                        .map(CustomModelMapper::mapDtoToOrder)
-                        .collect(Collectors.toList()));
-        convertedToWarehouse.setExpectedOrders(
-                warehouseDtoToConvert
-                        .getExpectedOrders()
-                        .stream()
-                        .map(CustomModelMapper::mapDtoToOrder)
-                        .collect(Collectors.toList())
-        );
-
-        convertedToWarehouse.setOrderProcessingPoints(
-                warehouseDtoToConvert.getOrderProcessingPoints()
-                        .stream()
-                        .map(processingPointToConvert -> modelMapper.map(processingPointToConvert, OrderProcessingPoint.class))
-                        .collect(Collectors.toList())
-        );
+        convertedToWarehouse.setWorkingPlaceType(warehouseDtoToConvert.getWorkingPlaceType().toString());
+        if (warehouseDtoToConvert.getDispatchedOrders() != null) {
+            convertedToWarehouse.setDispatchedOrders(
+                    warehouseDtoToConvert
+                            .getDispatchedOrders()
+                            .stream()
+                            .map(CustomModelMapper::mapDtoToOrder)
+                            .collect(Collectors.toList()));
+        }
+        if (warehouseDtoToConvert.getExpectedOrders() != null) {
+            convertedToWarehouse.setExpectedOrders(
+                    warehouseDtoToConvert
+                            .getExpectedOrders()
+                            .stream()
+                            .map(CustomModelMapper::mapDtoToOrder)
+                            .collect(Collectors.toList())
+            );
+        }
+        if (warehouseDtoToConvert.getOrderProcessingPoints() != null) {
+            convertedToWarehouse.setOrderProcessingPoints(
+                    warehouseDtoToConvert.getOrderProcessingPoints()
+                            .stream()
+                            .map(processingPointToConvert -> modelMapper.map(processingPointToConvert, OrderProcessingPoint.class))
+                            .collect(Collectors.toList())
+            );
+        }
         return convertedToWarehouse;
     }
 
@@ -123,7 +129,7 @@ public class CustomModelMapper {
         WarehouseDto convertedToDto = new WarehouseDto();
         convertedToDto.setId(warehouseToConvert.getId());
         convertedToDto.setLocation(warehouseToConvert.getLocation());
-        convertedToDto.setWorkingPlaceType(warehouseToConvert.getWorkingPlaceType());
+        convertedToDto.setWorkingPlaceType(WorkingPlaceType.valueOf(warehouseToConvert.getWorkingPlaceType()));
         convertedToDto.setDispatchedOrders(
                 warehouseToConvert
                         .getDispatchedOrders()

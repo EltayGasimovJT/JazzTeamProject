@@ -18,20 +18,20 @@ public class VoyageController {
 
     @PostMapping(path = "/voyages")
     public @ResponseBody
-    VoyageDto addNewCoefficient(@RequestBody VoyageDto voyageDto) throws SQLException {
+    VoyageDto addNewVoyage(@RequestBody VoyageDto voyageDto) throws SQLException {
         return modelMapper.map(voyageService.save(voyageDto), VoyageDto.class);
     }
 
     @GetMapping(path = "/voyages")
     public @ResponseBody
-    Iterable<VoyageDto> findAllCoefficients() throws SQLException {
+    Iterable<VoyageDto> findAllVoyages() throws SQLException {
         return voyageService.findAll().stream()
                 .map(orderProcessingPoint -> modelMapper.map(orderProcessingPoint, VoyageDto.class))
                 .collect(Collectors.toSet());
     }
 
     @DeleteMapping(path = "/voyages/{id}")
-    public void deleteCoefficient(@PathVariable Long id) throws SQLException {
+    public void deleteVoyage(@PathVariable Long id) throws SQLException {
         voyageService.delete(id);
     }
 
@@ -42,7 +42,7 @@ public class VoyageController {
     }
 
     @PutMapping("/voyages")
-    public VoyageDto updateCoefficient(@RequestBody VoyageDto newVoyage) throws SQLException {
+    public VoyageDto updateVoyage(@RequestBody VoyageDto newVoyage) throws SQLException {
         if (voyageService.findOne(newVoyage.getId()) == null) {
             return modelMapper.map(voyageService.save(newVoyage), VoyageDto.class);
         } else {

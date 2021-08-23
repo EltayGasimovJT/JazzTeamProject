@@ -14,7 +14,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "abstractBuilding")
 public abstract class AbstractBuilding extends AbstractLocation {
-    @Column(name = "location")
+    @Column(name = "location", unique = true)
     private String location;
-    private WorkingPlaceType workingPlaceType;
+    @Column(name = "working_place_type")
+    private String workingPlaceType;
 }

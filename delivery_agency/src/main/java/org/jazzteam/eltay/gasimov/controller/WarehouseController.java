@@ -18,20 +18,20 @@ public class WarehouseController {
 
     @PostMapping(path = "/warehouses")
     public @ResponseBody
-    WarehouseDto addNewCoefficient(@RequestBody WarehouseDto warehouseDto) throws SQLException {
+    WarehouseDto addNewWarehouse(@RequestBody WarehouseDto warehouseDto) throws SQLException {
         return modelMapper.map(warehouseService.save(warehouseDto), WarehouseDto.class);
     }
 
     @GetMapping(path = "/warehouses")
     public @ResponseBody
-    Iterable<WarehouseDto> findAllCoefficients() throws SQLException {
+    Iterable<WarehouseDto> findAllWarehouses() throws SQLException {
         return warehouseService.findAll().stream()
                 .map(orderProcessingPoint -> modelMapper.map(orderProcessingPoint, WarehouseDto.class))
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
     }
 
     @DeleteMapping(path = "/warehouses/{id}")
-    public void deleteCoefficient(@PathVariable Long id) {
+    public void deleteWarehouse(@PathVariable Long id) {
         warehouseService.delete(id);
     }
 

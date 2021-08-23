@@ -18,20 +18,20 @@ public class OrderProcessingPointController {
 
     @PostMapping(path = "/processingPoints")
     public @ResponseBody
-    OrderProcessingPointDto addNewCoefficient(@RequestBody OrderProcessingPointDto processingPointDto) throws SQLException {
+    OrderProcessingPointDto addNewProcessingPoint(@RequestBody OrderProcessingPointDto processingPointDto) throws SQLException {
         return modelMapper.map(processingPointService.save(processingPointDto), OrderProcessingPointDto.class);
     }
 
     @GetMapping(path = "/processingPoints")
     public @ResponseBody
-    Iterable<OrderProcessingPointDto> findAllCoefficients() throws SQLException {
+    Iterable<OrderProcessingPointDto> findAllProcessingPoints() throws SQLException {
         return processingPointService.findAll().stream()
                 .map(orderProcessingPoint -> modelMapper.map(orderProcessingPoint, OrderProcessingPointDto.class))
                 .collect(Collectors.toSet());
     }
 
     @DeleteMapping(path = "/processingPoints/{id}")
-    public void deleteCoefficient(@PathVariable Long id) throws SQLException {
+    public void deleteProcessingPoint(@PathVariable Long id) throws SQLException {
         processingPointService.delete(id);
     }
 
@@ -42,7 +42,7 @@ public class OrderProcessingPointController {
     }
 
     @PutMapping("/processingPoints")
-    public OrderProcessingPointDto updateCoefficient(@RequestBody OrderProcessingPointDto newProcessingPoint) throws SQLException {
+    public OrderProcessingPointDto updateProcessingPoint(@RequestBody OrderProcessingPointDto newProcessingPoint) throws SQLException {
         if (processingPointService.findOne(newProcessingPoint.getId()) == null) {
             return modelMapper.map(processingPointService.save(newProcessingPoint), OrderProcessingPointDto.class);
         } else {

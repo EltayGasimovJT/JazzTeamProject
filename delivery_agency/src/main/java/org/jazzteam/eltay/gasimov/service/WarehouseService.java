@@ -15,5 +15,7 @@ public interface WarehouseService {
 
     Warehouse findOne(long idForSearch) throws SQLException;
 
+    Warehouse findByLocation(String idForSearch) throws SQLException;
+
     Warehouse update(WarehouseDto warehouseDtoToUpdate) throws SQLException;
 }

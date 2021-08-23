@@ -13,18 +13,18 @@ import java.util.Calendar;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "orderHistory")
+@Table
 public class OrderHistory {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn
     private User user;
-    @Column(name = "comment")
+    @Column
     private String comment;
-    @Column(name = "changedAt")
+    @Column
     private Calendar changedAt;
-    @Column(name = "changeType")
+    @Column
     private String changedTypeEnum;
 }

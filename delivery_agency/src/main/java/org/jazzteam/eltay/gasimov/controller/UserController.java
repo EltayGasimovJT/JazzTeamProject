@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/users/{id}")
-    public void deleteCoefficient(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long id) {
         userService.delete(id);
     }
 
@@ -44,7 +44,7 @@ public class UserController {
 
     @PutMapping("/users")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public User replaceEmployee(@RequestBody UserDto newUser) throws SQLException {
+    public User updateUser(@RequestBody UserDto newUser) throws SQLException {
         if (userService.findOne(newUser.getId()) == null) {
             return userService.save(newUser);
         } else {

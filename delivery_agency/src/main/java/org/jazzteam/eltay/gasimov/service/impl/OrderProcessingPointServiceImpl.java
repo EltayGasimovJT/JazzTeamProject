@@ -1,17 +1,18 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
-import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
+import org.jazzteam.eltay.gasimov.repository.OrderProcessingPointRepository;
+import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
+import org.jazzteam.eltay.gasimov.service.WarehouseService;
+import org.jazzteam.eltay.gasimov.validator.OrderProcessingPointValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.jazzteam.eltay.gasimov.repository.OrderProcessingPointRepository;
-import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
-import org.jazzteam.eltay.gasimov.validator.OrderProcessingPointValidator;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -21,17 +22,20 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     @Autowired
     private OrderProcessingPointRepository orderProcessingPointRepository;
     @Autowired
+    private WarehouseService warehouseService;
+    @Autowired
     private ModelMapper modelMapper;
 
 
     @Override
-    public OrderProcessingPoint save(OrderProcessingPointDto processingPointDtoToSave) throws IllegalArgumentException {
+    public OrderProcessingPoint save(OrderProcessingPointDto processingPointDtoToSave) throws IllegalArgumentException, SQLException {
         OrderProcessingPoint orderProcessingPointToSave = new OrderProcessingPoint();
         orderProcessingPointToSave.setId(processingPointDtoToSave.getId());
         orderProcessingPointToSave.setLocation(processingPointDtoToSave.getLocation());
-        Warehouse warehouseToSave = new Warehouse();
-        warehouseToSave.setId(processingPointDtoToSave.getWarehouse().getId());
-        warehouseToSave.setLocation(processingPointDtoToSave.getWarehouse().getLocation());
+        orderProcessingPointToSave.setWorkingPlaceType(processingPointDtoToSave.getWorkingPlaceType().toString());
+        String location = processingPointDtoToSave.getLocation();
+        String[] splitLocation = location.split("-");
+        Warehouse warehouseToSave = warehouseService.findByLocation(splitLocation[1]);
         orderProcessingPointToSave.setWarehouse(warehouseToSave);
         OrderProcessingPointValidator.validateOnSave(orderProcessingPointToSave);
 

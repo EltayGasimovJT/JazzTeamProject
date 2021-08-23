@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
@@ -15,6 +16,6 @@ import java.util.List;
 @Entity
 @Table(name = "warehouse")
 public class Warehouse extends AbstractBuilding {
-    @OneToMany
+    @OneToMany(mappedBy = "warehouse", fetch = FetchType.EAGER)
     private List<OrderProcessingPoint> orderProcessingPoints;
 }

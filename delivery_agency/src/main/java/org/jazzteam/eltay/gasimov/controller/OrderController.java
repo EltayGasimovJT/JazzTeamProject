@@ -17,38 +17,38 @@ public class OrderController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = "/clients")
+    @PostMapping(path = "/orders")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    OrderDto addNewUser(@RequestBody OrderDto orderDtoToSave) throws SQLException {
+    OrderDto addNewOrder(@RequestBody OrderDto orderDtoToSave) throws SQLException {
 
         return modelMapper.map(orderService.save(orderDtoToSave), OrderDto.class);
     }
 
-    @GetMapping(path = "/clients/{id}")
+    @GetMapping(path = "/orders/{id}")
     public @ResponseBody
     OrderDto findById(@PathVariable Long id) throws SQLException {
         return modelMapper.map(orderService.findOne(id), OrderDto.class);
     }
 
-    @GetMapping(path = "/clients")
+    @GetMapping(path = "/orders")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<OrderDto> findAllUsers() throws SQLException {
+    Iterable<OrderDto> findAllOrders() throws SQLException {
         return orderService.findAll()
                 .stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toSet());
     }
 
-    @DeleteMapping(path = "/clients/{id}")
-    public void deleteCoefficient(@PathVariable Long id) {
+    @DeleteMapping(path = "/orders/{id}")
+    public void deleteOrder(@PathVariable Long id) {
         orderService.delete(id);
     }
 
-    @PutMapping("/clients")
+    @PutMapping("/orders")
     @ResponseStatus(HttpStatus.OK)
-    public OrderDto replaceEmployee(@RequestBody OrderDto newOrder) throws SQLException {
+    public OrderDto updateOrder(@RequestBody OrderDto newOrder) throws SQLException {
         if (orderService.findOne(newOrder.getId()) == null) {
             return modelMapper.map(orderService.save(newOrder), OrderDto.class);
         } else {

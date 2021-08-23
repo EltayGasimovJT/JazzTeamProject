@@ -2,7 +2,6 @@ package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
-import org.jazzteam.eltay.gasimov.entity.Voyage;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.WarehouseRepository;
@@ -12,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -54,6 +54,13 @@ public class WarehouseServiceImpl implements WarehouseService {
         WarehouseValidator.validateWarehouse(foundWarehouse);
 
         return foundWarehouse;
+    }
+
+    @Override
+    public Warehouse findByLocation(String locationForSearch) throws SQLException {
+        Warehouse foundWarehouseFromRepository = warehouseRepository.findByLocation(locationForSearch);
+        WarehouseValidator.validateWarehouse(foundWarehouseFromRepository);
+        return foundWarehouseFromRepository;
     }
 
     @Override

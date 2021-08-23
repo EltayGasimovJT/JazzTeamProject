@@ -20,7 +20,7 @@ public class ClientController {
     @PostMapping(path = "/clients")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    Client addNewUser(@RequestBody ClientDto clientToSave) throws SQLException {
+    Client addNewClient(@RequestBody ClientDto clientToSave) throws SQLException {
 
         return clientService.save(clientToSave);
     }
@@ -34,18 +34,18 @@ public class ClientController {
     @GetMapping(path = "/clients")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<Client> findAllUsers() {
+    Iterable<Client> findAllClients() {
         return clientService.findAll();
     }
 
     @DeleteMapping(path = "/clients/{id}")
-    public void deleteCoefficient(@PathVariable Long id) {
+    public void deleteClient(@PathVariable Long id) {
         clientService.delete(id);
     }
 
     @PutMapping("/clients")
     @ResponseStatus(HttpStatus.OK)
-    public Client replaceEmployee(@RequestBody ClientDto newClient) throws SQLException {
+    public Client updateClient(@RequestBody ClientDto newClient) throws SQLException {
         if (clientService.findById(newClient.getId()) == null) {
             return clientService.save(newClient);
         } else {
