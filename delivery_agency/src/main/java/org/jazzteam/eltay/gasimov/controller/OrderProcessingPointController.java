@@ -35,6 +35,12 @@ public class OrderProcessingPointController {
         processingPointService.delete(id);
     }
 
+    @GetMapping(path = "/processingPoints/{id}")
+    public @ResponseBody
+    OrderProcessingPointDto findById(@PathVariable Long id) throws SQLException {
+        return modelMapper.map(processingPointService.findOne(id), OrderProcessingPointDto.class);
+    }
+
     @PutMapping("/processingPoints")
     public OrderProcessingPointDto updateCoefficient(@RequestBody OrderProcessingPointDto newProcessingPoint) throws SQLException {
         if (processingPointService.findOne(newProcessingPoint.getId()) == null) {

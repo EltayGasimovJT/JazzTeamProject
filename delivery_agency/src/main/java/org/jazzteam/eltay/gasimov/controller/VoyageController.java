@@ -35,6 +35,12 @@ public class VoyageController {
         voyageService.delete(id);
     }
 
+    @GetMapping(path = "/voyages/{id}")
+    public @ResponseBody
+    VoyageDto findById(@PathVariable Long id) throws SQLException {
+        return modelMapper.map(voyageService.findOne(id), VoyageDto.class);
+    }
+
     @PutMapping("/voyages")
     public VoyageDto updateCoefficient(@RequestBody VoyageDto newVoyage) throws SQLException {
         if (voyageService.findOne(newVoyage.getId()) == null) {

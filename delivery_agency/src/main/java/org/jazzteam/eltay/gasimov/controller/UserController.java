@@ -3,6 +3,7 @@ package org.jazzteam.eltay.gasimov.controller;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.entity.User;
 import org.jazzteam.eltay.gasimov.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.SQLException;
 
 @RestController
-public class UserRoles {
+public class UserController {
     @Autowired
     private UserService userService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping(path = "/users")
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,6 +34,12 @@ public class UserRoles {
     @DeleteMapping(path = "/users/{id}")
     public void deleteCoefficient(@PathVariable Long id) {
         userService.delete(id);
+    }
+
+    @GetMapping(path = "/users/{id}")
+    public @ResponseBody
+    UserDto findById(@PathVariable Long id) throws SQLException {
+        return modelMapper.map(userService.findOne(id), UserDto.class);
     }
 
     @PutMapping("/users")

@@ -31,7 +31,7 @@ public class WarehouseController {
     }
 
     @DeleteMapping(path = "/warehouses/{id}")
-    public void deleteCoefficient(@PathVariable Long id) throws SQLException {
+    public void deleteCoefficient(@PathVariable Long id) {
         warehouseService.delete(id);
     }
 
@@ -42,5 +42,11 @@ public class WarehouseController {
         } else {
             return modelMapper.map(warehouseService.update(newWarehouse), WarehouseDto.class);
         }
+    }
+
+    @GetMapping(path = "/warehouses/{id}")
+    public @ResponseBody
+    WarehouseDto findById(@PathVariable Long id) throws SQLException {
+        return modelMapper.map(warehouseService.findOne(id), WarehouseDto.class);
     }
 }

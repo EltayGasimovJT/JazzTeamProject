@@ -1,21 +1,24 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
-import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.stream.Collectors;
 
 @RestController
 public class CoefficientForPriceCalculationController {
     @Autowired
     private CoefficientForPriceCalculationService calculationService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping(path = "/coefficients")
     public @ResponseBody
-    CoefficientForPriceCalculation addNewCoefficient(@RequestBody CoefficientForPriceCalculationDto coefficient) throws SQLException {
+    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody CoefficientForPriceCalculationDto coefficient) throws SQLException {
 
         CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto
                 .builder()
@@ -24,13 +27,21 @@ public class CoefficientForPriceCalculationController {
                 .parcelSizeLimit(coefficient.getParcelSizeLimit())
                 .build();
 
-        return calculationService.save(coefficientToSave);
+        return modelMapper.map(calculationService.save(coefficientToSave), CoefficientForPriceCalculationDto.class);
+    }
+
+    @GetMapping(path = "/coefficients/{id}")
+    public @ResponseBody
+    CoefficientForPriceCalculationDto findById(@PathVariable Long id) throws SQLException {
+        return modelMapper.map(calculationService.findOne(id), CoefficientForPriceCalculationDto.class);
     }
 
     @GetMapping(path = "/coefficients")
     public @ResponseBody
-    Iterable<CoefficientForPriceCalculation> findAllCoefficients() throws SQLException {
-        return calculationService.findAll();
+    Iterable<CoefficientForPriceCalculationDto> findAll() throws SQLException {
+        return calculationService.findAll().stream()
+                .map(coefficient -> modelMapper.map(coefficient, CoefficientForPriceCalculationDto.class))
+                .collect(Collectors.toSet());
     }
 
     @DeleteMapping(path = "/coefficients/{id}")
@@ -39,9 +50,9 @@ public class CoefficientForPriceCalculationController {
     }
 
     @PutMapping("/coefficients")
-    public CoefficientForPriceCalculation updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) throws SQLException {
+    public CoefficientForPriceCalculationDto updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) throws SQLException {
         if (calculationService.findOne(newCoefficient.getId()) == null) {
-            return calculationService.save(newCoefficient);
+            return modelMapper.map(calculationService.save(newCoefficient), CoefficientForPriceCalculationDto.class);
         } else {
             CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto.builder()
                     .id(newCoefficient.getId())
@@ -49,7 +60,7 @@ public class CoefficientForPriceCalculationController {
                     .countryCoefficient(newCoefficient.getCountryCoefficient())
                     .parcelSizeLimit(newCoefficient.getParcelSizeLimit())
                     .build();
-            return calculationService.update(coefficientToSave);
+            return modelMapper.map(calculationService.update(coefficientToSave), CoefficientForPriceCalculationDto.class);
         }
     }
 }
