@@ -1,9 +1,6 @@
 package org.jazzteam.eltay.gasimov.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -12,6 +9,6 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class OrderProcessingPointDto extends AbstractBuildingDto {
     @NotEmpty(message = "Warehouse which connected with processing point cannot be empty")
-    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private WarehouseDto warehouse;
 }
