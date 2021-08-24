@@ -59,6 +59,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order save(OrderDto orderDtoToSave) throws SQLException, IllegalArgumentException {
+        OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
+
         BigDecimal price = calculatePrice(orderDtoToSave);
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         orderDtoToSave.setPrice(price);

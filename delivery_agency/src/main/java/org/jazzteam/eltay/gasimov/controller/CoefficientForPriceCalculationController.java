@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.sql.SQLException;
 import java.util.stream.Collectors;
 
@@ -18,8 +19,7 @@ public class CoefficientForPriceCalculationController {
 
     @PostMapping(path = "/coefficients")
     public @ResponseBody
-    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody CoefficientForPriceCalculationDto coefficient) throws SQLException {
-
+    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficient) throws SQLException, IllegalArgumentException {
         CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto
                 .builder()
                 .country(coefficient.getCountry())
