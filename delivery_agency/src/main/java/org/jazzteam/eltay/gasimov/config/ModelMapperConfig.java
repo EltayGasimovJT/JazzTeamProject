@@ -1,4 +1,4 @@
-package org.jazzteam.eltay.gasimov.mapping;
+package org.jazzteam.eltay.gasimov.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

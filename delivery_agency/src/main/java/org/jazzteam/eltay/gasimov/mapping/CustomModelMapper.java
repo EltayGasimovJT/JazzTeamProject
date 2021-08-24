@@ -67,6 +67,7 @@ public class CustomModelMapper {
                 .id(userToConvert.getId())
                 .name(userToConvert.getName())
                 .surname(userToConvert.getSurname())
+                .password(userToConvert.getPassword())
                 .roles(userToConvert.getRoles())
                 .build();
         if (userToConvert.getWorkingPlace() instanceof OrderProcessingPoint) {
@@ -82,6 +83,7 @@ public class CustomModelMapper {
                 .id(userDtoToConvert.getId())
                 .name(userDtoToConvert.getName())
                 .surname(userDtoToConvert.getSurname())
+                .password(userDtoToConvert.getPassword())
                 .roles(userDtoToConvert.getRoles())
                 .build();
         if (userDtoToConvert.getWorkingPlace().equals(WorkingPlaceType.PROCESSING_POINT)) {

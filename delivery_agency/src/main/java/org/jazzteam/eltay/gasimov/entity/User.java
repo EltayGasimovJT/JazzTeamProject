@@ -22,6 +22,8 @@ public class User {
     private String name;
     @Column(name = "surname")
     private String surname;
+    @Column(name = "password")
+    private String password;
     @ManyToOne(cascade = CascadeType.ALL)
     private AbstractBuilding workingPlace;
     @ManyToMany(cascade = CascadeType.ALL)

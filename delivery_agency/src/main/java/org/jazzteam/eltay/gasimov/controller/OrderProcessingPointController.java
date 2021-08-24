@@ -1,13 +1,16 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
+import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @RestController
 public class OrderProcessingPointController {
@@ -24,10 +27,12 @@ public class OrderProcessingPointController {
 
     @GetMapping(path = "/processingPoints")
     public @ResponseBody
-    Iterable<OrderProcessingPointDto> findAllProcessingPoints() throws SQLException {
-        return processingPointService.findAll().stream()
-                .map(orderProcessingPoint -> modelMapper.map(orderProcessingPoint, OrderProcessingPointDto.class))
-                .collect(Collectors.toSet());
+    Iterable<Long> findAllProcessingPoints() throws SQLException {
+        List<Long> listOfWarehousesId = new ArrayList<>();
+        for (OrderProcessingPoint processingPoint : processingPointService.findAll()) {
+            listOfWarehousesId.add(processingPoint.getId());
+        }
+        return listOfWarehousesId;
     }
 
     @DeleteMapping(path = "/processingPoints/{id}")
@@ -37,8 +42,11 @@ public class OrderProcessingPointController {
 
     @GetMapping(path = "/processingPoints/{id}")
     public @ResponseBody
-    OrderProcessingPointDto findById(@PathVariable Long id) throws SQLException {
-        return modelMapper.map(processingPointService.findOne(id), OrderProcessingPointDto.class);
+    List<String> findById(@PathVariable Long id) throws SQLException {
+        OrderProcessingPointDto foundProcessingPoint = modelMapper.map(processingPointService.findOne(id), OrderProcessingPointDto.class);
+        return Arrays.asList("id: " + foundProcessingPoint.getId().toString(),
+                "Location: " + foundProcessingPoint.getLocation(), "WorkingPlaceType: " + foundProcessingPoint.getWorkingPlaceType().toString(),
+                "Warehouse: " + foundProcessingPoint.getWarehouse().toString());
     }
 
     @PutMapping("/processingPoints")

@@ -15,15 +15,15 @@ public class UserValidator {
         if (userToValidate.getName() == null) {
             throw new IllegalArgumentException("User must have name");
         }
-        if (userToValidate.getSurname() == null) {
+        /*if (userToValidate.getSurname() == null) {
             throw new IllegalArgumentException("User must have surname");
-        }
+        }*/
         if (userToValidate.getWorkingPlace() == null) {
             throw new IllegalArgumentException("User must have working place");
         }
-        if (userToValidate.getRoles().isEmpty()){
+        /*if (userToValidate.getRoles().isEmpty()){
             throw new IllegalArgumentException("User must have any role");
-        }
+        }*/
     }
 
     public static void validateOnSave(User userToValidate) throws IllegalArgumentException {

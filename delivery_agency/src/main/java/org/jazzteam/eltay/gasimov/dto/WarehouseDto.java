@@ -1,8 +1,6 @@
 package org.jazzteam.eltay.gasimov.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -10,6 +8,8 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "orderProcessingPoints")
+@EqualsAndHashCode(exclude = "orderProcessingPoints", callSuper = false)
 public class WarehouseDto extends AbstractBuildingDto {
     @NotEmpty(message = "Warehouse must have at least one connected processing point")
     private List<OrderProcessingPointDto> orderProcessingPoints;

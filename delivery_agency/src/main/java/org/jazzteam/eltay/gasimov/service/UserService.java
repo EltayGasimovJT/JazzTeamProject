@@ -19,4 +19,8 @@ public interface UserService {
     User update(UserDto userDtoToUpdate) throws SQLException;
 
     User changeWorkingPlace(UserDto userId, AbstractBuildingDto newWorkingPlace) throws SQLException;
+
+    User findByName(String name);
+
+    User findByLoginAndPassword(String login, String password);
 }

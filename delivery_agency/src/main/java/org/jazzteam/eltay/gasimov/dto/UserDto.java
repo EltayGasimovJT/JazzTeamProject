@@ -25,6 +25,9 @@ public class UserDto {
     @NotBlank(message = "User surname cannot be empty")
     @Size(min = 1, max = 50, message = "User surname size must be between 1 and 50 characters")
     private String surname;
+    @NotBlank(message = "User name cannot be empty")
+    @Size(min = 1, max = 50, message = "User name size must be between 1 and 50 characters")
+    private String password;
     @NotEmpty(message = "User must have working place")
     @JsonProperty("workingPlace")
     private WorkingPlaceType workingPlace;
