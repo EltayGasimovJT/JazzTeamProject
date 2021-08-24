@@ -18,7 +18,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
     private OrderHistoryRepository orderHistoryRepository;
 
     @Override
-    public OrderHistory save(OrderHistoryDto orderHistoryDtoToSave) throws SQLException {
+    public OrderHistory save(OrderHistoryDto orderHistoryDtoToSave)  {
         OrderHistory orderHistoryToSave = OrderHistory.builder()
                 .changedAt(orderHistoryDtoToSave.getChangingTime())
                 .comment(orderHistoryDtoToSave.getComment())
@@ -45,7 +45,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
     }
 
     @Override
-    public OrderHistory update(OrderHistoryDto orderHistoryToUpdate) throws SQLException {
+    public OrderHistory update(OrderHistoryDto orderHistoryToUpdate) {
         Optional<OrderHistory> foundClientFromRepository = orderHistoryRepository.findById(orderHistoryToUpdate.getId());
         OrderHistory foundHistory = foundClientFromRepository.orElseGet(OrderHistory::new);
         foundHistory.setChangedAt(orderHistoryToUpdate.getChangingTime());
