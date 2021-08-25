@@ -21,7 +21,6 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderDto addNewOrder(@RequestBody OrderDto orderDtoToSave) throws SQLException {
-
         return modelMapper.map(orderService.save(orderDtoToSave), OrderDto.class);
     }
 

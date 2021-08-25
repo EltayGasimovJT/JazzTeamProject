@@ -8,7 +8,6 @@ import org.jazzteam.eltay.gasimov.service.OrderHistoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,12 +33,12 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
     }
 
     @Override
-    public List<OrderHistory> findAll() throws SQLException {
+    public List<OrderHistory> findAll() {
         return orderHistoryRepository.findAll();
     }
 
     @Override
-    public OrderHistory findOne(long idForSearch) throws SQLException {
+    public OrderHistory findOne(long idForSearch) {
         Optional<OrderHistory> foundClientFromRepository = orderHistoryRepository.findById(idForSearch);
         return foundClientFromRepository.orElseGet(OrderHistory::new);
     }

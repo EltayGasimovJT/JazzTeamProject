@@ -1,17 +1,16 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.Order;
-import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.jazzteam.eltay.gasimov.repository.ClientRepository;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.validator.ClientValidator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -74,7 +73,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client update(ClientDto newClient) throws SQLException, IllegalArgumentException {
+    public Client update(ClientDto newClient) throws IllegalArgumentException {
         Optional<Client> foundClientFromRepo = clientRepository.findById(newClient.getId());
         Client foundClient = foundClientFromRepo.orElseGet(Client::new);
         ClientValidator.validateClient(foundClient);

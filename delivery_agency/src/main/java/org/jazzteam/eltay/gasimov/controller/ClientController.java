@@ -32,6 +32,12 @@ public class ClientController {
     }
 
     @GetMapping(path = "/clients")
+    public @ResponseBody
+    ClientDto findByPassportId(@RequestBody String passportId) throws SQLException {
+        return modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
+    }
+
+    @GetMapping(path = "/clients")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<Client> findAllClients() {
