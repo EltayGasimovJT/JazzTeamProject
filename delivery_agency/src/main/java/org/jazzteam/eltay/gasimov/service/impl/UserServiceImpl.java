@@ -5,10 +5,7 @@ import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
-import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
-import org.jazzteam.eltay.gasimov.entity.User;
-import org.jazzteam.eltay.gasimov.entity.Warehouse;
-import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
+import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.UserRepository;
 import org.jazzteam.eltay.gasimov.service.UserRolesService;
@@ -86,14 +83,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User changeWorkingPlace(UserDto userToUpdate, AbstractBuildingDto newWorkingPlace) throws SQLException, IllegalArgumentException {
+    public User changeWorkingPlace(Long id, AbstractBuildingDto newWorkingPlace) throws SQLException, IllegalArgumentException {
+        Optional<User> foundUser = userRepository.findById(id);
+        User userFromOptional = foundUser.orElseGet(User::new);
+
         if (newWorkingPlace instanceof OrderProcessingPointDto) {
-            userToUpdate.setWorkingPlace(WorkingPlaceType.PROCESSING_POINT);
+            AbstractBuilding abstractBuildingToUpdate = new OrderProcessingPoint();
+            abstractBuildingToUpdate.setId(newWorkingPlace.getId());
+            abstractBuildingToUpdate.setLocation(newWorkingPlace.getLocation());
+            abstractBuildingToUpdate.setWorkingPlaceType(newWorkingPlace.getWorkingPlaceType().toString());
+            userFromOptional.setWorkingPlace(abstractBuildingToUpdate);
         } else if (newWorkingPlace instanceof WarehouseDto) {
-            userToUpdate.setWorkingPlace(WorkingPlaceType.WAREHOUSE);
+            AbstractBuilding abstractBuildingToUpdate = new Warehouse();
+            abstractBuildingToUpdate.setId(newWorkingPlace.getId());
+            abstractBuildingToUpdate.setLocation(newWorkingPlace.getLocation());
+            abstractBuildingToUpdate.setWorkingPlaceType(newWorkingPlace.getWorkingPlaceType().toString());
+            userFromOptional.setWorkingPlace(abstractBuildingToUpdate);
         }
 
-        return update(userToUpdate);
+        return update(CustomModelMapper.mapUserToDto(userFromOptional));
     }
 
     @Override

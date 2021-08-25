@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.controller;
 
+import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.entity.User;
 import org.jazzteam.eltay.gasimov.service.UserService;
@@ -22,6 +23,13 @@ public class UserController {
     public @ResponseBody
     User addNewUser(@RequestBody UserDto userDtoToSave) throws SQLException {
         return userService.save(userDtoToSave);
+    }
+
+    @PostMapping(path = "/users/changeWorkingPlace/{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public @ResponseBody
+    User changeWorkingPlace(@PathVariable Long id, @RequestBody AbstractBuildingDto newWorkingPlace) throws SQLException {
+        return userService.changeWorkingPlace(id, newWorkingPlace);
     }
 
     @GetMapping(path = "/users")
