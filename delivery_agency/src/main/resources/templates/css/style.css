@@ -11,8 +11,6 @@
     line-height: 28px;
 
     display: inline-flex;
-
-    color: #FFFFFF;
 }
 
 * {
@@ -160,5 +158,17 @@
 }
 
 .listMargin {
-    align-self: revert;
+    align-self: flex-end;
+}
+
+.inputFieldAlign {
+
+}
+
+.tableMargin {
+    margin-top: 200px;
+}
+
+.backToTheActionPageBtn {
+    margin-top: 800px;
 }
