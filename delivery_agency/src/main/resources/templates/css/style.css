@@ -1,4 +1,4 @@
-.defaultBar{
+.defaultBar {
     width: 1920px;
     height: 98px;
 
@@ -15,12 +15,12 @@
     color: #FFFFFF;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
 }
 
-.defaultLogo{
+.defaultLogo {
     width: 144px;
     height: 55px;
 
@@ -32,7 +32,8 @@
 
     color: #FFFFFF;
 }
-.navBarHomePage{
+
+.navBarHomePage {
     width: 120px;
     height: 28.57px;
 
@@ -45,17 +46,17 @@
     color: white;
 }
 
-.actionTabText{
+.actionTabText {
     width: 394px;
     height: 42px;
     display: flex;
 
-    align-self: center;
-
+    margin-top: 20px;
+    margin-left: 70px;
     font-family: Calibri, serif;
 }
 
-.actionTab{
+.actionTab {
     width: 572px;
     height: 605px;
 
@@ -69,10 +70,11 @@
     font-size: 36px;
     line-height: 42px;
     display: flex;
-    justify-content: center;
+
     align-items: center;
     flex-direction: column;
-
+    margin-left: 520px;
+    margin-top: 200px;
     color: black;
 }
 
@@ -84,9 +86,79 @@
     border-radius: 10px;
 }
 
-.buttonText{
+.buttonText {
     color: white;
     font-family: Calibri, serif;
-    font-size: 50px;
+    font-size: 30px;
     display: flex;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.btnMargin {
+    margin-top: 100px;
+}
+
+.createOrderText {
+    width: 405px;
+    height: 81px;
+
+    font-family: Calibri, serif;
+    font-size: 50px;
+    line-height: 59px;
+    text-align: center;
+
+    margin-top: 5%;
+    color: #000000;
+}
+
+.createOrderBar {
+    width: 572px;
+    height: 920px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 200px;
+    margin-left: 150px;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.inputField {
+    width: 219px;
+    height: 22px;
+
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    align: right;
+}
+
+.recipientInputFields {
+    margin-top: 50px;
+}
+
+.createOrderTextField {
+    width: 405px;
+    height: 81px;
+
+    font-family: Calibri, serif;
+    line-height: 59px;
+    text-align: center;
+    color: #000000;
+}
+
+.navBarMargin {
+    margin-top: 20px;
+    margin-left: 300px;
+}
+
+.listMargin {
+    align-self: revert;
 }
