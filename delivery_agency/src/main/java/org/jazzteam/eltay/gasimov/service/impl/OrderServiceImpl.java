@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -58,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order save(OrderDto orderDtoToSave) throws SQLException, IllegalArgumentException {
+    public Order save(OrderDto orderDtoToSave) throws IllegalArgumentException {
         OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
 
         BigDecimal price = calculatePrice(orderDtoToSave);
@@ -235,7 +234,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException, SQLException {
+    public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException{
         CoefficientForPriceCalculationDto coefficientForCalculate = getCoefficient(orderForCalculate.getDestinationPlace());
 
         return priceCalculationRuleService.calculatePrice(orderForCalculate, coefficientForCalculate);
@@ -338,7 +337,7 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws SQLException, IllegalArgumentException {
+    private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws IllegalArgumentException {
         CoefficientForPriceCalculation coefficientForPriceCalculation;
 
         String russia = "Russia";

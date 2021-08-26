@@ -28,7 +28,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
 
 
     @Override
-    public OrderProcessingPoint save(OrderProcessingPointDto processingPointDtoToSave) throws IllegalArgumentException, SQLException {
+    public OrderProcessingPoint save(OrderProcessingPointDto processingPointDtoToSave) throws IllegalArgumentException {
         OrderProcessingPoint orderProcessingPointToSave = new OrderProcessingPoint();
         orderProcessingPointToSave.setId(processingPointDtoToSave.getId());
         orderProcessingPointToSave.setLocation(processingPointDtoToSave.getLocation());

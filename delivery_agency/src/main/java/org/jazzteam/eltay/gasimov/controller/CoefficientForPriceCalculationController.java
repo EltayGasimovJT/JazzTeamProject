@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -19,7 +18,7 @@ public class CoefficientForPriceCalculationController {
 
     @PostMapping(path = "/coefficients")
     public @ResponseBody
-    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficient) throws SQLException, IllegalArgumentException {
+    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficient) throws IllegalArgumentException {
         CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto
                 .builder()
                 .country(coefficient.getCountry())
@@ -32,25 +31,25 @@ public class CoefficientForPriceCalculationController {
 
     @GetMapping(path = "/coefficients/{id}")
     public @ResponseBody
-    CoefficientForPriceCalculationDto findById(@PathVariable Long id) throws SQLException {
+    CoefficientForPriceCalculationDto findById(@PathVariable Long id) {
         return modelMapper.map(calculationService.findOne(id), CoefficientForPriceCalculationDto.class);
     }
 
     @GetMapping(path = "/coefficients")
     public @ResponseBody
-    Iterable<CoefficientForPriceCalculationDto> findAll() throws SQLException {
+    Iterable<CoefficientForPriceCalculationDto> findAll(){
         return calculationService.findAll().stream()
                 .map(coefficient -> modelMapper.map(coefficient, CoefficientForPriceCalculationDto.class))
                 .collect(Collectors.toSet());
     }
 
     @DeleteMapping(path = "/coefficients/{id}")
-    public void deleteCoefficient(@PathVariable Long id) throws SQLException {
+    public void deleteCoefficient(@PathVariable Long id) {
         calculationService.delete(id);
     }
 
     @PutMapping("/coefficients")
-    public CoefficientForPriceCalculationDto updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) throws SQLException {
+    public CoefficientForPriceCalculationDto updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) {
         if (calculationService.findOne(newCoefficient.getId()) == null) {
             return modelMapper.map(calculationService.save(newCoefficient), CoefficientForPriceCalculationDto.class);
         } else {

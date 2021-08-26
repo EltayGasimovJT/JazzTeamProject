@@ -11,7 +11,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -57,7 +56,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Warehouse findByLocation(String locationForSearch) throws SQLException {
+    public Warehouse findByLocation(String locationForSearch){
         Warehouse foundWarehouseFromRepository = warehouseRepository.findByLocation(locationForSearch);
         WarehouseValidator.validateWarehouse(foundWarehouseFromRepository);
         return foundWarehouseFromRepository;

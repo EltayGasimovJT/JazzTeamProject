@@ -3,17 +3,16 @@ package org.jazzteam.eltay.gasimov.service;
 import org.jazzteam.eltay.gasimov.dto.OrderStateDto;
 import org.jazzteam.eltay.gasimov.entity.OrderState;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface OrderStateService {
-    OrderState save(OrderStateDto orderStateDtoToSave) throws SQLException;
+    OrderState save(OrderStateDto orderStateDtoToSave);
 
     void delete(Long idForDelete);
 
-    List<OrderState> findAll() throws SQLException;
+    List<OrderState> findAll();
 
-    OrderState findOne(long idForSearch) throws SQLException;
+    OrderState findOne(long idForSearch);
 
-    OrderState update(OrderStateDto orderStateDtoToUpdate) throws SQLException;
+    OrderState update(OrderStateDto orderStateDtoToUpdate);
 }

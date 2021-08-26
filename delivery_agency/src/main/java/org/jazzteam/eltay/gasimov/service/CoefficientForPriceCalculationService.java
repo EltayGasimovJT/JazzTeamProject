@@ -5,19 +5,18 @@ import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.List;
 
 public interface CoefficientForPriceCalculationService {
-    CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws SQLException;
+    CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave);
 
-    void delete(Long idForDelete) throws SQLException;
+    void delete(Long idForDelete);
 
-    List<CoefficientForPriceCalculation> findAll() throws SQLException;
+    List<CoefficientForPriceCalculation> findAll();
 
-    CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientDtoForUpdate) throws SQLException;
+    CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientDtoForUpdate);
 
-    CoefficientForPriceCalculation findOne(long idForSearch) throws SQLException;
+    CoefficientForPriceCalculation findOne(long idForSearch);
 
     BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException;
 

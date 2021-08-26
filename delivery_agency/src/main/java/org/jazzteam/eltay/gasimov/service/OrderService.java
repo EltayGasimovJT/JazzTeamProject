@@ -8,37 +8,36 @@ import org.jazzteam.eltay.gasimov.entity.AbstractBuilding;
 import org.jazzteam.eltay.gasimov.entity.Order;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.List;
 
 public interface OrderService {
-   Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) throws SQLException;
+   Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation);
 
-   void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory) throws SQLException;
+   void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory);
 
-   Order save(OrderDto orderDtoToSave) throws SQLException;
+   Order save(OrderDto orderDtoToSave);
 
-   Order findOne(long idForSearch) throws SQLException;
+   Order findOne(long idForSearch);
 
    Order findByRecipient(ClientDto recipientForSearch);
 
    Order findBySender(ClientDto senderForSearch);
 
-   AbstractBuilding getCurrentOrderLocation(long idForFindCurrentLocation) throws SQLException;
+   AbstractBuilding getCurrentOrderLocation(long idForFindCurrentLocation);
 
-   void send(List<OrderDto> orderDtosToSend) throws SQLException;
+   void send(List<OrderDto> orderDtosToSend);
 
-   List<Order> accept(List<OrderDto> orderDtosToAccept) throws SQLException;
+   List<Order> accept(List<OrderDto> orderDtosToAccept);
 
-   String getState(long idForStateFind) throws SQLException;
+   String getState(long idForStateFind);
 
    void compareOrders(List<OrderDto> expectedOrders, List<OrderDto> acceptedOrders) throws IllegalArgumentException;
 
-   List<Order> findAll() throws SQLException;
+   List<Order> findAll();
 
-   BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException, SQLException;
+   BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException;
 
-   Order update(OrderDto orderDtoToUpdate) throws SQLException;
+   Order update(OrderDto orderDtoToUpdate);
 
    void delete(Long idForDelete);
 }

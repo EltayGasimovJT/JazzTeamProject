@@ -4,21 +4,20 @@ import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.entity.User;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface UserService {
-    User save(UserDto userToSave) throws SQLException;
+    User save(UserDto userToSave);
 
     void delete(Long idForDelete);
 
-    List<User> findAll() throws SQLException;
+    List<User> findAll();
 
-    User findOne(long idForSearch) throws SQLException;
+    User findOne(long idForSearch);
 
-    User update(UserDto userDtoToUpdate) throws SQLException;
+    User update(UserDto userDtoToUpdate);
 
-    User changeWorkingPlace(Long userId, AbstractBuildingDto newWorkingPlace) throws SQLException;
+    User changeWorkingPlace(Long userId, AbstractBuildingDto newWorkingPlace);
 
     User findByName(String name);
 

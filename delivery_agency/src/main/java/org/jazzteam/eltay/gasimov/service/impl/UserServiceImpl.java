@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     private UserRolesService userRolesService;
 
     @Override
-    public User save(UserDto userDtoToSave) throws SQLException {
+    public User save(UserDto userDtoToSave){
         User userToSave = User.builder().id(userDtoToSave.getId())
                 .name(userDtoToSave.getName())
                 .surname(userDtoToSave.getSurname())
@@ -76,14 +76,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(UserDto userDtoToUpdate) throws SQLException {
+    public User update(UserDto userDtoToUpdate)  {
         User userToUpdate = CustomModelMapper.mapDtoToUser(userDtoToUpdate);
         UserValidator.validateUser(userToUpdate);
         return userRepository.save(userToUpdate);
     }
 
     @Override
-    public User changeWorkingPlace(Long id, AbstractBuildingDto newWorkingPlace) throws SQLException, IllegalArgumentException {
+    public User changeWorkingPlace(Long id, AbstractBuildingDto newWorkingPlace) throws IllegalArgumentException {
         Optional<User> foundUser = userRepository.findById(id);
         User userFromOptional = foundUser.orElseGet(User::new);
 

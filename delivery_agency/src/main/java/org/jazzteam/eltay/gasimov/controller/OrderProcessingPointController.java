@@ -21,13 +21,13 @@ public class OrderProcessingPointController {
 
     @PostMapping(path = "/processingPoints")
     public @ResponseBody
-    OrderProcessingPointDto addNewProcessingPoint(@RequestBody OrderProcessingPointDto processingPointDto) throws SQLException {
+    OrderProcessingPointDto addNewProcessingPoint(@RequestBody OrderProcessingPointDto processingPointDto) {
         return modelMapper.map(processingPointService.save(processingPointDto), OrderProcessingPointDto.class);
     }
 
     @GetMapping(path = "/processingPoints")
     public @ResponseBody
-    Iterable<Long> findAllProcessingPoints() throws SQLException {
+    Iterable<Long> findAllProcessingPoints() {
         List<Long> listOfWarehousesId = new ArrayList<>();
         for (OrderProcessingPoint processingPoint : processingPointService.findAll()) {
             listOfWarehousesId.add(processingPoint.getId());
@@ -36,7 +36,7 @@ public class OrderProcessingPointController {
     }
 
     @DeleteMapping(path = "/processingPoints/{id}")
-    public void deleteProcessingPoint(@PathVariable Long id) throws SQLException {
+    public void deleteProcessingPoint(@PathVariable Long id) {
         processingPointService.delete(id);
     }
 
@@ -50,7 +50,7 @@ public class OrderProcessingPointController {
     }
 
     @PutMapping("/processingPoints")
-    public OrderProcessingPointDto updateProcessingPoint(@RequestBody OrderProcessingPointDto newProcessingPoint) throws SQLException {
+    public OrderProcessingPointDto updateProcessingPoint(@RequestBody OrderProcessingPointDto newProcessingPoint) {
         if (processingPointService.findOne(newProcessingPoint.getId()) == null) {
             return modelMapper.map(processingPointService.save(newProcessingPoint), OrderProcessingPointDto.class);
         } else {

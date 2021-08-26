@@ -107,7 +107,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void addPriceCalculationRule() throws SQLException {
+    void addPriceCalculationRule() {
         CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)

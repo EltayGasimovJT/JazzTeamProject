@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
-
 @RestController
 public class ClientController {
     @Autowired
@@ -20,20 +18,20 @@ public class ClientController {
     @PostMapping(path = "/clients")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    Client addNewClient(@RequestBody ClientDto clientToSave) throws SQLException {
+    Client addNewClient(@RequestBody ClientDto clientToSave) {
 
         return clientService.save(clientToSave);
     }
 
     @GetMapping(path = "/clients/{id}")
     public @ResponseBody
-    ClientDto findById(@PathVariable Long id) throws SQLException {
+    ClientDto findById(@PathVariable Long id){
         return modelMapper.map(clientService.findById(id), ClientDto.class);
     }
 
-    @GetMapping(path = "/clients")
+    @GetMapping(path = "/clients/byPassport")
     public @ResponseBody
-    ClientDto findByPassportId(@RequestBody String passportId) throws SQLException {
+    ClientDto findByPassportId(@RequestBody String passportId) {
         return modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
     }
 
@@ -51,7 +49,7 @@ public class ClientController {
 
     @PutMapping("/clients")
     @ResponseStatus(HttpStatus.OK)
-    public Client updateClient(@RequestBody ClientDto newClient) throws SQLException {
+    public Client updateClient(@RequestBody ClientDto newClient) {
         if (clientService.findById(newClient.getId()) == null) {
             return clientService.save(newClient);
         } else {
