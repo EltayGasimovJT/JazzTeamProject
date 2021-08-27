@@ -22,7 +22,6 @@ public class ClientController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     Client addNewClient(@RequestBody ClientDto clientToSave) {
-
         return clientService.save(clientToSave);
     }
 
