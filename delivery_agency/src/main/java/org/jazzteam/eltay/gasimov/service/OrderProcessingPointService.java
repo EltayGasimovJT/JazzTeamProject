@@ -16,4 +16,5 @@ public interface OrderProcessingPointService {
 
     OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate);
 
+    OrderProcessingPoint findByLocation(String locationForFind);
 }

@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderProcessingPointRepository extends JpaRepository<OrderProcessingPoint, Long> {
+    OrderProcessingPoint findByLocation(String location);
 }

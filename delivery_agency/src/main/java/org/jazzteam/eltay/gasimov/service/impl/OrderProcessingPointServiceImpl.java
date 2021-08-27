@@ -12,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,6 +80,13 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
                 .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList()));
         return orderProcessingPointRepository.save(orderProcessingPointUpdate);
+    }
+
+    @Override
+    public OrderProcessingPoint findByLocation(String locationForFind) {
+        OrderProcessingPoint foundClientFromRepository = orderProcessingPointRepository.findByLocation(locationForFind);
+        OrderProcessingPointValidator.validateProcessingPoint(foundClientFromRepository);
+        return foundClientFromRepository;
     }
 
 }

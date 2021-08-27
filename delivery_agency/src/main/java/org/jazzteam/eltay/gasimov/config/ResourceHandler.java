@@ -13,20 +13,17 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 public class ResourceHandler  implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry
-                .addResourceHandler("/js/**")
-                .addResourceLocations("/resources/static/js/*");
-        registry
-                .addResourceHandler("/css/**")
-                .addResourceLocations("/resources/static/css/*");
+        if (!registry.hasMappingForPattern("/static/**")) {
+            registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
+        }
     }
 
     @Bean
     public ViewResolver viewResolver(){
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setTemplateMode("HTML");
-        templateResolver.setPrefix("templates/");
-        templateResolver.setSuffix(".html");
+        templateResolver.setTemplateMode("CSS");
+        templateResolver.setPrefix("static/");
+        templateResolver.setSuffix(".css");
 
         SpringTemplateEngine engine = new SpringTemplateEngine();
         engine.setTemplateResolver(templateResolver);
