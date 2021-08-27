@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +19,7 @@ public class UserRolesServiceImpl implements UserRolesService {
     private ModelMapper modelMapper;
 
     @Override
-    public UserRoles save(UserRolesDto userRolesDtoToSave) throws SQLException {
+    public UserRoles save(UserRolesDto userRolesDtoToSave) {
         return userRolesRepository.save(modelMapper.map(userRolesDtoToSave, UserRoles.class));
     }
 
@@ -30,18 +29,18 @@ public class UserRolesServiceImpl implements UserRolesService {
     }
 
     @Override
-    public List<UserRoles> findAll() throws SQLException {
+    public List<UserRoles> findAll() {
         return userRolesRepository.findAll();
     }
 
     @Override
-    public UserRoles findOne(long idForSearch) throws SQLException {
+    public UserRoles findOne(long idForSearch) {
         Optional<UserRoles> foundRolesFromRepo = userRolesRepository.findById(idForSearch);
         return  foundRolesFromRepo.orElseGet(UserRoles::new);
     }
 
     @Override
-    public UserRoles update(UserRolesDto userRolesDtoToUpdate) throws SQLException {
+    public UserRoles update(UserRolesDto userRolesDtoToUpdate) {
         return userRolesRepository.save(modelMapper.map(userRolesDtoToUpdate, UserRoles.class));
     }
 }

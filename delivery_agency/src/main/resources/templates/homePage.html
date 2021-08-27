@@ -1,20 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <link rel="shortcut icon" href="icons/waterFall.png"/>
-    <title>GasDel general</title>
     <meta charset="UTF8">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <script>
-
-    </script>
+    <title>GasDel general</title>
+    <link href="/static/css/style.css" th:href="@{/static/css/style.css}" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="../static/icons/waterFall.png" th:href="@{static/icons/waterFall.png}"/>
 </head>
 <body>
 <div class="defaultBar">
     <div class="defaultLogo">GasDel</div>
-    <div class="navBarMargin">
-        <div class="navBarHomePage">Sign as <img class="navBarHomeArrowDown" src="icons/arrowForList.png"></div>
+
+    <div class="topNav">
+        <div class="topNavA">
+            <a style="color: white; text-decoration: none" href="/actionPage" th:href="@{/actionPage}">Sign as client</a>
+        </div>
+        <div class="topNavA">
+            <a style="color: white; text-decoration: none" href="">Sign as user</a>
+        </div>
+        <div style="color: white" class="topNavA">
+            <a style="color: white; text-decoration: none" href="#contact">Contact</a>
+        </div>
+        <div class="topNavA">
+            <a style="color: white; text-decoration: none" href="#about">About us</a>
+        </div>
     </div>
+
+    <script type="text/javascript" src="/static/js/action.js" th:src="@{/static/js/action.js}"></script>
 </div>
 </body>
 </html>

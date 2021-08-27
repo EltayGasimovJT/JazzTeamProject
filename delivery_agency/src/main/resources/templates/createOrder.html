@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="shortcut icon" href="icons/waterFall.png"/>
+    <link rel="shortcut icon" href="../static/icons/waterFall.png"/>
     <title>Create order</title>
     <meta charset="UTF8">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <script>
-
-    </script>
+    <link rel="stylesheet" href="../static/css/style.css" type="text/css">
+    <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <div class="defaultBar">
@@ -55,11 +53,13 @@
                 <div>
                     <span class="createOrderTextField">Destination point country</span>
 
-                    <select class="listMargin">
-                        <option value="1">Беларусь</option>
-                        <option value="2">Россия</option>
-                        <option value="3">Украина</option>
-                    </select>
+                    <label>
+                        <select class="listMargin">
+                            <option value="1">Беларусь</option>
+                            <option value="2">Россия</option>
+                            <option value="3">Украина</option>
+                        </select>
+                    </label>
                 </div>
             </div>
             <div>
@@ -67,11 +67,13 @@
                     <div>
                         <span class="createOrderTextField">Destination point town</span>
 
-                        <select class="listMargin">
-                            <option value="1">Минск</option>
-                            <option value="2">Москва</option>
-                            <option value="3">Киев</option>
-                        </select>
+                        <label>
+                            <select class="listMargin">
+                                <option value="1">Минск</option>
+                                <option value="2">Москва</option>
+                                <option value="3">Киев</option>
+                            </select>
+                        </label>
                     </div>
                 </div>
             </div>
@@ -98,8 +100,10 @@
     </div>
 
 </div>
-<div class="backToTheActionPageBtn">
-    <button class="customBtn buttonText" onclick='location.href="actionPage.html"'>Back to the action page</button>
+<div id="backToTheActionPageBtn" class="backToTheActionPageBtn">
+    <button id="backToTheActionPageBtnId" class="customBtn buttonText">Back to the action page
+        <script type="text/javascript" src="../static/js/action.js"></script>
+    </button>
 </div>
 </body>
 </html>

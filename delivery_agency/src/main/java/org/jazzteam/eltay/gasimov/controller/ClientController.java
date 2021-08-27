@@ -1,14 +1,17 @@
 package org.jazzteam.eltay.gasimov.controller;
 
+import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Log
 public class ClientController {
     @Autowired
     private ClientService clientService;
@@ -31,7 +34,8 @@ public class ClientController {
 
     @GetMapping(path = "/clients/byPassport")
     public @ResponseBody
-    ClientDto findByPassportId(@RequestBody String passportId) {
+    ClientDto findByPassportId(@ModelAttribute String passportId, Model model) {
+        log.severe(passportId);
         return modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
     }
 

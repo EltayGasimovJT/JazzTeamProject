@@ -1,26 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="shortcut icon" href="icons/waterFall.png"/>
+    <link rel="shortcut icon" href="../static/icons/waterFall.png"/>
     <title>GasDel action</title>
     <meta charset="UTF8">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <script>
+    <link rel="stylesheet" href="../static/css/style.css" type="text/css">
+    <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
 
-    </script>
 </head>
 <body>
 <div class="defaultBar">
+
     <div class="defaultLogo">GasDel</div>
     <div class="actionTab">
         <div class="actionTabText">What do you want to do?</div>
         <div class="btnMargin">
-            <button class="customBtn buttonText" onclick='location.href="createOrder.html"'>Create order</button>
-            <button class="customBtn buttonText">Track order</button>
-            <button class="customBtn buttonText" onclick='location.href="clientsOrders.html"'>Check order</button>
+            <button id="createOrderBtn" class="customBtn buttonText">Create order</button>
+            <button id="openRegFormId" class="customBtn buttonText">Track order</button>
+            <div>
+                <button id="checkOrderBtn" class="customBtn buttonText">Check order</button>
+
+                <div class="form-popup" id="findByPassportIdForm">
+                    <form action="" class="form-container" method="post">
+                        <h1>Вход</h1>
+                        <label for="passportId"><b>Пароль</b></label>
+                        <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
+                        <button type="submit" class="btn">Ввести номер пасспорта</button>
+                        <button id="closeRegFormId" type="button" class="btn cancel">Назад</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<script type="text/javascript" src="../static/js/action.js"></script>
 </body>
 </html>
 

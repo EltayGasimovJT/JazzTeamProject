@@ -172,3 +172,41 @@
 .backToTheActionPageBtn {
     margin-top: 800px;
 }
+
+.topNav {
+    overflow: hidden;
+    margin-left: 200px;
+}
+
+.topNavA {
+    float: left;
+    text-align: center;
+    height: 98px;
+    background-color: #5176FA;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.topNavA:hover {
+    background-color: gray;
+    color: black;
+}
+
+.topNavA.active {
+    color: green;
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+}
+
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+}

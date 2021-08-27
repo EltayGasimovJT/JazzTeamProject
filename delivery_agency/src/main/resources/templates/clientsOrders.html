@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="shortcut icon" href="icons/waterFall.png"/>
+    <link rel="shortcut icon" href="../static/icons/waterFall.png"/>
     <title>Clients orders</title>
     <meta charset="UTF8">
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <script>
+    <link rel="stylesheet" href="../static/css/style.css" type="text/css">
+    <script type="text/javascript" src="../static/js/jquery-3.6.0.min.js"></script>
 
-    </script>
 </head>
 <body>
 <div class="defaultBar">
@@ -40,7 +39,9 @@
     </div>
 </div>
 <div class="backToTheActionPageBtn">
-    <button class="customBtn buttonText" onclick='location.href="actionPage.html"'>Back to the action page</button>
+    <button id="backToTheActionPageBtnId" class="customBtn buttonText">Back to the action page
+        <script type="text/javascript" src="../static/js/action.js"></script>
+    </button>
 </div>
 </body>
 </html>
