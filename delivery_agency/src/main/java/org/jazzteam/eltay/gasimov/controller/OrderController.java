@@ -2,7 +2,7 @@ package org.jazzteam.eltay.gasimov.controller;
 
 import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
-import org.jazzteam.eltay.gasimov.dto.CreateOrderFormDto;
+import org.jazzteam.eltay.gasimov.dto.CreateOrderRequestDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.service.ClientService;
@@ -40,7 +40,7 @@ public class OrderController {
     @PostMapping(path = "/createOrder")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    OrderDto createOrder(@RequestBody CreateOrderFormDto dtoFromForm) {
+    OrderDto createOrder(@RequestBody CreateOrderRequestDto dtoFromForm) {
         ClientDto sender = ClientDto.builder()
                 .name(dtoFromForm.getSenderName())
                 .surname(dtoFromForm.getSenderSurname())

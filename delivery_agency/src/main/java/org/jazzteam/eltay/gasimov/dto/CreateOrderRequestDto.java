@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CreateOrderFormDto {
+public class CreateOrderRequestDto {
     private String senderName;
     private String senderSurname;
     private String senderPhoneNumber;

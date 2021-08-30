@@ -20,6 +20,7 @@ jQuery('document').ready(function () {
     const closeModel = document.querySelector('.modal-close');
     const openModel = document.querySelector('.open-modal');
     const openClientsOrder = document.querySelector('.open-clientsOrder');
+    const createOrder = document.querySelector('.create-order');
 
     backgrounDModal.addEventListener('click', () => {
         backgrounDModal.style.visibility = 'hidden';
@@ -39,6 +40,10 @@ jQuery('document').ready(function () {
 
     openClientsOrder.addEventListener('click', () => {
         location.href = "clientsOrders.html";
+    })
+
+    createOrder.addEventListener('click', () => {
+        location.href = "createOrder.html";
     })
 
     /*$("#passportIdEnterForm").on("submit", function () {
@@ -97,7 +102,20 @@ jQuery('document').ready(function () {
         });
     });*/
 
-    $("#createOrderForm").submit(function (event) {
+    function _getOrderData(){
+        const senderName = $("#passportIdEnterForm").val();
+
+        return {
+            sender:{
+                senderName: senderName
+            },
+            recipient:{
+
+            }
+        }
+    }
+
+    /*$("#createOrderForm").submit(function (event) {
         event.preventDefault();
         let $form = $(this),
             name = $form.find("input[name='senderName']").val(), url = $form.attr("action");
@@ -108,5 +126,5 @@ jQuery('document').ready(function () {
             let content = $(data).find("#content");
             $("#foundClient").empty().append(content);
         });
-    });
+    });*/
 })
