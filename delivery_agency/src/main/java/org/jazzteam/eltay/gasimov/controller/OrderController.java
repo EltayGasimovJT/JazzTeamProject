@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.controller;
 
+import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
@@ -14,6 +15,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
+@Log
 public class OrderController {
     @Autowired
     private ClientService clientService;
@@ -63,6 +65,8 @@ public class OrderController {
         clientService.save(sender);
         clientService.save(recipient);
 
+
+        log.severe(orderDtoToSave.toString());
         orderService.save(orderDtoToSave);
 
         return orderDtoToSave;

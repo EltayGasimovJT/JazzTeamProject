@@ -15,25 +15,27 @@
     <div class="actionTab">
         <div class="actionTabText">What do you want to do?</div>
         <div class="btnMargin">
-            <button id="createOrderBtn" class="customBtn buttonText">Create order</button>
-            <button id="openRegFormId" class="customBtn buttonText">Track order</button>
-            <div>
-                <button id="checkOrderBtn" class="customBtn buttonText">Check order</button>
+            <button id="createOrderBtn" class="me-btn buttonText create-order">Create order</button>
+            <button id="openRegFormId" class="me-btn buttonText">Track order</button>
+            <button id="checkOrderBtn" class="me-btn buttonText open-modal">Check order</button>
+        </div>
+    </div>
 
-                <div class="form-popup" id="findByPassportIdForm">
-                    <form action="" class="form-container" method="post">
-                        <h1>Вход</h1>
-                        <label for="passportId"><b>Пароль</b></label>
-                        <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
-                        <button type="submit" class="btn">Ввести номер пасспорта</button>
-                        <button id="closeRegFormId" type="button" class="btn cancel">Назад</button>
-                    </form>
-                </div>
-            </div>
+    <div class="form-popup" id="findByPassportIdForm">
+
+    </div>
+    <div class="backGround-modal">
+        <div class="modal-custom">
+            <form id="passportIdEnterForm">
+                <span>Please enter your passport Id</span>
+                <span for="passportId"><b>Passport Id</b></span>
+                <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
+                <button type="submit" class="enter-passportId">Login</button>
+                <button class="modal-close">Х</button>
+            </form>
         </div>
     </div>
 </div>
 <script type="text/javascript" src="js/action.js"></script>
 </body>
 </html>
-

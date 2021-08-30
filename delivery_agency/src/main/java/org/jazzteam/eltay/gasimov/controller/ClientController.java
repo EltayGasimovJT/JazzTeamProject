@@ -7,7 +7,6 @@ import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -33,8 +32,7 @@ public class ClientController {
 
     @GetMapping(path = "/clients/byPassport")
     public @ResponseBody
-    ClientDto findByPassportId(@ModelAttribute String passportId, Model model) {
-        log.severe(passportId);
+    ClientDto findByPassportId(@RequestParam String passportId) {
         return modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
     }
 

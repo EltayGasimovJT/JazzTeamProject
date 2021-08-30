@@ -1,16 +1,4 @@
 jQuery('document').ready(function () {
-    jQuery("#checkOrderBtn").on('click', function () {
-        openForm();
-
-        jQuery("#openRegFormId").on('submit', function () {
-
-        })
-    })
-
-    jQuery("#createOrderBtn").on('click', function () {
-        location.href = "createOrder.html";
-    })
-
     jQuery("#backToTheActionPageBtnId").on('click', function () {
         location.href = "actionPage.html";
     })
@@ -26,4 +14,79 @@ jQuery('document').ready(function () {
     function closeForm() {
         document.getElementById("findByPassportIdForm").style.display = "none";
     }
+
+    const backgrounDModal = document.querySelector('.backGround-modal');
+    const modal = document.querySelector('.modal-custom');
+    const closeModel = document.querySelector('.modal-close');
+    const openModel = document.querySelector('.open-modal');
+    const createOrder = document.querySelector('.create-order');
+
+    openModel.addEventListener('click', () => {
+        backgrounDModal.style.visibility = 'visible';
+    })
+
+    backgrounDModal.addEventListener('click', () => {
+        backgrounDModal.style.visibility = 'hidden';
+    })
+
+    modal.addEventListener('click', (event) => {
+        event.stopPropagation();
+    })
+
+    closeModel.addEventListener('click', () => {
+        backgrounDModal.style.visibility = 'hidden';
+    })
+
+    createOrder.addEventListener('click', () => {
+        location.href = "createOrder.html";
+    })
+
+
+    $("#passportIdEnterForm").on("submit", function () {
+        $.ajax({
+            url: '/clients/byPassport',
+            method: 'get',
+            dataType: 'text',
+            contentType: 'application/json;charset=uft-8',
+            data: $(this).serialize(),
+            success: function (data) {
+                console.log(typeof(data));
+            },
+
+            error: function () {
+                alert('ERROR!!!')
+            }
+        });
+    });
+
+    /*$("#form").on("submit", function () {
+        $.ajax({
+            url: '/clientByPassportId',
+            method: 'post',
+            dataType: 'text',
+            contentType: 'application/json;charset=uft-8',
+            data: $(this).serialize(),
+            success: function (clientTest) {
+                alert(clientTest.name);
+                location.href = 'clientsOrders.html';
+            }
+        });
+    });*/
+
+    $("#createOrderForm").on("submit", function () {
+        $.ajax({
+            url: '/createOrder',
+            method: 'post',
+            dataType: 'json',
+            contentType: 'application/json;charset=uft-8',
+            data: $(this).serialize(),
+            success: function () {
+                location.href = 'actionPage.html';
+            },
+
+            error: function (){
+                alert("Error")
+            }
+        });
+    });
 })

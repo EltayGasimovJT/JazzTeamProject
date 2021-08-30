@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="shortcut icon" href="icons/waterFall.png" xmlns:th="http://www.thymeleaf.org"/>
+    <link rel="shortcut icon" href="icons/waterFall.png"/>
     <title>Create order</title>
     <meta charset="UTF8">
     <link rel="stylesheet" href="css/style.css" type="text/css">
@@ -12,7 +12,7 @@
     <div class="defaultLogo">GasDel</div>
     <div class="createOrderText">Create new Order</div>
     <div class="createOrderBar">
-        <form method="post" action="/createOrder" th:href="@{/createOrder}">
+        <form id="createOrderForm">
             <div>
                 <div>
                     <span class="createOrderTextField">Sender name</span>
