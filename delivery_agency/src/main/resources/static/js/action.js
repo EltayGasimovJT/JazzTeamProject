@@ -71,7 +71,7 @@ jQuery('document').ready(function () {
         let geting = $.get(url, {passportId: passportId});
         geting.done(function (data) {
             let content = $(data).find("#content");
-            $("#foundClient").empty().append(content);
+            window.location.href = `http://localhost:8081/clientsOrders.html?clientId=${data.id}`;
         });
     });
 
