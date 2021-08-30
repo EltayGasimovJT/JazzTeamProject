@@ -353,3 +353,13 @@ span {
     color: black;
     border: 1px solid black;
 }
+
+.blockForPersonalDataInput{
+    width: 572px;
+    height: 415px;
+    margin-top: 230px;
+    margin-left: 500px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
