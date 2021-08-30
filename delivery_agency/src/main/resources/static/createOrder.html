@@ -12,7 +12,7 @@
     <div class="defaultLogo">GasDel</div>
     <div class="createOrderText">Create new Order</div>
     <div class="createOrderBar">
-        <form id="createOrderForm">
+        <form id="createOrderForm" method="post" action="http://localhost:8081/createOrder">
             <div>
                 <div>
                     <span class="createOrderTextField">Sender name</span>
@@ -51,48 +51,33 @@
             </div>
             <div>
                 <div>
-                    <span class="createOrderTextField">Destination point country</span>
-
-                    <label>
-                        <select class="listMargin">
-                            <option value="1">Беларусь</option>
-                            <option value="2">Россия</option>
-                            <option value="3">Украина</option>
-                        </select>
-                    </label>
-                </div>
-            </div>
-            <div>
-                <div>
                     <div>
-                        <span class="createOrderTextField">Destination point town</span>
-
-                        <label>
-                            <select class="listMargin">
-                                <option value="1">Минск</option>
-                                <option value="2">Москва</option>
-                                <option value="3">Киев</option>
-                            </select>
-                        </label>
+                        <span class="createOrderTextField">Destination place:</span>
+                        <input list="towns" id="destinationPoint" name="destinationPlaceTown">
+                        <datalist id="towns" class="listMargin">
+                            <option>Минск</option>
+                            <option>Москва</option>
+                            <option>Киев</option>
+                        </datalist>
                     </div>
                 </div>
             </div>
             <div>
                 <div>
                     <span class="createOrderTextField">Parcel width</span>
-                    <input type="text" title="Введите ширину посылки">
+                    <input type="text" name="width" title="Введите ширину посылки">
                 </div>
                 <div>
                     <span class="createOrderTextField">Parcel length</span>
-                    <input type="text" title="Введите длину">
+                    <input type="text" name="length" title="Введите длину">
                 </div>
                 <div>
                     <span class="createOrderTextField">Parcel height</span>
-                    <input type="text" title="Введите высоту">
+                    <input type="text" name="height" title="Введите высоту">
                 </div>
                 <div>
                     <span class="createOrderTextField">Parcel weight</span>
-                    <input type="text" title="Введите вес">
+                    <input type="text" name="weight" title="Введите вес">
                 </div>
             </div>
             <input style="margin-left: 100px" class="customBtn buttonText" type="submit" value="Create new Order">
@@ -100,9 +85,10 @@
     </div>
 
 </div>
+
 <div id="backToTheActionPageBtn" class="backToTheActionPageBtn">
     <button id="backToTheActionPageBtnId" class="customBtn buttonText">Back to the action page
-        <script type="text/javascript" src="js/action.js"></script>
+        <script type="text/javascript" src="js/createOrderPage.js"></script>
     </button>
 </div>
 </body>

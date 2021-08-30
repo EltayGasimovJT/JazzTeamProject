@@ -1,7 +1,10 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import lombok.extern.java.Log;
-import org.jazzteam.eltay.gasimov.dto.*;
+import org.jazzteam.eltay.gasimov.dto.ClientDto;
+import org.jazzteam.eltay.gasimov.dto.CreateOrderFormDto;
+import org.jazzteam.eltay.gasimov.dto.OrderDto;
+import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
@@ -11,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -58,7 +62,7 @@ public class OrderController {
                         .width(dtoFromForm.getWidth())
                         .length(dtoFromForm.getLength())
                         .build())
-                .destinationPlace(modelMapper.map(orderProcessingPointService.findByLocation(dtoFromForm.getDestinationPlaceCountry()), OrderProcessingPointDto.class))
+                 //.destinationPlace(modelMapper.map(orderProcessingPointService.findByLocation(dtoFromForm.getDestinationPlaceCountry()), OrderProcessingPointDto.class))
                 .build();
         Set<OrderDto> ordersToSave = new HashSet<>();
         sender.setOrders(ordersToSave);
@@ -66,10 +70,17 @@ public class OrderController {
         clientService.save(recipient);
 
 
-        log.severe(orderDtoToSave.toString());
         orderService.save(orderDtoToSave);
 
         return orderDtoToSave;
+    }
+
+    @GetMapping(path = "/orders/findBySenderPassport")
+    public @ResponseBody
+    Iterable<OrderDto> findByPassportId(@RequestParam String passportId, Map<String,Object> model) {
+        final ClientDto map = modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
+        model.put("Orders", map.getOrders());
+        return map.getOrders();
     }
 
     @GetMapping(path = "/orders/{id}")

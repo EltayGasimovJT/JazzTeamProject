@@ -79,6 +79,7 @@
 .customBtn {
     width: 250px;
     height: 72px;
+    transition: .3s;
 
     background: #5176FA;
     border-radius: 10px;
@@ -182,6 +183,7 @@
     float: left;
     text-align: center;
     height: 98px;
+    transition: .3s;
     background-color: #5176FA;
     padding: 14px 16px;
     text-decoration: none;
@@ -298,6 +300,20 @@
     height: 40px;
     margin: 5px;
     background: red;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 24px;
+    border: 1px solid black;
+
+}
+
+.unauthorized {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    margin: 5px;
+    background: blue;
     color: white;
     border-radius: 5px;
     font-weight: bold;

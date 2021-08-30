@@ -11,10 +11,11 @@
 <body>
 <div class="defaultBar">
     <div class="defaultLogo">GasDel</div>
-    <div class="createOrderText">Clients orders</div>
-
+    <div class="createOrderText">Clients orders
+        <button id="checkOrderBtn" style="margin-left: 100px" class="me-btn buttonText open-modal" onClick={load()}>Show my orders</button>
+    </div>
     <div>
-        <table border="2px black solid" class="tableForOrders tableMargin">
+        <table id="orders" border="2px black solid" class="tableForOrders tableMargin">
             <tr>
                 <td>Order ID</td>
                 <td>Recipient name</td>
@@ -24,18 +25,19 @@
                 <td>Destination Point</td>
                 <td>Current Location</td>
             </tr>
-            <tr>
-                <td>1</td>
-                <td>Eltay</td>
-                <td>Igor</td>
-                <td>26.08.2021</td>
-                <td>40 BYN</td>
-                <td>Minsk</td>
-                <td>Minsk</td>
-            </tr>
-
         </table>
 
+    </div>
+    <div class="backGround-modal">
+        <div class="modal-custom">
+            <form id="passportIdEnterForm">
+                <span>Please enter your passport Id</span>
+                <span for="passportId"><b>Passport Id</b></span>
+                <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
+                <button type="submit" class="enter-passportId">Login</button>
+                <button class="modal-close">Х</button>
+            </form>
+        </div>
     </div>
 </div>
 <div class="backToTheActionPageBtn">

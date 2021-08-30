@@ -3,44 +3,6 @@ jQuery('document').ready(function () {
         location.href = "actionPage.html";
     })
 
-    jQuery("#closeRegFormId").on('click', function () {
-        closeForm();
-    })
-
-    function openForm() {
-        document.getElementById("findByPassportIdForm").style.display = "block";
-    }
-
-    function closeForm() {
-        document.getElementById("findByPassportIdForm").style.display = "none";
-    }
-
-    const backgrounDModal = document.querySelector('.backGround-modal');
-    const modal = document.querySelector('.modal-custom');
-    const closeModel = document.querySelector('.modal-close');
-    const openModel = document.querySelector('.open-modal');
-    const openClientsOrder = document.querySelector('.open-clientsOrder');
-
-    backgrounDModal.addEventListener('click', () => {
-        backgrounDModal.style.visibility = 'hidden';
-    })
-
-    modal.addEventListener('click', (event) => {
-        event.stopPropagation();
-    })
-
-    closeModel.addEventListener('click', () => {
-        backgrounDModal.style.visibility = 'hidden';
-    })
-
-    openModel.addEventListener('click', () => {
-        backgrounDModal.style.visibility = 'visible';
-    })
-
-    openClientsOrder.addEventListener('click', () => {
-        location.href = "clientsOrders.html";
-    })
-
     /*$("#passportIdEnterForm").on("submit", function () {
         $.ajax({
             url: 'http://localhost:8081/clients/byPassport',

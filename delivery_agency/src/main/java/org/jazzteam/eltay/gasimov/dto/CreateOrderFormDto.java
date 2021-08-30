@@ -14,7 +14,6 @@ public class CreateOrderFormDto {
     private String recipientSurname;
     private String recipientPhoneNumber;
     private String recipientPassportId;
-    private String destinationPlaceCountry;
     private String destinationPlaceTown;
     private Double weight;
     private Double height;
