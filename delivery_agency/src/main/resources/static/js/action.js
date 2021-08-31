@@ -15,15 +15,18 @@ jQuery('document').ready(function () {
         document.getElementById("findByPassportIdForm").style.display = "none";
     }
 
-    const backgrounDModal = document.querySelector('.backGround-modal');
+    const backgroundModal = document.querySelector('.backGround-modal');
+    const trackOrderModelBackground = document.querySelector('.backGround-modal');
     const modal = document.querySelector('.modal-custom');
     const closeModel = document.querySelector('.modal-close');
     const openModel = document.querySelector('.open-modal');
     const openClientsOrder = document.querySelector('.open-clientsOrder');
     const createOrder = document.querySelector('.create-order');
+    const trackOrder = document.querySelector('.track-order');
 
-    backgrounDModal.addEventListener('click', () => {
-        backgrounDModal.style.visibility = 'hidden';
+
+    backgroundModal.addEventListener('click', () => {
+        backgroundModal.style.visibility = 'hidden';
     })
 
     modal.addEventListener('click', (event) => {
@@ -31,11 +34,15 @@ jQuery('document').ready(function () {
     })
 
     closeModel.addEventListener('click', () => {
-        backgrounDModal.style.visibility = 'hidden';
+        backgroundModal.style.visibility = 'hidden';
     })
 
     openModel.addEventListener('click', () => {
-        backgrounDModal.style.visibility = 'visible';
+        backgroundModal.style.visibility = 'visible';
+    })
+
+    trackOrder.addEventListener('click', () => {
+        location.href = "trackOrder.html";
     })
 
     openClientsOrder.addEventListener('click', () => {
@@ -101,16 +108,14 @@ jQuery('document').ready(function () {
         });
     });*/
 
-    function _getOrderData(){
+    function _getOrderData() {
         const senderName = $("#passportIdEnterForm").val();
 
         return {
-            sender:{
+            sender: {
                 senderName: senderName
             },
-            recipient:{
-
-            }
+            recipient: {}
         }
     }
 

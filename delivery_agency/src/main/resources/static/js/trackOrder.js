@@ -3,7 +3,7 @@ jQuery('document').ready(function () {
 
     let idFromUrl = getIdFromUrl();
 
-    let client = getUsersOrders(idFromUrl.clientId);
+    let client = getUsersOrder(idFromUrl.clientId);
 
     console.log(client);
 
@@ -12,7 +12,7 @@ jQuery('document').ready(function () {
     })
 });
 
-function getUsersOrders(idFromUrl) {
+function getUsersOrder(idFromUrl) {
     $.ajax({
         url: `http://localhost:8081/clients/${idFromUrl}`,
         type: 'GET',
@@ -59,5 +59,3 @@ function getIdFromUrl() {
         );
     return params;
 }
-
-
