@@ -1,6 +1,4 @@
 jQuery('document').ready(function () {
-    var data1 = ["1", "2", "3"];
-
     let idFromUrl = getIdFromUrl();
 
     let client = getUsersOrders(idFromUrl.clientId);

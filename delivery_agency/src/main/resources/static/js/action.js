@@ -3,18 +3,6 @@ jQuery('document').ready(function () {
         location.href = "actionPage.html";
     })
 
-    jQuery("#closeRegFormId").on('click', function () {
-        closeForm();
-    })
-
-    function openForm() {
-        document.getElementById("findByPassportIdForm").style.display = "block";
-    }
-
-    function closeForm() {
-        document.getElementById("findByPassportIdForm").style.display = "none";
-    }
-
     const backgroundModal = document.querySelector('.backGround-modal');
     const trackOrderModelBackground = document.querySelector('.backGround-modal');
     const modal = document.querySelector('.modal-custom');
@@ -49,10 +37,6 @@ jQuery('document').ready(function () {
         location.href = "clientsOrders.html";
     })
 
-    createOrder.addEventListener('click', () => {
-        location.href = "createOrder.html";
-    })
-
     /*$("#passportIdEnterForm").on("submit", function () {
         $.ajax({
             url: 'http://localhost:8081/clients/byPassport',
@@ -77,6 +61,7 @@ jQuery('document').ready(function () {
             url = $form.attr("action");
         let geting = $.get(url, {passportId: passportId});
         geting.done(function (data) {
+            console.log(data);
             window.location.href = `http://localhost:8081/clientsOrders.html?clientId=${data.id}`;
         });
     });
@@ -107,17 +92,6 @@ jQuery('document').ready(function () {
             }
         });
     });*/
-
-    function _getOrderData() {
-        const senderName = $("#passportIdEnterForm").val();
-
-        return {
-            sender: {
-                senderName: senderName
-            },
-            recipient: {}
-        }
-    }
 
     /*$("#createOrderForm").submit(function (event) {
         event.preventDefault();
