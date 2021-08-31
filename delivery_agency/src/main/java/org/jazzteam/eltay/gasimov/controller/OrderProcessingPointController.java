@@ -22,7 +22,8 @@ public class OrderProcessingPointController {
     @PostMapping(path = "/processingPoints")
     public @ResponseBody
     OrderProcessingPointDto addNewProcessingPoint(@RequestBody OrderProcessingPointDto processingPointDto) {
-        return modelMapper.map(processingPointService.save(processingPointDto), OrderProcessingPointDto.class);
+        final OrderProcessingPointDto map = modelMapper.map(processingPointService.save(processingPointDto), OrderProcessingPointDto.class);
+        return map;
     }
 
     @GetMapping(path = "/processingPoints")

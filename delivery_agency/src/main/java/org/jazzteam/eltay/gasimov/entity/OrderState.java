@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "orderState")
+@Table(name = "order_state")
 public class OrderState {
     @Id
     @GeneratedValue
@@ -21,13 +21,13 @@ public class OrderState {
     @Column(name = "state")
     private String state;
     @ManyToMany
-    @JoinTable(name = "rolesAllowedWithdrawFromState", joinColumns = {
-            @JoinColumn(name = "orderStateId")
-    }, inverseJoinColumns = {@JoinColumn(name = "roleId")})
+    @JoinTable(name = "roles_allowed_withdraw_from_state", joinColumns = {
+            @JoinColumn(name = "order_state_id")
+    }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<UserRoles> rolesAllowedWithdrawFromState;
     @ManyToMany
-    @JoinTable(name = "rolesAllowedPutToState", joinColumns = {
-            @JoinColumn(name = "orderStateId")
-    }, inverseJoinColumns = {@JoinColumn(name = "roleId")})
+    @JoinTable(name = "roles_allowed_put_to_state", joinColumns = {
+            @JoinColumn(name = "order_state_id")
+    }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<UserRoles> rolesAllowedPutToState;
 }

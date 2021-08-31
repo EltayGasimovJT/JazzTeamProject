@@ -24,6 +24,7 @@ public class OrderHistoryDto {
     private String comment;
     @NotEmpty(message = "OrderHistory must have value")
     private Calendar changingTime;
+    private Calendar sendingTime;
     @NotEmpty(message = "Changed type must have value")
     private OrderStateChangeType changedTypeEnum;
 }

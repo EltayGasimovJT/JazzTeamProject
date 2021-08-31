@@ -6,6 +6,7 @@ import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.OrderRepository;
 import org.jazzteam.eltay.gasimov.repository.VoyageRepository;
+import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
 import org.jazzteam.eltay.gasimov.validator.OrderValidator;
@@ -24,6 +25,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepository orderRepository;
     @Autowired
     private CoefficientForPriceCalculationService priceCalculationRuleService;
+    @Autowired
+    private ClientService clientService;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
@@ -58,25 +61,26 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order save(OrderDto orderDtoToSave) throws IllegalArgumentException {
-        OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
+        //OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
 
-        BigDecimal price = calculatePrice(orderDtoToSave);
+        BigDecimal price = orderDtoToSave.getPrice();
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         orderDtoToSave.setPrice(price);
         orderDtoToSave.setState(modelMapper.map(orderState, OrderStateDto.class));
         OrderHistory orderHistory = OrderHistory.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND.toString())
-                .user(CustomModelMapper.mapDtoToUser(orderDtoToSave.getHistory().get(0).getUser()))
+                .user(new User())
                 .comment(orderDtoToSave.getHistory().get(0).getComment())
                 .build();
         orderDtoToSave.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
 
+
         Client senderToSave = Client.builder()
-                .id(orderDtoToSave.getSender().getId())
-                .name(orderDtoToSave.getSender().getName())
-                .surname(orderDtoToSave.getSender().getSurname())
-                .passportId(orderDtoToSave.getSender().getPassportId())
-                .phoneNumber(orderDtoToSave.getSender().getPhoneNumber())
+                .id(orderDtoToSave.getSenderId())
+                .name(clientService.findById(orderDtoToSave.getSenderId()).getName())
+                .surname(clientService.findById(orderDtoToSave.getSenderId()).getSurname())
+                .passportId(clientService.findById(orderDtoToSave.getSenderId()).getPassportId())
+                .phoneNumber(clientService.findById(orderDtoToSave.getSenderId()).getPhoneNumber())
                 .build();
 
         Client recipientToSave = Client.builder()
@@ -107,7 +111,12 @@ public class OrderServiceImpl implements OrderService {
                 .price(orderDtoToSave.getPrice())
                 .state(orderState)
                 .build();
-        OrderValidator.validateOrder(orderToSave);
+
+        if (orderDtoToSave.getRecipient().getName() != null && orderDtoToSave.getRecipient().getSurname() != null
+                && orderDtoToSave.getRecipient().getPassportId() != null && orderDtoToSave.getRecipient().getPhoneNumber() != null) {
+            orderToSave.setRecipient(clientService.findById(orderDtoToSave.getRecipient().getId()));
+        }
+
 
         return orderRepository.save(orderToSave);
     }
@@ -126,7 +135,6 @@ public class OrderServiceImpl implements OrderService {
     public Order findByRecipient(ClientDto recipientForSearch) throws IllegalArgumentException {
         Order foundOrder = orderRepository.findByRecipient(modelMapper.map(recipientForSearch, Client.class));
         OrderValidator.validateOrder(foundOrder);
-
         return foundOrder;
     }
 
@@ -234,7 +242,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException{
+    public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException {
         CoefficientForPriceCalculationDto coefficientForCalculate = getCoefficient(orderForCalculate.getDestinationPlace());
 
         return priceCalculationRuleService.calculatePrice(orderForCalculate, coefficientForCalculate);
@@ -333,7 +341,7 @@ public class OrderServiceImpl implements OrderService {
             newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
         }
         //orderState.setRolesAllowedPutToState(newRolesAllowedPutToState);
-       // orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
+        // orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
         return orderState;
     }
 

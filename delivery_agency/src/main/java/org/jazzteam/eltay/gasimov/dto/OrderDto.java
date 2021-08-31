@@ -1,17 +1,18 @@
 package org.jazzteam.eltay.gasimov.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
 @Data
+@ToString(exclude = {"senderId", "recipient"})
+@EqualsAndHashCode(exclude = "senderId")
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
@@ -20,13 +21,15 @@ public class OrderDto {
     private OrderStateDto state;
     @NotEmpty(message = "Order must have parcelParameters")
     private ParcelParametersDto parcelParameters;
-    @NotEmpty(message = "Order must Have sender")
-    private ClientDto sender;
+    @NotEmpty(message = "Order must Have senderId")
+    @JsonManagedReference
+    private Long senderId;
     @NotEmpty(message = "Order must Have recipient")
     private ClientDto recipient;
     @Positive(message = "Price must be positive")
-    @NotEmpty(message = "Price cannot be empty")
     private BigDecimal price;
+    @NotEmpty(message = "SendingTime cannot be null")
+    private LocalDateTime sendingTime;
     @NotEmpty(message = "Order must have destination place")
     private OrderProcessingPointDto destinationPlace;
     @NotEmpty(message = "Order must have current location")

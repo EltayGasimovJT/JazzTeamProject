@@ -70,7 +70,6 @@ jQuery('document').ready(function () {
             url = $form.attr("action");
         let geting = $.get(url, {passportId: passportId});
         geting.done(function (data) {
-            let content = $(data).find("#content");
             window.location.href = `http://localhost:8081/clientsOrders.html?clientId=${data.id}`;
         });
     });

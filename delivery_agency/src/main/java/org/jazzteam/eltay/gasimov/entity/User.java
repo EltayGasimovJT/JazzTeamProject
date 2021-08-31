@@ -27,8 +27,8 @@ public class User {
     @ManyToOne(cascade = CascadeType.ALL)
     private AbstractBuilding workingPlace;
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "userRoles", joinColumns = {
-            @JoinColumn(name = "userId")
-    }, inverseJoinColumns = {@JoinColumn(name = "roleId")})
+    @JoinTable(name = "user_roles", joinColumns = {
+            @JoinColumn(name = "user_id")
+    }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<UserRoles> roles;
 }

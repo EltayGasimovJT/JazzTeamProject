@@ -15,7 +15,7 @@ public class OrderValidator {
             throw new IllegalArgumentException("There is not Order with this Id");
         }
         if (orderToValidate.getSender() == null && orderToValidate.getRecipient() == null) {
-            throw new IllegalArgumentException("The order must have recipient and sender");
+            throw new IllegalArgumentException("The order must have recipient and senderId");
         }
         if (orderToValidate.getPrice().doubleValue() < 0) {
             throw new IllegalArgumentException("Order price cannot be negative" + orderToValidate.getPrice().doubleValue());

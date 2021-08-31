@@ -1,21 +1,20 @@
 package org.jazzteam.eltay.gasimov.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(exclude = "orders")
+@ToString(exclude = "orders")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Component
 public class ClientDto {
     private Long id;
     @NotBlank(message = "Client name cannot be empty")
@@ -31,5 +30,6 @@ public class ClientDto {
     @Size(min = 1, max = 100, message = "Client phoneNumber must be between 1 and 100 characters")
     private String phoneNumber;
     @NotEmpty(message = "Client must have at least one order")
+    @JsonManagedReference
     private Set<OrderDto> orders;
 }

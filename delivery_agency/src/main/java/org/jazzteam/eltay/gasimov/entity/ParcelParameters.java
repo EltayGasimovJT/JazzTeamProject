@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "parcelParameters")
+@Table(name = "parcel_parameters")
 public class ParcelParameters {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

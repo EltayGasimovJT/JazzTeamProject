@@ -40,7 +40,7 @@ class VoyageServiceTest {
                         .length(1.0)
                         .weight(20.0).build())
                 .destinationPlace(processingPointToTest)
-                .sender(ClientDto.builder().build())
+                .senderId(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(new OrderProcessingPointDto())
                 .state(OrderStateDto.builder().build())

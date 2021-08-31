@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class AbstractBuildingDto extends AbstractLocationDto {
+public class AbstractBuildingDto extends AbstractLocationDto {
     @NotEmpty(message = "Location cannot be empty")
     @Size(min = 1, max = 50, message = "Abstract building size must be between 1 and 50 characters")
     private String location;

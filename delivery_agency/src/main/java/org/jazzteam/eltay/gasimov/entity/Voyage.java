@@ -15,10 +15,10 @@ import java.util.Calendar;
 @Entity
 @Table(name = "voyage")
 public class Voyage extends AbstractLocation {
-    @Column(name = "departurePoint")
+    @Column(name = "departure_point")
     private String departurePoint;
-    @Column(name = "destinationPoint")
+    @Column(name = "destination_point")
     private String destinationPoint;
-    @Column(name = "sendingTime")
+    @Column(name = "sending_time")
     private Calendar sendingTime;
 }

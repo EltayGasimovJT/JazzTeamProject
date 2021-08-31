@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "abstractBuilding")
+@Table(name = "abstract_building")
 public abstract class AbstractBuilding extends AbstractLocation {
     @Column(name = "location", unique = true)
     private String location;

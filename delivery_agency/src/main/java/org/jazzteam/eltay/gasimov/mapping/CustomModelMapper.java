@@ -5,6 +5,7 @@ import org.jazzteam.eltay.gasimov.entity.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,7 +27,7 @@ public class CustomModelMapper {
                 .destinationPlace(modelMapper.map(orderToConvert.getDestinationPlace(), OrderProcessingPointDto.class))
                 .state(modelMapper.map(orderToConvert.getState(), OrderStateDto.class))
                 .recipient(modelMapper.map(orderToConvert.getRecipient(), ClientDto.class))
-                .sender(modelMapper.map(orderToConvert.getSender(), ClientDto.class))
+                .senderId(orderToConvert.getSender().getId())
                 .history(historiesToConvert)
                 .price(orderToConvert.getPrice())
                 .parcelParameters(modelMapper.map(orderToConvert.getParcelParameters(), ParcelParametersDto.class))
@@ -40,16 +41,19 @@ public class CustomModelMapper {
     }
 
     public static Order mapDtoToOrder(OrderDto orderDtoToConvert) {
-        Set<OrderHistory> historiesToConvert = orderDtoToConvert.getHistory().stream()
-                .map(history -> modelMapper.map(history, OrderHistory.class))
-                .collect(Collectors.toSet());
+        Set<OrderHistory> historiesToConvert = new HashSet<>();
+        if (orderDtoToConvert.getHistory() != null) {
+            historiesToConvert = orderDtoToConvert.getHistory().stream()
+                    .map(history -> modelMapper.map(history, OrderHistory.class))
+                    .collect(Collectors.toSet());
+        }
 
         Order convertedToOrder = Order.builder()
                 .id(orderDtoToConvert.getId())
                 .destinationPlace(modelMapper.map(orderDtoToConvert.getDestinationPlace(), OrderProcessingPoint.class))
                 .state(modelMapper.map(orderDtoToConvert.getState(), OrderState.class))
                 .recipient(modelMapper.map(orderDtoToConvert.getRecipient(), Client.class))
-                .sender(modelMapper.map(orderDtoToConvert.getSender(), Client.class))
+                .sender(modelMapper.map(orderDtoToConvert.getSenderId(), Client.class))
                 .history(historiesToConvert)
                 .price(orderDtoToConvert.getPrice())
                 .parcelParameters(modelMapper.map(orderDtoToConvert.getParcelParameters(), ParcelParameters.class))

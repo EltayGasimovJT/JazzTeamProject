@@ -6,7 +6,6 @@ import org.jazzteam.eltay.gasimov.dto.CreateOrderRequestDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.service.ClientService;
-import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +26,6 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private OrderProcessingPointService orderProcessingPointService;
 
     @PostMapping(path = "/orders")
     @ResponseStatus(HttpStatus.CREATED)
@@ -53,8 +50,8 @@ public class OrderController {
                 .phoneNumber(dtoFromForm.getRecipientPhoneNumber())
                 .passportId(dtoFromForm.getRecipientPassportId())
                 .build();
+
         OrderDto orderDtoToSave = OrderDto.builder()
-                .sender(sender)
                 .recipient(recipient)
                 .parcelParameters(ParcelParametersDto.builder()
                         .height(dtoFromForm.getHeight())
@@ -69,15 +66,13 @@ public class OrderController {
         clientService.save(sender);
         clientService.save(recipient);
 
-
         orderService.save(orderDtoToSave);
-
         return orderDtoToSave;
     }
 
     @GetMapping(path = "/orders/findBySenderPassport")
     public @ResponseBody
-    Iterable<OrderDto> findByPassportId(@RequestParam String passportId, Map<String,Object> model) {
+    Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId, Map<String,Object> model) {
         final ClientDto map = modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
         model.put("Orders", map.getOrders());
         return map.getOrders();
@@ -93,10 +88,11 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderDto> findAllOrders() {
-        return orderService.findAll()
+        final Set<OrderDto> collect = orderService.findAll()
                 .stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toSet());
+        return collect;
     }
 
     @DeleteMapping(path = "/orders/{id}")

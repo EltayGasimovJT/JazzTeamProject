@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Builder
@@ -20,23 +22,26 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "orderStateId")
+    @JoinColumn
     private OrderState state;
     @OneToOne
     private ParcelParameters parcelParameters;
     @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn(name="senderId", nullable=false)
+    @JoinColumn
+    @JsonBackReference
     private Client sender;
     @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn(name = "recipientId")
+    @JoinColumn
     private Client recipient;
-    @Column(name = "price")
+    @Column
     private BigDecimal price;
+    @Column
+    private LocalDateTime sendingTime;
     @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn(name = "destinationPointId")
+    @JoinColumn
     private OrderProcessingPoint destinationPlace;
     @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn(name = "currentLocationId")
+    @JoinColumn
     private AbstractBuilding currentLocation;
     @OneToMany
     @JoinColumn
