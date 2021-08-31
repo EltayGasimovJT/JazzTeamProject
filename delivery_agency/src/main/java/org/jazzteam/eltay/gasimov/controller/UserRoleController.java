@@ -40,7 +40,7 @@ public class UserRoleController {
     }
 
     @DeleteMapping(path = "/userRoles/{id}")
-    public void deleteClient(@PathVariable Long id) {
+    public void deleteRole(@PathVariable Long id) {
         userRolesService.delete(id);
     }
 

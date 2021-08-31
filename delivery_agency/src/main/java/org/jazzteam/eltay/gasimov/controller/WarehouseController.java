@@ -41,7 +41,7 @@ public class WarehouseController {
     }
 
     @PutMapping("/warehouses")
-    public List<String> updateCoefficient(@RequestBody WarehouseDto newWarehouse) {
+    public List<String> updateWarehouse(@RequestBody WarehouseDto newWarehouse) {
         if (warehouseService.findOne(newWarehouse.getId()) == null) {
             List<String> processingPointsIds = new ArrayList<>();
             final WarehouseDto savedWarehouse = modelMapper.map(warehouseService.save(newWarehouse), WarehouseDto.class);
