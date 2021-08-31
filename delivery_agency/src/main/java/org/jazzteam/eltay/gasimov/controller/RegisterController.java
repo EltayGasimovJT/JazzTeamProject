@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.sql.SQLException;
 
 @RestController
 public class RegisterController {
@@ -23,7 +22,7 @@ public class RegisterController {
     private JwtProvider jwtProvider;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) throws SQLException {
+    public String registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
         UserDto userDtoToSave = new UserDto();
         userDtoToSave.setPassword(registrationRequest.getPassword());
         userDtoToSave.setName(registrationRequest.getLogin());

@@ -1,10 +1,7 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import lombok.extern.java.Log;
-import org.jazzteam.eltay.gasimov.dto.ClientDto;
-import org.jazzteam.eltay.gasimov.dto.CreateOrderRequestDto;
-import org.jazzteam.eltay.gasimov.dto.OrderDto;
-import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
+import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
 import org.modelmapper.ModelMapper;
@@ -59,7 +56,6 @@ public class OrderController {
                         .width(dtoFromForm.getWidth())
                         .length(dtoFromForm.getLength())
                         .build())
-                 //.destinationPlace(modelMapper.map(orderProcessingPointService.findByLocation(dtoFromForm.getDestinationPlaceCountry()), OrderProcessingPointDto.class))
                 .build();
         Set<OrderDto> ordersToSave = new HashSet<>();
         sender.setOrders(ordersToSave);
@@ -72,7 +68,7 @@ public class OrderController {
 
     @GetMapping(path = "/orders/findBySenderPassport")
     public @ResponseBody
-    Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId, Map<String,Object> model) {
+    Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId, Map<String, Object> model) {
         final ClientDto map = modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
         model.put("Orders", map.getOrders());
         return map.getOrders();
@@ -80,7 +76,7 @@ public class OrderController {
 
     @GetMapping(path = "/orders/{id}")
     public @ResponseBody
-    OrderDto findById(@PathVariable Long id)  {
+    OrderDto findById(@PathVariable Long id) {
         return modelMapper.map(orderService.findOne(id), OrderDto.class);
     }
 
@@ -88,11 +84,10 @@ public class OrderController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderDto> findAllOrders() {
-        final Set<OrderDto> collect = orderService.findAll()
+        return orderService.findAll()
                 .stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toSet());
-        return collect;
     }
 
     @DeleteMapping(path = "/orders/{id}")

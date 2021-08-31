@@ -6,7 +6,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -18,31 +17,31 @@ public class VoyageController {
 
     @PostMapping(path = "/voyages")
     public @ResponseBody
-    VoyageDto addNewVoyage(@RequestBody VoyageDto voyageDto) throws SQLException {
+    VoyageDto addNewVoyage(@RequestBody VoyageDto voyageDto) {
         return modelMapper.map(voyageService.save(voyageDto), VoyageDto.class);
     }
 
     @GetMapping(path = "/voyages")
     public @ResponseBody
-    Iterable<VoyageDto> findAllVoyages() throws SQLException {
+    Iterable<VoyageDto> findAllVoyages() {
         return voyageService.findAll().stream()
                 .map(orderProcessingPoint -> modelMapper.map(orderProcessingPoint, VoyageDto.class))
                 .collect(Collectors.toSet());
     }
 
     @DeleteMapping(path = "/voyages/{id}")
-    public void deleteVoyage(@PathVariable Long id) throws SQLException {
+    public void deleteVoyage(@PathVariable Long id) {
         voyageService.delete(id);
     }
 
     @GetMapping(path = "/voyages/{id}")
     public @ResponseBody
-    VoyageDto findById(@PathVariable Long id) throws SQLException {
+    VoyageDto findById(@PathVariable Long id) {
         return modelMapper.map(voyageService.findOne(id), VoyageDto.class);
     }
 
     @PutMapping("/voyages")
-    public VoyageDto updateVoyage(@RequestBody VoyageDto newVoyage) throws SQLException {
+    public VoyageDto updateVoyage(@RequestBody VoyageDto newVoyage) {
         if (voyageService.findOne(newVoyage.getId()) == null) {
             return modelMapper.map(voyageService.save(newVoyage), VoyageDto.class);
         } else {

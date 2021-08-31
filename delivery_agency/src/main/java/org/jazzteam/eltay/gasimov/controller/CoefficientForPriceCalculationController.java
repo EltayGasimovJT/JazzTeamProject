@@ -18,7 +18,7 @@ public class CoefficientForPriceCalculationController {
 
     @PostMapping(path = "/coefficients")
     public @ResponseBody
-    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficient) throws IllegalArgumentException {
+    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficient) {
         CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto
                 .builder()
                 .country(coefficient.getCountry())

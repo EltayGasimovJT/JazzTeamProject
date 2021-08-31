@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.stream.Collectors;
 
 @RestController
@@ -20,20 +19,20 @@ public class UserRoleController {
     @PostMapping(path = "/userRoles")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    UserRolesDto addNewUserRole(@RequestBody UserRolesDto userRolesDto) throws SQLException {
+    UserRolesDto addNewUserRole(@RequestBody UserRolesDto userRolesDto) {
         return modelMapper.map(userRolesService.save(userRolesDto), UserRolesDto.class);
     }
 
     @GetMapping(path = "/userRoles/{id}")
     public @ResponseBody
-    UserRolesDto findById(@PathVariable Long id) throws SQLException {
+    UserRolesDto findById(@PathVariable Long id) {
         return modelMapper.map(userRolesService.findOne(id), UserRolesDto.class);
     }
 
     @GetMapping(path = "/userRoles")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<UserRolesDto> findAllUserRoles() throws SQLException {
+    Iterable<UserRolesDto> findAllUserRoles() {
         return userRolesService.findAll()
                 .stream()
                 .map(userRoles -> modelMapper.map(userRoles, UserRolesDto.class))
@@ -47,7 +46,7 @@ public class UserRoleController {
 
     @PutMapping("/userRoles")
     @ResponseStatus(HttpStatus.OK)
-    public UserRolesDto updateUserRole(@RequestBody UserRolesDto newUserRole) throws SQLException {
+    public UserRolesDto updateUserRole(@RequestBody UserRolesDto newUserRole) {
         if (userRolesService.findOne(newUserRole.getId()) == null) {
             return modelMapper.map(userRolesService.save(newUserRole), UserRolesDto.class);
         } else {

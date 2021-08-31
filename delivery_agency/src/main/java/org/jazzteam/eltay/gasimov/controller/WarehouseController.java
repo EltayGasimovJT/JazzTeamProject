@@ -8,7 +8,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,13 +21,13 @@ public class WarehouseController {
 
     @PostMapping(path = "/warehouses")
     public @ResponseBody
-    WarehouseDto addNewWarehouse(@RequestBody WarehouseDto warehouseDto) throws SQLException {
+    WarehouseDto addNewWarehouse(@RequestBody WarehouseDto warehouseDto) {
         return modelMapper.map(warehouseService.save(warehouseDto), WarehouseDto.class);
     }
 
     @GetMapping(path = "/warehouses")
     public @ResponseBody
-    Iterable<Long> findAllWarehouses() throws SQLException {
+    Iterable<Long> findAllWarehouses() {
         List<Long> listOfWarehousesId = new ArrayList<>();
         for (Warehouse warehouse : warehouseService.findAll()) {
             listOfWarehousesId.add(warehouse.getId());
@@ -42,7 +41,7 @@ public class WarehouseController {
     }
 
     @PutMapping("/warehouses")
-    public List<String> updateCoefficient(@RequestBody WarehouseDto newWarehouse) throws SQLException {
+    public List<String> updateCoefficient(@RequestBody WarehouseDto newWarehouse) {
         if (warehouseService.findOne(newWarehouse.getId()) == null) {
             List<String> processingPointsIds = new ArrayList<>();
             final WarehouseDto savedWarehouse = modelMapper.map(warehouseService.save(newWarehouse), WarehouseDto.class);
@@ -62,7 +61,7 @@ public class WarehouseController {
 
     @GetMapping(path = "/warehouses/{id}")
     public @ResponseBody
-    List<String> findById(@PathVariable Long id) throws SQLException {
+    List<String> findById(@PathVariable Long id) {
         WarehouseDto foundWarehouse = modelMapper.map(warehouseService.findOne(id), WarehouseDto.class);
         List<String> processingPointsIds = new ArrayList<>();
         for (OrderProcessingPointDto orderProcessingPoint : foundWarehouse.getOrderProcessingPoints()) {

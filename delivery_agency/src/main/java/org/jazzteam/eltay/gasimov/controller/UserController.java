@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
-
 @RestController
 public class UserController {
     @Autowired
@@ -21,21 +19,21 @@ public class UserController {
     @PostMapping(path = "/users")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    User addNewUser(@RequestBody UserDto userDtoToSave) throws SQLException {
+    User addNewUser(@RequestBody UserDto userDtoToSave) {
         return userService.save(userDtoToSave);
     }
 
     @PostMapping(path = "/users/changeWorkingPlace/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    User changeWorkingPlace(@PathVariable Long id, @RequestBody AbstractBuildingDto newWorkingPlace) throws SQLException {
+    User changeWorkingPlace(@PathVariable Long id, @RequestBody AbstractBuildingDto newWorkingPlace) {
         return userService.changeWorkingPlace(id, newWorkingPlace);
     }
 
     @GetMapping(path = "/users")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<User> findAllUsers() throws SQLException {
+    Iterable<User> findAllUsers() {
         return userService.findAll();
     }
 
@@ -48,13 +46,13 @@ public class UserController {
     @GetMapping(path = "/users/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    UserDto findById(@PathVariable Long id) throws SQLException {
+    UserDto findById(@PathVariable Long id) {
         return modelMapper.map(userService.findOne(id), UserDto.class);
     }
 
     @PutMapping("/users")
     @ResponseStatus(HttpStatus.OK)
-    public User updateUser(@RequestBody UserDto newUser) throws SQLException {
+    public User updateUser(@RequestBody UserDto newUser) {
         if (userService.findOne(newUser.getId()) == null) {
             return userService.save(newUser);
         } else {

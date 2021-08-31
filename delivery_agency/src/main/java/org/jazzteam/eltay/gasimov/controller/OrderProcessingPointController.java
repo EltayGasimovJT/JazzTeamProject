@@ -7,7 +7,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,8 +21,7 @@ public class OrderProcessingPointController {
     @PostMapping(path = "/processingPoints")
     public @ResponseBody
     OrderProcessingPointDto addNewProcessingPoint(@RequestBody OrderProcessingPointDto processingPointDto) {
-        final OrderProcessingPointDto map = modelMapper.map(processingPointService.save(processingPointDto), OrderProcessingPointDto.class);
-        return map;
+        return modelMapper.map(processingPointService.save(processingPointDto), OrderProcessingPointDto.class);
     }
 
     @GetMapping(path = "/processingPoints")
@@ -43,7 +41,7 @@ public class OrderProcessingPointController {
 
     @GetMapping(path = "/processingPoints/{id}")
     public @ResponseBody
-    List<String> findById(@PathVariable Long id) throws SQLException {
+    List<String> findById(@PathVariable Long id) {
         OrderProcessingPointDto foundProcessingPoint = modelMapper.map(processingPointService.findOne(id), OrderProcessingPointDto.class);
         return Arrays.asList("id: " + foundProcessingPoint.getId().toString(),
                 "Location: " + foundProcessingPoint.getLocation(), "WorkingPlaceType: " + foundProcessingPoint.getWorkingPlaceType().toString(),
