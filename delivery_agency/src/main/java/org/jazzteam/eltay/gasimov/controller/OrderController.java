@@ -37,17 +37,20 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderDto createOrder(@RequestBody CreateOrderRequestDto dtoFromForm) {
-        if (clientService.findByPassportId(dtoFromForm.getSender().getPassportId()) == null) {
-            clientService.save(dtoFromForm.getSender());
+
+        log.severe(dtoFromForm.toString());
+      if (clientService.findByPassportId(dtoFromForm.getSender().getPassportId()) == null) {
+          //  clientService.save(dtoFromForm.getSender());
         }
         if (clientService.findByPassportId(dtoFromForm.getRecipient().getPassportId()) == null) {
-            clientService.save(dtoFromForm.getRecipient());
+            //clientService.save(dtoFromForm.getRecipient());
         }
         OrderDto orderDtoToSave = OrderDto.builder()
                 .build();
 
         //orderService.save(orderDtoToSave);
-        return orderDtoToSave;
+        log.severe("qaqwqwqtwqwt");
+        return null;
     }
 
     @GetMapping(path = "/orders/findBySenderPassport")
