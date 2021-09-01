@@ -37,7 +37,6 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderDto createOrder(@RequestBody CreateOrderRequestDto dtoFromForm) {
-
         log.severe(dtoFromForm.toString());
       if (clientService.findByPassportId(dtoFromForm.getSender().getPassportId()) == null) {
           //  clientService.save(dtoFromForm.getSender());
