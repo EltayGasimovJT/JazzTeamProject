@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF8">
     <title>GasDel general</title>
+    <style>
+        table {
+            font-family: "Calibri Light", Helvetica, Arial, sans-serif;
+        }
+    </style>
     <link href="/static/css/style.css" th:href="@{/static/css/style.css}" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" href="icons/waterFall.png" th:href="@{static/icons/waterFall.png}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -17,7 +22,8 @@
 
     <div class="topNav">
         <div class="topNavA">
-            <a style="color: white; text-decoration: none" href="http://localhost:8081/actionPage.html">Sign as client</a>
+            <a style="color: white; text-decoration: none" href="http://localhost:8081/actionPage.html">Sign as
+                client</a>
         </div>
         <div class="topNavA">
             <a style="color: white; text-decoration: none" href="">Sign as user</a>
@@ -29,21 +35,30 @@
             <a style="color: white; text-decoration: none" href="#about">About us</a>
         </div>
     </div>
-
-    <div class="backGround-modal">
-        <div class="modal-custom">
-            <form id="passportIdEnterForm" action="http://localhost:8081/clients/byPassport">
-                <span>Please enter your passport Id</span>
-                <span for="passportId"><b>Passport Id</b></span>
-                <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
-                <button type="submit" class="enter-passportId">Login</button>
-                <button class="modal-close">Х</button>
-            </form>
-        </div>
+    <div>
+        <table id="histories" style="" class="table table-bordered table-sm tableMargin">
+            <tr>
+                <td>Sent at</td>
+                <td>Changed at</td>
+                <td>Comment</td>
+            </tr>
+        </table>
     </div>
-
-    <script type="text/javascript" src="/static/js/orderInfo.js"></script>
 </div>
+<div id="orderId" class="createOrderText">Order №</div>
+<div class="backGround-modal">
+    <div class="modal-custom">
+        <form id="passportIdEnterForm" action="http://localhost:8081/clients/byPassport">
+            <span>Please enter your passport Id</span>
+            <span for="passportId"><b>Passport Id</b></span>
+            <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
+            <button type="submit" class="enter-passportId">Login</button>
+            <button class="modal-close">Х</button>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript" src="/static/js/orderInfo.js"></script>
 </body>
 </html>
 

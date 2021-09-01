@@ -56,13 +56,13 @@ class VoyageServiceTest {
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
     void addVoyage(OrderDto orderToTest) throws SQLException {
-        GregorianCalendar sendingTime = new GregorianCalendar();
-        sendingTime.set(Calendar.HOUR_OF_DAY, 12);
-        sendingTime.set(Calendar.MINUTE, 30);
+        GregorianCalendar sentAt = new GregorianCalendar();
+        sentAt.set(Calendar.HOUR_OF_DAY, 12);
+        sentAt.set(Calendar.MINUTE, 30);
 
         VoyageDto voyageToTest = new VoyageDto();
         voyageToTest.setId(1L);
-        voyageToTest.setSendingTime(sendingTime);
+        voyageToTest.setSentAt(sentAt);
         voyageToTest.setDispatchedOrders(Arrays.asList(
                 orderToTest,
                 orderToTest));
@@ -214,12 +214,12 @@ class VoyageServiceTest {
 
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);
         expectedTime.set(Calendar.MINUTE, 30);
-        voyageToTest.setSendingTime(expectedTime);
+        voyageToTest.setSentAt(expectedTime);
         voyageService.clear();
 
         voyageService.save(voyageToTest);
 
-        Calendar actualTime = voyageService.findOne(1).getSendingTime();
+        Calendar actualTime = voyageService.findOne(1).getSentAt();
 
         Assertions.assertEquals(expectedTime, actualTime);
     }
@@ -241,11 +241,11 @@ class VoyageServiceTest {
                         orderToSave
                 )
         );
-        GregorianCalendar sendingTime = new GregorianCalendar();
-        sendingTime.set(Calendar.HOUR_OF_DAY, 12);
-        sendingTime.set(Calendar.MINUTE, 30);
+        GregorianCalendar sentAt = new GregorianCalendar();
+        sentAt.set(Calendar.HOUR_OF_DAY, 12);
+        sentAt.set(Calendar.MINUTE, 30);
 
-        expectedVoyage.setSendingTime(sendingTime);
+        expectedVoyage.setSentAt(sentAt);
         voyageService.clear();
 
         voyageService.save(expectedVoyage);
@@ -254,7 +254,7 @@ class VoyageServiceTest {
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);
         expectedTime.set(Calendar.MINUTE, 30);
 
-        expectedVoyage.setSendingTime(expectedTime);
+        expectedVoyage.setSentAt(expectedTime);
 
         Voyage actualVoyage = voyageService.update(expectedVoyage);
 

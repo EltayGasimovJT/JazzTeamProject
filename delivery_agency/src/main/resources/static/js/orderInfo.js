@@ -1,7 +1,8 @@
 jQuery('document').ready(function () {
 
     let order = getIdFromUrl();
-    let histories = getOrderHistories(order.orderId);
+    getOrderHistories(order.orderId);
+    $('#orderId').append(order.orderNumber);
 
 })
 
@@ -28,28 +29,19 @@ function getOrderHistories(idFromUrl) {
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
-            /*let orders = result.orders;
-            var r = [], j = -1;
+            let r = [], j = -1;
 
-            for (let key = 0, size = orders.length; key < size; key++) {
-                r[++j] = '<tr class="text"><td>';
-                r[++j] = orders[key].recipient.name;
+            for (let key = 0, size = result.length; key < size; key++) {
+                r[++j] = '<tr><td>';
+                r[++j] = result[key].sentAt;
                 r[++j] = '</td><td>';
-                r[++j] = orders[key].recipient.surname;
+                r[++j] = result[key].changedAt;
                 r[++j] = '</td><td>';
-                r[++j] = orders[key].sendingTime;
-                r[++j] = '</td><td>';
-                r[++j] = orders[key].price;
-                r[++j] = '</td><td>';
-                r[++j] = orders[key].state.state;
-                r[++j] = '</td><td>';
-                r[++j] = orders[key].currentLocation.location;
+                r[++j] = result[key].comment;
                 r[++j] = '</td></tr>';
-            }*/
+            }
             console.log(result);
-            /*
-                        $('#orders').append(r.join(''));
-            */
+            $('#histories').append(r.join(''));
         }
     });
 }

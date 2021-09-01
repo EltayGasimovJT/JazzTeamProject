@@ -19,7 +19,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
     @Override
     public OrderHistory save(OrderHistoryDto orderHistoryDtoToSave)  {
         OrderHistory orderHistoryToSave = OrderHistory.builder()
-                .changedAt(orderHistoryDtoToSave.getChangingTime())
+                .changedAt(orderHistoryDtoToSave.getChangedAt())
                 .comment(orderHistoryDtoToSave.getComment())
                 .changedTypeEnum(orderHistoryDtoToSave.getChangedTypeEnum().toString())
                 .user(CustomModelMapper.mapDtoToUser(orderHistoryDtoToSave.getUser()))
@@ -47,7 +47,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
     public OrderHistory update(OrderHistoryDto orderHistoryToUpdate) {
         Optional<OrderHistory> foundClientFromRepository = orderHistoryRepository.findById(orderHistoryToUpdate.getId());
         OrderHistory foundHistory = foundClientFromRepository.orElseGet(OrderHistory::new);
-        foundHistory.setChangedAt(orderHistoryToUpdate.getChangingTime());
+        foundHistory.setChangedAt(orderHistoryToUpdate.getChangedAt());
         foundHistory.setComment(orderHistoryToUpdate.getComment());
         foundHistory.setChangedTypeEnum(orderHistoryToUpdate.getChangedTypeEnum().toString());
         foundHistory.setUser(CustomModelMapper.mapDtoToUser(orderHistoryToUpdate.getUser()));

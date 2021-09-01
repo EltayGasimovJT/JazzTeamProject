@@ -4,7 +4,7 @@ jQuery('document').ready(function () {
     getUsersOrders(idFromUrl.clientId);
 
     jQuery("#backToTheActionPageBtnId").on('click', function () {
-        location.href = "actionPage.html";
+        window.location.href = "actionPage.html";
     })
 });
 

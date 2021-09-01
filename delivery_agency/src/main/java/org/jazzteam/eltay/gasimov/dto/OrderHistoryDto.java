@@ -23,8 +23,8 @@ public class OrderHistoryDto {
     @Size(min = 1, max = 50, message = "Comment size must be between 1 and 50 characters")
     private String comment;
     @NotEmpty(message = "OrderHistory must have value")
-    private Calendar changingTime;
-    private Calendar sendingTime;
+    private Calendar changedAt;
+    private Calendar sentAt;
     @NotEmpty(message = "Changed type must have value")
     private OrderStateChangeType changedTypeEnum;
 }

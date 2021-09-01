@@ -13,8 +13,13 @@
 <div class="defaultBar">
     <a href="homePage.html" class="defaultLogo">GasDel</a>
 
-
-    <script type="text/javascript" src="/static/js/action.js" th:src="@{/static/js/action.js}"></script>
+    <div class="processingPointOrderActionBar">
+        <div class="actionTabText" style="margin-left: 80px">Order actions</div>
+        <div class="btnMargin" style="margin-left: 151px">
+            <button id="createOrderBtnId" class="me-btn buttonText create-order-btn">Create order</button>
+        </div>
+    </div>
 </div>
+<script type="text/javascript" src="/static/js/processingPointWorkerAction.js"></script>
 </body>
 </html>

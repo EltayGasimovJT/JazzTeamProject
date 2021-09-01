@@ -26,5 +26,7 @@ public class OrderHistory {
     @Column
     private Calendar changedAt;
     @Column
+    private Calendar sentAt;
+    @Column
     private String changedTypeEnum;
 }

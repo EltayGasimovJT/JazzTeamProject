@@ -123,7 +123,7 @@ class OrderServiceTest {
         GregorianCalendar changingTimeToTest = new GregorianCalendar();
         changingTimeToTest.set(Calendar.HOUR_OF_DAY, 15);
         changingTimeToTest.set(Calendar.MINUTE, 35);
-        expected.setChangingTime(changingTimeToTest);
+        expected.setChangedAt(changingTimeToTest);
         OrderDto order = OrderDto.builder()
                 .id(1L)
                 .history(Collections.singletonList(expected))
@@ -147,7 +147,7 @@ class OrderServiceTest {
 
         changingTimeToTest.set(Calendar.HOUR_OF_DAY, 12);
 
-        newOrderHistory.setChangingTime(changingTimeToTest);
+        newOrderHistory.setChangedAt(changingTimeToTest);
 
         orderService.updateOrderHistory(1, newOrderHistory);
 

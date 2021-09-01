@@ -122,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(orderToSave);
     }
 
-    public String generateNewTrackNumber() {
+    private String generateNewTrackNumber() {
         int randomStringLength = 7;
         String charset = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZ";
         return RandomStringUtils.random(randomStringLength, charset);

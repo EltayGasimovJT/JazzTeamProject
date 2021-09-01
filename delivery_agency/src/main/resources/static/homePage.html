@@ -17,38 +17,34 @@
 
     <div class="topNav">
         <div class="topNavA">
-            <a style="color: white; text-decoration: none" href="http://localhost:8081/actionPage.html">Sign as client</a>
+            <a style="color: white; text-decoration: none" role="button" href="http://localhost:8081/actionPage.html">Sign as client</a>
         </div>
         <div class="topNavA">
-            <a style="color: white; text-decoration: none" href="">Sign as user</a>
+            <a class="asUserId" role="button" style="color: white; text-decoration: none">Sign as user</a>
         </div>
         <div style="color: white" class="topNavA">
-            <a style="color: white; text-decoration: none" href="#contact">Contact</a>
+            <a style="color: white; text-decoration: none" role="button" href="#contact">Contact</a>
         </div>
         <div class="topNavA">
-            <a style="color: white; text-decoration: none" href="#about">About us</a>
+            <a style="color: white; text-decoration: none" role="button" href="#about">About us</a>
         </div>
     </div>
 
     <div style="margin-top: 200px">
         <form id="trackOrderForm" action="http://localhost:8081/orders/findByTrackNumber">
             <div class="form-group trackForm">
-                <label for="email">Enter an identification number </label>
-                <input type="text" class="form-control" id="email" placeholder="Enter an identification number" name="orderNumber">
+                <label for="orderNumberId">Enter an identification number </label>
+                <input type="text" class="form-control" id="orderNumberId" placeholder="Enter an identification number" name="orderNumber">
             </div>
             <button type="submit" class="btn btn-dark">Submit</button>
         </form>
     </div>
 
     <div class="backGround-modal">
-        <div class="modal-custom">
-            <form id="passportIdEnterForm" action="http://localhost:8081/clients/byPassport">
-                <span>Please enter your passport Id</span>
-                <span for="passportId"><b>Passport Id</b></span>
-                <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
-                <button type="submit" class="enter-passportId">Login</button>
-                <button class="modal-close">Х</button>
-            </form>
+        <div class="modal-redirect">
+            <button style="width: 50%; align-self: center" class="btn btn-info buttonText open-modal">Sign as Admin</button>
+            <button style="width: 50%; align-self: center" class="btn btn-info buttonText open-modal">Sign as warehouse worker</button>
+            <button id="processingPointWorker" style="width: 50%; align-self: center" class="btn btn-info buttonText open-modal processing-point-worker">Sign as processing point worker</button>
         </div>
     </div>
 
