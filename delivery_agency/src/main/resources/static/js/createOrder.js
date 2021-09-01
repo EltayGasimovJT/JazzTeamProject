@@ -100,7 +100,8 @@ $('#createOrderForm').submit(function (e) {
         sender: sender,
         recipient: recipient,
         destinationPoint: `${$form[8].value}`,
-        parcelParameters: parcelParameters
+        parcelParameters: parcelParameters,
+        price: price.innerText
     })
 
     $.ajax({
