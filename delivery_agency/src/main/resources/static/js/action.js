@@ -8,7 +8,6 @@ jQuery('document').ready(function () {
     const modal = document.querySelector('.modal-custom');
     const closeModel = document.querySelector('.modal-close');
     const openModel = document.querySelector('.open-modal');
-    const openClientsOrder = document.querySelector('.open-clientsOrder');
     const createOrder = document.querySelector('.create-order');
     const trackOrder = document.querySelector('.track-order');
 
@@ -31,10 +30,6 @@ jQuery('document').ready(function () {
 
     trackOrder.addEventListener('click', () => {
         location.href = "trackOrder.html";
-    })
-
-    openClientsOrder.addEventListener('click', () => {
-        location.href = "clientsOrders.html";
     })
 
     /*$("#passportIdEnterForm").on("submit", function () {

@@ -57,5 +57,3 @@ function getIdFromUrl() {
         );
     return params;
 }
-
-
