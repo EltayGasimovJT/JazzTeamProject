@@ -1,6 +1,5 @@
 package org.jazzteam.eltay.gasimov.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -30,6 +29,5 @@ public class ClientDto {
     @Size(min = 1, max = 100, message = "Client phoneNumber must be between 1 and 100 characters")
     private String phoneNumber;
     @NotEmpty(message = "Client must have at least one order")
-    @JsonManagedReference
     private Set<OrderDto> orders;
 }

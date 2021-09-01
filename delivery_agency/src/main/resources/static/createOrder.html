@@ -15,41 +15,48 @@
     <a href="homePage.html" class="defaultLogo">GasDel</a>
     <div class="createOrderText">Create new Order</div>
     <div class="createOrderBar">
-        <form id="createOrderForm">
-            <div>
+        <form id="createOrderForm" class="createOrderForm">
+            <div class="form-group">
                 <div>
                     <span class="createOrderTextField">Sender name</span>
-                    <input type="text" name="senderName" title="Введите имя отправителя">
+                    <input type="text" name="senderName" value="Eltay" title="Введите имя отправителя">
                 </div>
                 <div>
                     <span class="createOrderTextField">Sender surname</span>
-                    <input align="right" type="text" name="senderSurname" title="Введите фамилию отправителя">
+                    <label style="">
+                        <input align="right" type="text" value="Gasimov" name="senderSurname"
+                               title="Введите фамилию отправителя">
+                    </label>
                 </div>
                 <div>
                     <span class="createOrderTextField">Sender phone number</span>
-                    <input align="right" name="senderPhoneNumber" type="tel" title="Введите номер телефона отправителя">
+                    <input align="right" name="senderPhoneNumber" value="756-75-35" type="tel"
+                           title="Введите номер телефона отправителя">
                 </div>
                 <div>
                     <span class="createOrderTextField">Sender passport Id</span>
-                    <input type="text" name="senderPassportId" title="Введите номер пасспорта отправителя">
+                    <input type="text" name="senderPassportId" value="1253135"
+                           title="Введите номер пасспорта отправителя">
                 </div>
             </div>
             <div>
                 <div>
                     <span class="createOrderTextField">Recipient name</span>
-                    <input type="text" name="recipientName" title="Введите имя получателя">
+                    <input type="text" name="recipientName" value="Igor" title="Введите имя получателя">
                 </div>
                 <div>
                     <span class="createOrderTextField">Recipient surname</span>
-                    <input type="text" name="recipientSurname" title="Введите фамилию получателя">
+                    <input type="text" name="recipientSurname" value="qqwrq" title="Введите фамилию получателя">
                 </div>
                 <div>
                     <span class="createOrderTextField">Recipient phone number</span>
-                    <input type="text" name="recipientPhoneNumber" title="Введите номер телефона получателя">
+                    <input type="text" name="recipientPhoneNumber" value="305-66-38"
+                           title="Введите номер телефона получателя">
                 </div>
                 <div>
                     <span class="createOrderTextField">Recipient passport Id</span>
-                    <input type="text" name="recipientPassportId" title="Введите номер пасспорта получателя">
+                    <input type="text" name="recipientPassportId" value="12541125"
+                           title="Введите номер пасспорта получателя">
                 </div>
             </div>
             <div>
@@ -65,24 +72,7 @@
                     </div>
                 </div>
             </div>
-            <div>
-                <div>
-                    <span class="createOrderTextField">Parcel width</span>
-                    <input type="text" name="width" title="Введите ширину посылки">
-                </div>
-                <div>
-                    <span class="createOrderTextField">Parcel length</span>
-                    <input type="text" name="length" title="Введите длину">
-                </div>
-                <div>
-                    <span class="createOrderTextField">Parcel height</span>
-                    <input type="text" name="height" title="Введите высоту">
-                </div>
-                <div>
-                    <span class="createOrderTextField">Parcel weight</span>
-                    <input type="text" name="weight" title="Введите вес">
-                </div>
-            </div>
+
             <input style="margin-left: 100px" class="customBtn buttonText" type="submit" value="Create new Order">
         </form>
     </div>
@@ -91,7 +81,7 @@
 
 <div id="backToTheActionPageBtn" class="backToTheActionPageBtn">
     <button id="backToTheActionPageBtnId" class="customBtn buttonText">Back to the action page
-        <script type="text/javascript" src="js/action.js"></script>
+        <script type="module" src="js/createOrder.js"></script>
     </button>
 </div>
 </body>

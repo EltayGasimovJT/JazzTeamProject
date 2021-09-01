@@ -1,6 +1,5 @@
 package org.jazzteam.eltay.gasimov.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
@@ -22,7 +21,6 @@ public class OrderDto {
     @NotEmpty(message = "Order must have parcelParameters")
     private ParcelParametersDto parcelParameters;
     @NotEmpty(message = "Order must Have senderId")
-    @JsonManagedReference
     private Long senderId;
     @NotEmpty(message = "Order must Have recipient")
     private ClientDto recipient;
