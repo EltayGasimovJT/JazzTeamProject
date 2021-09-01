@@ -17,8 +17,32 @@
 <body>
 <div class="defaultBar">
     <a href="homePage.html" class="defaultLogo">GasDel</a>
-    <div class="createOrderText">Clients orders</div>
+    <div>
+        <div class="storeActionsBar">
+            <div class="actionTabText">Store Actions</div>
+            <div class="storeActionsBtnMargin">
+                <button id="addProcessingPointBtn" class="me-btn buttonText">Add new processing point</button>
+                <button id="deleteProcessingPointBtn" class="me-btn buttonText">Delete processing point</button>
+                <button id="addWarehouseBtn" class="me-btn buttonText">Add warehouse</button>
+                <button id="deleteWarehouseBtn" class="me-btn buttonText">Delete warehouse</button>
+                <button id="addUserBtn" class="me-btn buttonText">Add user</button>
+                <button id="deleteUserBtn" class="me-btn buttonText">Delete user</button>
+                <button id="addRoleBtn" class="me-btn buttonText">Add role</button>
+                <button id="deleteRoleBtn" class="me-btn buttonText">Delete role</button>
+            </div>
+        </div>
 
+        <div class="orderActionsBar">
+            <div class="actionTabText">Order Actions</div>
+            <div class="storeActionsBtnMargin">
+                <button id="deleteOrder" class="me-btn buttonText">Delete order</button>
+                <button style="margin-top: 20px" id="lockOrder" class="me-btn buttonText">Lock order</button>
+                <button style="margin-top: 20px" id="findBySender" class="me-btn buttonText">Find by sender</button>
+                <button style="margin-top: 20px" id="findByRecipient" class="me-btn buttonText">Find by recipient</button>
+                <button style="margin-top: 20px" id="findById" class="me-btn buttonText">Find by id</button>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="backToTheActionPageBtn">
     <button id="backToTheActionPageBtnId" class="customBtn buttonText">Back to the action page
