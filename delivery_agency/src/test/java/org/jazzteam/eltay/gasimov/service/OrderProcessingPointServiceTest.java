@@ -34,17 +34,17 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
         firstProcessingPointToTest.setId(1L);
         firstProcessingPointToTest.setLocation("Minsk");
-        firstProcessingPointToTest.setWarehouse(new WarehouseDto());
+        firstProcessingPointToTest.setWarehouseId(new WarehouseDto());
 
         OrderProcessingPointDto secondProcessingPointToTest = new OrderProcessingPointDto();
         secondProcessingPointToTest.setId(2L);
         secondProcessingPointToTest.setLocation("Moscow");
-        secondProcessingPointToTest.setWarehouse(new WarehouseDto());
+        secondProcessingPointToTest.setWarehouseId(new WarehouseDto());
 
         OrderProcessingPointDto thirdProcessingPointToTest = new OrderProcessingPointDto();
         thirdProcessingPointToTest.setId(3L);
         thirdProcessingPointToTest.setLocation("Grodno");
-        thirdProcessingPointToTest.setWarehouse(new WarehouseDto());
+        thirdProcessingPointToTest.setWarehouseId(new WarehouseDto());
 
         return Stream.of(
                 Arguments.of(firstProcessingPointToTest, "Minsk"),
@@ -68,17 +68,17 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
         firstProcessingPointToTest.setId(1L);
         firstProcessingPointToTest.setLocation("Polotsk");
-        firstProcessingPointToTest.setWarehouse(new WarehouseDto());
+        firstProcessingPointToTest.setWarehouseId(new WarehouseDto());
 
         OrderProcessingPointDto secondProcessingPointTest = new OrderProcessingPointDto();
         secondProcessingPointTest.setId(2L);
         secondProcessingPointTest.setLocation("Minsk");
-        secondProcessingPointTest.setWarehouse(new WarehouseDto());
+        secondProcessingPointTest.setWarehouseId(new WarehouseDto());
 
         OrderProcessingPointDto thirdProcessingPointTest = new OrderProcessingPointDto();
         thirdProcessingPointTest.setId(3L);
         thirdProcessingPointTest.setLocation("Minsk");
-        thirdProcessingPointTest.setWarehouse(new WarehouseDto());
+        thirdProcessingPointTest.setWarehouseId(new WarehouseDto());
         orderProcessingPointService.clear();
 
         orderProcessingPointService.save(firstProcessingPointToTest);
@@ -92,9 +92,9 @@ class OrderProcessingPointServiceTest {
         List<OrderProcessingPointDto> actualProcessingPointDtos = new ArrayList<>();
 
         for (OrderProcessingPoint actualProcessingPoint : actualProcessingPoints) {
-            WarehouseDto actualWarehouse = modelMapper.map(actualProcessingPoint.getWarehouse(), WarehouseDto.class);
+            WarehouseDto actualWarehouse = modelMapper.map(actualProcessingPoint.getWarehouseId(), WarehouseDto.class);
             OrderProcessingPointDto actualProcessingPointDto = modelMapper.map(actualProcessingPoint, OrderProcessingPointDto.class);
-            actualProcessingPointDto.setWarehouse(actualWarehouse);
+            actualProcessingPointDto.setWarehouseId(actualWarehouse);
             actualProcessingPointDtos.add(actualProcessingPointDto);
         }
 
@@ -105,13 +105,13 @@ class OrderProcessingPointServiceTest {
     @Test
     void findAllOrderProcessingPoints() throws SQLException {
         OrderProcessingPointDto firstProcessingPointTest = new OrderProcessingPointDto();
-        firstProcessingPointTest.setWarehouse(new WarehouseDto());
+        firstProcessingPointTest.setWarehouseId(new WarehouseDto());
         firstProcessingPointTest.setLocation("Minsk");
         OrderProcessingPointDto secondProcessingPointTest = new OrderProcessingPointDto();
-        secondProcessingPointTest.setWarehouse(new WarehouseDto());
+        secondProcessingPointTest.setWarehouseId(new WarehouseDto());
         secondProcessingPointTest.setLocation("Gomel");
         OrderProcessingPointDto thirdProcessingPointTest = new OrderProcessingPointDto();
-        thirdProcessingPointTest.setWarehouse(new WarehouseDto());
+        thirdProcessingPointTest.setWarehouseId(new WarehouseDto());
         thirdProcessingPointTest.setLocation("Polotsk");
         orderProcessingPointService.clear();
 
@@ -124,9 +124,9 @@ class OrderProcessingPointServiceTest {
         List<OrderProcessingPointDto> actualProcessingPointDtos = new ArrayList<>();
 
         for (OrderProcessingPoint actualOrderProcessingPoint : actualOrderProcessingPoints) {
-            WarehouseDto actualWarehouse = modelMapper.map(actualOrderProcessingPoint.getWarehouse(), WarehouseDto.class);
+            WarehouseDto actualWarehouse = modelMapper.map(actualOrderProcessingPoint.getWarehouseId(), WarehouseDto.class);
             OrderProcessingPointDto actualProcessingOrder = modelMapper.map(actualOrderProcessingPoint, OrderProcessingPointDto.class);
-            actualProcessingOrder.setWarehouse(actualWarehouse);
+            actualProcessingOrder.setWarehouseId(actualWarehouse);
             actualProcessingPointDtos.add(actualProcessingOrder);
         }
 
@@ -140,12 +140,12 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
         processingPointToTest.setId(1L);
         processingPointToTest.setLocation("Minsk");
-        processingPointToTest.setWarehouse(new WarehouseDto());
+        processingPointToTest.setWarehouseId(new WarehouseDto());
 
         OrderProcessingPointDto expectedProcessingPointDto = new OrderProcessingPointDto();
         expectedProcessingPointDto.setId(2L);
         expectedProcessingPointDto.setLocation("Moscow");
-        expectedProcessingPointDto.setWarehouse(new WarehouseDto());
+        expectedProcessingPointDto.setWarehouseId(new WarehouseDto());
         orderProcessingPointService.clear();
 
         orderProcessingPointService.save(processingPointToTest);
@@ -155,7 +155,7 @@ class OrderProcessingPointServiceTest {
 
         OrderProcessingPointDto actualProcessingPointDto = modelMapper.map(actual, OrderProcessingPointDto.class);
 
-        actualProcessingPointDto.setWarehouse(modelMapper.map(actual.getWarehouse(), WarehouseDto.class));
+        actualProcessingPointDto.setWarehouseId(modelMapper.map(actual.getWarehouseId(), WarehouseDto.class));
 
         Assertions.assertEquals(expectedProcessingPointDto, actualProcessingPointDto);
     }
@@ -165,7 +165,7 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPointDto expectedProcessingPointDto = new OrderProcessingPointDto();
         expectedProcessingPointDto.setId(1L);
         expectedProcessingPointDto.setLocation("Minsk");
-        expectedProcessingPointDto.setWarehouse(new WarehouseDto());
+        expectedProcessingPointDto.setWarehouseId(new WarehouseDto());
         expectedProcessingPointDto.setExpectedOrders(new ArrayList<>());
         expectedProcessingPointDto.setDispatchedOrders(new ArrayList<>());
         orderProcessingPointService.clear();
@@ -180,7 +180,7 @@ class OrderProcessingPointServiceTest {
 
         OrderProcessingPointDto actualProcessingPointDto = modelMapper.map(actual, OrderProcessingPointDto.class);
 
-        actualProcessingPointDto.setWarehouse(modelMapper.map(actual.getWarehouse(), WarehouseDto.class));
+        actualProcessingPointDto.setWarehouseId(modelMapper.map(actual.getWarehouseId(), WarehouseDto.class));
 
         Assertions.assertEquals(expectedProcessingPointDto, actualProcessingPointDto);
     }

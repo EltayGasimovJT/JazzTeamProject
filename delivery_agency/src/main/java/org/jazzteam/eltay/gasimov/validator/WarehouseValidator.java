@@ -11,14 +11,14 @@ public class WarehouseValidator {
 
     public static void validateOnSave(Warehouse warehouseToValidate) throws IllegalArgumentException {
         if (warehouseToValidate == null) {
-            throw new IllegalArgumentException("Cannot save warehouse because its null");
+            throw new IllegalArgumentException("Cannot save warehouseId because its null");
         }
         validateWarehouse(warehouseToValidate);
     }
 
     public static void validateWarehouse(Warehouse warehouseToValidate) throws IllegalArgumentException {
         if (warehouseToValidate == null) {
-            throw new IllegalArgumentException("There is now warehouse with such id");
+            throw new IllegalArgumentException("There is now warehouseId with such id");
         }
         if (warehouseToValidate.getLocation() == null) {
             throw new IllegalArgumentException("Warehouse must have location");

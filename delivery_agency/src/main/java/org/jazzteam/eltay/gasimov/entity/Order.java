@@ -26,24 +26,26 @@ public class Order {
     private OrderState state;
     @OneToOne
     private ParcelParameters parcelParameters;
-    @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
     @JsonBackReference
     private Client sender;
-    @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
     private Client recipient;
     @Column
     private BigDecimal price;
+    @Column(name = "track_number")
+    private String trackNumber;
     @Column
     private LocalDateTime sendingTime;
-    @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
-    @JoinColumn
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "destination_point_id")
     private OrderProcessingPoint destinationPlace;
-    @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn
     private AbstractBuilding currentLocation;
     @OneToMany
-    @JoinColumn
+    @JoinColumn(name = "order_id")
     private Set<OrderHistory> history;
 }

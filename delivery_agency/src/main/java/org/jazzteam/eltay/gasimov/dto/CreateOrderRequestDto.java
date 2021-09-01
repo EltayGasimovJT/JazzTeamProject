@@ -6,17 +6,9 @@ import lombok.Data;
 @Data
 @Builder
 public class CreateOrderRequestDto {
-    private String senderName;
-    private String senderSurname;
-    private String senderPhoneNumber;
-    private String senderPassportId;
-    private String recipientName;
-    private String recipientSurname;
-    private String recipientPhoneNumber;
-    private String recipientPassportId;
+    private ClientDto sender;
+    private ClientDto recipient;
+    private UserDto userDto;
+    private ParcelParametersDto parcelParameters;
     private String destinationPlaceTown;
-    private Double weight;
-    private Double height;
-    private Double length;
-    private Double width;
 }

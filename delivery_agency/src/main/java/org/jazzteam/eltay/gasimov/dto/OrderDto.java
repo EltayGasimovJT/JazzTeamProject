@@ -26,6 +26,7 @@ public class OrderDto {
     private Long senderId;
     @NotEmpty(message = "Order must Have recipient")
     private ClientDto recipient;
+    private String orderTrackNumber;
     @Positive(message = "Price must be positive")
     private BigDecimal price;
     @NotEmpty(message = "SendingTime cannot be null")

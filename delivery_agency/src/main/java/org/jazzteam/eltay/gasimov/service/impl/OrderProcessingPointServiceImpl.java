@@ -72,7 +72,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         OrderProcessingPoint orderProcessingPointUpdate = new OrderProcessingPoint();
         orderProcessingPointUpdate.setId(processingPointDtoToUpdate.getId());
         orderProcessingPointUpdate.setLocation(processingPointDtoToUpdate.getLocation());
-        orderProcessingPointUpdate.setWarehouse(modelMapper.map(processingPointDtoToUpdate.getWarehouse(), Warehouse.class));
+        orderProcessingPointUpdate.setWarehouse(modelMapper.map(processingPointDtoToUpdate.getWarehouseId(), Warehouse.class));
         orderProcessingPointUpdate.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
                 .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList()));

@@ -1,7 +1,11 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import lombok.extern.java.Log;
-import org.jazzteam.eltay.gasimov.dto.*;
+import org.jazzteam.eltay.gasimov.dto.ClientDto;
+import org.jazzteam.eltay.gasimov.dto.CreateOrderRequestDto;
+import org.jazzteam.eltay.gasimov.dto.OrderDto;
+import org.jazzteam.eltay.gasimov.dto.OrderHistoryDto;
+import org.jazzteam.eltay.gasimov.entity.Order;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
 import org.modelmapper.ModelMapper;
@@ -9,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -35,32 +37,11 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderDto createOrder(@RequestBody CreateOrderRequestDto dtoFromForm) {
-        ClientDto sender = ClientDto.builder()
-                .name(dtoFromForm.getSenderName())
-                .surname(dtoFromForm.getSenderSurname())
-                .phoneNumber(dtoFromForm.getSenderPhoneNumber())
-                .passportId(dtoFromForm.getSenderPassportId())
-                .build();
-        ClientDto recipient = ClientDto.builder()
-                .name(dtoFromForm.getRecipientName())
-                .surname(dtoFromForm.getRecipientSurname())
-                .phoneNumber(dtoFromForm.getRecipientPhoneNumber())
-                .passportId(dtoFromForm.getRecipientPassportId())
-                .build();
+        clientService.save(dtoFromForm.getSender());
+        clientService.save(dtoFromForm.getRecipient());
 
         OrderDto orderDtoToSave = OrderDto.builder()
-                .recipient(recipient)
-                .parcelParameters(ParcelParametersDto.builder()
-                        .height(dtoFromForm.getHeight())
-                        .weight(dtoFromForm.getWeight())
-                        .width(dtoFromForm.getWidth())
-                        .length(dtoFromForm.getLength())
-                        .build())
                 .build();
-        Set<OrderDto> ordersToSave = new HashSet<>();
-        sender.setOrders(ordersToSave);
-        clientService.save(sender);
-        clientService.save(recipient);
 
         orderService.save(orderDtoToSave);
         return orderDtoToSave;
@@ -72,6 +53,21 @@ public class OrderController {
         final ClientDto map = modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
         model.put("Orders", map.getOrders());
         return map.getOrders();
+    }
+
+    @GetMapping(path = "/orders/findHistory/{id}")
+    public @ResponseBody
+    Iterable<OrderHistoryDto> findOrderHistoryById(@PathVariable Long id) {
+        Order foundOrder = orderService.findOne(id);
+        return foundOrder.getHistory().stream()
+                .map(orderHistory -> modelMapper.map(orderHistory, OrderHistoryDto.class))
+                .collect(Collectors.toSet());
+    }
+
+    @GetMapping(path = "/orders/findByTrackNumber")
+    public @ResponseBody
+    OrderDto findByOrderTrackNumber(@RequestParam String orderNumber) {
+        return modelMapper.map(orderService.findByTrackNumber(orderNumber), OrderDto.class);
     }
 
     @GetMapping(path = "/orders/{id}")

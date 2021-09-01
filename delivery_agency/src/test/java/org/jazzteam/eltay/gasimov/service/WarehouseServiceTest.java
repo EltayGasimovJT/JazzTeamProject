@@ -28,7 +28,7 @@ class WarehouseServiceTest {
     public static Stream<Arguments> ordersAndProcessingPointToTest() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
         processingPointToTest.setLocation("Russia");
-        processingPointToTest.setWarehouse(new WarehouseDto());
+        processingPointToTest.setWarehouseId(new WarehouseDto());
         OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -155,7 +155,7 @@ class WarehouseServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointToTest")
-    void getWarehouse(OrderDto orderDtoToTest) throws SQLException {
+    void getWarehouseId(OrderDto orderDtoToTest) throws SQLException {
         WarehouseDto warehouseToTest = new WarehouseDto();
         warehouseToTest.setId(1L);
         String expected = "Vitebsk";

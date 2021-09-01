@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -41,11 +40,8 @@ public class OrderProcessingPointController {
 
     @GetMapping(path = "/processingPoints/{id}")
     public @ResponseBody
-    List<String> findById(@PathVariable Long id) {
-        OrderProcessingPointDto foundProcessingPoint = modelMapper.map(processingPointService.findOne(id), OrderProcessingPointDto.class);
-        return Arrays.asList("id: " + foundProcessingPoint.getId().toString(),
-                "Location: " + foundProcessingPoint.getLocation(), "WorkingPlaceType: " + foundProcessingPoint.getWorkingPlaceType().toString(),
-                "Warehouse: " + foundProcessingPoint.getWarehouse().toString());
+    OrderProcessingPointDto findById(@PathVariable Long id) {
+        return modelMapper.map(processingPointService.findOne(id), OrderProcessingPointDto.class);
     }
 
     @PutMapping("/processingPoints")

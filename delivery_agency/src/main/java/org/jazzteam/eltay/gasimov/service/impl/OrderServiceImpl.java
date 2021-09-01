@@ -1,6 +1,7 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
@@ -110,6 +111,7 @@ public class OrderServiceImpl implements OrderService {
                 .parcelParameters(modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class))
                 .price(orderDtoToSave.getPrice())
                 .state(orderState)
+                .trackNumber(generateNewTrackNumber())
                 .build();
 
         if (orderDtoToSave.getRecipient().getName() != null && orderDtoToSave.getRecipient().getSurname() != null
@@ -117,8 +119,13 @@ public class OrderServiceImpl implements OrderService {
             orderToSave.setRecipient(clientService.findById(orderDtoToSave.getRecipient().getId()));
         }
 
-
         return orderRepository.save(orderToSave);
+    }
+
+    public String generateNewTrackNumber() {
+        int randomStringLength = 7;
+        String charset = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZ";
+        return RandomStringUtils.random(randomStringLength, charset);
     }
 
     @Override
@@ -280,6 +287,13 @@ public class OrderServiceImpl implements OrderService {
         Order orderToUpdate = foundClientFromRepository.orElseGet(Order::new);
         OrderValidator.validateOrder(orderToUpdate);
         orderRepository.deleteById(idForDelete);
+    }
+
+    @Override
+    public Order findByTrackNumber(String trackNumber) {
+        Order foundOrder = orderRepository.findByTrackNumber(trackNumber);
+        OrderValidator.validateOrder(foundOrder);
+        return foundOrder;
     }
 
     private OrderState updateState(String state) {

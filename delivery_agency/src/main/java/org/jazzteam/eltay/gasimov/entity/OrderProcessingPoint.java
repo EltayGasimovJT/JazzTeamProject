@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,6 @@ import javax.persistence.Table;
 @Table
 public class OrderProcessingPoint extends AbstractBuilding {
     @ManyToOne
+    @JsonBackReference
     private Warehouse warehouse;
 }

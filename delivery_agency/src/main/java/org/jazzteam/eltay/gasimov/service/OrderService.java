@@ -11,33 +11,35 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface OrderService {
-   Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation);
+    Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation);
 
-   void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory);
+    void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory);
 
-   Order save(OrderDto orderDtoToSave);
+    Order save(OrderDto orderDtoToSave);
 
-   Order findOne(long idForSearch);
+    Order findOne(long idForSearch);
 
-   Order findByRecipient(ClientDto recipientForSearch);
+    Order findByRecipient(ClientDto recipientForSearch);
 
-   Order findBySender(ClientDto senderForSearch);
+    Order findBySender(ClientDto senderForSearch);
 
-   AbstractBuilding getCurrentOrderLocation(long idForFindCurrentLocation);
+    AbstractBuilding getCurrentOrderLocation(long idForFindCurrentLocation);
 
-   void send(List<OrderDto> orderDtosToSend);
+    void send(List<OrderDto> orderDtosToSend);
 
-   List<Order> accept(List<OrderDto> orderDtosToAccept);
+    List<Order> accept(List<OrderDto> orderDtosToAccept);
 
-   String getState(long idForStateFind);
+    String getState(long idForStateFind);
 
-   void compareOrders(List<OrderDto> expectedOrders, List<OrderDto> acceptedOrders) throws IllegalArgumentException;
+    void compareOrders(List<OrderDto> expectedOrders, List<OrderDto> acceptedOrders) throws IllegalArgumentException;
 
-   List<Order> findAll();
+    List<Order> findAll();
 
-   BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException;
+    BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException;
 
-   Order update(OrderDto orderDtoToUpdate);
+    Order update(OrderDto orderDtoToUpdate);
 
-   void delete(Long idForDelete);
+    void delete(Long idForDelete);
+
+    Order findByTrackNumber(String trackNumber);
 }

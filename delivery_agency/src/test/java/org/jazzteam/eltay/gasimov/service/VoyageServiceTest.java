@@ -31,7 +31,7 @@ class VoyageServiceTest {
     public static Stream<Arguments> ordersAndProcessingPointsForTest() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
         processingPointToTest.setLocation("Russia");
-        processingPointToTest.setWarehouse(new WarehouseDto());
+        processingPointToTest.setWarehouseId(new WarehouseDto());
         OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -183,7 +183,7 @@ class VoyageServiceTest {
     void getVoyage(OrderDto orderDtoToTest) throws SQLException {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setLocation("Russia");
-        orderProcessingPointToTest.setWarehouse(new WarehouseDto());
+        orderProcessingPointToTest.setWarehouseId(new WarehouseDto());
         VoyageDto voyageToTest = new VoyageDto();
         voyageToTest.setId(1L);
         voyageToTest.setDispatchedOrders(Arrays.asList(

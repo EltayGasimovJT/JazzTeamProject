@@ -4,12 +4,9 @@ jQuery('document').ready(function () {
     })
 
     const backgroundModal = document.querySelector('.backGround-modal');
-    const trackOrderModelBackground = document.querySelector('.backGround-modal');
     const modal = document.querySelector('.modal-custom');
     const closeModel = document.querySelector('.modal-close');
     const openModel = document.querySelector('.open-modal');
-    const createOrder = document.querySelector('.create-order');
-    const trackOrder = document.querySelector('.track-order');
 
 
     backgroundModal.addEventListener('click', () => {
@@ -28,9 +25,6 @@ jQuery('document').ready(function () {
         backgroundModal.style.visibility = 'visible';
     })
 
-    trackOrder.addEventListener('click', () => {
-        location.href = "trackOrder.html";
-    })
 
     /*$("#passportIdEnterForm").on("submit", function () {
         $.ajax({
@@ -54,6 +48,7 @@ jQuery('document').ready(function () {
         let $form = $(this),
             passportId = $form.find("input[name='passportId']").val(),
             url = $form.attr("action");
+        console.log(url);
         let geting = $.get(url, {passportId: passportId});
         geting.done(function (data) {
             console.log(data);

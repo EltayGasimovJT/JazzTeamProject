@@ -25,12 +25,14 @@ public class ClientController {
     }
 
     @GetMapping(path = "/clients/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     ClientDto findById(@PathVariable Long id){
         return modelMapper.map(clientService.findById(id), ClientDto.class);
     }
 
     @GetMapping(path = "/clients/byPassport")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     ClientDto findByPassportId(@RequestParam String passportId) {
         return modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);

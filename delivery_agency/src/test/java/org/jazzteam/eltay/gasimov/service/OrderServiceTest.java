@@ -34,7 +34,7 @@ class OrderServiceTest {
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
         processingPointToTest.setLocation("Russia");
-        processingPointToTest.setWarehouse(new WarehouseDto());
+        processingPointToTest.setWarehouseId(new WarehouseDto());
         OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -118,7 +118,7 @@ class OrderServiceTest {
     void updateOrderHistory() throws SQLException {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setLocation("Russia");
-        orderProcessingPointToTest.setWarehouse(new WarehouseDto());
+        orderProcessingPointToTest.setWarehouseId(new WarehouseDto());
         OrderHistoryDto expected = OrderHistoryDto.builder().user(UserDto.builder().build()).build();
         GregorianCalendar changingTimeToTest = new GregorianCalendar();
         changingTimeToTest.set(Calendar.HOUR_OF_DAY, 15);
@@ -370,7 +370,7 @@ class OrderServiceTest {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setId(1L);
         orderProcessingPointToTest.setLocation("Russia");
-        orderProcessingPointToTest.setWarehouse(new WarehouseDto());
+        orderProcessingPointToTest.setWarehouseId(new WarehouseDto());
 
         OrderDto orderToTest = OrderDto.builder()
                 .id(1L)
@@ -403,12 +403,12 @@ class OrderServiceTest {
         OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
         firstProcessingPointToTest.setId(1L);
         firstProcessingPointToTest.setLocation("Russia");
-        firstProcessingPointToTest.setWarehouse(new WarehouseDto());
+        firstProcessingPointToTest.setWarehouseId(new WarehouseDto());
 
         OrderProcessingPointDto secondProcessingPointToTest = new OrderProcessingPointDto();
         secondProcessingPointToTest.setId(2L);
         secondProcessingPointToTest.setLocation("Russia");
-        secondProcessingPointToTest.setWarehouse(new WarehouseDto());
+        secondProcessingPointToTest.setWarehouseId(new WarehouseDto());
 
         OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)

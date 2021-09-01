@@ -37,7 +37,7 @@ public class CoefficientForPriceCalculationController {
 
     @GetMapping(path = "/coefficients")
     public @ResponseBody
-    Iterable<CoefficientForPriceCalculationDto> findAll(){
+    Iterable<CoefficientForPriceCalculationDto> findAll() {
         return calculationService.findAll().stream()
                 .map(coefficient -> modelMapper.map(coefficient, CoefficientForPriceCalculationDto.class))
                 .collect(Collectors.toSet());
@@ -51,7 +51,7 @@ public class CoefficientForPriceCalculationController {
     @PutMapping("/coefficients")
     public CoefficientForPriceCalculationDto updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) {
         if (calculationService.findOne(newCoefficient.getId()) == null) {
-            return modelMapper.map(calculationService.save(newCoefficient), CoefficientForPriceCalculationDto.class);
+            throw new IllegalArgumentException("Cannot update this coefficient, cos not exist");
         } else {
             CoefficientForPriceCalculationDto coefficientToSave = CoefficientForPriceCalculationDto.builder()
                     .id(newCoefficient.getId())
