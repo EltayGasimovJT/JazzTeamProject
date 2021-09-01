@@ -109,6 +109,8 @@ $('#createOrderForm').submit(function (e) {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(dataForSend)
     }).done(function () {
+
+
         console.log('success');
         console.log('success');
     }).fail(function () {
