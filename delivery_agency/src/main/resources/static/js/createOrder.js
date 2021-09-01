@@ -1,5 +1,74 @@
 let $form;
+init()
 
+const INITIAL_SIZE = 1400;
+const INITIAL_WEIGHT = 20;
+let allCoefficients;
+
+let config = {
+    destinationPoint :null,
+    parcelWidth: null,
+    parcelLength: null,
+    parcelHeight: null,
+    parcelWeight: null,
+}
+
+const price = document.getElementById('price');
+
+document.getElementById('destinationPoint').oninput = function(event) {
+    config.destinationPoint = allCoefficients.find(elem => elem.country === event.target.value);
+
+    calcPrice();
+};
+document.getElementById('parcelWidth').oninput = function(event) {
+    config.parcelWidth = +event.target.value;
+    calcPrice();
+};
+document.getElementById('parcelLength').oninput = function(event) {
+    config.parcelLength = +event.target.value;
+    calcPrice();
+};
+document.getElementById('parcelHeight').oninput = function(event) {
+    config.parcelHeight = +event.target.value;
+    calcPrice();
+};
+document.getElementById('parcelWeight').oninput = (event) => {
+    config.parcelWeight = +event.target.value;
+    calcPrice();
+};
+
+function calcPrice() {
+    const volume = config.parcelWidth * config.parcelLength * config.parcelHeight;
+
+    if (volume > INITIAL_SIZE && config.parcelWeight > INITIAL_WEIGHT) {
+        price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (volume / INITIAL_SIZE) * (config.parcelWeight / INITIAL_WEIGHT));
+        return;
+    }
+
+    if (volume > INITIAL_SIZE) {
+        price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (volume / INITIAL_SIZE));
+        return;
+    }
+
+    if (config.parcelWeight > INITIAL_WEIGHT) {
+
+        price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (config.parcelWeight / INITIAL_WEIGHT));
+        return;
+    }
+
+    price.innerHTML =  Math.round(volume * config.destinationPoint.countryCoefficient);
+}
+
+function init() {
+    $.ajax({
+        url: `http://localhost:8081/coefficients`,
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (result) {
+            allCoefficients = result;
+        }
+    });
+}
 
 $('#createOrderForm').submit(function (e) {
     $form = $(this).serializeArray();
@@ -119,11 +188,19 @@ export class ClientDto {
 }
 
 export class CreateOrderRequestDto {
+    get price() {
+        return this._price;
+    }
+
+    set price(value) {
+        this._price = value;
+    }
     constructor(props = {}) {
         this._sender = props.sender;
         this._recipient = props.recipient;
         this._parcelParameters = props.parcelParameters;
         this._destinationPoint = props.destinationPoint;
+        this._price = props.price;
     }
 
     get sender() {
@@ -163,7 +240,8 @@ export class CreateOrderRequestDto {
             sender: this.sender.toJSON(),
             recipient: this.recipient.toJSON(),
             destinationPoint: this.destinationPoint,
-            parcelParameters: this.parcelParameters.toJSON()
+            parcelParameters: this.parcelParameters.toJSON(),
+            price: this.price,
         };
     }
 }
@@ -217,3 +295,5 @@ export class ParcelParametersDto {
         };
     }
 }
+
+
