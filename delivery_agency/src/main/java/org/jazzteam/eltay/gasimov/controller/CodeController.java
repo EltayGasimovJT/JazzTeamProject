@@ -16,15 +16,11 @@ public class CodeController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     boolean findPersonalCode(@RequestParam String code) {
-        if (codeService.findByCode(code) != null) {
-            return true;
-        }
-        return false;
+        return codeService.findByCode(code) != null;
     }
 
     @DeleteMapping(path = "/codes/{code}")
     public void deleteClient(@PathVariable String code) {
-        log.severe(code);
         codeService.delete(code);
     }
 }

@@ -70,6 +70,7 @@ jQuery('document').ready(function () {
             url = $form.attr("action");
         let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
         geting.done(function (data) {
+            clientPhoneNumber = phoneNumber;
             generatedCode = data.code.generatedCode;
             codeBackgroundModal.style.visibility = 'visible';
         });
@@ -105,8 +106,8 @@ jQuery('document').ready(function () {
             data: {code: code},
             success: function () {
                 localStorage.setItem('clientPhone', clientPhoneNumber);
-                localStorage.setItem( 'sessiontime', (new Date()).toString())
-                alert('Успех епт');
+                localStorage.setItem('sessionTime', (new Date()).toString())
+                window.location.href = `http://localhost:8081/clientsOrders.html`;
             }
         });
     }

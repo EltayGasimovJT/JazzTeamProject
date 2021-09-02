@@ -1,16 +1,19 @@
-jQuery('document').ready(function () {
-    let idFromUrl = getIdFromUrl();
+let idFromUrl = getIdFromUrl();
 
-    getUsersOrders(idFromUrl.clientId);
+getUsersOrders(idFromUrl.clientId);
 
-    jQuery("#backToTheActionPageBtnId").on('click', function () {
-        window.location.href = "actionPage.html";
-    })
-});
+/*
+jQuery("#backToTheActionPageBtnId").on('click', function () {
+    window.location.href = "actionPage.html";
+})
+*/
 
-function getUsersOrders(idFromUrl) {
-    $.ajax({
-        url: `http://localhost:8081/clients/${idFromUrl}`,
+function getUsersOrders() {
+    console.log(localStorage.getItem('clientPhone'))
+    console.log(localStorage.getItem('sessionTime'))
+    console.log(new Date(localStorage.getItem('sessionTime')).getMinutes())
+    /*$.ajax({
+        url: `http://localhost:8081/clients`,
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
@@ -34,8 +37,11 @@ function getUsersOrders(idFromUrl) {
             }
             console.log(result);
             $('#orders').append(r.join(''));
+        },
+        error: function () {
+            alert(localStorage.getItem('clientPhone'));
         }
-    });
+    });*/
 }
 
 function getIdFromUrl() {
