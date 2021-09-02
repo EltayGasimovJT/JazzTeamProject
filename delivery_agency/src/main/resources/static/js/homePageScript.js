@@ -59,6 +59,8 @@ jQuery('document').ready(function () {
         window.location.href = "http://localhost:8081/processingPointWorkerActionPage.html";
     })
 
+    let clientPhoneNumber;
+
     let generatedCode;
 
     $('#phoneNumberInput').submit(function (event) {
@@ -70,7 +72,6 @@ jQuery('document').ready(function () {
         geting.done(function (data) {
             generatedCode = data.code.generatedCode;
             codeBackgroundModal.style.visibility = 'visible';
-
         });
     })
 
@@ -96,14 +97,17 @@ jQuery('document').ready(function () {
         });
     });
 
-    function deleteCode(code){
+    function deleteCode(code) {
         $.ajax({
             url: `http://localhost:8081/codes/${code}`,
             type: 'DELETE',
             contentType: 'application/json',
             data: {code: code},
             success: function () {
-                alert('Успех епт');            }
+                localStorage.setItem('clientPhone', clientPhoneNumber);
+                localStorage.setItem( 'sessiontime', (new Date()).toString())
+                alert('Успех епт');
+            }
         });
     }
 })
