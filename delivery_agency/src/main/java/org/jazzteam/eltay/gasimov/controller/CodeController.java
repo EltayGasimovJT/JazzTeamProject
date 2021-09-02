@@ -16,7 +16,9 @@ public class CodeController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     boolean findPersonalCode(@RequestParam String code) {
-        return codeService.findByCode(code) != null;
+        boolean isFound = codeService.findByCode(code) != null;
+        codeService.delete(code);
+        return isFound;
     }
 
     @DeleteMapping(path = "/codes/{code}")

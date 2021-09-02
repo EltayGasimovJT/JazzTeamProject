@@ -38,12 +38,6 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderDto createOrder(@RequestBody CreateOrderRequestDto dtoFromForm) {
-        if (clientService.findByPhoneNumber(dtoFromForm.getSender().getPhoneNumber()) == null) {
-            clientService.save(dtoFromForm.getSender());
-        }
-        if (clientService.findByPhoneNumber(dtoFromForm.getRecipient().getPhoneNumber()) == null) {
-            clientService.save(dtoFromForm.getRecipient());
-        }
         OrderDto orderDtoToSave = OrderDto.builder()
                 .currentLocation(new OrderProcessingPointDto())
                 .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(dtoFromForm.getDestinationPoint()), OrderProcessingPointDto.class))
@@ -53,8 +47,7 @@ public class OrderController {
                 .sender(dtoFromForm.getSender())
                 .build();
 
-        orderService.save(orderDtoToSave);
-        return orderDtoToSave;
+        return CustomModelMapper.mapOrderToDto(orderService.save(orderDtoToSave));
     }
 
     @GetMapping(path = "/orders/findBySenderPassport")

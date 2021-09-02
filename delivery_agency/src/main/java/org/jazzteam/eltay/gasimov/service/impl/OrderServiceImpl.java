@@ -7,10 +7,7 @@ import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.OrderRepository;
 import org.jazzteam.eltay.gasimov.repository.VoyageRepository;
-import org.jazzteam.eltay.gasimov.service.ClientService;
-import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
-import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
-import org.jazzteam.eltay.gasimov.service.OrderService;
+import org.jazzteam.eltay.gasimov.service.*;
 import org.jazzteam.eltay.gasimov.validator.OrderValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +33,10 @@ public class OrderServiceImpl implements OrderService {
     private VoyageRepository voyageRepository;
     @Autowired
     private OrderProcessingPointService orderProcessingPointService;
+    @Autowired
+    private ParcelParametersService parcelParametersService;
+    @Autowired
+    private OrderStateService orderStateService;
 
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
@@ -71,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal price = orderDtoToSave.getPrice();
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         orderDtoToSave.setPrice(price);
-        orderDtoToSave.setState(modelMapper.map(orderState, OrderStateDto.class));
+        orderDtoToSave.setState(modelMapper.map(orderStateService.findOne(1), OrderStateDto.class));
         OrderHistory orderHistory = OrderHistory.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND.toString())
                 .user(new User())
@@ -81,24 +82,9 @@ public class OrderServiceImpl implements OrderService {
                 .build();
         orderDtoToSave.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
 
+        Client senderToSave = getClientToSave(orderDtoToSave.getSender());
 
-        Client foundSender = clientService.findByPhoneNumber(orderDtoToSave.getSender().getPhoneNumber());
-        Client senderToSave = Client.builder()
-                .id(foundSender.getId())
-                .name(foundSender.getName())
-                .surname(foundSender.getSurname())
-                .passportId(foundSender.getPassportId())
-                .phoneNumber(foundSender.getPhoneNumber())
-                .build();
-
-        Client foundRecipient = clientService.findByPhoneNumber(orderDtoToSave.getRecipient().getPhoneNumber());
-        Client recipientToSave = Client.builder()
-                .id(foundRecipient.getId())
-                .name(foundRecipient.getName())
-                .surname(foundRecipient.getSurname())
-                .passportId(foundRecipient.getPassportId())
-                .phoneNumber(foundRecipient.getPhoneNumber())
-                .build();
+        Client recipientToSave = getClientToSave(orderDtoToSave.getRecipient());
 
         Set<OrderHistory> historiesToSave = orderDtoToSave.getHistory().stream()
                 .map(orderHistoryDto -> modelMapper.map(orderHistoryDto, OrderHistory.class))
@@ -107,32 +93,23 @@ public class OrderServiceImpl implements OrderService {
 
         OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
         OrderProcessingPoint departurePointToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
+        ParcelParameters savedParameters = parcelParametersService.save(orderDtoToSave.getParcelParameters());
 
         Order orderToSave = Order.builder()
-                .id(orderDtoToSave.getId())
                 .sender(senderToSave)
                 .recipient(recipientToSave)
                 .currentLocation(departurePointToSave)
                 .destinationPlace(destinationPlaceToSave)
                 .history(historiesToSave)
-                .parcelParameters(modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class))
+                .parcelParameters(savedParameters)
                 .price(orderDtoToSave.getPrice())
                 .state(orderState)
                 .trackNumber(generateNewTrackNumber())
                 .build();
 
-        if (orderDtoToSave.getRecipient().getName() != null && orderDtoToSave.getRecipient().getSurname() != null
-                && orderDtoToSave.getRecipient().getPassportId() != null && orderDtoToSave.getRecipient().getPhoneNumber() != null) {
-            orderToSave.setRecipient(clientService.findById(foundRecipient.getId()));
-        }
-        if (orderDtoToSave.getSender().getName() != null && orderDtoToSave.getSender().getSurname() != null
-                && orderDtoToSave.getSender().getPassportId() != null && orderDtoToSave.getSender().getPhoneNumber() != null) {
-
-            orderToSave.setRecipient(clientService.findById(foundSender.getId()));
-        }
-
         return orderRepository.save(orderToSave);
     }
+
 
     private String generateNewTrackNumber() {
         int randomStringLength = 7;
@@ -405,5 +382,28 @@ public class OrderServiceImpl implements OrderService {
             throw new IllegalArgumentException("This country is not supported yet!!!" + processingPointDto.getLocation());
         }
         return modelMapper.map(coefficientForPriceCalculation, CoefficientForPriceCalculationDto.class);
+    }
+
+    private Client getClientToSave(ClientDto sender) {
+        Client senderToSave;
+        Client foundSender = clientService.findClientByPassportId(sender.getPassportId());
+        if (foundSender != null) {
+            senderToSave = Client.builder()
+                    .id(foundSender.getId())
+                    .name(foundSender.getName())
+                    .surname(foundSender.getSurname())
+                    .passportId(foundSender.getPassportId())
+                    .phoneNumber(foundSender.getPhoneNumber())
+                    .build();
+        } else {
+            senderToSave = Client.builder()
+                    .name(sender.getName())
+                    .surname(sender.getSurname())
+                    .passportId(sender.getPassportId())
+                    .phoneNumber(sender.getPhoneNumber())
+                    .build();
+            clientService.save(modelMapper.map(senderToSave, ClientDto.class));
+        }
+        return senderToSave;
     }
 }

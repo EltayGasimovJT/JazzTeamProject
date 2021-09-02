@@ -43,9 +43,7 @@ public class CodeServiceImpl implements CodeService {
 
     @Override
     public ClientsCode save(ClientsCodeDto clientsCode) {
-        final ClientsCode save = codeRepository.save(modelMapper.map(clientsCode, ClientsCode.class));
-        log.severe(save.toString());
-        return save;
+        return codeRepository.save(modelMapper.map(clientsCode, ClientsCode.class));
     }
 
     @Override

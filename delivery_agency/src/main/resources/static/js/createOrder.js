@@ -57,16 +57,6 @@ function calcPrice() {
     }
 
     price.innerHTML =  Math.round(volume * config.destinationPoint.countryCoefficient);
-    /*$.ajax({
-        type: 'POST',
-        url: `http://localhost:8081/createOrder`,
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(dataForSend)
-    }).done(function () {
-        console.log('success');
-    }).fail(function () {
-        console.log('fail');
-    });*/
 }
 
 function init() {
@@ -82,6 +72,7 @@ function init() {
 
 $('#createOrderForm').submit(function (e) {
     $form = $(this).serializeArray();
+    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
 
     let sender = new ClientDto({
         name: `${$form[0].value}`,

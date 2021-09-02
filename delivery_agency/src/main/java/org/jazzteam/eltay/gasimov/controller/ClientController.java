@@ -2,12 +2,15 @@ package org.jazzteam.eltay.gasimov.controller;
 
 import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
+import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Set;
 
 @RestController
 @Log
@@ -44,6 +47,14 @@ public class ClientController {
     ClientDto findByPhoneNumber(@RequestParam String phoneNumber) {
         return modelMapper.map(clientService.findByPhoneNumber(phoneNumber), ClientDto.class);
     }
+
+    @GetMapping(path = "/clients/ordersByPhoneNumber/{phoneNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    Set<OrderDto> findOrdersByClientPhoneNumber(@PathVariable String phoneNumber) {
+        return clientService.findOrdersByClientPhoneNumber(phoneNumber);
+    }
+
 
     @GetMapping(path = "/clients")
     @ResponseStatus(HttpStatus.OK)

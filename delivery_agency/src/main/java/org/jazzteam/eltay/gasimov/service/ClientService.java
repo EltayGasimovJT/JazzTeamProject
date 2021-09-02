@@ -1,10 +1,12 @@
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
+import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 
 import java.util.List;
+import java.util.Set;
 
 public interface ClientService {
     void delete(Long idForDelete);
@@ -22,4 +24,6 @@ public interface ClientService {
     OrderProcessingPoint determineCurrentDestinationPlace(String destinationPlace);
 
     Client findByPhoneNumber(String phoneNumber);
+
+    Set<OrderDto> findOrdersByClientPhoneNumber(String phoneNumber);
 }

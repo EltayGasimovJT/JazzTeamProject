@@ -40,6 +40,9 @@ jQuery('document').ready(function () {
     })
 
     asClientModal.addEventListener('click', () => {
+        if (localStorage.getItem('clientPhone') !== null) {
+            window.location.href = "http://localhost:8081/clientsOrders.html";
+        }
         clientBackgroundModal.style.visibility = 'visible';
     })
 
@@ -52,6 +55,10 @@ jQuery('document').ready(function () {
     })
 
     asUserModal.addEventListener('click', () => {
+        if (localStorage.getItem('clientPhone') !== null) {
+            localStorage.removeItem('clientPhone');
+            localStorage.removeItem('sessionTime');
+        }
         backgroundModal.style.visibility = 'visible';
     })
 
@@ -61,17 +68,14 @@ jQuery('document').ready(function () {
 
     let clientPhoneNumber;
 
-    let generatedCode;
-
     $('#phoneNumberInput').submit(function (event) {
         event.preventDefault();
         let $form = $(this),
             phoneNumber = $form.find("input[name='phoneNumber']").val(),
             url = $form.attr("action");
         let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
-        geting.done(function (data) {
+        geting.done(function () {
             clientPhoneNumber = phoneNumber;
-            generatedCode = data.code.generatedCode;
             codeBackgroundModal.style.visibility = 'visible';
         });
     })
@@ -82,8 +86,10 @@ jQuery('document').ready(function () {
             code = $form.find("input[name='code']").val(),
             url = $form.attr("action");
         let geting = $.get(url, {code: code}, 'application/json');
-        geting.done(function (data) {
-            deleteCode(code);
+        geting.done(function () {
+            localStorage.setItem('clientPhone', clientPhoneNumber);
+            localStorage.setItem('sessionTime', (new Date()).toString())
+            window.location.href = `http://localhost:8081/clientsOrders.html`;
         });
     })
 
@@ -97,18 +103,4 @@ jQuery('document').ready(function () {
             window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
         });
     });
-
-    function deleteCode(code) {
-        $.ajax({
-            url: `http://localhost:8081/codes/${code}`,
-            type: 'DELETE',
-            contentType: 'application/json',
-            data: {code: code},
-            success: function () {
-                localStorage.setItem('clientPhone', clientPhoneNumber);
-                localStorage.setItem('sessionTime', (new Date()).toString())
-                window.location.href = `http://localhost:8081/clientsOrders.html`;
-            }
-        });
-    }
 })

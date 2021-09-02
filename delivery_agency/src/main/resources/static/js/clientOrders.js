@@ -1,47 +1,44 @@
-let idFromUrl = getIdFromUrl();
+getUsersOrders();
 
-getUsersOrders(idFromUrl.clientId);
-
-/*
 jQuery("#backToTheActionPageBtnId").on('click', function () {
-    window.location.href = "actionPage.html";
+    checkSession();
+    window.location.href = `http://localhost:8081/homePage.html`;
 })
-*/
 
 function getUsersOrders() {
-    console.log(localStorage.getItem('clientPhone'))
+    checkSession();
+    let phoneNumber = localStorage.getItem('clientPhone');
     console.log(localStorage.getItem('sessionTime'))
-    console.log(new Date(localStorage.getItem('sessionTime')).getMinutes())
-    /*$.ajax({
-        url: `http://localhost:8081/clients`,
+    $.ajax({
+        url: `http://localhost:8081/clients/ordersByPhoneNumber/${phoneNumber}`,
         type: 'GET',
         contentType: 'application/json',
+        data: {phoneNumber: phoneNumber},
         success: function (result) {
-            let orders = result.orders;
             var r = [], j = -1;
 
-            for (let key = 0, size = orders.length; key < size; key++) {
+            for (let key = 0, size = result.length; key < size; key++) {
                 r[++j] = '<tr class="text"><td>';
-                r[++j] = orders[key].recipient.name;
+                r[++j] = result[key].recipient.name;
                 r[++j] = '</td><td>';
-                r[++j] = orders[key].recipient.surname;
+                r[++j] = result[key].recipient.surname;
                 r[++j] = '</td><td>';
-                r[++j] = orders[key].sendingTime;
+                r[++j] = result[key].sendingTime;
                 r[++j] = '</td><td>';
-                r[++j] = orders[key].price;
+                r[++j] = result[key].price;
                 r[++j] = '</td><td>';
-                r[++j] = orders[key].state.state;
+                r[++j] = result[key].state.state;
                 r[++j] = '</td><td>';
-                r[++j] = orders[key].currentLocation.location;
+                r[++j] = result[key].currentLocation.location;
                 r[++j] = '</td></tr>';
             }
-            console.log(result);
             $('#orders').append(r.join(''));
+
         },
         error: function () {
             alert(localStorage.getItem('clientPhone'));
         }
-    });*/
+    });
 }
 
 function getIdFromUrl() {
@@ -59,4 +56,15 @@ function getIdFromUrl() {
             {}
         );
     return params;
+}
+
+function checkSession(){
+    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
+        localStorage.removeItem('clientPhone');
+        localStorage.removeItem('sessionTime');
+        window.location.href = `http://localhost:8081/homePage.html`;
+    } else {
+        localStorage.setItem('sessionTime', (new Date()).toString())
+    }
 }
