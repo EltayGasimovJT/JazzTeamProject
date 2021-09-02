@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="icons/waterFall.png"/>
+    <title>GasDel action</title>
+    <meta charset="UTF8">
+    <style> a {
+        text-decoration: none;
+    } </style>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+
+</head>
+<body>
+<div class="defaultBar">
+    <a href="homePage.html" class="defaultLogo">GasDel</a>
+
+
+</div>
+
+<div class="actionTab">
+    <div class="actionTabText">What do you want to do?</div>
+    <div class="btnMargin">
+        <button id="checkOrderBtn" class="me-btn buttonText open-modal">Check orders</button>
+    </div>
+</div>
+
+<div class="form-popup" id="findByPassportIdForm">
+
+</div>
+<div class="backGround-modal">
+    <div class="modal-custom">
+        <form class="passport-login-form" id="passportIdEnterForm" action="http://localhost:8081/clients/byPassport">
+            <span class="login-form-header">Please enter your passport Id</span>
+            <div class="passport-login">
+                <span for="passportId"><b>Passport Id</b></span>
+                <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
+            </div>
+            <div class="navigate-btn">
+                <button type="submit" class="enter-passportId">Login</button>
+                <button class="modal-close">Х</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div id="foundClient"></div>
+
+<script type="text/javascript" src="js/action.js"></script>
+</body>
+</html>
