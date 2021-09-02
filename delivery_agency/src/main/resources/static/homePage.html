@@ -17,7 +17,7 @@
 
   <div class="topNav">
     <div class="topNavA">
-      <a class="redirect" style="color: white; text-decoration: none" role="button" href="http://localhost:8081/actionPage.html">Sign as
+      <a class="asClient redirect" style="color: white; text-decoration: none" role="button">Sign as
         client
       </a>
     </div>
@@ -46,6 +46,32 @@
             <button id="processingPointWorker" style="width: 50%; align-self: center"
                     class="btn btn-info buttonText open-modal processing-point-worker">Sign as processing point worker
             </button>
+        </div>
+    </div>
+
+    <div class="client-backGround-modal">
+        <div class="modal-redirect input-numberForm">
+            <form id="phoneNumberInput" action="http://localhost:8081/clients/findByPhoneNumber">
+                <div class="form-group trackForm">
+                    <label class="general-name" for="orderNumberId">Enter your phone number</label>
+                    <input type="text" class="form-control" id="phoneNumberForm" placeholder="Enter your phone number"
+                           name="phoneNumber">
+                </div>
+                <button type="submit" class="btn btn-dark">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="code-backGround-modal">
+        <div class="modal-redirect input-codeForm">
+            <form id="codeInput" action="http://localhost:8081/codes/findCode">
+                <div class="form-group trackForm">
+                    <label class="general-name" for="orderNumberId">Enter code</label>
+                    <input type="text" class="form-control" id="codeForm" placeholder="Enter code"
+                           name="code">
+                </div>
+                <button type="submit" class="btn btn-dark">Submit</button>
+            </form>
         </div>
     </div>
 </div>

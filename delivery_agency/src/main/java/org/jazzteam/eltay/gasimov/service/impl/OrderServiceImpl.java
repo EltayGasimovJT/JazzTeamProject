@@ -9,6 +9,7 @@ import org.jazzteam.eltay.gasimov.repository.OrderRepository;
 import org.jazzteam.eltay.gasimov.repository.VoyageRepository;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
+import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
 import org.jazzteam.eltay.gasimov.validator.OrderValidator;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,6 +34,8 @@ public class OrderServiceImpl implements OrderService {
     private ModelMapper modelMapper;
     @Autowired
     private VoyageRepository voyageRepository;
+    @Autowired
+    private OrderProcessingPointService orderProcessingPointService;
 
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
@@ -71,35 +75,38 @@ public class OrderServiceImpl implements OrderService {
         OrderHistory orderHistory = OrderHistory.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND.toString())
                 .user(new User())
-                .comment(orderDtoToSave.getHistory().get(0).getComment())
+                .changedAt(LocalDateTime.now())
+                .sentAt(LocalDateTime.now())
+                .comment("Order was sent from " + orderDtoToSave.getCurrentLocation().getLocation() + " to the " + orderDtoToSave.getDestinationPlace().getLocation())
                 .build();
         orderDtoToSave.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
 
 
+        Client foundSender = clientService.findByPhoneNumber(orderDtoToSave.getSender().getPhoneNumber());
         Client senderToSave = Client.builder()
-                .id(orderDtoToSave.getSenderId())
-                .name(clientService.findById(orderDtoToSave.getSenderId()).getName())
-                .surname(clientService.findById(orderDtoToSave.getSenderId()).getSurname())
-                .passportId(clientService.findById(orderDtoToSave.getSenderId()).getPassportId())
-                .phoneNumber(clientService.findById(orderDtoToSave.getSenderId()).getPhoneNumber())
+                .id(foundSender.getId())
+                .name(foundSender.getName())
+                .surname(foundSender.getSurname())
+                .passportId(foundSender.getPassportId())
+                .phoneNumber(foundSender.getPhoneNumber())
                 .build();
 
+        Client foundRecipient = clientService.findByPhoneNumber(orderDtoToSave.getRecipient().getPhoneNumber());
         Client recipientToSave = Client.builder()
-                .id(orderDtoToSave.getRecipient().getId())
-                .name(orderDtoToSave.getRecipient().getName())
-                .surname(orderDtoToSave.getRecipient().getSurname())
-                .passportId(orderDtoToSave.getRecipient().getPassportId())
-                .phoneNumber(orderDtoToSave.getRecipient().getPhoneNumber())
+                .id(foundRecipient.getId())
+                .name(foundRecipient.getName())
+                .surname(foundRecipient.getSurname())
+                .passportId(foundRecipient.getPassportId())
+                .phoneNumber(foundRecipient.getPhoneNumber())
                 .build();
 
         Set<OrderHistory> historiesToSave = orderDtoToSave.getHistory().stream()
                 .map(orderHistoryDto -> modelMapper.map(orderHistoryDto, OrderHistory.class))
                 .collect(Collectors.toSet());
+        historiesToSave.add(orderHistory);
 
-        OrderProcessingPoint departurePointToSave = new OrderProcessingPoint();
-        departurePointToSave.setId(orderDtoToSave.getCurrentLocation().getId());
-        OrderProcessingPoint destinationPlaceToSave = new OrderProcessingPoint();
-        departurePointToSave.setId(orderDtoToSave.getDestinationPlace().getId());
+        OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
+        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
 
         Order orderToSave = Order.builder()
                 .id(orderDtoToSave.getId())
@@ -116,7 +123,12 @@ public class OrderServiceImpl implements OrderService {
 
         if (orderDtoToSave.getRecipient().getName() != null && orderDtoToSave.getRecipient().getSurname() != null
                 && orderDtoToSave.getRecipient().getPassportId() != null && orderDtoToSave.getRecipient().getPhoneNumber() != null) {
-            orderToSave.setRecipient(clientService.findById(orderDtoToSave.getRecipient().getId()));
+            orderToSave.setRecipient(clientService.findById(foundRecipient.getId()));
+        }
+        if (orderDtoToSave.getSender().getName() != null && orderDtoToSave.getSender().getSurname() != null
+                && orderDtoToSave.getSender().getPassportId() != null && orderDtoToSave.getSender().getPhoneNumber() != null) {
+
+            orderToSave.setRecipient(clientService.findById(foundSender.getId()));
         }
 
         return orderRepository.save(orderToSave);
@@ -252,7 +264,7 @@ public class OrderServiceImpl implements OrderService {
     public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException {
         CoefficientForPriceCalculationDto coefficientForCalculate = getCoefficient(orderForCalculate.getDestinationPlace());
 
-        return priceCalculationRuleService.calculatePrice(orderForCalculate, coefficientForCalculate);
+        return priceCalculationRuleService.calculatePrice(orderForCalculate.getParcelParameters(), coefficientForCalculate);
     }
 
 

@@ -12,6 +12,6 @@ public class CreateOrderRequestDto {
     private ClientDto recipient;
     private UserDto userDto;
     private ParcelParametersDto parcelParameters;
-    private String destinationPlace;
+    private String destinationPoint;
     private BigDecimal price;
 }

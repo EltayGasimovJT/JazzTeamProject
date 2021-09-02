@@ -2,6 +2,7 @@ package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
+import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 
 import java.util.List;
 
@@ -12,9 +13,13 @@ public interface ClientService {
 
     Client findById(long idForSearch) throws IllegalArgumentException;
 
-    Client findByPassportId(String passportIdForSearch) throws IllegalArgumentException;
+    Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException;
 
     Client save(ClientDto clientDtoToSave) throws IllegalArgumentException;
 
     Client update(ClientDto newClient) throws IllegalArgumentException;
+
+    OrderProcessingPoint determineCurrentDestinationPlace(String destinationPlace);
+
+    Client findByPhoneNumber(String phoneNumber);
 }

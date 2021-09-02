@@ -1,12 +1,14 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
+import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
 @RestController
@@ -41,6 +43,12 @@ public class CoefficientForPriceCalculationController {
         return calculationService.findAll().stream()
                 .map(coefficient -> modelMapper.map(coefficient, CoefficientForPriceCalculationDto.class))
                 .collect(Collectors.toSet());
+    }
+
+    @GetMapping(path = "/calculatePrice")
+    public @ResponseBody
+    BigDecimal calculatePrice(@RequestBody CoefficientForPriceCalculationDto coefficient, @RequestBody ParcelParametersDto parcelParametersDto) {
+        return calculationService.calculatePrice(parcelParametersDto, coefficient);
     }
 
     @DeleteMapping(path = "/coefficients/{id}")

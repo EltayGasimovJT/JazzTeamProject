@@ -506,3 +506,37 @@
 .table tbody tr:nth-child(1){
     font-weight: bold;
 }
+
+.client-backGround-modal {
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(68, 66, 66, 0.8);
+}
+
+.clientOrder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Calibri, serif;
+    font-size: 30px;
+    width: 100%;
+    color: Black;
+}
+
+.code-backGround-modal {
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(68, 66, 66, 0.8);
+}

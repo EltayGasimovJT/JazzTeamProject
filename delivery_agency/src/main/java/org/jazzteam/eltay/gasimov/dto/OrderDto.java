@@ -10,8 +10,8 @@ import java.util.List;
 
 @Builder
 @Data
-@ToString(exclude = {"senderId", "recipient"})
-@EqualsAndHashCode(exclude = "senderId")
+@ToString(exclude = {"sender", "recipient"})
+@EqualsAndHashCode(exclude = "sender")
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDto {
@@ -20,8 +20,8 @@ public class OrderDto {
     private OrderStateDto state;
     @NotEmpty(message = "Order must have parcelParameters")
     private ParcelParametersDto parcelParameters;
-    @NotEmpty(message = "Order must Have senderId")
-    private Long senderId;
+    @NotEmpty(message = "Order must Have sender")
+    private ClientDto sender;
     @NotEmpty(message = "Order must Have recipient")
     private ClientDto recipient;
     private String orderTrackNumber;
@@ -33,5 +33,6 @@ public class OrderDto {
     private OrderProcessingPointDto destinationPlace;
     @NotEmpty(message = "Order must have current location")
     private AbstractBuildingDto currentLocation;
+    private String personalCode;
     private List<OrderHistoryDto> history;
 }

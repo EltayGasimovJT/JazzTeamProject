@@ -27,12 +27,13 @@ public class CustomModelMapper {
                 .destinationPlace(modelMapper.map(orderToConvert.getDestinationPlace(), OrderProcessingPointDto.class))
                 .state(modelMapper.map(orderToConvert.getState(), OrderStateDto.class))
                 .recipient(modelMapper.map(orderToConvert.getRecipient(), ClientDto.class))
-                .senderId(orderToConvert.getSender().getId())
+                .sender(modelMapper.map(orderToConvert.getSender(), ClientDto.class))
                 .history(historiesToConvert)
                 .orderTrackNumber(orderToConvert.getTrackNumber())
                 .price(orderToConvert.getPrice())
                 .parcelParameters(modelMapper.map(orderToConvert.getParcelParameters(), ParcelParametersDto.class))
                 .build();
+
         if (orderToConvert.getCurrentLocation() instanceof OrderProcessingPoint) {
             convertedToDto.setCurrentLocation(modelMapper.map(orderToConvert.getCurrentLocation(), OrderProcessingPointDto.class));
         } else if (orderToConvert.getCurrentLocation() instanceof Warehouse) {
@@ -54,7 +55,7 @@ public class CustomModelMapper {
                 .destinationPlace(modelMapper.map(orderDtoToConvert.getDestinationPlace(), OrderProcessingPoint.class))
                 .state(modelMapper.map(orderDtoToConvert.getState(), OrderState.class))
                 .recipient(modelMapper.map(orderDtoToConvert.getRecipient(), Client.class))
-                .sender(modelMapper.map(orderDtoToConvert.getSenderId(), Client.class))
+                .sender(modelMapper.map(orderDtoToConvert.getSender(), Client.class))
                 .trackNumber(orderDtoToConvert.getOrderTrackNumber())
                 .history(historiesToConvert)
                 .price(orderDtoToConvert.getPrice())

@@ -17,7 +17,6 @@ const price = document.getElementById('price');
 
 document.getElementById('destinationPoint').oninput = function(event) {
     config.destinationPoint = allCoefficients.find(elem => elem.country === event.target.value);
-
     calcPrice();
 };
 document.getElementById('parcelWidth').oninput = function(event) {
@@ -38,6 +37,7 @@ document.getElementById('parcelWeight').oninput = (event) => {
 };
 
 function calcPrice() {
+    let priceValue;
     const volume = config.parcelWidth * config.parcelLength * config.parcelHeight;
 
     if (volume > INITIAL_SIZE && config.parcelWeight > INITIAL_WEIGHT) {
@@ -57,6 +57,16 @@ function calcPrice() {
     }
 
     price.innerHTML =  Math.round(volume * config.destinationPoint.countryCoefficient);
+    /*$.ajax({
+        type: 'POST',
+        url: `http://localhost:8081/createOrder`,
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(dataForSend)
+    }).done(function () {
+        console.log('success');
+    }).fail(function () {
+        console.log('fail');
+    });*/
 }
 
 function init() {
@@ -110,13 +120,11 @@ $('#createOrderForm').submit(function (e) {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(dataForSend)
     }).done(function () {
-
-
-        console.log('success');
         console.log('success');
     }).fail(function () {
         console.log('fail');
     });
+
     e.preventDefault();
 });
 

@@ -84,9 +84,9 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
 
     @Override
     public OrderProcessingPoint findByLocation(String locationForFind) {
-        OrderProcessingPoint foundClientFromRepository = orderProcessingPointRepository.findByLocation(locationForFind);
-        OrderProcessingPointValidator.validateProcessingPoint(foundClientFromRepository);
-        return foundClientFromRepository;
+        OrderProcessingPoint foundFromRepository = orderProcessingPointRepository.findByLocation(locationForFind);
+        OrderProcessingPointValidator.validateProcessingPoint(foundFromRepository);
+        return foundFromRepository;
     }
 
 }

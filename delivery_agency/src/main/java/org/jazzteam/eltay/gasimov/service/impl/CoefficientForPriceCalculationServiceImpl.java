@@ -1,7 +1,7 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
-import org.jazzteam.eltay.gasimov.dto.OrderDto;
+import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
 import org.jazzteam.eltay.gasimov.repository.CoefficientForPriceCalculationRepository;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
@@ -19,7 +19,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     @Autowired
     private CoefficientForPriceCalculationRepository priceCalculationRuleRepository;
 
-    private static final int INITIAL_PRISE = 40;
+    private static final int INITIAL_PRISE = 1400;
     private static final int INITIAL_WEIGHT = 20;
 
     @Override
@@ -78,16 +78,16 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException {
+    public BigDecimal calculatePrice(ParcelParametersDto parcelParametersDto, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException {
         BigDecimal resultPrice = new BigDecimal(1);
-        BigDecimal size = BigDecimal.valueOf(getSize(order));
+        BigDecimal size = BigDecimal.valueOf(getSize(parcelParametersDto));
         BigDecimal parcelSizeLimit = BigDecimal.valueOf(coefficientForCalculate.getParcelSizeLimit());
-        if (size.doubleValue() > parcelSizeLimit.doubleValue() && order.getParcelParameters().getWeight() > INITIAL_WEIGHT) {
+        if (size.doubleValue() > parcelSizeLimit.doubleValue() && parcelParametersDto.getWeight() > INITIAL_WEIGHT) {
             resultPrice =
                     resultPrice
                             .multiply(BigDecimal.valueOf(coefficientForCalculate.getCountryCoefficient())
                                     .multiply(BigDecimal.valueOf(INITIAL_PRISE)
-                                            .multiply(BigDecimal.valueOf(order.getParcelParameters().getWeight() / INITIAL_WEIGHT))
+                                            .multiply(BigDecimal.valueOf(parcelParametersDto.getWeight() / INITIAL_WEIGHT))
                                             .multiply((size.divide(parcelSizeLimit, RoundingMode.DOWN))))
                             );
         } else if (size.doubleValue() > parcelSizeLimit.doubleValue()) {
@@ -96,11 +96,11 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
                             .multiply(BigDecimal.valueOf(coefficientForCalculate.getCountryCoefficient())
                                     .multiply(BigDecimal.valueOf(INITIAL_PRISE)
                                             .multiply((size.divide(parcelSizeLimit, RoundingMode.DOWN)))));
-        } else if (order.getParcelParameters().getWeight() > INITIAL_WEIGHT) {
+        } else if (parcelParametersDto.getWeight() > INITIAL_WEIGHT) {
             resultPrice = resultPrice.multiply(BigDecimal.valueOf(
                     coefficientForCalculate.getCountryCoefficient()
                             * INITIAL_PRISE
-                            * (order.getParcelParameters().getWeight() / INITIAL_WEIGHT)));
+                            * (parcelParametersDto.getWeight() / INITIAL_WEIGHT)));
         } else {
             resultPrice = resultPrice.multiply(BigDecimal.valueOf(
                     coefficientForCalculate.getCountryCoefficient() * INITIAL_PRISE));
@@ -117,9 +117,9 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
         return foundCoefficient;
     }
 
-    private double getSize(OrderDto order) {
-        return (order.getParcelParameters().getLength()
-                * order.getParcelParameters().getHeight()
-                * order.getParcelParameters().getWidth()) + order.getParcelParameters().getWeight();
+    private double getSize(ParcelParametersDto parcelParametersDto) {
+        return (parcelParametersDto.getLength()
+                * parcelParametersDto.getHeight()
+                * parcelParametersDto.getWidth()) + parcelParametersDto.getWeight();
     }
 }

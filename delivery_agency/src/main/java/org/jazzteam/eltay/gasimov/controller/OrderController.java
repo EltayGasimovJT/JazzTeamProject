@@ -1,11 +1,12 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import lombok.extern.java.Log;
-import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.CreateOrderRequestDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.dto.OrderHistoryDto;
+import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.entity.Order;
+import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
 import org.modelmapper.ModelMapper;
@@ -13,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -37,27 +38,32 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderDto createOrder(@RequestBody CreateOrderRequestDto dtoFromForm) {
-        log.severe(dtoFromForm.toString());
-      if (clientService.findByPassportId(dtoFromForm.getSender().getPassportId()) == null) {
-          //  clientService.save(dtoFromForm.getSender());
+        if (clientService.findByPhoneNumber(dtoFromForm.getSender().getPhoneNumber()) == null) {
+            clientService.save(dtoFromForm.getSender());
         }
-        if (clientService.findByPassportId(dtoFromForm.getRecipient().getPassportId()) == null) {
-            //clientService.save(dtoFromForm.getRecipient());
+        if (clientService.findByPhoneNumber(dtoFromForm.getRecipient().getPhoneNumber()) == null) {
+            clientService.save(dtoFromForm.getRecipient());
         }
         OrderDto orderDtoToSave = OrderDto.builder()
+                .currentLocation(new OrderProcessingPointDto())
+                .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(dtoFromForm.getDestinationPoint()), OrderProcessingPointDto.class))
+                .parcelParameters(dtoFromForm.getParcelParameters())
+                .price(dtoFromForm.getPrice())
+                .recipient(dtoFromForm.getRecipient())
+                .sender(dtoFromForm.getSender())
                 .build();
 
-        //orderService.save(orderDtoToSave);
-        log.severe("qaqwqwqtwqwt");
-        return null;
+        orderService.save(orderDtoToSave);
+        return orderDtoToSave;
     }
 
     @GetMapping(path = "/orders/findBySenderPassport")
     public @ResponseBody
-    Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId, Map<String, Object> model) {
-        final ClientDto map = modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
-        model.put("Orders", map.getOrders());
-        return map.getOrders();
+    Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId) {
+        Set<Order> ordersBySenderPassportId = clientService.findClientByPassportId(passportId).getOrders();
+        return ordersBySenderPassportId.stream()
+                .map(CustomModelMapper::mapOrderToDto)
+                .collect(Collectors.toSet());
     }
 
     @GetMapping(path = "/orders/findHistory/{id}")

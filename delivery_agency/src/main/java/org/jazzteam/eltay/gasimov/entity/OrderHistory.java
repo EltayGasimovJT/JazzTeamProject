@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 @Builder
 @Data
@@ -24,9 +24,9 @@ public class OrderHistory {
     @Column
     private String comment;
     @Column
-    private Calendar changedAt;
+    private LocalDateTime changedAt;
     @Column
-    private Calendar sentAt;
+    private LocalDateTime sentAt;
     @Column
     private String changedTypeEnum;
 }

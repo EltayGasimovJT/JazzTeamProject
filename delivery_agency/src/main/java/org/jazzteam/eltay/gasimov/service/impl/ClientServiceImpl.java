@@ -1,27 +1,35 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
-import org.jazzteam.eltay.gasimov.entity.Order;
-import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
+import org.jazzteam.eltay.gasimov.entity.ClientsCode;
+import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.repository.ClientRepository;
+import org.jazzteam.eltay.gasimov.repository.CodeRepository;
 import org.jazzteam.eltay.gasimov.service.ClientService;
+import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
 import org.jazzteam.eltay.gasimov.validator.ClientValidator;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service(value = "clientService")
 public class ClientServiceImpl implements ClientService {
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
+    private OrderProcessingPointService orderProcessingPointService;
+    @Autowired
+    private CodeRepository codeRepository;
+    @Autowired
+    private ModelMapper modelMapper;
+
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
@@ -48,10 +56,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findByPassportId(String passportIdForSearch) throws IllegalArgumentException {
-        Client foundClientFromRepository = clientRepository.findByPassportId(passportIdForSearch);
-        ClientValidator.validateClient(foundClientFromRepository);
-        return foundClientFromRepository;
+    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException {
+        return clientRepository.findByPassportId(passportIdForSearch);
     }
 
     @Override
@@ -77,12 +83,6 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> foundClientFromRepo = clientRepository.findById(newClient.getId());
         Client foundClient = foundClientFromRepo.orElseGet(Client::new);
         ClientValidator.validateClient(foundClient);
-        Set<Order> clientOrdersToUpdate = new HashSet<>();
-        if (newClient.getOrders() != null) {
-            clientOrdersToUpdate = newClient.getOrders().stream()
-                    .map(CustomModelMapper::mapDtoToOrder)
-                    .collect(Collectors.toSet());
-        }
 
         Client clientToUpdate = Client.builder()
                 .id(newClient.getId())
@@ -90,10 +90,31 @@ public class ClientServiceImpl implements ClientService {
                 .surname(newClient.getSurname())
                 .passportId(newClient.getPassportId())
                 .phoneNumber(newClient.getPhoneNumber())
-                .orders(clientOrdersToUpdate)
                 .build();
 
         return clientRepository.save(clientToUpdate);
     }
 
+    @Override
+    public OrderProcessingPoint determineCurrentDestinationPlace(String destinationPlace) {
+        return orderProcessingPointService.findByLocation(destinationPlace);
+    }
+
+    @Override
+    public Client findByPhoneNumber(String phoneNumber) {
+        Client byPhoneNumber = clientRepository.findByPhoneNumber(phoneNumber);
+        String generatedCode = generateNewCode();
+        ClientsCode generatedCodeObject = ClientsCode.builder()
+                .client(byPhoneNumber)
+                .generatedCode(generatedCode)
+                .build();
+        byPhoneNumber.setCode(codeRepository.save(generatedCodeObject));
+        return byPhoneNumber;
+    }
+
+    private String generateNewCode() {
+        int randomStringLength = 4;
+        String charset = "0123456789";
+        return RandomStringUtils.random(randomStringLength, charset);
+    }
 }

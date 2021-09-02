@@ -1,7 +1,7 @@
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
-import org.jazzteam.eltay.gasimov.dto.OrderDto;
+import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
 
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ public interface CoefficientForPriceCalculationService {
 
     CoefficientForPriceCalculation findOne(long idForSearch);
 
-    BigDecimal calculatePrice(OrderDto order, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException;
+    BigDecimal calculatePrice(ParcelParametersDto parcelParametersDto, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException;
 
     CoefficientForPriceCalculation findByCountry(String countryForSearch);
 

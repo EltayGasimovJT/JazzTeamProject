@@ -35,7 +35,14 @@ public class ClientController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     ClientDto findByPassportId(@RequestParam String passportId) {
-        return modelMapper.map(clientService.findByPassportId(passportId), ClientDto.class);
+        return modelMapper.map(clientService.findClientByPassportId(passportId), ClientDto.class);
+    }
+
+    @GetMapping(path = "/clients/findByPhoneNumber")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    ClientDto findByPhoneNumber(@RequestParam String phoneNumber) {
+        return modelMapper.map(clientService.findByPhoneNumber(phoneNumber), ClientDto.class);
     }
 
     @GetMapping(path = "/clients")
@@ -62,7 +69,6 @@ public class ClientController {
                     .surname(newClient.getSurname())
                     .passportId(newClient.getPassportId())
                     .phoneNumber(newClient.getPhoneNumber())
-                    .orders(newClient.getOrders())
                     .build();
             return clientService.update(clientToSave);
         }
