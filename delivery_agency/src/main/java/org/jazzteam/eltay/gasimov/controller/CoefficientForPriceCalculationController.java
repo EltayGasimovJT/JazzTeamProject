@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.controller;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
 import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
@@ -22,21 +23,21 @@ public class CoefficientForPriceCalculationController {
     @PostMapping(path = "/coefficients")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficientToSave) {
+    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficientToSave) throws ObjectNotFoundException {
         return modelMapper.map(calculationService.save(coefficientToSave), CoefficientForPriceCalculationDto.class);
     }
 
     @GetMapping(path = "/coefficients/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    CoefficientForPriceCalculationDto findById(@PathVariable Long id) {
+    CoefficientForPriceCalculationDto findById(@PathVariable Long id) throws ObjectNotFoundException {
         return modelMapper.map(calculationService.findOne(id), CoefficientForPriceCalculationDto.class);
     }
 
     @GetMapping(path = "/coefficients")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<CoefficientForPriceCalculationDto> findAll() {
+    Iterable<CoefficientForPriceCalculationDto> findAll() throws ObjectNotFoundException {
         return calculationService.findAll().stream()
                 .map(coefficient -> modelMapper.map(coefficient, CoefficientForPriceCalculationDto.class))
                 .collect(Collectors.toSet());
@@ -50,13 +51,13 @@ public class CoefficientForPriceCalculationController {
 
     @DeleteMapping(path = "/coefficients/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCoefficient(@PathVariable Long id) {
+    public void deleteCoefficient(@PathVariable Long id) throws ObjectNotFoundException {
         calculationService.delete(id);
     }
 
     @PutMapping("/coefficients")
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public CoefficientForPriceCalculationDto updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) {
+    public CoefficientForPriceCalculationDto updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) throws ObjectNotFoundException {
         return modelMapper.map(calculationService.update(newCoefficient), CoefficientForPriceCalculationDto.class);
     }
 }

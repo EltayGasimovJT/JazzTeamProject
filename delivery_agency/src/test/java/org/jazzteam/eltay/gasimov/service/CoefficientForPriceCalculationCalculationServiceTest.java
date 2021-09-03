@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.service;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.SneakyThrows;
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
@@ -17,7 +18,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.stream.Stream;
 
 @SpringBootTest
@@ -107,7 +107,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void addPriceCalculationRule() {
+    void addPriceCalculationRule() throws ObjectNotFoundException {
         CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
@@ -156,7 +156,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void findAllPriceCalculationRules() throws SQLException {
+    void findAllPriceCalculationRules() throws ObjectNotFoundException {
         CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
@@ -175,7 +175,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void getCoefficient() throws SQLException {
+    void getCoefficient() throws ObjectNotFoundException {
         CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
@@ -194,7 +194,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void update() throws SQLException {
+    void update() throws ObjectNotFoundException {
         CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)

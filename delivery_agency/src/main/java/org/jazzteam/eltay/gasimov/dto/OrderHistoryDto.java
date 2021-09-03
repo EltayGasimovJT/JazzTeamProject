@@ -24,6 +24,7 @@ public class OrderHistoryDto {
     private String comment;
     @NotEmpty(message = "OrderHistory must have value")
     private LocalDateTime changedAt;
+    @NotEmpty(message = "OrderHistory must have value")
     private LocalDateTime sentAt;
     @NotEmpty(message = "Changed type must have value")
     private OrderStateChangeType changedTypeEnum;

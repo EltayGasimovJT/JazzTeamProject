@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.controller;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
@@ -23,28 +24,28 @@ public class ClientController {
     @PostMapping(path = "/clients")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    Client addNewClient(@RequestBody ClientDto clientToSave) {
+    Client addNewClient(@RequestBody ClientDto clientToSave) throws ObjectNotFoundException {
         return clientService.save(clientToSave);
     }
 
     @GetMapping(path = "/clients/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    ClientDto findById(@PathVariable Long id) {
+    ClientDto findById(@PathVariable Long id) throws ObjectNotFoundException {
         return modelMapper.map(clientService.findById(id), ClientDto.class);
     }
 
     @GetMapping(path = "/clients/byPassport")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    ClientDto findByPassportId(@RequestParam String passportId) {
+    ClientDto findByPassportId(@RequestParam String passportId) throws ObjectNotFoundException {
         return modelMapper.map(clientService.findClientByPassportId(passportId), ClientDto.class);
     }
 
     @GetMapping(path = "/clients/findByPhoneNumber")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    ClientDto findByPhoneNumber(@RequestParam String phoneNumber) {
+    ClientDto findByPhoneNumber(@RequestParam String phoneNumber) throws ObjectNotFoundException {
         return modelMapper.map(clientService.findByPhoneNumber(phoneNumber), ClientDto.class);
     }
 
@@ -58,19 +59,19 @@ public class ClientController {
     @GetMapping(path = "/clients")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<Client> findAllClients() {
+    Iterable<Client> findAllClients() throws ObjectNotFoundException {
         return clientService.findAll();
     }
 
     @DeleteMapping(path = "/clients/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteClient(@PathVariable Long id) {
+    public void deleteClient(@PathVariable Long id) throws ObjectNotFoundException {
         clientService.delete(id);
     }
 
     @PutMapping("/clients")
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public Client updateClient(@RequestBody ClientDto newClient) {
+    public Client updateClient(@RequestBody ClientDto newClient) throws ObjectNotFoundException {
         return clientService.update(newClient);
     }
 }

@@ -15,4 +15,6 @@ public interface OrderStateService {
     OrderState findOne(long idForSearch);
 
     OrderState update(OrderStateDto orderStateDtoToUpdate);
+
+    OrderState findByState(String toString);
 }

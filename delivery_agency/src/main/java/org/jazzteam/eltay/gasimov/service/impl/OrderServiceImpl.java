@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jazzteam.eltay.gasimov.dto.*;
@@ -37,6 +38,10 @@ public class OrderServiceImpl implements OrderService {
     private ParcelParametersService parcelParametersService;
     @Autowired
     private OrderStateService orderStateService;
+    @Autowired
+    private OrderHistoryService orderHistoryService;
+    @Autowired
+    private UserService userService;
 
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
@@ -55,48 +60,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Order save(OrderDto orderDtoToSave) throws IllegalArgumentException {
-        OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
-
-        BigDecimal price = orderDtoToSave.getPrice();
-        OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
-        orderDtoToSave.setPrice(price);
-        orderDtoToSave.setState(modelMapper.map(orderStateService.findOne(1), OrderStateDto.class));
-        OrderHistory orderHistory = OrderHistory.builder()
-                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND.toString())
-                .user(new User())
-                .changedAt(LocalDateTime.now())
-                .sentAt(LocalDateTime.now())
-                .comment("Order was sent from " + orderDtoToSave.getCurrentLocation().getLocation() + " to the " + orderDtoToSave.getDestinationPlace().getLocation())
-                .build();
-        orderDtoToSave.setHistory(Collections.singletonList(modelMapper.map(orderHistory, OrderHistoryDto.class)));
-
-        Client senderToSave = getClientToSave(orderDtoToSave.getSender());
-
-        Client recipientToSave = getClientToSave(orderDtoToSave.getRecipient());
-
-        Set<OrderHistory> historiesToSave = orderDtoToSave.getHistory().stream()
-                .map(orderHistoryDto -> modelMapper.map(orderHistoryDto, OrderHistory.class))
-                .collect(Collectors.toSet());
-        historiesToSave.add(orderHistory);
-
-        OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
-        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
-        ParcelParameters savedParameters = parcelParametersService.save(orderDtoToSave.getParcelParameters());
-
-        Order orderToSave = Order.builder()
-                .sender(senderToSave)
-                .recipient(recipientToSave)
-                .currentLocation(departurePointToSave)
-                .destinationPlace(destinationPlaceToSave)
-                .history(historiesToSave)
-                .parcelParameters(savedParameters)
-                .price(orderDtoToSave.getPrice())
-                .state(orderState)
-                .trackNumber(generateNewTrackNumber())
-                .build();
-
-        return orderRepository.save(orderToSave);
+    public Order save(OrderDto orderDtoToSave) throws IllegalArgumentException, ObjectNotFoundException {
+        return getOrderFoSave(orderDtoToSave);
     }
 
 
@@ -227,7 +192,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException {
+    public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException, ObjectNotFoundException {
         CoefficientForPriceCalculationDto coefficientForCalculate = getCoefficient(orderForCalculate.getDestinationPlace());
 
         return priceCalculationRuleService.calculatePrice(orderForCalculate.getParcelParameters(), coefficientForCalculate);
@@ -237,7 +202,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order update(OrderDto orderDtoToUpdate) throws IllegalArgumentException {
         Optional<Order> foundOrderFromRepository = orderRepository.findById(orderDtoToUpdate.getId());
-        OrderHistory historyToAdd = modelMapper.map(orderDtoToUpdate.getHistory().get(0), OrderHistory.class);
+        OrderHistory historyToAdd = modelMapper.map(orderDtoToUpdate.getHistory().iterator().next(), OrderHistory.class);
         Order orderToUpdate = foundOrderFromRepository.orElseGet(Order::new);
         OrderValidator.validateOrder(orderToUpdate);
         Client newRecipient = Client.builder()
@@ -270,6 +235,64 @@ public class OrderServiceImpl implements OrderService {
         Order foundOrder = orderRepository.findByTrackNumber(trackNumber);
         OrderValidator.validateOrder(foundOrder);
         return foundOrder;
+    }
+
+    @Override
+    public Order createOrder(CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
+        OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
+        OrderDto orderDtoToSave = OrderDto.builder()
+                .currentLocation(new OrderProcessingPointDto())
+                .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
+                .parcelParameters(requestOrder.getParcelParameters())
+                .price(requestOrder.getPrice())
+                .recipient(requestOrder.getRecipient())
+                .sender(requestOrder.getSender())
+                .state(modelMapper.map(orderState, OrderStateDto.class))
+                .build();
+
+        return getOrderFoSave(orderDtoToSave);
+    }
+
+    private Order getOrderFoSave(OrderDto orderDtoToSave) throws ObjectNotFoundException {
+        OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
+
+        BigDecimal price = orderDtoToSave.getPrice();
+        OrderState orderState = orderStateService.findByState(OrderStateChangeType.READY_TO_SEND.toString());
+        orderDtoToSave.setPrice(price);
+        orderDtoToSave.setState(modelMapper.map(orderStateService.findOne(1), OrderStateDto.class));
+        OrderHistory orderHistoryForSave = OrderHistory.builder()
+                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND.toString())
+                .user(userService.findOne(1L))
+                .changedAt(LocalDateTime.now())
+                .comment("Order was sent from " + orderDtoToSave.getCurrentLocation().getLocation() + " to the " + orderDtoToSave.getDestinationPlace().getLocation())
+                .build();
+
+        OrderHistory savedHistory = orderHistoryService.save(modelMapper.map(orderHistoryForSave, OrderHistoryDto.class));
+        savedHistory.setSentAt(LocalDateTime.now());
+        Set<OrderHistory> orderHistories = new HashSet<>();
+        orderHistories.add(savedHistory);
+
+        Client senderToSave = getClientToSave(orderDtoToSave.getSender());
+
+        Client recipientToSave = getClientToSave(orderDtoToSave.getRecipient());
+
+        OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
+        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
+        ParcelParameters savedParameters = parcelParametersService.save(orderDtoToSave.getParcelParameters());
+
+        Order orderToSave = Order.builder()
+                .sender(senderToSave)
+                .recipient(recipientToSave)
+                .currentLocation(departurePointToSave)
+                .destinationPlace(destinationPlaceToSave)
+                .history(orderHistories)
+                .parcelParameters(savedParameters)
+                .price(orderDtoToSave.getPrice())
+                .state(orderState)
+                .trackNumber(generateNewTrackNumber())
+                .build();
+
+        return orderRepository.save(orderToSave);
     }
 
     private OrderState updateState(String state) {
@@ -395,11 +418,11 @@ public class OrderServiceImpl implements OrderService {
         return orderState;
     }
 
-    private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws IllegalArgumentException {
+    private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws IllegalArgumentException, ObjectNotFoundException {
         return modelMapper.map(priceCalculationRuleService.findByCountry(processingPointDto.getLocation()), CoefficientForPriceCalculationDto.class);
     }
 
-    private Client getClientToSave(ClientDto sender) {
+    private Client getClientToSave(ClientDto sender) throws ObjectNotFoundException {
         Client senderToSave;
         Client foundSender = clientService.findClientByPassportId(sender.getPassportId());
         if (foundSender != null) {

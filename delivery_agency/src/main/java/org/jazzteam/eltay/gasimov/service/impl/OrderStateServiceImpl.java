@@ -43,4 +43,9 @@ public class OrderStateServiceImpl implements OrderStateService {
     public OrderState update(OrderStateDto orderStateDtoToUpdate) {
         return orderStateRepository.save(modelMapper.map(orderStateDtoToUpdate, OrderState.class));
     }
+
+    @Override
+    public OrderState findByState(String stateForFind) {
+        return orderStateRepository.findByState(stateForFind);
+    }
 }

@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
@@ -35,7 +36,7 @@ public class ClientServiceImpl implements ClientService {
 
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException {
+    public void delete(Long idForDelete) throws IllegalArgumentException, ObjectNotFoundException {
         Optional<Client> foundClientFromRepository = clientRepository.findById(idForDelete);
         Client foundClient = foundClientFromRepository.orElseGet(Client::new);
         ClientValidator.validateClient(foundClient);
@@ -43,14 +44,14 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> findAll() throws IllegalArgumentException {
+    public List<Client> findAll() throws ObjectNotFoundException {
         List<Client> foundClientsFromRepository = clientRepository.findAll();
         ClientValidator.validateClientList(foundClientsFromRepository);
         return foundClientsFromRepository;
     }
 
     @Override
-    public Client findById(long idForSearch) throws IllegalArgumentException {
+    public Client findById(long idForSearch) throws IllegalArgumentException, ObjectNotFoundException {
         Optional<Client> foundClientFromRepository = clientRepository.findById(idForSearch);
         Client foundClient = foundClientFromRepository.orElseGet(Client::new);
 
@@ -59,14 +60,12 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException {
-        final Client foundClient = clientRepository.findByPassportId(passportIdForSearch);
-        ClientValidator.validateOnFindByPassport(foundClient, passportIdForSearch);
-        return foundClient;
+    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException, ObjectNotFoundException {
+        return clientRepository.findByPassportId(passportIdForSearch);
     }
 
     @Override
-    public Client save(ClientDto clientDtoToSave) throws IllegalArgumentException {
+    public Client save(ClientDto clientDtoToSave) throws IllegalArgumentException, ObjectNotFoundException {
         Client clientToSave = Client.builder()
                 .id(clientDtoToSave.getId())
                 .name(clientDtoToSave.getName())
@@ -84,7 +83,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client update(ClientDto newClient) throws IllegalArgumentException {
+    public Client update(ClientDto newClient) throws IllegalArgumentException, ObjectNotFoundException {
         Optional<Client> foundClientFromRepo = clientRepository.findById(newClient.getId());
         Client foundClient = foundClientFromRepo.orElseGet(Client::new);
         ClientValidator.validateClient(foundClient);
@@ -105,7 +104,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findByPhoneNumber(String phoneNumber) {
+    public Client findByPhoneNumber(String phoneNumber) throws ObjectNotFoundException {
         Client foundClient = clientRepository.findByPhoneNumber(phoneNumber);
         ClientValidator.validateOnFindByPhoneNumber(foundClient, phoneNumber);
         String generatedCode = generateNewCode();

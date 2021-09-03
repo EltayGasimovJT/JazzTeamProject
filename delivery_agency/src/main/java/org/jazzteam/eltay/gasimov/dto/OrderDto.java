@@ -6,7 +6,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 @Builder
 @Data
@@ -34,5 +34,5 @@ public class OrderDto {
     @NotEmpty(message = "Order must have current location")
     private AbstractBuildingDto currentLocation;
     private String personalCode;
-    private List<OrderHistoryDto> history;
+    private Set<OrderHistoryDto> history;
 }

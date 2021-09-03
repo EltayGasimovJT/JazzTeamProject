@@ -1,10 +1,10 @@
 package org.jazzteam.eltay.gasimov.controller;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.CreateOrderRequestDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.dto.OrderHistoryDto;
-import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.entity.Order;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.service.ClientService;
@@ -30,30 +30,21 @@ public class OrderController {
     @PostMapping(path = "/orders")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    OrderDto addNewOrder(@RequestBody OrderDto orderDtoToSave) {
+    OrderDto addNewOrder(@RequestBody OrderDto orderDtoToSave) throws ObjectNotFoundException {
         return modelMapper.map(orderService.save(orderDtoToSave), OrderDto.class);
     }
 
     @PostMapping(path = "/createOrder")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    OrderDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) {
-        OrderDto orderDtoToSave = OrderDto.builder()
-                .currentLocation(new OrderProcessingPointDto())
-                .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
-                .parcelParameters(requestOrder.getParcelParameters())
-                .price(requestOrder.getPrice())
-                .recipient(requestOrder.getRecipient())
-                .sender(requestOrder.getSender())
-                .build();
-
-        return CustomModelMapper.mapOrderToDto(orderService.save(orderDtoToSave));
+    OrderDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
+        return CustomModelMapper.mapOrderToDto(orderService.createOrder(requestOrder));
     }
 
     @GetMapping(path = "/orders/findBySenderPassport")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId) {
+    Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId) throws ObjectNotFoundException {
         Set<Order> ordersBySenderPassportId = clientService.findClientByPassportId(passportId).getOrders();
         return ordersBySenderPassportId.stream()
                 .map(CustomModelMapper::mapOrderToDto)
