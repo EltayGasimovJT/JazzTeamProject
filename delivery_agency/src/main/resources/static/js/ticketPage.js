@@ -13,8 +13,8 @@ jQuery('document').ready(function () {
                 keywords: 'Keywords'
             },
 
-            pageSize: 'A4',
-            pageOrientation: 'landscape',
+            pageSize: 'A5',
+            pageOrientation: 'portrait',
             pageMargins: [50, 50, 30, 60],
 
             header: function (currentPage, pageCount) {
@@ -34,7 +34,7 @@ jQuery('document').ready(function () {
             content: [
                 {
                     text: 'Ticket #' + idFromUrl.ticketNumber,
-                    fontSize: 100,
+                    fontSize: 40,
                     alignment: 'center'
                 },
                 {
@@ -45,7 +45,7 @@ jQuery('document').ready(function () {
                         'Destination point: ' + order.destinationPlace.location + '\n' +
                         'Sending time: ' + getTimeFormat(order.sendingTime) + '\n' +
                         'Price:' + order.price + '\n',
-                    fontSize: 30
+                    fontSize: 20
                 }
             ]
         }
