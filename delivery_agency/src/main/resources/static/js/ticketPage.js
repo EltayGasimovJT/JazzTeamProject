@@ -3,7 +3,57 @@ jQuery('document').ready(function () {
 
     $('#ticketSpanId').append(idFromUrl.ticketNumber);
     getOrder(idFromUrl.orderId);
+
+    jQuery("#downloadTicketPdf").on('click', function () {
+        let docInfo = {
+            info: {
+                title: 'Ticket №' + idFromUrl.ticketNumber,
+                author: 'Eltay',
+                subject: 'Theme',
+                keywords: 'Keywords'
+            },
+
+            pageSize: 'A4',
+            pageOrientation: 'landscape',
+            pageMargins: [50, 50, 30, 60],
+
+            header: function (currentPage, pageCount) {
+                return {
+                    text: currentPage.toString() + 'из' + pageCount,
+                    alignment: 'right',
+                    margin: [0, 30, 10, 50]
+                }
+            },
+
+            footer: [
+                {
+                    text: '',
+                    alignment: 'right'
+                }
+            ],
+            content: [
+                {
+                    text: 'Ticket #' + idFromUrl.ticketNumber,
+                    fontSize: 100,
+                    alignment: 'center'
+                },
+                {
+                    text: 'Order tracking number: #' + order.orderTrackNumber + '\n' +
+                        'Sender name: ' + order.sender.name + '\n' +
+                        'Recipient name: ' + order.recipient.name + '\n' +
+                        'Departure point: ' + order.destinationPlace.location + '\n' +
+                        'Destination point: ' + order.destinationPlace.location + '\n' +
+                        'Sending time: ' + getTimeFormat(order.sendingTime) + '\n' +
+                        'Price:' + order.price + '\n',
+                    fontSize: 30
+                }
+            ]
+        }
+
+        pdfMake.createPdf(docInfo).download('Ticket#' + idFromUrl.ticketNumber);
+    })
 })
+let order;
 
 function getOrder(orderId) {
     $.ajax({
@@ -11,12 +61,8 @@ function getOrder(orderId) {
         url: `http://localhost:8081/orders/${orderId}`,
         contentType: 'application/json; charset=utf-8',
     }).done(function (data) {
-        console.log(data.history[0].sentAt);
-        let date = new Date(data.history[0].sentAt);
-        console.log(data);
-        console.log(date);
-        console.log(date.getFullYear() + " " + date.getHours() +
-            ":" + date.getMinutes() + ":" + date.getSeconds());
+        order = data;
+        insetValuesIntoTicket(data);
     }).fail(function () {
         console.log('fail');
     });
@@ -37,4 +83,19 @@ function getIdFromUrl() {
             {}
         );
     return params;
+}
+
+function insetValuesIntoTicket(data) {
+    $('#trackNumber').append(data.orderTrackNumber);
+    $('#senderName').append(data.sender.name);
+    $('#recipientName').append(data.recipient.name);
+    $('#departurePoint').append(data.destinationPlace.location);
+    $('#destinationPoint').append(data.destinationPlace.location);
+    $('#sendingTime').append(getTimeFormat(data.sendingTime));
+    $('#price').append(data.price);
+}
+
+function getTimeFormat(time) {
+    let sendingTime = new Date(time);
+    return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();
 }

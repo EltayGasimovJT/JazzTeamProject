@@ -30,7 +30,6 @@ public class Client {
             orphanRemoval = true)
     @JsonManagedReference
     private Set<Order> orders;
-
     @OneToOne
     private ClientsCode code;
 }

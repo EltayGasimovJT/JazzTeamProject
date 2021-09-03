@@ -17,20 +17,24 @@
 <div class="backToTheActionPageBtn">
     <button id="backToTheActionPageBtnId" class="customBtn buttonText">Back to the home page</button>
 </div>
-<div class="clientOrder" >
+<div class="ticketFormat">
     <div id="ticketSpanId">Ticket №</div>
-    <pre></pre>
-    <pre></pre>
-    <pre></pre>
-    <pre></pre>
-    <pre></pre>
-    <pre></pre>
-    <pre></pre>
+    <div class="ticket-info" style="margin-top: 50px">
+        <pre id="trackNumber">Order tracking number: #</pre>
+        <pre id="senderName">Sender name: </pre>
+        <pre id="recipientName">Recipient name: </pre>
+        <pre id="departurePoint">Departure point: </pre>
+        <pre id="destinationPoint">Destination point: </pre>
+        <pre id="sendingTime">Sending time: </pre>
+        <pre id="price">Price: </pre>
+    </div>
 </div>
-<div class="">
+<div class="downloadBtn">
     <button id="downloadTicketPdf" class="customBtn buttonText">Download ticket.pdf</button>
 </div>
 
+<script type="text/javascript" src="js/pdfmake.min.js"></script>
+<script type="text/javascript" src="js/vfs_fonts.js"></script>
 <script type="text/javascript" src="js/ticketPage.js"></script>
 </body>
 </html>
