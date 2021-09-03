@@ -1,16 +1,24 @@
-let idFromUrl = getIdFromUrl();
+jQuery('document').ready(function () {
+    let idFromUrl = getIdFromUrl();
 
-console.log(idFromUrl.orderId);
-getUsersOrders();
+    $('#ticketSpanId').append(idFromUrl.ticketNumber);
+    getOrder(idFromUrl.orderId);
+})
 
-function getUsersOrders() {
+function getOrder(orderId) {
     $.ajax({
-        url: `http://localhost:8081/generateTicket/${idFromUrl.orderId}`,
         type: 'GET',
-        contentType: 'application/json',
-        success: function (result) {
-            console.log(result);
-        }
+        url: `http://localhost:8081/orders/${orderId}`,
+        contentType: 'application/json; charset=utf-8',
+    }).done(function (data) {
+        console.log(data.history[0].sentAt);
+        let date = new Date(data.history[0].sentAt);
+        console.log(data);
+        console.log(date);
+        console.log(date.getFullYear() + " " + date.getHours() +
+            ":" + date.getMinutes() + ":" + date.getSeconds());
+    }).fail(function () {
+        console.log('fail');
     });
 }
 

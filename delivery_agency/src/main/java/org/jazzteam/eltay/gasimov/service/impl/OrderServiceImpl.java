@@ -66,7 +66,7 @@ public class OrderServiceImpl implements OrderService {
 
 
     private String generateNewTrackNumber() {
-        int randomStringLength = 7;
+        int randomStringLength = 9;
         String charset = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZ";
         return RandomStringUtils.random(randomStringLength, charset);
     }

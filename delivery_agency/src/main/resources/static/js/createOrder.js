@@ -111,7 +111,7 @@ $('#createOrderForm').submit(function (e) {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(dataForSend)
     }).done(function (data) {
-        window.location.href = `http://localhost:8081/ticketPage.html?orderId=${data.id}`;
+        window.location.href = `http://localhost:8081/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
     }).fail(function () {
         console.log('fail');
     });

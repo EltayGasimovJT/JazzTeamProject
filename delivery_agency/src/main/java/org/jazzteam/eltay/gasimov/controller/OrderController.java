@@ -2,13 +2,12 @@ package org.jazzteam.eltay.gasimov.controller;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.extern.java.Log;
-import org.jazzteam.eltay.gasimov.dto.CreateOrderRequestDto;
-import org.jazzteam.eltay.gasimov.dto.OrderDto;
-import org.jazzteam.eltay.gasimov.dto.OrderHistoryDto;
+import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.Order;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.service.ClientService;
 import org.jazzteam.eltay.gasimov.service.OrderService;
+import org.jazzteam.eltay.gasimov.service.TicketService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +25,9 @@ public class OrderController {
     private OrderService orderService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private TicketService ticketService;
+
 
     @PostMapping(path = "/orders")
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,8 +39,12 @@ public class OrderController {
     @PostMapping(path = "/createOrder")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    OrderDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
-        return CustomModelMapper.mapOrderToDto(orderService.createOrder(requestOrder));
+    OrderResponseDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
+        OrderDto createdOrder = CustomModelMapper.mapOrderToDto(orderService.createOrder(requestOrder));
+        return OrderResponseDto.builder()
+                .orderDto(createdOrder)
+                .ticketDto(modelMapper.map(ticketService.generateTicket(createdOrder.getId()), TicketDto.class))
+                .build();
     }
 
     @GetMapping(path = "/orders/findBySenderPassport")
