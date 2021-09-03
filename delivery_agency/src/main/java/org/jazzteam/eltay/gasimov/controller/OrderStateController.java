@@ -24,6 +24,7 @@ public class OrderStateController {
     }
 
     @GetMapping(path = "/orderStates/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     OrderStateDto findById(@PathVariable Long id) {
         return modelMapper.map(orderStateService.findOne(id), OrderStateDto.class);
@@ -40,21 +41,14 @@ public class OrderStateController {
     }
 
     @DeleteMapping(path = "/orderStates/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteState(@PathVariable Long id) {
         orderStateService.delete(id);
     }
 
     @PutMapping("/orderStates")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     public OrderStateDto updateState(@RequestBody OrderStateDto orderStateDto) {
-        if (orderStateService.findOne(orderStateDto.getId()) == null) {
-            return modelMapper.map(orderStateService.save(orderStateDto), OrderStateDto.class);
-        } else {
-            OrderStateDto orderStateDtoToUpdate = OrderStateDto.builder()
-                    .id(orderStateDto.getId())
-                    .state(orderStateDto.getState())
-                    .build();
-            return modelMapper.map(orderStateService.update(orderStateDtoToUpdate), OrderStateDto.class);
-        }
+        return modelMapper.map(orderStateService.update(orderStateDto), OrderStateDto.class);
     }
 }

@@ -19,11 +19,12 @@ public class UserRoleController {
     @PostMapping(path = "/userRoles")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    UserRolesDto addNewUserRole(@RequestBody UserRolesDto userRolesDto) {
-        return modelMapper.map(userRolesService.save(userRolesDto), UserRolesDto.class);
+    UserRolesDto addNewUserRole(@RequestBody UserRolesDto newRoles) {
+        return modelMapper.map(userRolesService.save(newRoles), UserRolesDto.class);
     }
 
     @GetMapping(path = "/userRoles/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     UserRolesDto findById(@PathVariable Long id) {
         return modelMapper.map(userRolesService.findOne(id), UserRolesDto.class);
@@ -40,21 +41,14 @@ public class UserRoleController {
     }
 
     @DeleteMapping(path = "/userRoles/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRole(@PathVariable Long id) {
         userRolesService.delete(id);
     }
 
     @PutMapping("/userRoles")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     public UserRolesDto updateUserRole(@RequestBody UserRolesDto newUserRole) {
-        if (userRolesService.findOne(newUserRole.getId()) == null) {
-            return modelMapper.map(userRolesService.save(newUserRole), UserRolesDto.class);
-        } else {
-            UserRolesDto clientToSave = UserRolesDto.builder()
-                    .id(newUserRole.getId())
-                    .role(newUserRole.getRole())
-                    .build();
-            return modelMapper.map(userRolesService.update(clientToSave), UserRolesDto.class);
-        }
+        return modelMapper.map(userRolesService.update(newUserRole), UserRolesDto.class);
     }
 }

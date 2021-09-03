@@ -11,7 +11,7 @@ public class ClientValidator {
 
     public static void validateClient(Client clientToValidate) throws IllegalArgumentException {
         if (clientToValidate == null) {
-            throw new IllegalArgumentException("There is no client with such Id");
+            throw new IllegalArgumentException("There is no client");
         }
         if (clientToValidate.getPassportId() == null) {
             throw new IllegalArgumentException("PassportId cannot be null");

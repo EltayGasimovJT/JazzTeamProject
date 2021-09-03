@@ -55,19 +55,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory) throws IllegalArgumentException {
-        Optional<Order> foundClientFromRepository = orderRepository.findById(idForHistoryUpdate);
-        Order foundOrder = foundClientFromRepository.orElseGet(Order::new);
-        OrderValidator.validateOrder(foundOrder);
-        Set<OrderHistory> histories = foundOrder.getHistory();
-        histories.add(modelMapper.map(newHistory, OrderHistory.class));
-        foundOrder.setHistory(histories);
-        orderRepository.save(foundOrder);
-    }
-
-    @Override
     public Order save(OrderDto orderDtoToSave) throws IllegalArgumentException {
-        //OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
+        OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
 
         BigDecimal price = orderDtoToSave.getPrice();
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
@@ -247,8 +236,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order update(OrderDto orderDtoToUpdate) throws IllegalArgumentException {
-        Optional<Order> foundClientFromRepository = orderRepository.findById(orderDtoToUpdate.getId());
-        Order orderToUpdate = foundClientFromRepository.orElseGet(Order::new);
+        Optional<Order> foundOrderFromRepository = orderRepository.findById(orderDtoToUpdate.getId());
+        OrderHistory historyToAdd = modelMapper.map(orderDtoToUpdate.getHistory().get(0), OrderHistory.class);
+        Order orderToUpdate = foundOrderFromRepository.orElseGet(Order::new);
         OrderValidator.validateOrder(orderToUpdate);
         Client newRecipient = Client.builder()
                 .id(orderDtoToUpdate.getRecipient().getId())
@@ -258,13 +248,10 @@ public class OrderServiceImpl implements OrderService {
                 .phoneNumber(orderDtoToUpdate.getRecipient().getPhoneNumber())
                 .build();
 
-        OrderState orderState = OrderState.builder()
-                .id(orderDtoToUpdate.getState().getId())
-                .state(orderDtoToUpdate.getState().getState())
-                .build();
-
+        OrderState newState = updateState(orderToUpdate.getState().getState());
+        orderToUpdate.getHistory().add(historyToAdd);
         orderToUpdate.setRecipient(newRecipient);
-        orderToUpdate.setState(orderState);
+        orderToUpdate.setState(newState);
         OrderValidator.validateOrder(orderToUpdate);
 
         return orderRepository.save(orderToUpdate);
@@ -286,102 +273,130 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderState updateState(String state) {
-        List<String> newRolesAllowedPutToState = new ArrayList<>();
-        List<String> newRolesAllowedToWithdrawFromState = new ArrayList<>();
+        Set<UserRoles> newRolesAllowedPutToState = new HashSet<>();
+        Set<UserRoles> newRolesAllowedToWithdrawFromState = new HashSet<>();
         OrderState orderState = OrderState.builder()
                 .state(state).build();
         if (state.equals(OrderStates.READY_TO_SEND.toString())) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_PICKUP_WORKER)
+                    .build());
 
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_PICKUP_WORKER)
+                    .build());
         }
         if (state.equals(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString())) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_PICKUP_WORKER)
+                    .build());
 
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_WAREHOUSE_WORKER)
+                    .build());
         }
         if (state.equals(OrderStates.ON_THE_WAREHOUSE.toString())) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_WAREHOUSE_WORKER)
+                    .build());
 
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_WAREHOUSE_WORKER)
+                    .build());
         }
         if (state.equals(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString())) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_WAREHOUSE_WORKER)
+                    .build());
 
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_WAREHOUSE_WORKER)
+                    .build());
         }
         if (state.equals(OrderStates.ON_THE_FINAL_WAREHOUSE.toString())) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_WAREHOUSE_WORKER)
+                    .build());
 
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_WAREHOUSE_WORKER);
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_WAREHOUSE_WORKER)
+                    .build());
         }
         if (state.equals(OrderStates.ON_THE_WAY_TO_THE_RECEPTION.toString())) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_WAREHOUSE_WORKER);
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_WAREHOUSE_WORKER)
+                    .build());
 
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_PICKUP_WORKER)
+                    .build());
         }
         if (state.equals(OrderStates.ORDER_COMPLETED.toString())) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedPutToState.add(ROLE_PICKUP_WORKER);
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_PICKUP_WORKER)
+                    .build());
 
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_PICKUP_WORKER);
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_PICKUP_WORKER)
+                    .build());
         }
         if (state.equals(OrderStates.ORDER_LOCKED.toString())) {
-            newRolesAllowedPutToState.add(ROLE_ADMIN);
-            newRolesAllowedToWithdrawFromState.add(ROLE_ADMIN);
+            newRolesAllowedPutToState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
+            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+                    .role(ROLE_ADMIN)
+                    .build());
         }
-        //orderState.setRolesAllowedPutToState(newRolesAllowedPutToState);
-        // orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
+        orderState.setRolesAllowedPutToState(newRolesAllowedPutToState);
+        orderState.setRolesAllowedWithdrawFromState(newRolesAllowedToWithdrawFromState);
         return orderState;
     }
 
     private CoefficientForPriceCalculationDto getCoefficient(OrderProcessingPointDto processingPointDto) throws IllegalArgumentException {
-        CoefficientForPriceCalculation coefficientForPriceCalculation;
-
-        String russia = "Russia";
-
-        CoefficientForPriceCalculation firstCoefficient = CoefficientForPriceCalculation
-                .builder()
-                .id(1L)
-                .countryCoefficient(1.6)
-                .country(russia)
-                .parcelSizeLimit(50)
-                .build();
-
-        String poland = "Poland";
-
-        CoefficientForPriceCalculation secondCoefficient = CoefficientForPriceCalculation
-                .builder()
-                .id(2L)
-                .countryCoefficient(1.8)
-                .country(poland)
-                .parcelSizeLimit(40)
-                .build();
-
-        priceCalculationRuleService.save(modelMapper.map(firstCoefficient, CoefficientForPriceCalculationDto.class));
-        priceCalculationRuleService.save(modelMapper.map(secondCoefficient, CoefficientForPriceCalculationDto.class));
-
-        if (processingPointDto.getLocation().equals(russia)) {
-            coefficientForPriceCalculation = priceCalculationRuleService.findByCountry(russia);
-        } else if (processingPointDto.getLocation().equals(poland)) {
-            coefficientForPriceCalculation = priceCalculationRuleService.findByCountry(poland);
-        } else {
-            throw new IllegalArgumentException("This country is not supported yet!!!" + processingPointDto.getLocation());
-        }
-        return modelMapper.map(coefficientForPriceCalculation, CoefficientForPriceCalculationDto.class);
+        return modelMapper.map(priceCalculationRuleService.findByCountry(processingPointDto.getLocation()), CoefficientForPriceCalculationDto.class);
     }
 
     private Client getClientToSave(ClientDto sender) {

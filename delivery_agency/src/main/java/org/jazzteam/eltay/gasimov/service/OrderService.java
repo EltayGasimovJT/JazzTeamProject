@@ -3,7 +3,6 @@ package org.jazzteam.eltay.gasimov.service;
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
-import org.jazzteam.eltay.gasimov.dto.OrderHistoryDto;
 import org.jazzteam.eltay.gasimov.entity.AbstractBuilding;
 import org.jazzteam.eltay.gasimov.entity.Order;
 
@@ -12,8 +11,6 @@ import java.util.List;
 
 public interface OrderService {
     Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation);
-
-    void updateOrderHistory(long idForHistoryUpdate, OrderHistoryDto newHistory);
 
     Order save(OrderDto orderDtoToSave);
 

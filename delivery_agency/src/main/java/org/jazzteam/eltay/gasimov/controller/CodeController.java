@@ -20,9 +20,4 @@ public class CodeController {
         codeService.delete(code);
         return isFound;
     }
-
-    @DeleteMapping(path = "/codes/{code}")
-    public void deleteClient(@PathVariable String code) {
-        codeService.delete(code);
-    }
 }

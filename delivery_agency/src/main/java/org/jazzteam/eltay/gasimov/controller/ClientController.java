@@ -30,7 +30,7 @@ public class ClientController {
     @GetMapping(path = "/clients/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    ClientDto findById(@PathVariable Long id){
+    ClientDto findById(@PathVariable Long id) {
         return modelMapper.map(clientService.findById(id), ClientDto.class);
     }
 
@@ -55,7 +55,6 @@ public class ClientController {
         return clientService.findOrdersByClientPhoneNumber(phoneNumber);
     }
 
-
     @GetMapping(path = "/clients")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
@@ -64,24 +63,14 @@ public class ClientController {
     }
 
     @DeleteMapping(path = "/clients/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClient(@PathVariable Long id) {
         clientService.delete(id);
     }
 
     @PutMapping("/clients")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     public Client updateClient(@RequestBody ClientDto newClient) {
-        if (clientService.findById(newClient.getId()) == null) {
-            return clientService.save(newClient);
-        } else {
-            ClientDto clientToSave = ClientDto.builder()
-                    .id(newClient.getId())
-                    .name(newClient.getName())
-                    .surname(newClient.getSurname())
-                    .passportId(newClient.getPassportId())
-                    .phoneNumber(newClient.getPhoneNumber())
-                    .build();
-            return clientService.update(clientToSave);
-        }
+        return clientService.update(newClient);
     }
 }

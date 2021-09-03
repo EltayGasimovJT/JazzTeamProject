@@ -6,6 +6,7 @@ import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.service.WarehouseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class WarehouseController {
     }
 
     @GetMapping(path = "/warehouses")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<Long> findAllWarehouses() {
         List<Long> listOfWarehousesId = new ArrayList<>();
@@ -36,30 +38,24 @@ public class WarehouseController {
     }
 
     @DeleteMapping(path = "/warehouses/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteWarehouse(@PathVariable Long id) {
         warehouseService.delete(id);
     }
 
     @PutMapping("/warehouses")
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     public List<String> updateWarehouse(@RequestBody WarehouseDto newWarehouse) {
-        if (warehouseService.findOne(newWarehouse.getId()) == null) {
-            List<String> processingPointsIds = new ArrayList<>();
-            final WarehouseDto savedWarehouse = modelMapper.map(warehouseService.save(newWarehouse), WarehouseDto.class);
-            for (OrderProcessingPointDto orderProcessingPoint : savedWarehouse.getOrderProcessingPoints()) {
-                processingPointsIds.add(orderProcessingPoint.getId().toString());
-            }
-            return getWarehouseAsString(savedWarehouse, processingPointsIds);
-        } else {
-            List<String> processingPointsIds = new ArrayList<>();
-            final WarehouseDto updateWarehouse = modelMapper.map(warehouseService.update(newWarehouse), WarehouseDto.class);
-            for (OrderProcessingPointDto orderProcessingPoint : updateWarehouse.getOrderProcessingPoints()) {
-                processingPointsIds.add(orderProcessingPoint.getId().toString());
-            }
-            return getWarehouseAsString(updateWarehouse, processingPointsIds);
+        List<String> processingPointsIds = new ArrayList<>();
+        WarehouseDto updateWarehouse = modelMapper.map(warehouseService.update(newWarehouse), WarehouseDto.class);
+        for (OrderProcessingPointDto orderProcessingPoint : updateWarehouse.getOrderProcessingPoints()) {
+            processingPointsIds.add(orderProcessingPoint.getId().toString());
         }
+        return getWarehouseAsString(updateWarehouse, processingPointsIds);
     }
 
     @GetMapping(path = "/warehouses/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     List<String> findById(@PathVariable Long id) {
         WarehouseDto foundWarehouse = modelMapper.map(warehouseService.findOne(id), WarehouseDto.class);

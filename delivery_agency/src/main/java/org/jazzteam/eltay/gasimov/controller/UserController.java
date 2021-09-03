@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/users/changeWorkingPlace/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     public @ResponseBody
     User changeWorkingPlace(@PathVariable Long id, @RequestBody AbstractBuildingDto newWorkingPlace) {
         return userService.changeWorkingPlace(id, newWorkingPlace);
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/users/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
         userService.delete(id);
     }
@@ -51,19 +51,8 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     public User updateUser(@RequestBody UserDto newUser) {
-        if (userService.findOne(newUser.getId()) == null) {
-            return userService.save(newUser);
-        } else {
-            UserDto userToSave = UserDto.builder()
-                    .id(newUser.getId())
-                    .name(newUser.getName())
-                    .surname(newUser.getSurname())
-                    .roles(newUser.getRoles())
-                    .workingPlace(newUser.getWorkingPlace())
-                    .build();
-            return userService.update(userToSave);
-        }
+        return userService.update(newUser);
     }
 }

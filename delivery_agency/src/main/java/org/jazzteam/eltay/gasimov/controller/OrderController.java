@@ -37,20 +37,21 @@ public class OrderController {
     @PostMapping(path = "/createOrder")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    OrderDto createOrder(@RequestBody CreateOrderRequestDto dtoFromForm) {
+    OrderDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) {
         OrderDto orderDtoToSave = OrderDto.builder()
                 .currentLocation(new OrderProcessingPointDto())
-                .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(dtoFromForm.getDestinationPoint()), OrderProcessingPointDto.class))
-                .parcelParameters(dtoFromForm.getParcelParameters())
-                .price(dtoFromForm.getPrice())
-                .recipient(dtoFromForm.getRecipient())
-                .sender(dtoFromForm.getSender())
+                .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
+                .parcelParameters(requestOrder.getParcelParameters())
+                .price(requestOrder.getPrice())
+                .recipient(requestOrder.getRecipient())
+                .sender(requestOrder.getSender())
                 .build();
 
         return CustomModelMapper.mapOrderToDto(orderService.save(orderDtoToSave));
     }
 
     @GetMapping(path = "/orders/findBySenderPassport")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId) {
         Set<Order> ordersBySenderPassportId = clientService.findClientByPassportId(passportId).getOrders();
@@ -60,6 +61,7 @@ public class OrderController {
     }
 
     @GetMapping(path = "/orders/findHistory/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderHistoryDto> findOrderHistoryById(@PathVariable Long id) {
         Order foundOrder = orderService.findOne(id);
@@ -69,12 +71,14 @@ public class OrderController {
     }
 
     @GetMapping(path = "/orders/findByTrackNumber")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     OrderDto findByOrderTrackNumber(@RequestParam String orderNumber) {
         return modelMapper.map(orderService.findByTrackNumber(orderNumber), OrderDto.class);
     }
 
     @GetMapping(path = "/orders/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     OrderDto findById(@PathVariable Long id) {
         return modelMapper.map(orderService.findOne(id), OrderDto.class);
@@ -91,17 +95,14 @@ public class OrderController {
     }
 
     @DeleteMapping(path = "/orders/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable Long id) {
         orderService.delete(id);
     }
 
     @PutMapping("/orders")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
     public OrderDto updateOrder(@RequestBody OrderDto newOrder) {
-        if (orderService.findOne(newOrder.getId()) == null) {
-            return modelMapper.map(orderService.save(newOrder), OrderDto.class);
-        } else {
-            return modelMapper.map(orderService.update(newOrder), OrderDto.class);
-        }
+        return modelMapper.map(orderService.update(newOrder), OrderDto.class);
     }
 }

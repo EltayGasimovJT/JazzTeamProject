@@ -1,8 +1,6 @@
-create database jazzteamproject;
-
 USE jazzteamproject;
 
-show tables;
+SHOW TABLES;
 
 CREATE TABLE clients
 (
