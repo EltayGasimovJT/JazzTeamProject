@@ -32,7 +32,6 @@ jQuery('document').ready(function () {
         console.log(url);
         let geting = $.get(url, {passportId: passportId});
         geting.done(function (data) {
-            console.log(data);
             window.location.href = `http://localhost:8081/clientsOrders.html?clientId=${data.id}`;
         });
     });
