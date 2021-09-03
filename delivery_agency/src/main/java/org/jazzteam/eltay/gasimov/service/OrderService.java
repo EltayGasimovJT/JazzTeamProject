@@ -1,7 +1,9 @@
 package org.jazzteam.eltay.gasimov.service;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
+import org.jazzteam.eltay.gasimov.dto.CreateOrderRequestDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.entity.AbstractBuilding;
 import org.jazzteam.eltay.gasimov.entity.Order;
@@ -12,7 +14,7 @@ import java.util.List;
 public interface OrderService {
     Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation);
 
-    Order save(OrderDto orderDtoToSave);
+    Order save(OrderDto orderDtoToSave) throws ObjectNotFoundException;
 
     Order findOne(long idForSearch);
 
@@ -32,11 +34,13 @@ public interface OrderService {
 
     List<Order> findAll();
 
-    BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException;
+    BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException, ObjectNotFoundException;
 
     Order update(OrderDto orderDtoToUpdate);
 
     void delete(Long idForDelete);
 
     Order findByTrackNumber(String trackNumber);
+
+    Order createOrder(CreateOrderRequestDto orderDtoToSave) throws ObjectNotFoundException;
 }

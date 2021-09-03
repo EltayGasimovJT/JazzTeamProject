@@ -6,7 +6,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,9 +17,9 @@ public class CustomModelMapper {
     }
 
     public static OrderDto mapOrderToDto(Order orderToConvert) {
-        List<OrderHistoryDto> historiesToConvert = orderToConvert.getHistory().stream()
+        Set<OrderHistoryDto> historiesToConvert = orderToConvert.getHistory().stream()
                 .map(history -> modelMapper.map(history, OrderHistoryDto.class))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         OrderDto convertedToDto = OrderDto.builder()
                 .id(orderToConvert.getId())

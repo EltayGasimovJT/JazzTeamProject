@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
 import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
@@ -23,7 +24,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     private static final int INITIAL_WEIGHT = 20;
 
     @Override
-    public CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws IllegalArgumentException {
+    public CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws IllegalArgumentException, ObjectNotFoundException {
         CoefficientForPriceCalculation coefficientToSave = CoefficientForPriceCalculation.builder()
                 .id(coefficientDtoToSave.getId())
                 .country(coefficientDtoToSave.getCountry())
@@ -37,7 +38,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public void delete(Long idForDelete) throws IllegalArgumentException {
+    public void delete(Long idForDelete) throws IllegalArgumentException, ObjectNotFoundException {
         Optional<CoefficientForPriceCalculation> foundCoefficientOptional = priceCalculationRuleRepository.findById(idForDelete);
         CoefficientForPriceCalculation foundCoefficient = foundCoefficientOptional.orElseGet(CoefficientForPriceCalculation::new);
         CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
@@ -45,14 +46,14 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public List<CoefficientForPriceCalculation> findAll() throws IllegalArgumentException {
+    public List<CoefficientForPriceCalculation> findAll() throws IllegalArgumentException, ObjectNotFoundException {
         List<CoefficientForPriceCalculation> coefficientsFromRepository = priceCalculationRuleRepository.findAll();
         CoefficientForPriseCalculationValidator.validateCoefficientList(coefficientsFromRepository);
         return coefficientsFromRepository;
     }
 
     @Override
-    public CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientDtoForUpdate) throws IllegalArgumentException {
+    public CoefficientForPriceCalculation update(CoefficientForPriceCalculationDto coefficientDtoForUpdate) throws IllegalArgumentException, ObjectNotFoundException {
         Optional<CoefficientForPriceCalculation> foundCoefficientOptional = priceCalculationRuleRepository.findById(coefficientDtoForUpdate.getId());
         CoefficientForPriceCalculation foundCoefficient = foundCoefficientOptional.orElseGet(CoefficientForPriceCalculation::new);
         CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
@@ -68,7 +69,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public CoefficientForPriceCalculation findOne(long idForSearch) throws IllegalArgumentException {
+    public CoefficientForPriceCalculation findOne(long idForSearch) throws IllegalArgumentException, ObjectNotFoundException {
         Optional<CoefficientForPriceCalculation> foundCoefficientOptional = priceCalculationRuleRepository.findById(idForSearch);
         CoefficientForPriceCalculation foundCoefficient = foundCoefficientOptional.orElseGet(CoefficientForPriceCalculation::new);
 
@@ -110,9 +111,9 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public CoefficientForPriceCalculation findByCountry(String countryForSearch) throws IllegalArgumentException {
+    public CoefficientForPriceCalculation findByCountry(String countryForSearch) throws IllegalArgumentException, ObjectNotFoundException {
         CoefficientForPriceCalculation foundCoefficient = priceCalculationRuleRepository.findByCountry(countryForSearch);
-        CoefficientForPriseCalculationValidator.validateCoefficient(foundCoefficient);
+        CoefficientForPriseCalculationValidator.validateOnFindByCountry(foundCoefficient, countryForSearch);
 
         return foundCoefficient;
     }
