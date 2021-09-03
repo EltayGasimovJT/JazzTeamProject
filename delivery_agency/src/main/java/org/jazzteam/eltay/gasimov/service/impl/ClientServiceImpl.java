@@ -88,7 +88,6 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> foundClientFromRepo = clientRepository.findById(newClient.getId());
         Client foundClient = foundClientFromRepo.orElseGet(Client::new);
         ClientValidator.validateClient(foundClient);
-
         Client clientToUpdate = Client.builder()
                 .id(newClient.getId())
                 .name(newClient.getName())
