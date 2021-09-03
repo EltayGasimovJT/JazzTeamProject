@@ -54,13 +54,15 @@ public class ClientServiceImpl implements ClientService {
         Optional<Client> foundClientFromRepository = clientRepository.findById(idForSearch);
         Client foundClient = foundClientFromRepository.orElseGet(Client::new);
 
-        ClientValidator.validateClient(foundClient);
+        ClientValidator.validateOnFindById(foundClient, idForSearch);
         return foundClient;
     }
 
     @Override
     public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException {
-        return clientRepository.findByPassportId(passportIdForSearch);
+        final Client foundClient = clientRepository.findByPassportId(passportIdForSearch);
+        ClientValidator.validateOnFindByPassport(foundClient, passportIdForSearch);
+        return foundClient;
     }
 
     @Override
@@ -105,14 +107,15 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public Client findByPhoneNumber(String phoneNumber) {
-        Client byPhoneNumber = clientRepository.findByPhoneNumber(phoneNumber);
+        Client foundClient = clientRepository.findByPhoneNumber(phoneNumber);
+        ClientValidator.validateOnFindByPhoneNumber(foundClient, phoneNumber);
         String generatedCode = generateNewCode();
         ClientsCode generatedCodeObject = ClientsCode.builder()
-                .client(byPhoneNumber)
+                .client(foundClient)
                 .generatedCode(generatedCode)
                 .build();
-        byPhoneNumber.setCode(codeRepository.save(generatedCodeObject));
-        return byPhoneNumber;
+        foundClient.setCode(codeRepository.save(generatedCodeObject));
+        return foundClient;
     }
 
     @Override
