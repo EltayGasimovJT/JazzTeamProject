@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
-import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.CLIENTS_BY_PASSPORT_URL;
-import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.CLIENTS_URL;
+import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.*;
 
 @RestController
 @Log
@@ -31,7 +30,7 @@ public class ClientController {
         return clientService.save(clientToSave);
     }
 
-    @GetMapping(path = CLIENTS_URL + "/{id}")
+    @GetMapping(path = CLIENTS_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     ClientDto findById(@PathVariable Long id) throws ObjectNotFoundException {
@@ -45,14 +44,14 @@ public class ClientController {
         return modelMapper.map(clientService.findClientByPassportId(passportId), ClientDto.class);
     }
 
-    @GetMapping(path = "/clients/findByPhoneNumber")
+    @GetMapping(path = CLIENTS_BY_PHONE_NUMBER_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     ClientDto findByPhoneNumber(@RequestParam String phoneNumber) throws ObjectNotFoundException {
         return modelMapper.map(clientService.findByPhoneNumber(phoneNumber), ClientDto.class);
     }
 
-    @GetMapping(path = "/clients/ordersByPhoneNumber/{phoneNumber}")
+    @GetMapping(path = CLIENTS_BY_PASSPORT_PATH_VARIABLE_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Set<OrderDto> findOrdersByClientPhoneNumber(@PathVariable String phoneNumber) {
@@ -66,7 +65,7 @@ public class ClientController {
         return clientService.findAll();
     }
 
-    @DeleteMapping(path = "/clients/{id}")
+    @DeleteMapping(path = CLIENTS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteClient(@PathVariable Long id) throws ObjectNotFoundException {
         clientService.delete(id);
