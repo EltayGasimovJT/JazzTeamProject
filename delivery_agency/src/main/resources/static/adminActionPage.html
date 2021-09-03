@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="icons/waterFall.png"/>
+    <title>Clients orders</title>
+    <meta charset="UTF8">
+    <style> a {
+        text-decoration: none;
+    } </style>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="defaultBar">
+    <a href="homePage.html" class="defaultLogo">GasDel</a>
+    <div>
+        <div class="storeActionsBar">
+            <div class="actionTabText">Store Actions</div>
+            <div class="storeActionsBtnMargin">
+                <button id="addProcessingPointBtn" class="me-btn buttonText">Add new processing point</button>
+                <button id="deleteProcessingPointBtn" class="me-btn buttonText">Delete processing point</button>
+                <button id="addWarehouseBtn" class="me-btn buttonText">Add warehouse</button>
+                <button id="deleteWarehouseBtn" class="me-btn buttonText">Delete warehouse</button>
+                <button id="addUserBtn" class="me-btn buttonText">Add user</button>
+                <button id="deleteUserBtn" class="me-btn buttonText">Delete user</button>
+                <button id="addRoleBtn" class="me-btn buttonText">Add role</button>
+                <button id="deleteRoleBtn" class="me-btn buttonText">Delete role</button>
+            </div>
+        </div>
+
+        <div class="orderActionsBar">
+            <div class="actionTabText">Order Actions</div>
+            <div class="storeActionsBtnMargin">
+                <button id="deleteOrder" class="me-btn buttonText">Delete order</button>
+                <button style="margin-top: 20px" id="lockOrder" class="me-btn buttonText">Lock order</button>
+                <button style="margin-top: 20px" id="findBySender" class="me-btn buttonText">Find by sender</button>
+                <button style="margin-top: 20px" id="findByRecipient" class="me-btn buttonText">Find by recipient</button>
+                <button style="margin-top: 20px" id="findById" class="me-btn buttonText">Find by id</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="backToTheActionPageBtn">
+    <button id="backToTheActionPageBtnId" class="customBtn buttonText">Back to the action page
+    </button>
+</div>
+<script type="text/javascript" src="js/clientOrders.js"></script>
+
+</body>
+</html>
+
