@@ -290,6 +290,7 @@ public class OrderServiceImpl implements OrderService {
                 .price(orderDtoToSave.getPrice())
                 .state(orderState)
                 .trackNumber(generateNewTrackNumber())
+                .sendingTime(savedHistory.getSentAt())
                 .build();
 
         return orderRepository.save(orderToSave);
@@ -422,11 +423,11 @@ public class OrderServiceImpl implements OrderService {
         return modelMapper.map(priceCalculationRuleService.findByCountry(processingPointDto.getLocation()), CoefficientForPriceCalculationDto.class);
     }
 
-    private Client getClientToSave(ClientDto sender) throws ObjectNotFoundException {
-        Client senderToSave;
-        Client foundSender = clientService.findClientByPassportId(sender.getPassportId());
+    private Client getClientToSave(ClientDto client) throws ObjectNotFoundException {
+        Client clientToSave;
+        Client foundSender = clientService.findClientByPassportId(client.getPassportId());
         if (foundSender != null) {
-            senderToSave = Client.builder()
+            clientToSave = Client.builder()
                     .id(foundSender.getId())
                     .name(foundSender.getName())
                     .surname(foundSender.getSurname())
@@ -434,14 +435,15 @@ public class OrderServiceImpl implements OrderService {
                     .phoneNumber(foundSender.getPhoneNumber())
                     .build();
         } else {
-            senderToSave = Client.builder()
-                    .name(sender.getName())
-                    .surname(sender.getSurname())
-                    .passportId(sender.getPassportId())
-                    .phoneNumber(sender.getPhoneNumber())
+            clientToSave = Client.builder()
+                    .name(client.getName())
+                    .surname(client.getSurname())
+                    .passportId(client.getPassportId())
+                    .phoneNumber(client.getPhoneNumber())
                     .build();
-            clientService.save(modelMapper.map(senderToSave, ClientDto.class));
+            Client savedClient = clientService.save(modelMapper.map(clientToSave, ClientDto.class));
+            clientToSave.setId(savedClient.getId());
         }
-        return senderToSave;
+        return clientToSave;
     }
 }

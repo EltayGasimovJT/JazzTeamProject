@@ -37,10 +37,10 @@ public class Order {
     private BigDecimal price;
     @Column(name = "track_number")
     private String trackNumber;
-    @Column
+    @Column(name = "sending_time")
     private LocalDateTime sendingTime;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "destination_point_id")
+    @JoinColumn(name = "destination_place_id")
     private OrderProcessingPoint destinationPlace;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn

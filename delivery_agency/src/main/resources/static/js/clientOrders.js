@@ -8,7 +8,6 @@ jQuery("#backToTheActionPageBtnId").on('click', function () {
 function getUsersOrders() {
     checkSession();
     let phoneNumber = localStorage.getItem('clientPhone');
-    console.log(localStorage.getItem('sessionTime'))
     $.ajax({
         url: `http://localhost:8081/clients/ordersByPhoneNumber/${phoneNumber}`,
         type: 'GET',
@@ -33,7 +32,6 @@ function getUsersOrders() {
                 r[++j] = '</td></tr>';
             }
             $('#orders').append(r.join(''));
-
         },
         error: function () {
             alert(localStorage.getItem('clientPhone'));

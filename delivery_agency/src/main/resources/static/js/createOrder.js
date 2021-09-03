@@ -6,7 +6,7 @@ const INITIAL_WEIGHT = 20;
 let allCoefficients;
 
 let config = {
-    destinationPoint :null,
+    destinationPoint: null,
     parcelWidth: null,
     parcelLength: null,
     parcelHeight: null,
@@ -15,19 +15,19 @@ let config = {
 
 const price = document.getElementById('price');
 
-document.getElementById('destinationPoint').oninput = function(event) {
+document.getElementById('destinationPoint').oninput = function (event) {
     config.destinationPoint = allCoefficients.find(elem => elem.country === event.target.value);
     calcPrice();
 };
-document.getElementById('parcelWidth').oninput = function(event) {
+document.getElementById('parcelWidth').oninput = function (event) {
     config.parcelWidth = +event.target.value;
     calcPrice();
 };
-document.getElementById('parcelLength').oninput = function(event) {
+document.getElementById('parcelLength').oninput = function (event) {
     config.parcelLength = +event.target.value;
     calcPrice();
 };
-document.getElementById('parcelHeight').oninput = function(event) {
+document.getElementById('parcelHeight').oninput = function (event) {
     config.parcelHeight = +event.target.value;
     calcPrice();
 };
@@ -56,7 +56,7 @@ function calcPrice() {
         return;
     }
 
-    price.innerHTML =  Math.round(volume * config.destinationPoint.countryCoefficient);
+    price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient);
 }
 
 function init() {
@@ -110,8 +110,8 @@ $('#createOrderForm').submit(function (e) {
         url: `http://localhost:8081/createOrder`,
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify(dataForSend)
-    }).done(function () {
-        console.log('success');
+    }).done(function (data) {
+        window.location.href = `http://localhost:8081/ticketPage.html?orderId=${data.id}`;
     }).fail(function () {
         console.log('fail');
     });
@@ -197,6 +197,7 @@ export class CreateOrderRequestDto {
     set price(value) {
         this._price = value;
     }
+
     constructor(props = {}) {
         this._sender = props.sender;
         this._recipient = props.recipient;
