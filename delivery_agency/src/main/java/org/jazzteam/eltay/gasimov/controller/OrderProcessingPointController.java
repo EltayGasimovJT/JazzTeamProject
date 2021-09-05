@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.PROCESSING_POINTS_BY_ID_URL;
 import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.PROCESSING_POINTS_URL;
@@ -31,12 +32,11 @@ public class OrderProcessingPointController {
     @GetMapping(path = PROCESSING_POINTS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<Long> findAllProcessingPoints() {
-        List<Long> listOfWarehousesId = new ArrayList<>();
-        for (OrderProcessingPoint processingPoint : processingPointService.findAll()) {
-            listOfWarehousesId.add(processingPoint.getId());
-        }
-        return listOfWarehousesId;
+    Iterable<OrderProcessingPointDto> findAllProcessingPoints() {
+        return processingPointService.findAll()
+                .stream()
+                .map(orderProcessingPoint -> modelMapper.map(orderProcessingPoint, OrderProcessingPointDto.class))
+                .collect(Collectors.toList());
     }
 
     @DeleteMapping(path = PROCESSING_POINTS_BY_ID_URL)

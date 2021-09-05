@@ -66,13 +66,17 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
 
     @Override
     public OrderProcessingPoint update(OrderProcessingPointDto processingPointDtoToUpdate) throws IllegalArgumentException {
+        String locationToSave = processingPointDtoToUpdate.getLocation();
         Optional<OrderProcessingPoint> foundClientFromRepository = orderProcessingPointRepository.findById(processingPointDtoToUpdate.getId());
         OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
         OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
         OrderProcessingPoint orderProcessingPointUpdate = new OrderProcessingPoint();
         orderProcessingPointUpdate.setId(processingPointDtoToUpdate.getId());
-        orderProcessingPointUpdate.setLocation(processingPointDtoToUpdate.getLocation());
-        orderProcessingPointUpdate.setWarehouse(modelMapper.map(processingPointDtoToUpdate.getWarehouseId(), Warehouse.class));
+        orderProcessingPointUpdate.setLocation(locationToSave);
+
+        String[] locationSplit = locationToSave.split("-");
+
+        orderProcessingPointUpdate.setWarehouse(modelMapper.map(warehouseService.findByLocation(locationSplit[1]), Warehouse.class));
         orderProcessingPointUpdate.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
                 .map(CustomModelMapper::mapDtoToOrder)
                 .collect(Collectors.toList()));
