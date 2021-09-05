@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.*;
+
 @RestController
 public class UserController {
     @Autowired
@@ -16,41 +18,41 @@ public class UserController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = "/users")
+    @PostMapping(path = USERS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     User addNewUser(@RequestBody UserDto userDtoToSave) {
         return userService.save(userDtoToSave);
     }
 
-    @PostMapping(path = "/users/changeWorkingPlace/{id}")
+    @PostMapping(path = USERS_CHANGE_WORKING_PLACE_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public @ResponseBody
     User changeWorkingPlace(@PathVariable Long id, @RequestBody AbstractBuildingDto newWorkingPlace) {
         return userService.changeWorkingPlace(id, newWorkingPlace);
     }
 
-    @GetMapping(path = "/users")
+    @GetMapping(path = USERS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<User> findAllUsers() {
         return userService.findAll();
     }
 
-    @DeleteMapping(path = "/users/{id}")
+    @DeleteMapping(path = USERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
         userService.delete(id);
     }
 
-    @GetMapping(path = "/users/{id}")
+    @GetMapping(path = USERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     UserDto findById(@PathVariable Long id) {
         return modelMapper.map(userService.findOne(id), UserDto.class);
     }
 
-    @PutMapping("/users")
+    @PutMapping(path = USERS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public User updateUser(@RequestBody UserDto newUser) {
         return userService.update(newUser);

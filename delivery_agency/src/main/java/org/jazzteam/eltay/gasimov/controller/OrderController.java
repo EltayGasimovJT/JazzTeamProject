@@ -53,7 +53,7 @@ public class OrderController {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping(path = "/orders/findHistory/{id}")
+    @GetMapping(path = ORDERS_FIND_HISTORY_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderHistoryDto> findOrderHistoryById(@PathVariable Long id) {
@@ -63,7 +63,7 @@ public class OrderController {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping(path = "/orders/findByTrackNumber")
+    @GetMapping(path = ORDERS_FIND_BY_TRACK_NUMBER_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     OrderDto findByOrderTrackNumber(@RequestParam String orderNumber) {

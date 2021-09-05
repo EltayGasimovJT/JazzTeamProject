@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
+import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.USER_ROLES_BY_ID_URL;
+import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.USER_ROLES_URL;
+
 @RestController
 public class UserRoleController {
     @Autowired
@@ -16,21 +19,21 @@ public class UserRoleController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = "/userRoles")
+    @PostMapping(path = USER_ROLES_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     UserRolesDto addNewUserRole(@RequestBody UserRolesDto newRoles) {
         return modelMapper.map(userRolesService.save(newRoles), UserRolesDto.class);
     }
 
-    @GetMapping(path = "/userRoles/{id}")
+    @GetMapping(path = USER_ROLES_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     UserRolesDto findById(@PathVariable Long id) {
         return modelMapper.map(userRolesService.findOne(id), UserRolesDto.class);
     }
 
-    @GetMapping(path = "/userRoles")
+    @GetMapping(path = USER_ROLES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<UserRolesDto> findAllUserRoles() {
@@ -40,13 +43,13 @@ public class UserRoleController {
                 .collect(Collectors.toList());
     }
 
-    @DeleteMapping(path = "/userRoles/{id}")
+    @DeleteMapping(path = USER_ROLES_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRole(@PathVariable Long id) {
         userRolesService.delete(id);
     }
 
-    @PutMapping("/userRoles")
+    @PutMapping(path = USER_ROLES_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public UserRolesDto updateUserRole(@RequestBody UserRolesDto newUserRole) {
         return modelMapper.map(userRolesService.update(newUserRole), UserRolesDto.class);
