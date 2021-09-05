@@ -107,8 +107,8 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void addPriceCalculationRule() throws ObjectNotFoundException {
-        CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
+    void findAllPriceCalculationRules() throws ObjectNotFoundException {
+        CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
                 .id(1L)
                 .countryCoefficient(1.6)
@@ -116,14 +116,30 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .parcelSizeLimit(50)
                 .build();
 
+        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
-        priceCalculationRuleService.save(expectedCoefficientDto);
+        int expectedSize = 5;
 
-        CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(1L);
+        int actualSize = priceCalculationRuleService.findAll().size();
 
-        CoefficientForPriceCalculationDto actualCoefficientDto = modelMapper.map(actualCoefficient, CoefficientForPriceCalculationDto.class);
+        Assertions.assertEquals(expectedSize, actualSize);
+    }
 
-        Assertions.assertEquals(expectedCoefficientDto, actualCoefficientDto);
+    @Test
+    void addPriceCalculationRule() throws ObjectNotFoundException {
+        CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
+                .builder()
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
+
+
+        CoefficientForPriceCalculation savedCoefficient = priceCalculationRuleService.save(expectedCoefficientDto);
+
+        CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(savedCoefficient.getId());
+
+        Assertions.assertEquals(savedCoefficient, actualCoefficient);
     }
 
     @SneakyThrows
@@ -156,58 +172,35 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     }
 
     @Test
-    void findAllPriceCalculationRules() throws ObjectNotFoundException {
-        CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
-                .builder()
-                .id(1L)
-                .countryCoefficient(1.6)
-                .country("Russia")
-                .parcelSizeLimit(50)
-                .build();
-
-        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
-
-        int expectedSize = 1;
-
-        int actualSize = priceCalculationRuleService.findAll().size();
-
-        Assertions.assertEquals(expectedSize, actualSize);
-    }
-
-    @Test
     void getCoefficient() throws ObjectNotFoundException {
         CoefficientForPriceCalculationDto expectedCoefficientDto = CoefficientForPriceCalculationDto
                 .builder()
-                .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.save(expectedCoefficientDto);
+        CoefficientForPriceCalculation savedCoefficient = priceCalculationRuleService.save(expectedCoefficientDto);
 
-        CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(1);
+        CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(savedCoefficient.getId());
 
-        CoefficientForPriceCalculationDto actualCoefficientDto = modelMapper.map(actualCoefficient, CoefficientForPriceCalculationDto.class);
-
-        Assertions.assertEquals(expectedCoefficientDto, actualCoefficientDto);
+        Assertions.assertEquals(savedCoefficient, actualCoefficient);
     }
 
     @Test
     void update() throws ObjectNotFoundException {
         CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
-                .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
 
-        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
+        CoefficientForPriceCalculation savedCoefficient = priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
-        coefficientForPriceCalculationToTest.setParcelSizeLimit(52);
+        savedCoefficient.setParcelSizeLimit(52);
 
-        CoefficientForPriceCalculation updatedCoefficient = priceCalculationRuleService.update(coefficientForPriceCalculationToTest);
+        CoefficientForPriceCalculation updatedCoefficient = priceCalculationRuleService.update(modelMapper.map(savedCoefficient, CoefficientForPriceCalculationDto.class));
 
         CoefficientForPriceCalculationDto actualCoefficientDto = modelMapper.map(updatedCoefficient, CoefficientForPriceCalculationDto.class);
 
@@ -217,6 +210,4 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         Assertions.assertEquals(expectedParcelSizeLimit, actualParcelSizeLimit, 0.001);
     }
-
-
 }
