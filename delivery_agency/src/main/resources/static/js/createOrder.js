@@ -3,6 +3,7 @@ init()
 
 const INITIAL_SIZE = 1400;
 const INITIAL_WEIGHT = 20;
+
 let allCoefficients;
 
 let config = {
@@ -37,26 +38,66 @@ document.getElementById('parcelWeight').oninput = (event) => {
 };
 
 function calcPrice() {
-    let priceValue;
     const volume = config.parcelWidth * config.parcelLength * config.parcelHeight;
+    if (validateParams(config) === true) {
+        if (volume > INITIAL_SIZE && config.parcelWeight > INITIAL_WEIGHT) {
+            price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (volume / INITIAL_SIZE) * (config.parcelWeight / INITIAL_WEIGHT));
+            return;
+        }
 
-    if (volume > INITIAL_SIZE && config.parcelWeight > INITIAL_WEIGHT) {
-        price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (volume / INITIAL_SIZE) * (config.parcelWeight / INITIAL_WEIGHT));
-        return;
+        if (volume > INITIAL_SIZE) {
+            price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (volume / INITIAL_SIZE));
+            return;
+        }
+
+        if (config.parcelWeight > INITIAL_WEIGHT) {
+
+            price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (config.parcelWeight / INITIAL_WEIGHT));
+            return;
+        }
+
+        price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient);
     }
 
-    if (volume > INITIAL_SIZE) {
-        price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (volume / INITIAL_SIZE));
-        return;
+    /*if (config.parcelWeight !== null && config.parcelHeight !== null && config.parcelLength !== null && config.parcelWidth !== null && config.destinationPoint !== null) {
+        let parcelParameters = new ParcelParametersDto(
+            {
+                width: `${config.parcelWidth}`,
+                length: `${config.parcelLength}`,
+                height: `${config.parcelHeight}`,
+                weight: `${config.parcelWeight}`
+            }
+        )
+        $.ajax({
+            url: `http://localhost:8081/calculatePrice/${config.destinationPoint.country}`,
+            type: 'GET',
+            contentType: 'application/json',
+            data: JSON.stringify(parcelParameters),
+            success: function (result) {
+                console.log(result);
+            }
+        });
+    }*/
+}
+
+function validateParams(params) {
+    if (params.parcelWidth < 0) {
+        alert("Parcel width cannot be less than 0");
+        return false;
     }
-
-    if (config.parcelWeight > INITIAL_WEIGHT) {
-
-        price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (config.parcelWeight / INITIAL_WEIGHT));
-        return;
+    if (params.parcelLength < 0) {
+        alert("Parcel length cannot be less than 0");
+        return false;
     }
-
-    price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient);
+    if (params.parcelHeight < 0) {
+        alert("Parcel height cannot be less than 0");
+        return false;
+    }
+    if (params.parcelWeight < 0) {
+        alert("Parcel weight cannot be less than 0");
+        return false;
+    }
+    return true;
 }
 
 function init() {

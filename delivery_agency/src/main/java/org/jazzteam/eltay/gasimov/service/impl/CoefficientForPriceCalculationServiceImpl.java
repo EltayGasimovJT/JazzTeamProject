@@ -78,15 +78,16 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     @Override
-    public BigDecimal calculatePrice(ParcelParametersDto parcelParametersDto, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException {
+    public BigDecimal calculatePrice(ParcelParametersDto parcelParametersDto, String country) throws IllegalArgumentException {
         BigDecimal volume = BigDecimal.valueOf(getSize(parcelParametersDto));
-        if (volume.doubleValue() > coefficientForCalculate.getParcelSizeLimit()) {
-            throw new IllegalArgumentException("Parcel size cannot be more than " + coefficientForCalculate.getParcelSizeLimit() + " for single delivery");
+        CoefficientForPriceCalculation foundCoefficient = priceCalculationRuleRepository.findByCountry(country);
+        if (volume.doubleValue() > foundCoefficient.getParcelSizeLimit()) {
+            throw new IllegalArgumentException("Parcel size cannot be more than " + foundCoefficient.getParcelSizeLimit() + " for single delivery");
         }
         if (parcelParametersDto.getWeight() > INITIAL_WEIGHT){
             throw new IllegalArgumentException("Parcel weight cannot be more than " + INITIAL_WEIGHT + " for single delivery");
         }
-        return BigDecimal.valueOf(PRICE_FOR_PACKAGE + PRICE_FOR_DELIVERY + (parcelParametersDto.getWeight() * 0.5) + (volume.doubleValue() * 0.10) + coefficientForCalculate.getCountryCoefficient() * 0.8);
+        return BigDecimal.valueOf(PRICE_FOR_PACKAGE + PRICE_FOR_DELIVERY + (parcelParametersDto.getWeight() * 0.5) + (volume.doubleValue() * 0.10) + foundCoefficient.getCountryCoefficient() * 0.8);
     }
 
     @Override

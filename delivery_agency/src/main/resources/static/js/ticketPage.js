@@ -34,7 +34,7 @@ jQuery('document').ready(function () {
             content: [
                 {
                     text: 'Ticket #' + idFromUrl.ticketNumber,
-                    fontSize: 40,
+                    fontSize: 20,
                     alignment: 'center'
                 },
                 {
@@ -45,7 +45,13 @@ jQuery('document').ready(function () {
                         'Destination point: ' + order.destinationPlace.location + '\n' +
                         'Sending time: ' + getTimeFormat(order.sendingTime) + '\n' +
                         'Price:' + order.price + '\n',
-                    fontSize: 20
+                    fontSize: 15,
+                    marginTop: 20
+                },
+                {
+                    text: 'Date__________' + "                      Signature__________",
+                    fontSize: 15,
+                    marginTop: 150
                 }
             ]
         }

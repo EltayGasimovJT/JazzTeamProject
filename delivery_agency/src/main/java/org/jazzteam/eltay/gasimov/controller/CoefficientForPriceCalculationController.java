@@ -1,6 +1,7 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import javassist.tools.rmi.ObjectNotFoundException;
+import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.CoefficientForPriceCalculationDto;
 import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.service.CoefficientForPriceCalculationService;
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
 @RestController
+@Log
 public class CoefficientForPriceCalculationController {
     @Autowired
     private CoefficientForPriceCalculationService calculationService;
@@ -43,10 +45,12 @@ public class CoefficientForPriceCalculationController {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping(path = "/calculatePrice")
+    @GetMapping(path = "/calculatePrice/{country}")
     public @ResponseBody
-    BigDecimal calculatePrice(@RequestBody CoefficientForPriceCalculationDto requestCoefficient, @RequestBody ParcelParametersDto parametersToCalculate) {
-        return calculationService.calculatePrice(parametersToCalculate, requestCoefficient);
+    BigDecimal calculatePrice(@PathVariable String country, @RequestBody ParcelParametersDto parametersToCalculate) {
+        log.severe("reeeeeeeeeeeeee");
+        BigDecimal bigDecimal = calculationService.calculatePrice(parametersToCalculate, country);
+        return bigDecimal;
     }
 
     @DeleteMapping(path = "/coefficients/{id}")

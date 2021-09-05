@@ -19,7 +19,7 @@ public interface CoefficientForPriceCalculationService {
 
     CoefficientForPriceCalculation findOne(long idForSearch) throws ObjectNotFoundException;
 
-    BigDecimal calculatePrice(ParcelParametersDto parcelParametersDto, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException;
+    BigDecimal calculatePrice(ParcelParametersDto parcelParametersDto, String country) throws IllegalArgumentException;
 
     CoefficientForPriceCalculation findByCountry(String countryForSearch) throws ObjectNotFoundException;
 

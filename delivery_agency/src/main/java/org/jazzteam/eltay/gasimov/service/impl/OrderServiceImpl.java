@@ -195,7 +195,7 @@ public class OrderServiceImpl implements OrderService {
     public BigDecimal calculatePrice(OrderDto orderForCalculate) throws IllegalArgumentException, ObjectNotFoundException {
         CoefficientForPriceCalculationDto coefficientForCalculate = getCoefficient(orderForCalculate.getDestinationPlace());
 
-        return priceCalculationRuleService.calculatePrice(orderForCalculate.getParcelParameters(), coefficientForCalculate);
+        return priceCalculationRuleService.calculatePrice(orderForCalculate.getParcelParameters(), coefficientForCalculate.getCountry());
     }
 
 
