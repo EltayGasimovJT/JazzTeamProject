@@ -29,4 +29,8 @@ public class ControllerConstant {
     public static final String USERS_CHANGE_WORKING_PLACE_URL = USERS_URL + "/changeWorkingPlace/{id}";
     public static final String USER_ROLES_URL = "/userRoles";
     public static final String USER_ROLES_BY_ID_URL = USER_ROLES_URL + "/{id}";
+    public static final String VOYAGES_URL = "/voyages";
+    public static final String VOYAGES_BY_ID_URL = VOYAGES_URL + "/{id}";
+    public static final String WAREHOUSES_URL = "/warehouses";
+    public static final String WAREHOUSES_BY_ID_URL = WAREHOUSES_URL + "/{id}";
 }

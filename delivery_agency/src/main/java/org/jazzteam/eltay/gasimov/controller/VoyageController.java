@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
+import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.VOYAGES_BY_ID_URL;
+import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.VOYAGES_URL;
+
 @RestController
 public class VoyageController {
     @Autowired
@@ -16,14 +19,14 @@ public class VoyageController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = "/voyages")
+    @PostMapping(path = VOYAGES_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     VoyageDto addNewVoyage(@RequestBody VoyageDto voyageDto) {
         return modelMapper.map(voyageService.save(voyageDto), VoyageDto.class);
     }
 
-    @GetMapping(path = "/voyages")
+    @GetMapping(path = VOYAGES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<VoyageDto> findAllVoyages() {
@@ -32,20 +35,20 @@ public class VoyageController {
                 .collect(Collectors.toSet());
     }
 
-    @DeleteMapping(path = "/voyages/{id}")
+    @DeleteMapping(path = VOYAGES_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteVoyage(@PathVariable Long id) {
         voyageService.delete(id);
     }
 
-    @GetMapping(path = "/voyages/{id}")
+    @GetMapping(path = VOYAGES_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     VoyageDto findById(@PathVariable Long id) {
         return modelMapper.map(voyageService.findOne(id), VoyageDto.class);
     }
 
-    @PutMapping("/voyages")
+    @PutMapping(path = VOYAGES_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public VoyageDto updateVoyage(@RequestBody VoyageDto newVoyage) {
         return modelMapper.map(voyageService.save(newVoyage), VoyageDto.class);
