@@ -31,6 +31,8 @@ public class OrderDto {
     private LocalDateTime sendingTime;
     @NotEmpty(message = "Order must have destination place")
     private OrderProcessingPointDto destinationPlace;
+    @NotEmpty(message = "Order must have departure place")
+    private OrderProcessingPointDto departurePoint;
     @NotEmpty(message = "Order must have current location")
     private AbstractBuildingDto currentLocation;
     private String personalCode;

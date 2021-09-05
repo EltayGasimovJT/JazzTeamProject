@@ -564,3 +564,12 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.downloadButton {
+    width: 200px;
+    height: 50px;
+    transition: .3s;
+
+    background: #5176FA;
+    border-radius: 10px;
+}

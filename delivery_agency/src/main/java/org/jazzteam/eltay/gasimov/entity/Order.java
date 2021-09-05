@@ -40,8 +40,11 @@ public class Order {
     @Column(name = "sending_time")
     private LocalDateTime sendingTime;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "destination_place_id")
+    @JoinColumn(name = "destination_point_id")
     private OrderProcessingPoint destinationPlace;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "departure_point_id")
+    private OrderProcessingPoint departurePoint;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn
     private AbstractBuilding currentLocation;

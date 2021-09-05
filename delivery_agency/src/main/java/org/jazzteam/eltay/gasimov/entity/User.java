@@ -13,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "users")
+@Table(name = "workers")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +27,7 @@ public class User {
     @ManyToOne(cascade = CascadeType.ALL)
     private AbstractBuilding workingPlace;
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "user_roles", joinColumns = {
+    @JoinTable(name = "worker_roles", joinColumns = {
             @JoinColumn(name = "user_id")
     }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<UserRoles> roles;

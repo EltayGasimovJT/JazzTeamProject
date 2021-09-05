@@ -15,20 +15,23 @@ function getUsersOrders() {
         data: {phoneNumber: phoneNumber},
         success: function (result) {
             var r = [], j = -1;
-
             for (let key = 0, size = result.length; key < size; key++) {
                 r[++j] = '<tr class="text"><td>';
                 r[++j] = result[key].recipient.name;
                 r[++j] = '</td><td>';
                 r[++j] = result[key].recipient.surname;
                 r[++j] = '</td><td>';
-                r[++j] = result[key].sendingTime;
+                r[++j] = getTimeFormat(result[key].sendingTime);
                 r[++j] = '</td><td>';
                 r[++j] = result[key].price;
                 r[++j] = '</td><td>';
                 r[++j] = result[key].state.state;
                 r[++j] = '</td><td>';
+                r[++j] = result[key].departurePoint.location;
+                r[++j] = '</td><td>';
                 r[++j] = result[key].currentLocation.location;
+                r[++j] = '</td><td>';
+                r[++j] = result[key].destinationPlace.location;
                 r[++j] = '</td></tr>';
             }
             $('#orders').append(r.join(''));
@@ -56,7 +59,7 @@ function getIdFromUrl() {
     return params;
 }
 
-function checkSession(){
+function checkSession() {
     let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 5) {
         localStorage.removeItem('clientPhone');
@@ -65,4 +68,9 @@ function checkSession(){
     } else {
         localStorage.setItem('sessionTime', (new Date()).toString())
     }
+}
+
+function getTimeFormat(time) {
+    let sendingTime = new Date(time);
+    return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();
 }

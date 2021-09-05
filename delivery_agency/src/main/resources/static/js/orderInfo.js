@@ -1,9 +1,8 @@
 jQuery('document').ready(function () {
-
     let order = getIdFromUrl();
     getOrderHistories(order.orderId);
+    getOrder(order.orderId);
     $('#orderId').append(order.orderNumber);
-
 })
 
 function getIdFromUrl() {
@@ -29,19 +28,41 @@ function getOrderHistories(idFromUrl) {
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
-            let r = [], j = -1;
 
-            for (let key = 0, size = result.length; key < size; key++) {
-                r[++j] = '<tr><td>';
-                r[++j] = result[key].sentAt;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].changedAt;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].comment;
-                r[++j] = '</td></tr>';
-            }
-            console.log(result);
-            $('#histories').append(r.join(''));
         }
     });
+}
+
+function getOrder(idFromUrl) {
+    $.ajax({
+        url: `http://localhost:8081/orders/${idFromUrl}`,
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (result) {
+            let r = [], j = -1;
+            r[++j] = '<tr class="text"><td>';
+            r[++j] = result.recipient.name;
+            r[++j] = '</td><td>';
+            r[++j] = result.recipient.surname;
+            r[++j] = '</td><td>';
+            r[++j] = getTimeFormat(result.sendingTime);
+            r[++j] = '</td><td>';
+            r[++j] = result.price;
+            r[++j] = '</td><td>';
+            r[++j] = result.state.state;
+            r[++j] = '</td><td>';
+            r[++j] = result.departurePoint.location;
+            r[++j] = '</td><td>';
+            r[++j] = result.currentLocation.location;
+            r[++j] = '</td><td>';
+            r[++j] = result.destinationPlace.location;
+            r[++j] = '</td></tr>';
+            $('#orderInfo').append(r.join(''));
+        }
+    });
+}
+
+function getTimeFormat(time) {
+    let sendingTime = new Date(time);
+    return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();
 }

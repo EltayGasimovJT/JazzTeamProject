@@ -240,12 +240,14 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
+        long idForSearch = 8L;
         OrderDto orderDtoToSave = OrderDto.builder()
-                .currentLocation(new OrderProcessingPointDto())
+                .currentLocation(modelMapper.map(orderProcessingPointService.findOne(idForSearch), OrderProcessingPointDto.class))
                 .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
                 .parcelParameters(requestOrder.getParcelParameters())
                 .price(requestOrder.getPrice())
                 .recipient(requestOrder.getRecipient())
+                .departurePoint(modelMapper.map(orderProcessingPointService.findOne(idForSearch), OrderProcessingPointDto.class))
                 .sender(requestOrder.getSender())
                 .state(modelMapper.map(orderState, OrderStateDto.class))
                 .build();
@@ -257,7 +259,7 @@ public class OrderServiceImpl implements OrderService {
         OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
 
         BigDecimal price = orderDtoToSave.getPrice();
-        OrderState orderState = orderStateService.findByState(OrderStateChangeType.READY_TO_SEND.toString());
+        OrderState orderState = orderStateService.findByState(OrderStates.READY_TO_SEND.getState());
         orderDtoToSave.setPrice(price);
         orderDtoToSave.setState(modelMapper.map(orderStateService.findOne(1), OrderStateDto.class));
         OrderHistory orderHistoryForSave = OrderHistory.builder()
@@ -277,13 +279,14 @@ public class OrderServiceImpl implements OrderService {
         Client recipientToSave = getClientToSave(orderDtoToSave.getRecipient());
 
         OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
-        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
+        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findOne(8L);
         ParcelParameters savedParameters = parcelParametersService.save(orderDtoToSave.getParcelParameters());
 
         Order orderToSave = Order.builder()
                 .sender(senderToSave)
                 .recipient(recipientToSave)
                 .currentLocation(departurePointToSave)
+                .departurePoint(departurePointToSave)
                 .destinationPlace(destinationPlaceToSave)
                 .history(orderHistories)
                 .parcelParameters(savedParameters)

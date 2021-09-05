@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,9 +19,9 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     @Autowired
     private CoefficientForPriceCalculationRepository priceCalculationRuleRepository;
 
-    private static final int INITIAL_PRISE = 1400;
-    private static final int INITIAL_WEIGHT = 20;
-
+    private static final int INITIAL_WEIGHT = 50;
+    private static final double PRICE_FOR_PACKAGE = 1.9;
+    private static final double PRICE_FOR_DELIVERY = 3.25;
     @Override
     public CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws IllegalArgumentException, ObjectNotFoundException {
         CoefficientForPriceCalculation coefficientToSave = CoefficientForPriceCalculation.builder()
@@ -80,34 +79,14 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
 
     @Override
     public BigDecimal calculatePrice(ParcelParametersDto parcelParametersDto, CoefficientForPriceCalculationDto coefficientForCalculate) throws IllegalArgumentException {
-        BigDecimal resultPrice = new BigDecimal(1);
-        BigDecimal size = BigDecimal.valueOf(getSize(parcelParametersDto));
-        BigDecimal parcelSizeLimit = BigDecimal.valueOf(coefficientForCalculate.getParcelSizeLimit());
-        if (size.doubleValue() > parcelSizeLimit.doubleValue() && parcelParametersDto.getWeight() > INITIAL_WEIGHT) {
-            resultPrice =
-                    resultPrice
-                            .multiply(BigDecimal.valueOf(coefficientForCalculate.getCountryCoefficient())
-                                    .multiply(BigDecimal.valueOf(INITIAL_PRISE)
-                                            .multiply(BigDecimal.valueOf(parcelParametersDto.getWeight() / INITIAL_WEIGHT))
-                                            .multiply((size.divide(parcelSizeLimit, RoundingMode.DOWN))))
-                            );
-        } else if (size.doubleValue() > parcelSizeLimit.doubleValue()) {
-            resultPrice =
-                    resultPrice
-                            .multiply(BigDecimal.valueOf(coefficientForCalculate.getCountryCoefficient())
-                                    .multiply(BigDecimal.valueOf(INITIAL_PRISE)
-                                            .multiply((size.divide(parcelSizeLimit, RoundingMode.DOWN)))));
-        } else if (parcelParametersDto.getWeight() > INITIAL_WEIGHT) {
-            resultPrice = resultPrice.multiply(BigDecimal.valueOf(
-                    coefficientForCalculate.getCountryCoefficient()
-                            * INITIAL_PRISE
-                            * (parcelParametersDto.getWeight() / INITIAL_WEIGHT)));
-        } else {
-            resultPrice = resultPrice.multiply(BigDecimal.valueOf(
-                    coefficientForCalculate.getCountryCoefficient() * INITIAL_PRISE));
+        BigDecimal volume = BigDecimal.valueOf(getSize(parcelParametersDto));
+        if (volume.doubleValue() > coefficientForCalculate.getParcelSizeLimit()) {
+            throw new IllegalArgumentException("Parcel size cannot be more than " + coefficientForCalculate.getParcelSizeLimit() + " for single delivery");
         }
-
-        return resultPrice;
+        if (parcelParametersDto.getWeight() > INITIAL_WEIGHT){
+            throw new IllegalArgumentException("Parcel weight cannot be more than " + INITIAL_WEIGHT + " for single delivery");
+        }
+        return BigDecimal.valueOf(PRICE_FOR_PACKAGE + PRICE_FOR_DELIVERY + (parcelParametersDto.getWeight() * 0.5) + (volume.doubleValue() * 0.10) + coefficientForCalculate.getCountryCoefficient() * 0.8);
     }
 
     @Override

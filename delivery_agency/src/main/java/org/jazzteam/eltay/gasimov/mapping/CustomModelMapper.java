@@ -28,6 +28,7 @@ public class CustomModelMapper {
                 .recipient(modelMapper.map(orderToConvert.getRecipient(), ClientDto.class))
                 .sender(modelMapper.map(orderToConvert.getSender(), ClientDto.class))
                 .history(historiesToConvert)
+                .departurePoint(modelMapper.map(orderToConvert.getDeparturePoint(), OrderProcessingPointDto.class))
                 .orderTrackNumber(orderToConvert.getTrackNumber())
                 .price(orderToConvert.getPrice())
                 .parcelParameters(modelMapper.map(orderToConvert.getParcelParameters(), ParcelParametersDto.class))
@@ -57,6 +58,7 @@ public class CustomModelMapper {
                 .sender(modelMapper.map(orderDtoToConvert.getSender(), Client.class))
                 .trackNumber(orderDtoToConvert.getOrderTrackNumber())
                 .history(historiesToConvert)
+                .departurePoint(modelMapper.map(orderDtoToConvert.getDeparturePoint(), OrderProcessingPoint.class))
                 .price(orderDtoToConvert.getPrice())
                 .parcelParameters(modelMapper.map(orderDtoToConvert.getParcelParameters(), ParcelParameters.class))
                 .build();

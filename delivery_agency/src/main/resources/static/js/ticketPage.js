@@ -87,8 +87,8 @@ function getIdFromUrl() {
 
 function insetValuesIntoTicket(data) {
     $('#trackNumber').append(data.orderTrackNumber);
-    $('#senderName').append(data.sender.name);
-    $('#recipientName').append(data.recipient.name);
+    $('#senderName').append(data.sender.name + " " + data.sender.surname);
+    $('#recipientName').append(data.recipient.name + " " + data.recipient.surname);
     $('#departurePoint').append(data.destinationPlace.location);
     $('#destinationPoint').append(data.destinationPlace.location);
     $('#sendingTime').append(getTimeFormat(data.sendingTime));
