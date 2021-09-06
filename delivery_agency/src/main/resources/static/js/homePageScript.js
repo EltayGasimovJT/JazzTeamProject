@@ -96,8 +96,8 @@ jQuery('document').ready(function () {
             localStorage.setItem('clientPhone', clientPhoneNumber);
             localStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `http://localhost:8081/clientsOrders.html`;
-        }).fail(function (exception) {
-            alert(exception.responseJSON.message);
+        }).fail(function () {
+            alert("Wrong code input");
         });
     })
 
