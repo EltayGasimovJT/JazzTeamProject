@@ -49,6 +49,6 @@ public class Order {
     @JoinColumn
     private AbstractBuilding currentLocation;
     @OneToMany
-    @JoinColumn
+    @JoinColumn(name = "order_id")
     private Set<OrderHistory> history;
 }

@@ -129,9 +129,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> accept(List<OrderDto> orderDtosToAccept) throws IllegalArgumentException {
-        List<Order> ordersToAccept = orderDtosToAccept.stream()
-                .map(orderDto -> modelMapper.map(orderDto, Order.class))
-                .collect(Collectors.toList());
 
         Optional<Voyage> foundVoyage = voyageRepository.findById(orderDtosToAccept.get(0).getCurrentLocation().getId());
         Voyage voyageToSave = foundVoyage.orElseGet(Voyage::new);
@@ -240,7 +237,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
-        long idForSearch = 8L;
+        long idForSearch = 3L;
         OrderDto orderDtoToSave = OrderDto.builder()
                 .currentLocation(modelMapper.map(orderProcessingPointService.findOne(idForSearch), OrderProcessingPointDto.class))
                 .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
@@ -279,7 +276,7 @@ public class OrderServiceImpl implements OrderService {
         Client recipientToSave = getClientToSave(orderDtoToSave.getRecipient());
 
         OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
-        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findOne(8L);
+        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findOne(4L);
         ParcelParameters savedParameters = parcelParametersService.save(orderDtoToSave.getParcelParameters());
 
         Order orderToSave = Order.builder()

@@ -28,7 +28,21 @@ function getOrderHistories(idFromUrl) {
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
-
+            var r = [], j = -1;
+            for (let key = 0, size = result.length; key < size; key++) {
+                r[++j] = '<tr class="text"><td>';
+                r[++j] = getTimeFormat(result[key].changedAt);
+                r[++j] = '</td><td>';
+                r[++j] = getTimeFormat(result[key].sentAt);
+                r[++j] = '</td><td>';
+                r[++j] = result[key].comment;
+                r[++j] = '</td><td>';
+                r[++j] = result[key].user.name;
+                r[++j] = '</td><td>';
+                r[++j] = result[key].user.surname;
+                r[++j] = '</td></tr>';
+            }
+            $('#orderHistory').append(r.join(''));
         }
     });
 }

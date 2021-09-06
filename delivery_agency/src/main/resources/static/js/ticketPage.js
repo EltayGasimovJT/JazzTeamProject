@@ -98,7 +98,7 @@ function insetValuesIntoTicket(data) {
     $('#departurePoint').append(data.destinationPlace.location);
     $('#destinationPoint').append(data.destinationPlace.location);
     $('#sendingTime').append(getTimeFormat(data.sendingTime));
-    $('#price').append(data.price);
+    $('#price').append(data.price + " BYN");
 }
 
 function getTimeFormat(time) {
