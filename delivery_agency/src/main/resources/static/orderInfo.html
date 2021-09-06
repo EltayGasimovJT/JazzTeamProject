@@ -8,7 +8,7 @@
             font-family: "Calibri Light", Helvetica, Arial, sans-serif;
         }
     </style>
-    <link href="css/style.css"rel="stylesheet" type="text/css">
+    <link href="css/style.css" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" href="icons/waterFall.png"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
@@ -21,31 +21,41 @@
     <a href="homePage.html" class="defaultLogo">GasDel</a>
 </div>
 <div id="orderId" class="clientOrder">Order №</div>
-<div class="table-wrap">
-    <table id="orderInfo" style="" class="custom-table table table-bordered table-sm table">
-        <tr>
-            <td>Recipient name</td>
-            <td>Recipient surname</td>
-            <td>Sending time</td>
-            <td>Price, BYN</td>
-            <td>Order state</td>
-            <td>Departure Point</td>
-            <td>Current Location</td>
-            <td>Destination Point</td>
-        </tr>
-    </table>
+<div class="block-wrap">
+    <div class="table-wrap">
+        <div class="tableName"><h2><b>Order information</b></h2></div>
+        <table id="orderInfo" style="" class="custom-table table table-bordered table-sm table">
+            <tr>
+                <td>Recipient name</td>
+                <td>Recipient surname</td>
+                <td>Sending time</td>
+                <td>Price, BYN</td>
+                <td>Order state</td>
+                <td>Departure Point</td>
+                <td>Current Location</td>
+                <td>Destination Point</td>
+                <td>Weight, mm</td>
+                <td>Height, mm</td>
+                <td>Width, mm</td>
+                <td>Length, mm</td>
+            </tr>
+        </table>
+    </div>
 </div>
 
-<div class="table-wrap">
-    <table id="orderHistory" style="" class="custom-table table table-bordered table-sm table">
-        <tr>
-            <td>Changed at</td>
-            <td>Sent at</td>
-            <td>Comment</td>
-            <td>Worker name</td>
-            <td>Worker surname</td>
-        </tr>
-    </table>
+<div class="block-wrap">
+    <div class="table-wrap">
+        <div class="tableName"><h2><b>Order history</b></h2></div>
+        <table id="orderHistory" class="custom-table table table-bordered table-sm table">
+            <tr>
+                <td>Changed at</td>
+                <td>Sent at</td>
+                <td>Comment</td>
+                <td>Worker name</td>
+                <td>Worker surname</td>
+            </tr>
+        </table>
+    </div>
 </div>
 <div class="backGround-modal">
     <div class="modal-custom">

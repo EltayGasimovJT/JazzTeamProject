@@ -22,6 +22,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     private static final int INITIAL_WEIGHT = 50;
     private static final double PRICE_FOR_PACKAGE = 1.9;
     private static final double PRICE_FOR_DELIVERY = 3.25;
+
     @Override
     public CoefficientForPriceCalculation save(CoefficientForPriceCalculationDto coefficientDtoToSave) throws IllegalArgumentException, ObjectNotFoundException {
         CoefficientForPriceCalculation coefficientToSave = CoefficientForPriceCalculation.builder()
@@ -82,10 +83,10 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
         BigDecimal volume = BigDecimal.valueOf(getSize(parcelParametersDto));
         CoefficientForPriceCalculation foundCoefficient = priceCalculationRuleRepository.findByCountry(country);
         if (volume.doubleValue() > foundCoefficient.getParcelSizeLimit()) {
-            throw new IllegalArgumentException("Parcel size cannot be more than " + foundCoefficient.getParcelSizeLimit() + " for single delivery");
+            throw new IllegalArgumentException("Parcel size cannot be more than " + foundCoefficient.getParcelSizeLimit() + " cubic meters for single delivery");
         }
-        if (parcelParametersDto.getWeight() > INITIAL_WEIGHT){
-            throw new IllegalArgumentException("Parcel weight cannot be more than " + INITIAL_WEIGHT + " for single delivery");
+        if (parcelParametersDto.getWeight() > INITIAL_WEIGHT) {
+            throw new IllegalArgumentException("Parcel weight cannot be more than " + INITIAL_WEIGHT + " kilograms for single delivery");
         }
         return BigDecimal.valueOf(PRICE_FOR_PACKAGE + PRICE_FOR_DELIVERY + (parcelParametersDto.getWeight() * 0.5) + (volume.doubleValue() * 0.10) + foundCoefficient.getCountryCoefficient() * 0.8);
     }
@@ -99,8 +100,8 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
     }
 
     private double getSize(ParcelParametersDto parcelParametersDto) {
-        return (parcelParametersDto.getLength()
+        return ((parcelParametersDto.getLength()
                 * parcelParametersDto.getHeight()
-                * parcelParametersDto.getWidth()) + parcelParametersDto.getWeight();
+                * parcelParametersDto.getWidth()) + parcelParametersDto.getWeight()) / 1000000000;
     }
 }

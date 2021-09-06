@@ -17,6 +17,8 @@ function getUsersOrders() {
             var r = [], j = -1;
             for (let key = 0, size = result.length; key < size; key++) {
                 r[++j] = '<tr class="text"><td>';
+                r[++j] = result[key].recipient.trackNumber;
+                r[++j] = '</td><td>';
                 r[++j] = result[key].recipient.name;
                 r[++j] = '</td><td>';
                 r[++j] = result[key].recipient.surname;
@@ -36,8 +38,8 @@ function getUsersOrders() {
             }
             $('#orders').append(r.join(''));
         },
-        error: function () {
-            alert(localStorage.getItem('clientPhone'));
+        error: function (exception) {
+            alert(exception.message);
         }
     });
 }
@@ -61,7 +63,7 @@ function getIdFromUrl() {
 
 function checkSession() {
     let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 5) {
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 4) {
         localStorage.removeItem('clientPhone');
         localStorage.removeItem('sessionTime');
         window.location.href = `http://localhost:8081/homePage.html`;

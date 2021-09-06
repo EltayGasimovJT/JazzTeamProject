@@ -70,13 +70,30 @@ function getOrder(idFromUrl) {
             r[++j] = result.currentLocation.location;
             r[++j] = '</td><td>';
             r[++j] = result.destinationPlace.location;
+            r[++j] = '</td><td>';
+            r[++j] = result.parcelParameters.weight;
+            r[++j] = '</td><td>';
+            r[++j] = result.parcelParameters.height;
+            r[++j] = '</td><td>';
+            r[++j] = result.parcelParameters.width;
+            r[++j] = '</td><td>';
+            r[++j] = result.parcelParameters.length;
             r[++j] = '</td></tr>';
             $('#orderInfo').append(r.join(''));
         }
     });
 }
 
+
 function getTimeFormat(time) {
-    let sendingTime = new Date(time);
-    return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();
+    let date = new Date(time);
+
+    date.setDate(date.getDate() + 20);
+
+    return ('0' + date.getDate()).slice(-2) + '.'
+        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
+        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+
+    /*   /!* let sendingTime = new Date(time);
+        return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime*!/.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();*/
 }

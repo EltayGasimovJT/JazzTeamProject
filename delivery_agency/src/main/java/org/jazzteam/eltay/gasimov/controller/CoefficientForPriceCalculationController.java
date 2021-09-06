@@ -45,12 +45,10 @@ public class CoefficientForPriceCalculationController {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping(path = "/calculatePrice/{country}")
+    @PostMapping(path = "/calculatePrice/{country}")
     public @ResponseBody
     BigDecimal calculatePrice(@PathVariable String country, @RequestBody ParcelParametersDto parametersToCalculate) {
-        log.severe("reeeeeeeeeeeeee");
-        BigDecimal bigDecimal = calculationService.calculatePrice(parametersToCalculate, country);
-        return bigDecimal;
+        return calculationService.calculatePrice(parametersToCalculate, country);
     }
 
     @DeleteMapping(path = "/coefficients/{id}")

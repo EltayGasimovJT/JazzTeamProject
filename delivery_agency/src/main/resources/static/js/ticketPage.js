@@ -44,14 +44,21 @@ jQuery('document').ready(function () {
                         'Departure point: ' + order.destinationPlace.location + '\n' +
                         'Destination point: ' + order.destinationPlace.location + '\n' +
                         'Sending time: ' + getTimeFormat(order.sendingTime) + '\n' +
-                        'Price:' + order.price + '\n',
+                        'Price: ' + order.price + ' BYN\n',
                     fontSize: 15,
                     marginTop: 20
                 },
                 {
-                    text: 'Date__________' + "                      Signature__________",
+                    text: 'Date__________' + "                      Worker sign__________",
                     fontSize: 15,
+                    alignment: 'right',
                     marginTop: 150
+                },
+                {
+                    text: "Client sign__________",
+                    fontSize: 15,
+                    alignment: 'right',
+                    marginTop: 20
                 }
             ]
         }
@@ -102,6 +109,14 @@ function insetValuesIntoTicket(data) {
 }
 
 function getTimeFormat(time) {
-    let sendingTime = new Date(time);
-    return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();
+    let MyDate = new Date(time);
+
+    MyDate.setDate(MyDate.getDate() + 20);
+
+    return ('0' + MyDate.getDate()).slice(-2) + '/'
+        + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/'
+        + MyDate.getFullYear();
+
+/*   /!* let sendingTime = new Date(time);
+    return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime*!/.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();*/
 }

@@ -55,6 +55,8 @@
 
 .price {
     display: flex;
+    font-family: Calibri, serif;
+    margin-top: 20px;
 }
 
 .actionTabText {
@@ -529,6 +531,7 @@
     justify-content: center;
     align-items: center;
     font-family: Calibri, serif;
+    font-weight: bold;
     font-size: 30px;
     width: 100%;
     color: Black;
@@ -573,4 +576,95 @@
 
     background: #5176FA;
     border-radius: 10px;
+}
+
+.tableName {
+    margin-top: 20px;
+    font-weight: bold;
+    font-family: Calibri, serif;
+}
+
+.block-wrap {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form__error {
+    color: red;
+    text-align: left;
+    font-size: 12px;
+    margin-top: 3px;
+    display: none;
+}
+
+input:valid:not(:placeholder-shown) {
+    border-color: green;
+}
+
+input:invalid:not(:placeholder-shown) {
+    border-color: red;
+}
+
+input:invalid:not(:placeholder-shown) + .form__error {
+    display: block;
+}
+
+.form {
+    display: inline-block;
+    padding: 25px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 500px;
+}
+
+.form__field {
+    margin-bottom: 10px;
+}
+
+.form__error {
+    color: red;
+    text-align: left;
+    font-size: 12px;
+    display: block;
+    margin-top: 3px;
+    display: none;
+}
+
+.form input {
+    outline: none;
+    display: block;
+    width: 100%;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.form button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 2px;
+    border: 0;
+    background-color: #ccc;
+    color: #fff;
+}
+
+input:valid:not(:placeholder-shown) {
+    border-color: green;
+}
+
+input:invalid:not(:placeholder-shown) {
+    border-color: red;
+}
+input:invalid:not(:placeholder-shown) + .form__error {
+    display: block;
+}
+
+.inputFieldForValidation {
+    display: flex;
+    flex-direction: column;
+    width: 173px;
+    height: 32px;
 }

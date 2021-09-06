@@ -1,4 +1,7 @@
 jQuery('document').ready(function () {
+    if (localStorage.getItem('clientsPhone') !== null) {
+        checkSession();
+    }
     const backgroundModal = document.querySelector('.backGround-modal');
     const clientBackgroundModal = document.querySelector('.client-backGround-modal');
     const codeBackgroundModal = document.querySelector('.code-backGround-modal');
@@ -42,8 +45,9 @@ jQuery('document').ready(function () {
     asClientModal.addEventListener('click', () => {
         if (localStorage.getItem('clientPhone') !== null) {
             window.location.href = "http://localhost:8081/clientsOrders.html";
+        } else {
+            clientBackgroundModal.style.visibility = 'visible';
         }
-        clientBackgroundModal.style.visibility = 'visible';
     })
 
     openModel.addEventListener('click', () => {
@@ -77,6 +81,8 @@ jQuery('document').ready(function () {
         geting.done(function () {
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
+        }).fail(function (exception) {
+            alert(exception.responseJSON.message);
         });
     })
 
@@ -90,6 +96,8 @@ jQuery('document').ready(function () {
             localStorage.setItem('clientPhone', clientPhoneNumber);
             localStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `http://localhost:8081/clientsOrders.html`;
+        }).fail(function (exception) {
+            alert(exception.responseJSON.message);
         });
     })
 
@@ -101,6 +109,20 @@ jQuery('document').ready(function () {
         let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
         geting.done(function (data) {
             window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
+        }).fail(function (exception) {
+            alert(exception.responseJSON.message);
         });
     });
 })
+
+
+function checkSession() {
+    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 5) {
+        localStorage.removeItem('clientPhone');
+        localStorage.removeItem('sessionTime');
+        window.location.href = `http://localhost:8081/homePage.html`;
+    } else {
+        localStorage.setItem('sessionTime', (new Date()).toString())
+    }
+}

@@ -38,28 +38,7 @@ document.getElementById('parcelWeight').oninput = (event) => {
 };
 
 function calcPrice() {
-    const volume = config.parcelWidth * config.parcelLength * config.parcelHeight;
-    if (validateParams(config) === true) {
-        if (volume > INITIAL_SIZE && config.parcelWeight > INITIAL_WEIGHT) {
-            price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (volume / INITIAL_SIZE) * (config.parcelWeight / INITIAL_WEIGHT));
-            return;
-        }
-
-        if (volume > INITIAL_SIZE) {
-            price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (volume / INITIAL_SIZE));
-            return;
-        }
-
-        if (config.parcelWeight > INITIAL_WEIGHT) {
-
-            price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient * (config.parcelWeight / INITIAL_WEIGHT));
-            return;
-        }
-
-        price.innerHTML = Math.round(volume * config.destinationPoint.countryCoefficient);
-    }
-
-    /*if (config.parcelWeight !== null && config.parcelHeight !== null && config.parcelLength !== null && config.parcelWidth !== null && config.destinationPoint !== null) {
+    if (config.parcelWeight !== null && config.parcelHeight !== null && config.parcelLength !== null && config.parcelWidth !== null && config.destinationPoint !== null) {
         let parcelParameters = new ParcelParametersDto(
             {
                 width: `${config.parcelWidth}`,
@@ -70,14 +49,22 @@ function calcPrice() {
         )
         $.ajax({
             url: `http://localhost:8081/calculatePrice/${config.destinationPoint.country}`,
-            type: 'GET',
+            type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(parcelParameters),
             success: function (result) {
                 console.log(result);
+                if (validateParams(config) !== true) {
+                    alert("Input data is not valid, please try again")
+                } else {
+                    price.innerHTML = result.toFixed(2);
+                }
+            },
+            error: function (exception) {
+                alert(exception.responseJSON.message);
             }
         });
-    }*/
+    }
 }
 
 function validateParams(params) {
@@ -107,14 +94,16 @@ function init() {
         contentType: 'application/json',
         success: function (result) {
             allCoefficients = result;
+            setupCountries(allCoefficients)
+        },
+        error: function (exception) {
+            exception.responseJSON.message;
         }
     });
 }
 
 $('#createOrderForm').submit(function (e) {
     $form = $(this).serializeArray();
-    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
-
     let sender = new ClientDto({
         name: `${$form[0].value}`,
         surname: `${$form[1].value}`,
@@ -145,19 +134,22 @@ $('#createOrderForm').submit(function (e) {
         parcelParameters: parcelParameters,
         price: price.innerText
     })
+    if (validateParams(config) !== true) {
+        alert("Input data is not valid, please try again")
+    } else {
+        $.ajax({
+            type: 'POST',
+            url: `http://localhost:8081/createOrder`,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(dataForSend)
+        }).done(function (data) {
+            window.location.href = `http://localhost:8081/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
+        }).fail(function (exception) {
+            alert(exception.responseJSON.message);
+        });
 
-    $.ajax({
-        type: 'POST',
-        url: `http://localhost:8081/createOrder`,
-        contentType: 'application/json; charset=utf-8',
-        data: JSON.stringify(dataForSend)
-    }).done(function (data) {
-        window.location.href = `http://localhost:8081/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
-    }).fail(function () {
-        console.log('fail');
-    });
-
-    e.preventDefault();
+        e.preventDefault();
+    }
 });
 
 export class ClientDto {
@@ -340,4 +332,13 @@ export class ParcelParametersDto {
     }
 }
 
+function setupCountries(countries) {
+    var r = [], j = -1;
+    for (let key = 0, size = countries.length; key < size; key++) {
+        r[++j] = '<option>';
+        r[++j] = countries[key].country;
+        r[++j] = '</option>';
+    }
+    $('#towns').append(r.join(''));
 
+}
