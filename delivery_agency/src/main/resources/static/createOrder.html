@@ -38,6 +38,11 @@
                            title="Input sender surname">
                 </div>
                 <div class="style-form">
+                    <span class="createOrderTextField">Sender passport Id</span>
+                    <input type="text" name="senderPassportId" required maxlength="40"
+                           title="Input sender passport number">
+                </div>
+                <div class="style-form">
                     <span class="createOrderTextField">Sender phone number</span>
                     <div class="inputFieldForValidation">
                         <input align="right" name="senderPhoneNumber"
@@ -46,11 +51,6 @@
                                title="Input sender phone number">
                         <span class="form__error">This field must be in format (44) 456-78-90</span>
                     </div>
-                </div>
-                <div class="style-form">
-                    <span class="createOrderTextField">Sender passport Id</span>
-                    <input type="text" name="senderPassportId" required maxlength="40"
-                           title="Input sender passport number">
                 </div>
             </div>
             <div>
@@ -65,6 +65,11 @@
                            title="Input recipient surname">
                 </div>
                 <div class="style-form">
+                    <span class="createOrderTextField">Recipient passport Id</span>
+                    <input type="text" name="recipientPassportId" required maxlength="40"
+                           title="Input recipient passport number">
+                </div>
+                <div class="style-form">
                     <span class="createOrderTextField">Recipient phone number</span>
                     <div class="inputFieldForValidation"><input type="text" name="recipientPhoneNumber" required
                                                                 maxlength="40"
@@ -72,11 +77,6 @@
                                                                 title="Input recipient phone number">
                         <span class="form__error">This field must be in format (44) 456-78-90</span>
                     </div>
-                </div>
-                <div class="style-form">
-                    <span class="createOrderTextField">Recipient passport Id</span>
-                    <input type="text" name="recipientPassportId" required maxlength="40"
-                           title="Input recipient passport number">
                 </div>
             </div>
             <div>
@@ -102,7 +102,7 @@
                     <input id="parcelHeight" type="number" required name="height" title="Height">
                 </div>
                 <div class="style-form">
-                    <span class="createOrderTextField">Parcel weight, mm</span>
+                    <span class="createOrderTextField">Parcel weight, gram</span>
                     <input id="parcelWeight" type="number" required name="weight" title="Weight">
                 </div>
                 <div class="price">

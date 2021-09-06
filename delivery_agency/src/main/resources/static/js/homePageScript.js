@@ -115,7 +115,6 @@ jQuery('document').ready(function () {
     });
 })
 
-
 function checkSession() {
     let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 5) {

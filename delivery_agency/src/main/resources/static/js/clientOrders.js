@@ -14,10 +14,11 @@ function getUsersOrders() {
         contentType: 'application/json',
         data: {phoneNumber: phoneNumber},
         success: function (result) {
+            console.log()
             var r = [], j = -1;
             for (let key = 0, size = result.length; key < size; key++) {
                 r[++j] = '<tr class="text"><td>';
-                r[++j] = result[key].recipient.trackNumber;
+                r[++j] = result[key].orderTrackNumber;
                 r[++j] = '</td><td>';
                 r[++j] = result[key].recipient.name;
                 r[++j] = '</td><td>';
@@ -33,10 +34,26 @@ function getUsersOrders() {
                 r[++j] = '</td><td>';
                 r[++j] = result[key].currentLocation.location;
                 r[++j] = '</td><td>';
-                r[++j] = result[key].destinationPlace.location;
+                r[++j] = result[key].currentLocation.location;
+                r[++j] = '</td><td>';
+                r[++j] = addBackToOrderListButton();
                 r[++j] = '</td></tr>';
             }
             $('#orders').append(r.join(''));
+            const clientOrders = document.querySelector('.text');
+
+            clientOrders.addEventListener(
+                'click', (event) => {
+                    console.log(event.target.innerText);
+                    console.log(event);
+                }
+            )
+
+           /* $(".hiddenButton").click(function () {
+                    let rowOfData = $('.text')
+                    console.log(rowOfData)
+                }
+            )*/
         },
         error: function (exception) {
             alert(exception.message);
@@ -72,7 +89,17 @@ function checkSession() {
     }
 }
 
+function addBackToOrderListButton() {
+    return '<button class="customHiddenBtn buttonText hiddenButton" type="button">'
+        + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';
+}
+
 function getTimeFormat(time) {
-    let sendingTime = new Date(time);
-    return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();
+    let date = new Date(time);
+
+    date.setDate(date.getDate() + 20);
+
+    return ('0' + date.getDate()).slice(-2) + '.'
+        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
+        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 }

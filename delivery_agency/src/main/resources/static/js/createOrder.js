@@ -107,15 +107,15 @@ $('#createOrderForm').submit(function (e) {
     let sender = new ClientDto({
         name: `${$form[0].value}`,
         surname: `${$form[1].value}`,
-        phoneNumber: `${$form[2].value}`,
-        passportId: `${$form[3].value}`
+        passportId: `${$form[2].value}`,
+        phoneNumber: `${$form[3].value}`
     });
 
     let recipient = new ClientDto({
         name: `${$form[4].value}`,
         surname: `${$form[5].value}`,
-        phoneNumber: `${$form[6].value}`,
-        passportId: `${$form[7].value}`
+        passportId: `${$form[6].value}`,
+        phoneNumber: `${$form[7].value}`
     });
 
     let parcelParameters = new ParcelParametersDto(

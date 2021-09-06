@@ -109,14 +109,11 @@ function insetValuesIntoTicket(data) {
 }
 
 function getTimeFormat(time) {
-    let MyDate = new Date(time);
+    let date = new Date(time);
 
-    MyDate.setDate(MyDate.getDate() + 20);
+    date.setDate(date.getDate() + 20);
 
-    return ('0' + MyDate.getDate()).slice(-2) + '/'
-        + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/'
-        + MyDate.getFullYear();
-
-/*   /!* let sendingTime = new Date(time);
-    return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime*!/.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();*/
+    return ('0' + date.getDate()).slice(-2) + '.'
+        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
+        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 }

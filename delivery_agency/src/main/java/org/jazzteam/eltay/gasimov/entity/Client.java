@@ -26,8 +26,7 @@ public class Client {
     private String passportId;
     @Column(name = "phone_number")
     private String phoneNumber;
-    @OneToMany(mappedBy = "sender", cascade = CascadeType.MERGE, fetch = FetchType.LAZY,
-            orphanRemoval = true)
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Order> orders;
     @OneToOne

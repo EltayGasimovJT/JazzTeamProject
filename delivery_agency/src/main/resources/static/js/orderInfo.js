@@ -3,7 +3,11 @@ jQuery('document').ready(function () {
     getOrderHistories(order.orderId);
     getOrder(order.orderId);
     $('#orderId').append(order.orderNumber);
+    if (localStorage.getItem('clientPhone') !== null) {
+        addBackToOrderListButton();
+    }
 })
+let backToTheClientsOrdersButton = document.getElementById('backToTheClientsOrdersButton');
 
 function getIdFromUrl() {
     let params = window
@@ -45,6 +49,18 @@ function getOrderHistories(idFromUrl) {
             $('#orderHistory').append(r.join(''));
         }
     });
+}
+
+function addBackToOrderListButton() {
+    let table = document.getElementById("backToTheClientsOrdersButton");
+    table.innerHTML = '<button class="customBtn buttonText hiddenButton"  type="button">'
+        + '<span class="glyphicon glyphicon-pencil"></span>На страницу заказов</button>';
+    const hiddenButton = document.querySelector('.hiddenButton');
+    hiddenButton.addEventListener(
+        'click', () => {
+            window.location.href = `http://localhost:8081/clientsOrders.html`;
+        }
+    )
 }
 
 function getOrder(idFromUrl) {
@@ -93,7 +109,4 @@ function getTimeFormat(time) {
     return ('0' + date.getDate()).slice(-2) + '.'
         + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
         + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
-
-    /*   /!* let sendingTime = new Date(time);
-        return sendingTime.getDay() + "." + sendingTime.getMonth() + "." + sendingTime.getFullYear() + " " + sendingTime*!/.getHours() + ":" + sendingTime.getMinutes() + ":" + sendingTime.getSeconds();*/
 }
