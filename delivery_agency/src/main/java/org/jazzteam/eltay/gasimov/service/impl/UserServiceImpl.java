@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -116,7 +115,7 @@ public class UserServiceImpl implements UserService {
     public User findByLoginAndPassword(String login, String password) {
         User userEntity = findByName(login);
         if (userEntity != null) {
-            log.info("u");
+            log.error("u");
             if (passwordEncoder.matches(password, userEntity.getPassword())) {
                 return userEntity;
             }

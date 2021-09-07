@@ -1,4 +1,4 @@
-package org.jazzteam.eltay.gasimov.controller.jwt.model;
+package org.jazzteam.eltay.gasimov.controller.security.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

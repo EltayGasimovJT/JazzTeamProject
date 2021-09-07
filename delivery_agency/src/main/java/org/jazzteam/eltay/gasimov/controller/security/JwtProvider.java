@@ -1,4 +1,4 @@
-package org.jazzteam.eltay.gasimov.controller.jwt;
+package org.jazzteam.eltay.gasimov.controller.security;
 
 import io.jsonwebtoken.*;
 import lombok.extern.java.Log;

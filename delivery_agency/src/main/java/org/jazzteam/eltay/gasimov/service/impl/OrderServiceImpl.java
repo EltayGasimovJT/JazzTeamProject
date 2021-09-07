@@ -263,7 +263,7 @@ public class OrderServiceImpl implements OrderService {
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND.toString())
                 .user(userService.findOne(1L))
                 .changedAt(LocalDateTime.now())
-                .comment("Order was sent from " + orderDtoToSave.getCurrentLocation().getLocation() + " to the " + orderDtoToSave.getDestinationPlace().getLocation())
+                .comment("Заказ был подготовлен к отправке из пункта " + orderDtoToSave.getCurrentLocation().getLocation())
                 .build();
 
         OrderHistory savedHistory = orderHistoryService.save(modelMapper.map(orderHistoryForSave, OrderHistoryDto.class));

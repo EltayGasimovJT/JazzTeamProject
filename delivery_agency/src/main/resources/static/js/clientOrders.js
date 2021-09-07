@@ -42,18 +42,21 @@ function getUsersOrders() {
             $('#orders').append(r.join(''));
             const clientOrders = document.querySelector('.text');
 
-            clientOrders.addEventListener(
+            /*clientOrders.addEventListener(
                 'click', (event) => {
-                    console.log(event.target.innerText);
+                    console.log(event.target.outerText);
                     console.log(event);
-                }
-            )
+                    console.log(result);
 
-           /* $(".hiddenButton").click(function () {
-                    let rowOfData = $('.text')
-                    console.log(rowOfData)
+                    //window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${localStorage.getItem('clientPhone')}`;
                 }
             )*/
+
+            $(".hiddenButton").click(function () {
+                    let rowOfData = $(this).closest('tr')[0].outerText
+                    console.log(rowOfData)
+                }
+            )
         },
         error: function (exception) {
             alert(exception.message);

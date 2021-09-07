@@ -1,4 +1,4 @@
-package org.jazzteam.eltay.gasimov.controller.jwt;
+package org.jazzteam.eltay.gasimov.controller.security;
 
 import org.jazzteam.eltay.gasimov.entity.User;
 import org.springframework.security.core.GrantedAuthority;
@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
+
 
 public class CustomUserDetails implements UserDetails {
     private String login;

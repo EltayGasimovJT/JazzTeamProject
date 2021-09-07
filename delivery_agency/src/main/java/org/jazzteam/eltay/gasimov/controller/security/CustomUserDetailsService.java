@@ -1,4 +1,4 @@
-package org.jazzteam.eltay.gasimov.controller.jwt;
+package org.jazzteam.eltay.gasimov.controller.security;
 
 import org.jazzteam.eltay.gasimov.entity.User;
 import org.jazzteam.eltay.gasimov.service.UserService;

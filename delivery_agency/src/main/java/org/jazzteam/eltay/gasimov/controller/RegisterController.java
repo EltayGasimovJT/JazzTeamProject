@@ -1,9 +1,9 @@
 package org.jazzteam.eltay.gasimov.controller;
 
-import org.jazzteam.eltay.gasimov.controller.jwt.JwtProvider;
-import org.jazzteam.eltay.gasimov.controller.jwt.model.AuthRequest;
-import org.jazzteam.eltay.gasimov.controller.jwt.model.AuthResponse;
-import org.jazzteam.eltay.gasimov.controller.jwt.model.RegistrationRequest;
+import org.jazzteam.eltay.gasimov.controller.security.JwtProvider;
+import org.jazzteam.eltay.gasimov.controller.security.model.AuthRequest;
+import org.jazzteam.eltay.gasimov.controller.security.model.AuthResponse;
+import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.entity.User;
 import org.jazzteam.eltay.gasimov.service.UserService;

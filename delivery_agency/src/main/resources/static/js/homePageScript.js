@@ -78,7 +78,8 @@ jQuery('document').ready(function () {
             phoneNumber = $form.find("input[name='phoneNumber']").val(),
             url = $form.attr("action");
         let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
-        geting.done(function () {
+        geting.done(function (data) {
+            alert(data.code.generatedCode)
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
         }).fail(function (exception) {

@@ -1,4 +1,4 @@
-package org.jazzteam.eltay.gasimov.controller.jwt;
+package org.jazzteam.eltay.gasimov.controller.security;
 
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
