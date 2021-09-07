@@ -1,59 +1,76 @@
 package org.jazzteam.eltay.gasimov.controller.security;
 
-import org.jazzteam.eltay.gasimov.entity.User;
+import lombok.NoArgsConstructor;
+import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 
-
+@NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private String login;
     private String password;
     private Collection<? extends GrantedAuthority> grantedAuthorities;
+    private boolean isActive;
 
-    public static CustomUserDetails fromUserEntityToCustomUserDetails(User userEntity) {
+    public static CustomUserDetails fromUserEntityToCustomUserDetails(UserDto userEntity) {
         CustomUserDetails c = new CustomUserDetails();
         c.login = userEntity.getName();
         c.password = userEntity.getPassword();
-        c.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_Admin"));
+        c.grantedAuthorities = userEntity.getRole().getAuthorities();
+        c.isActive = true;
         return c;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return grantedAuthorities;
+        return this.grantedAuthorities;
+    }
+
+    public CustomUserDetails(String login, String password, Collection<? extends GrantedAuthority> grantedAuthorities, boolean isActive) {
+        this.login = login;
+        this.password = password;
+        this.grantedAuthorities = grantedAuthorities;
+        this.isActive = isActive;
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     @Override
     public String getUsername() {
-        return login;
+        return this.login;
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return this.isActive;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.isActive;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return this.isActive;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.isActive;
+    }
+
+    public static UserDetails getUserDetailsFromUser(UserDto userDto){
+        return new User(
+                userDto.getName(),
+                userDto.getPassword(),
+                userDto.getRole().getAuthorities()
+        );
     }
 }

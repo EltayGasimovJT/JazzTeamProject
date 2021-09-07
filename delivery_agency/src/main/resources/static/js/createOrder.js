@@ -1,6 +1,10 @@
 let $form;
 init()
 
+jQuery("#backToTheActionPageBtnId").on('click', function () {
+    location.href = "homePage.html";
+})
+
 const INITIAL_SIZE = 1400;
 const INITIAL_WEIGHT = 20;
 

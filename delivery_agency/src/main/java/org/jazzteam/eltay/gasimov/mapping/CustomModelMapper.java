@@ -71,13 +71,21 @@ public class CustomModelMapper {
     }
 
     public static UserDto mapUserToDto(User userToConvert) {
+        UserRoles roleToMap = userToConvert.getRoles().iterator().next();
+
         UserDto convertedToDto = UserDto.builder()
                 .id(userToConvert.getId())
                 .name(userToConvert.getName())
                 .surname(userToConvert.getSurname())
                 .password(userToConvert.getPassword())
-                .roles(userToConvert.getRoles())
                 .build();
+        if (roleToMap.getRole().equals(Role.ADMIN.toString())) {
+            convertedToDto.setRole(Role.ADMIN);
+        }
+        if (roleToMap.getRole().equals(Role.PROCESSING_POINT_WORKER.toString())) {
+            convertedToDto.setRole(Role.PROCESSING_POINT_WORKER);
+        }
+
         if (userToConvert.getWorkingPlace() instanceof OrderProcessingPoint) {
             convertedToDto.setWorkingPlace(WorkingPlaceType.PROCESSING_POINT);
         } else if (userToConvert.getWorkingPlace() instanceof Warehouse) {
@@ -92,8 +100,22 @@ public class CustomModelMapper {
                 .name(userDtoToConvert.getName())
                 .surname(userDtoToConvert.getSurname())
                 .password(userDtoToConvert.getPassword())
-                .roles(userDtoToConvert.getRoles())
                 .build();
+
+        if (userDtoToConvert.getRole().toString().equals("ADMIN")) {
+            Set<UserRoles> userRoles = new HashSet<>();
+            userRoles.add(UserRoles.builder()
+                    .role(userDtoToConvert.getRole().toString())
+                    .build());
+            convertedToUser.setRoles(userRoles);
+        }
+        if (userDtoToConvert.getRole().toString().equals("PROCESSING_POINT_WORKER")) {
+            Set<UserRoles> userRoles = new HashSet<>();
+            userRoles.add(UserRoles.builder()
+                    .role(userDtoToConvert.getRole().toString())
+                    .build());
+            convertedToUser.setRoles(userRoles);
+        }
         if (userDtoToConvert.getWorkingPlace().equals(WorkingPlaceType.PROCESSING_POINT)) {
             convertedToUser.setWorkingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class));
         } else if (userDtoToConvert.getWorkingPlace().equals(WorkingPlaceType.WAREHOUSE)) {

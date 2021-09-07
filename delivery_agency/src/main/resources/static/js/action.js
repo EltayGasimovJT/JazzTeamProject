@@ -1,6 +1,6 @@
 jQuery('document').ready(function () {
     jQuery("#backToTheActionPageBtnId").on('click', function () {
-        location.href = "actionPage.html";
+        location.href = "homePage.html";
     })
 
     const backgroundModal = document.querySelector('.backGround-modal');

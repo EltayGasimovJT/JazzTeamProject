@@ -5,13 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jazzteam.eltay.gasimov.entity.UserRoles;
+import org.jazzteam.eltay.gasimov.entity.Role;
 import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
-import java.util.List;
 
 @Builder
 @Data
@@ -32,5 +31,5 @@ public class UserDto {
     @JsonProperty("workingPlace")
     private WorkingPlaceType workingPlace;
     @NotEmpty(message = "User must have at least one role")
-    private List<UserRoles> roles;
+    private Role role;
 }

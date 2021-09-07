@@ -1,20 +1,20 @@
 package org.jazzteam.eltay.gasimov.controller;
 
+import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.entity.User;
+import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.service.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Log
 public class WorkerController {
     @Autowired
     private UserService userService;
-    @Autowired
-    private ModelMapper modelMapper;
 
     @PostMapping(path = "/users")
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,7 +47,7 @@ public class WorkerController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     UserDto findById(@PathVariable Long id) {
-        return modelMapper.map(userService.findOne(id), UserDto.class);
+        return CustomModelMapper.mapUserToDto(userService.findOne(id));
     }
 
     @PutMapping("/users")

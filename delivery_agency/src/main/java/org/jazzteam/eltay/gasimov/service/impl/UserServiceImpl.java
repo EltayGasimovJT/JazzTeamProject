@@ -5,18 +5,18 @@ import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
-import org.jazzteam.eltay.gasimov.entity.*;
+import org.jazzteam.eltay.gasimov.entity.AbstractBuilding;
+import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
+import org.jazzteam.eltay.gasimov.entity.User;
+import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.UserRepository;
-import org.jazzteam.eltay.gasimov.service.UserRolesService;
 import org.jazzteam.eltay.gasimov.service.UserService;
 import org.jazzteam.eltay.gasimov.validator.UserValidator;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,26 +26,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ModelMapper modelMapper;
-    @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private UserRolesService userRolesService;
 
     @Override
     public User save(UserDto userDtoToSave){
-        User userToSave = User.builder().id(userDtoToSave.getId())
-                .name(userDtoToSave.getName())
-                .surname(userDtoToSave.getSurname())
-                .password(passwordEncoder.encode(userDtoToSave.getPassword()))
-                .roles(Collections.singletonList(userRolesService.findOne(3)))
-                .build();
-        if (userDtoToSave.getWorkingPlace().equals(WorkingPlaceType.PROCESSING_POINT)) {
-            userToSave.setWorkingPlace(modelMapper.map(userDtoToSave.getWorkingPlace(), OrderProcessingPoint.class));
-        } else if (userDtoToSave.getWorkingPlace().equals(WorkingPlaceType.WAREHOUSE)) {
-            userToSave.setWorkingPlace(modelMapper.map(userDtoToSave.getWorkingPlace(), Warehouse.class));
-        }
-
+        User userToSave = CustomModelMapper.mapDtoToUser(userDtoToSave);
         UserValidator.validateOnSave(userToSave);
 
         return userRepository.save(userToSave);
@@ -68,8 +53,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findOne(long idForSearch) throws IllegalArgumentException {
-        Optional<User> foundClientFromRepository = userRepository.findById(idForSearch);
-        User foundUser = foundClientFromRepository.orElseGet(User::new);
+        Optional<User> foundWorkerFromRepository = userRepository.findById(idForSearch);
+        User foundUser = foundWorkerFromRepository.orElseGet(User::new);
         UserValidator.validateUser(foundUser);
         return foundUser;
     }
@@ -120,6 +105,6 @@ public class UserServiceImpl implements UserService {
                 return userEntity;
             }
         }
-        return userEntity;
+        return null;
     }
 }
