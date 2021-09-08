@@ -39,6 +39,7 @@ function getUsersOrders() {
                 r[++j] = addBackToOrderListButton();
                 r[++j] = '</td></tr>';
             }
+
             $('#orders').append(r.join(''));
             const clientOrders = document.querySelector('.text');
 

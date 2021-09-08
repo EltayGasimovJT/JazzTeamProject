@@ -46,7 +46,7 @@ public class CustomModelMapper {
         Set<OrderHistory> historiesToConvert = new HashSet<>();
         if (orderDtoToConvert.getHistory() != null) {
             historiesToConvert = orderDtoToConvert.getHistory().stream()
-                    .map(history -> modelMapper.map(history, OrderHistory.class))
+                    .map(CustomModelMapper::mapDtoToHistory)
                     .collect(Collectors.toSet());
         }
 
@@ -60,6 +60,7 @@ public class CustomModelMapper {
                 .history(historiesToConvert)
                 .departurePoint(modelMapper.map(orderDtoToConvert.getDeparturePoint(), OrderProcessingPoint.class))
                 .price(orderDtoToConvert.getPrice())
+
                 .parcelParameters(modelMapper.map(orderDtoToConvert.getParcelParameters(), ParcelParameters.class))
                 .build();
         if (orderDtoToConvert.getCurrentLocation() instanceof OrderProcessingPointDto) {
@@ -78,18 +79,13 @@ public class CustomModelMapper {
                 .name(userToConvert.getName())
                 .surname(userToConvert.getSurname())
                 .password(userToConvert.getPassword())
+                .workingPlace(modelMapper.map(userToConvert.getWorkingPlace(), AbstractBuildingDto.class))
                 .build();
         if (roleToMap.getRole().equals(Role.ADMIN.toString())) {
             convertedToDto.setRole(Role.ADMIN);
         }
         if (roleToMap.getRole().equals(Role.PROCESSING_POINT_WORKER.toString())) {
             convertedToDto.setRole(Role.PROCESSING_POINT_WORKER);
-        }
-
-        if (userToConvert.getWorkingPlace() instanceof OrderProcessingPoint) {
-            convertedToDto.setWorkingPlace(WorkingPlaceType.PROCESSING_POINT);
-        } else if (userToConvert.getWorkingPlace() instanceof Warehouse) {
-            convertedToDto.setWorkingPlace(WorkingPlaceType.WAREHOUSE);
         }
         return convertedToDto;
     }
@@ -100,6 +96,7 @@ public class CustomModelMapper {
                 .name(userDtoToConvert.getName())
                 .surname(userDtoToConvert.getSurname())
                 .password(userDtoToConvert.getPassword())
+                .workingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
                 .build();
 
         if (userDtoToConvert.getRole().toString().equals("ADMIN")) {
@@ -115,11 +112,6 @@ public class CustomModelMapper {
                     .role(userDtoToConvert.getRole().toString())
                     .build());
             convertedToUser.setRoles(userRoles);
-        }
-        if (userDtoToConvert.getWorkingPlace().equals(WorkingPlaceType.PROCESSING_POINT)) {
-            convertedToUser.setWorkingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class));
-        } else if (userDtoToConvert.getWorkingPlace().equals(WorkingPlaceType.WAREHOUSE)) {
-            convertedToUser.setWorkingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), Warehouse.class));
         }
         return convertedToUser;
     }
@@ -184,4 +176,29 @@ public class CustomModelMapper {
         );
         return convertedToDto;
     }
+
+    public static OrderHistoryDto mapHistoryToDto(OrderHistory orderHistory) {
+
+        return OrderHistoryDto.builder()
+                .id(orderHistory.getId())
+                .changedAt(orderHistory.getChangedAt())
+                .sentAt(orderHistory.getSentAt())
+                .comment(orderHistory.getComment())
+                .changedTypeEnum(OrderStateChangeType.valueOf(orderHistory.getChangedTypeEnum()))
+                .user(mapUserToDto(orderHistory.getUser()))
+                .build();
+    }
+
+    public static OrderHistory mapDtoToHistory(OrderHistoryDto orderHistoryDto) {
+
+        return OrderHistory.builder()
+                .id(orderHistoryDto.getId())
+                .changedAt(orderHistoryDto.getChangedAt())
+                .sentAt(orderHistoryDto.getSentAt())
+                .comment(orderHistoryDto.getComment())
+                .changedTypeEnum(orderHistoryDto.getChangedTypeEnum().toString())
+                .user(mapDtoToUser(orderHistoryDto.getUser()))
+                .build();
+    }
+
 }

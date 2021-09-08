@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 
 import static io.jsonwebtoken.lang.Strings.hasText;
@@ -26,6 +25,7 @@ public class JwtFilter extends GenericFilterBean {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {

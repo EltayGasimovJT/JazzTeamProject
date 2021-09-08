@@ -22,9 +22,9 @@ public class Client {
     private String name;
     @Column(name = "surname")
     private String surname;
-    @Column(name = "passport_id")
+    @Column(name = "passport_id", unique = true)
     private String passportId;
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
     @OneToMany(mappedBy = "sender", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonManagedReference

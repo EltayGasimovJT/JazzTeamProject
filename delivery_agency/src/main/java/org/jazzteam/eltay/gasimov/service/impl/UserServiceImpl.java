@@ -100,11 +100,18 @@ public class UserServiceImpl implements UserService {
     public User findByLoginAndPassword(String login, String password) {
         User userEntity = findByName(login);
         if (userEntity != null) {
-            log.error("u");
             if (passwordEncoder.matches(password, userEntity.getPassword())) {
                 return userEntity;
             }
         }
         return null;
+    }
+
+    @Override
+    public User findByPassword(String password) {
+        Optional<User> foundClientFromRepository = userRepository.findByPassword(password);
+        User foundUser = foundClientFromRepository.orElseGet(User::new);
+        UserValidator.validateUser(foundUser);
+        return foundUser;
     }
 }

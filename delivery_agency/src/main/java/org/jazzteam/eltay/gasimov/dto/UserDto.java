@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.jazzteam.eltay.gasimov.entity.Role;
-import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -29,7 +28,7 @@ public class UserDto {
     private String password;
     @NotEmpty(message = "User must have working place")
     @JsonProperty("workingPlace")
-    private WorkingPlaceType workingPlace;
+    private AbstractBuildingDto workingPlace;
     @NotEmpty(message = "User must have at least one role")
     private Role role;
 }

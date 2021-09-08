@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service(value = "orderService")
@@ -237,17 +238,24 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
-        long idForSearch = 3L;
+        OrderHistoryDto orderHistoryForSave = OrderHistoryDto.builder()
+                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
+                .user(requestOrder.getUserDto())
+                .changedAt(LocalDateTime.now())
+                .comment("Заказ был подготовлен к отправке из пункта " + requestOrder.getUserDto().getWorkingPlace().getLocation())
+                .build();
         OrderDto orderDtoToSave = OrderDto.builder()
-                .currentLocation(modelMapper.map(orderProcessingPointService.findOne(idForSearch), OrderProcessingPointDto.class))
                 .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
                 .parcelParameters(requestOrder.getParcelParameters())
                 .price(requestOrder.getPrice())
                 .recipient(requestOrder.getRecipient())
-                .departurePoint(modelMapper.map(orderProcessingPointService.findOne(idForSearch), OrderProcessingPointDto.class))
                 .sender(requestOrder.getSender())
+                .currentLocation(modelMapper.map(orderProcessingPointService.findByLocation(requestOrder.getUserDto().getWorkingPlace().getLocation()), OrderProcessingPointDto.class))
+                .departurePoint(modelMapper.map(orderProcessingPointService.findByLocation(requestOrder.getUserDto().getWorkingPlace().getLocation()), OrderProcessingPointDto.class))
                 .state(modelMapper.map(orderState, OrderStateDto.class))
+                .history(Stream.of(orderHistoryForSave).collect(Collectors.toCollection(HashSet::new)))
                 .build();
+
 
         return getOrderFoSave(orderDtoToSave);
     }
@@ -259,14 +267,8 @@ public class OrderServiceImpl implements OrderService {
         OrderState orderState = orderStateService.findByState(OrderStates.READY_TO_SEND.getState());
         orderDtoToSave.setPrice(price);
         orderDtoToSave.setState(modelMapper.map(orderStateService.findOne(1), OrderStateDto.class));
-        OrderHistory orderHistoryForSave = OrderHistory.builder()
-                .changedTypeEnum(OrderStateChangeType.READY_TO_SEND.toString())
-                .user(userService.findOne(1L))
-                .changedAt(LocalDateTime.now())
-                .comment("Заказ был подготовлен к отправке из пункта " + orderDtoToSave.getCurrentLocation().getLocation())
-                .build();
 
-        OrderHistory savedHistory = orderHistoryService.save(modelMapper.map(orderHistoryForSave, OrderHistoryDto.class));
+        OrderHistory savedHistory = orderHistoryService.save(modelMapper.map(orderDtoToSave.getHistory().iterator().next(), OrderHistoryDto.class));
         savedHistory.setSentAt(LocalDateTime.now());
         Set<OrderHistory> orderHistories = new HashSet<>();
         orderHistories.add(savedHistory);

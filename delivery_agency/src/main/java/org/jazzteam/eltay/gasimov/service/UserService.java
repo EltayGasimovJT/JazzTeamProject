@@ -22,4 +22,6 @@ public interface UserService {
     User findByName(String name);
 
     User findByLoginAndPassword(String login, String password);
+
+    User findByPassword(String password);
 }

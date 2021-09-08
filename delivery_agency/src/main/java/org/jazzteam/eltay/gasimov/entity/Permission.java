@@ -4,7 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum Permission {
-    ORDER_CREATE("orders:create");
+    ORDER_CREATE("orders:create"),
+    ADD_USER("users:add");
 
     private final String permission;
 
