@@ -26,7 +26,6 @@ public class JwtFilter extends GenericFilterBean {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         String token = getTokenFromRequest((HttpServletRequest) request);

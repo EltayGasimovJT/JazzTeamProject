@@ -26,8 +26,7 @@ public class RegisterController {
         UserDto userDtoToSave = new UserDto();
         userDtoToSave.setPassword(registrationRequest.getPassword());
         userDtoToSave.setName(registrationRequest.getLogin());
-        userDtoToSave.setWorkingPlace(registrationRequest.getWorkingPlace());
-        userService.save(userDtoToSave);
+        userService.saveForRegistration(registrationRequest);
         return "OK";
     }
 

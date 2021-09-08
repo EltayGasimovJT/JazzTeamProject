@@ -99,7 +99,7 @@ public class CustomModelMapper {
                 .workingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
                 .build();
 
-        if (userDtoToConvert.getRole().toString().equals("ADMIN")) {
+       /* if (userDtoToConvert.getRole().toString().equals("ADMIN")) {
             Set<UserRoles> userRoles = new HashSet<>();
             userRoles.add(UserRoles.builder()
                     .role(userDtoToConvert.getRole().toString())
@@ -112,7 +112,7 @@ public class CustomModelMapper {
                     .role(userDtoToConvert.getRole().toString())
                     .build());
             convertedToUser.setRoles(userRoles);
-        }
+        }*/
         return convertedToUser;
     }
 

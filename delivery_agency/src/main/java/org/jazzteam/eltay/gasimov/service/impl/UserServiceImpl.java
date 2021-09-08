@@ -1,6 +1,7 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
@@ -11,6 +12,7 @@ import org.jazzteam.eltay.gasimov.entity.User;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.UserRepository;
+import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
 import org.jazzteam.eltay.gasimov.service.UserService;
 import org.jazzteam.eltay.gasimov.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private OrderProcessingPointService processingPointService;
 
     @Override
     public User save(UserDto userDtoToSave){
@@ -100,7 +104,7 @@ public class UserServiceImpl implements UserService {
     public User findByLoginAndPassword(String login, String password) {
         User userEntity = findByName(login);
         if (userEntity != null) {
-            if (passwordEncoder.matches(password, userEntity.getPassword())) {
+            if (passwordEncoder.matches(userEntity.getPassword(), password)) {
                 return userEntity;
             }
         }
@@ -113,5 +117,15 @@ public class UserServiceImpl implements UserService {
         User foundUser = foundClientFromRepository.orElseGet(User::new);
         UserValidator.validateUser(foundUser);
         return foundUser;
+    }
+
+    @Override
+    public User saveForRegistration(RegistrationRequest registrationRequest) {
+        User userToSave = User.builder()
+                .name(registrationRequest.getLogin())
+                .surname(registrationRequest.getLogin())
+                .workingPlace(processingPointService.findOne(registrationRequest.getWorkingPlaceId()))
+                .build();
+        return userRepository.save(userToSave);
     }
 }

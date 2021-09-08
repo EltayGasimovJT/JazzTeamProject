@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.service;
 
+import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.entity.User;
@@ -24,4 +25,6 @@ public interface UserService {
     User findByLoginAndPassword(String login, String password);
 
     User findByPassword(String password);
+
+    User saveForRegistration(RegistrationRequest registrationRequest);
 }
