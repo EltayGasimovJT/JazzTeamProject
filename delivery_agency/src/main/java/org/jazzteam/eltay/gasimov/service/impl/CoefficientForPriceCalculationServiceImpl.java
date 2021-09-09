@@ -90,7 +90,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
             throw new IllegalArgumentException("Parcel size cannot be more than " + foundCoefficient.getParcelSizeLimit() + " cubic meters for single delivery");
         }
         if (parcelParametersDto.getWeight() > INITIAL_WEIGHT) {
-            throw new IllegalArgumentException("Parcel weight cannot be more than " + INITIAL_WEIGHT + "grams for single delivery");
+            throw new IllegalArgumentException("Parcel weight cannot be more than " + INITIAL_WEIGHT + " grams for single delivery");
         }
         return BigDecimal.valueOf(PRICE_FOR_PACKAGE + PRICE_FOR_DELIVERY + ((parcelParametersDto.getWeight() / COEFFICIENT_FOR_KILOGRAMS_CONVERT) * WEIGHT_COEFFICIENT) + (volume.doubleValue() * VOLUME_COEFFICIENT) + foundCoefficient.getCountryCoefficient() * INITIAL_COUNTRY_COEFFICIENT);
     }

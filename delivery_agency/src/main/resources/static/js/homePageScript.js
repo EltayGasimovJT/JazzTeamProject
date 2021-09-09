@@ -2,6 +2,7 @@ jQuery('document').ready(function () {
     if (localStorage.getItem('clientsPhone') !== null) {
         checkSession();
     }
+
     const backgroundModal = document.querySelector('.backGround-modal');
     const clientBackgroundModal = document.querySelector('.client-backGround-modal');
     const codeBackgroundModal = document.querySelector('.code-backGround-modal');
@@ -12,7 +13,6 @@ jQuery('document').ready(function () {
     const openModel = document.querySelector('.open-modal');
     const closeNumberForm = document.querySelector('.input-numberForm');
     const closeCodeFrom = document.querySelector('.input-codeForm');
-    const processingPointBtn = document.querySelector('.processing-point-worker');
 
     backgroundModal.addEventListener('click', () => {
         backgroundModal.style.visibility = 'hidden';
@@ -38,11 +38,14 @@ jQuery('document').ready(function () {
         event.stopPropagation();
     })
 
-    codeBackgroundModal.addEventListener('click', (event) => {
+    codeBackgroundModal.addEventListener('click', () => {
         codeBackgroundModal.style.visibility = 'hidden';
     })
 
     asClientModal.addEventListener('click', () => {
+        if (localStorage.getItem('workersToken') !== null) {
+            localStorage.removeItem('workersToken');
+        }
         if (localStorage.getItem('clientPhone') !== null) {
             window.location.href = "http://localhost:8081/clientsOrders.html";
         } else {
@@ -63,11 +66,11 @@ jQuery('document').ready(function () {
             localStorage.removeItem('clientPhone');
             localStorage.removeItem('sessionTime');
         }
-        backgroundModal.style.visibility = 'visible';
-    })
-
-    processingPointBtn.addEventListener('click', () => {
-        window.location.href = "http://localhost:8081/processingPointWorkerActionPage.html";
+        if (localStorage.getItem('workersToken') !== null) {
+            window.location.href = "http://localhost:8081/processingPointWorkerActionPage.html";
+        } else {
+            backgroundModal.style.visibility = 'visible';
+        }
     })
 
     let clientPhoneNumber;
@@ -99,6 +102,30 @@ jQuery('document').ready(function () {
             window.location.href = `http://localhost:8081/clientsOrders.html`;
         }).fail(function () {
             alert("Неверный код, повторите попытку");
+        });
+    })
+
+    $('#workerAuthInput').submit(function (event) {
+        event.preventDefault();
+        let $form = $(this),
+            login = $form.find("input[name='login']").val(),
+            password = $form.find("input[name='password']").val(),
+            url = $form.attr("action");
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify({
+                login: `${login}`,
+                password: `${password}`
+            })
+        }).done(function (data) {
+            console.log(data)
+            localStorage.setItem('workersToken', data.token)
+            window.location.href = "http://localhost:8081/processingPointWorkerActionPage.html";
+        }).fail(function (exception) {
+            alert(exception.responseJSON.message);
         });
     })
 

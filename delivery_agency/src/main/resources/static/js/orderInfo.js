@@ -41,9 +41,9 @@ function getOrderHistories(idFromUrl) {
                 r[++j] = '</td><td>';
                 r[++j] = result[key].comment;
                 r[++j] = '</td><td>';
-                r[++j] = result[key].user.name;
+                r[++j] = result[key].worker.name;
                 r[++j] = '</td><td>';
-                r[++j] = result[key].user.surname;
+                r[++j] = result[key].worker.surname;
                 r[++j] = '</td></tr>';
             }
             $('#orderHistory').append(r.join(''));

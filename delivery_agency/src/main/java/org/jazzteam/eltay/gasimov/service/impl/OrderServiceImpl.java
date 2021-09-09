@@ -240,7 +240,7 @@ public class OrderServiceImpl implements OrderService {
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         OrderHistoryDto orderHistoryForSave = OrderHistoryDto.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
-                .user(requestOrder.getWorkerDto())
+                .worker(requestOrder.getWorkerDto())
                 .changedAt(LocalDateTime.now())
                 .comment("Заказ был подготовлен к отправке из пункта " + requestOrder.getWorkerDto().getWorkingPlace().getLocation())
                 .build();
@@ -278,7 +278,7 @@ public class OrderServiceImpl implements OrderService {
         Client recipientToSave = getClientToSave(orderDtoToSave.getRecipient());
 
         OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
-        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findOne(4L);
+        OrderProcessingPoint departurePointToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDeparturePoint().getLocation());
         ParcelParameters savedParameters = parcelParametersService.save(orderDtoToSave.getParcelParameters());
 
         Order orderToSave = Order.builder()

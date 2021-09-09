@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF8">
-  <title>GasDel general</title>
-  <link href="css/style.css" rel="stylesheet" type="text/css">
-  <link rel="shortcut icon" href="icons/waterFall.png" th:href="@{static/icons/waterFall.png}"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <meta charset="UTF8">
+    <title>GasDel general</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="icons/waterFall.png" th:href="@{static/icons/waterFall.png}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="defaultBar">
-  <div class="defaultLogo">GasDel</div>
+    <div class="defaultLogo">GasDel</div>
 
-  <div class="topNav">
-    <div class="topNavA">
-      <a class="asClient redirect" style="color: white; text-decoration: none" role="button">Войти как клиент</a>
+    <div class="topNav">
+        <div class="topNavA">
+            <a class="asClient redirect" style="color: white; text-decoration: none" role="button">Войти как клиент</a>
+        </div>
+        <div class="topNavA">
+            <a class="asUserId redirect" role="button" style="color: white; text-decoration: none">Войти как
+                сторудник</a>
+        </div>
     </div>
-    <div class="topNavA">
-      <a class="asUserId redirect" role="button" style="color: white; text-decoration: none">Войти как сотрудник</a>
-    </div>
-  </div>
 </div>
+
 <div class="modal-wrap">
     <div class="track-number-form" style="margin-top: 200px">
         <form id="trackOrderForm" action="http://localhost:8081/orders/findByTrackNumber">
             <div class="form-group trackForm">
                 <label class="general-name" for="orderNumberId">Введите идентификационный номер заказа </label>
-                <input type="text" class="form-control" id="orderNumberId" placeholder="Enter an identification number"
+                <input type="text" class="form-control" id="orderNumberId"
+                       placeholder="Введите идентификационный номер заказа"
                        name="orderNumber">
             </div>
             <button type="submit" class="btn btn-dark">Подтвердить</button>
@@ -38,10 +41,16 @@
 
     <div class="backGround-modal">
         <div class="modal-redirect">
-            <button style="width: 50%; align-self: center" class="btn btn-info buttonText open-modal">Войти как администратор</button>
-            <button style="width: 50%; align-self: center" class="btn btn-info buttonText open-modal">Войти как работник промежуточного склада</button>
-            <button id="processingPointWorker" style="width: 50%; align-self: center"
-                    class="btn btn-info buttonText open-modal processing-point-worker">Войти как работник пункта выдачи/приема</button>
+            <form id="workerAuthInput" action="http://localhost:8081/auth">
+                <div class="form-group trackForm">
+                    <label class="general-name" for="orderNumberId">Введите ваши данные пользователя</label>
+                    <input type="text" class="form-control" id="login" placeholder="Введите логин"
+                           name="login">
+                    <input type="password" class="form-control" id="password" placeholder="Введите пароль"
+                           name="password">
+                </div>
+                <button id="processingPointWorker" type="submit" class="btn btn-dark open-modal">Подтвердить</button>
+            </form>
         </div>
     </div>
 
@@ -70,6 +79,7 @@
             </form>
         </div>
     </div>
+
 </div>
 
 <script type="text/javascript" src="js/homePageScript.js"></script>

@@ -101,7 +101,7 @@ function insetValuesIntoTicket(data) {
     $('#trackNumber').append(data.orderTrackNumber);
     $('#senderName').append(data.sender.name + " " + data.sender.surname);
     $('#recipientName').append(data.recipient.name + " " + data.recipient.surname);
-    $('#departurePoint').append(data.destinationPlace.location);
+    $('#departurePoint').append(data.departurePoint.location);
     $('#destinationPoint').append(data.destinationPlace.location);
     $('#sendingTime').append(getTimeFormat(data.sendingTime));
     $('#price').append(data.price + " BYN");

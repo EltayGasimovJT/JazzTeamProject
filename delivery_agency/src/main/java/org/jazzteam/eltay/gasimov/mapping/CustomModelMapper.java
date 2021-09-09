@@ -2,7 +2,6 @@ package org.jazzteam.eltay.gasimov.mapping;
 
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.*;
-import org.jazzteam.eltay.gasimov.service.impl.WorkerRolesServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -100,8 +99,10 @@ public class CustomModelMapper {
                 .password(workerDtoToConvert.getPassword())
                 .workingPlace(modelMapper.map(workerDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
                 .roles(
-                        Stream.of(new WorkerRolesServiceImpl().findByRole(workerDtoToConvert.getRole().name()))
-                                .collect(Collectors.toSet())
+                        Stream.of(//new WorkerRolesServiceImpl().findByRole(workerDtoToConvert.getRole().name()))
+                        WorkerRoles.builder()
+                                .role("ROLE_ADMIN")
+                                .build()).collect(Collectors.toSet())
                 )
                 .build();
     }
@@ -175,7 +176,7 @@ public class CustomModelMapper {
                 .sentAt(orderHistory.getSentAt())
                 .comment(orderHistory.getComment())
                 .changedTypeEnum(OrderStateChangeType.valueOf(orderHistory.getChangedTypeEnum()))
-                .user(mapUserToDto(orderHistory.getWorker()))
+                .worker(mapUserToDto(orderHistory.getWorker()))
                 .build();
     }
 
@@ -187,7 +188,7 @@ public class CustomModelMapper {
                 .sentAt(orderHistoryDto.getSentAt())
                 .comment(orderHistoryDto.getComment())
                 .changedTypeEnum(orderHistoryDto.getChangedTypeEnum().toString())
-                .worker(mapDtoToWorker(orderHistoryDto.getUser()))
+                .worker(mapDtoToWorker(orderHistoryDto.getWorker()))
                 .build();
     }
 

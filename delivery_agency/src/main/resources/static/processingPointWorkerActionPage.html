@@ -8,11 +8,16 @@
     <title>GasDel general</title>
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" href="icons/waterFall.png"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
 <div class="defaultBar">
     <a href="homePage.html" class="defaultLogo">GasDel</a>
+    <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
 </div>
+
+
 <div class="modal-wrap">
     <div class="processingPointOrderActionBar">
         <div class="actionTabText" style="margin-left: 80px">Операции с заказом</div>
@@ -20,8 +25,11 @@
             <button id="createOrderBtnId" class="me-btn buttonText create-order-btn">Создать новый заказ</button>
         </div>
     </div>
-</div>
 
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/processingPointWorkerAction.js"></script>
 </body>
 </html>

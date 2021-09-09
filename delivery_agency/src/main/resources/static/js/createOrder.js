@@ -5,6 +5,12 @@ jQuery("#backToTheActionPageBtnId").on('click', function () {
     location.href = "homePage.html";
 })
 
+jQuery('document').ready(function () {
+    if (localStorage.getItem('workersToken') !== null) {
+        insertLogoutButton();
+    }
+})
+
 const INITIAL_SIZE = 1400;
 const INITIAL_WEIGHT = 20;
 
@@ -145,6 +151,12 @@ $('#createOrderForm').submit(function (e) {
             type: 'POST',
             url: `http://localhost:8081/createOrder`,
             contentType: 'application/json; charset=utf-8',
+            beforeSend: function (xhr) {
+            let jwtToken = localStorage.getItem('workersToken');
+            if (jwtToken !== null) {
+                xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
+            }
+        },
             data: JSON.stringify(dataForSend)
         }).done(function (data) {
             window.location.href = `http://localhost:8081/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
@@ -155,6 +167,18 @@ $('#createOrderForm').submit(function (e) {
         e.preventDefault();
     }
 });
+
+function insertLogoutButton() {
+    let table = document.getElementById("logoutButtonToInsert");
+    table.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
+    const hiddenButton = document.querySelector('.logout-button-margin');
+    hiddenButton.addEventListener(
+        'click', () => {
+            localStorage.removeItem('workersToken');
+            window.location.href = `http://localhost:8081/homePage.html`;
+        }
+    )
+}
 
 export class ClientDto {
     constructor(props = {}) {
