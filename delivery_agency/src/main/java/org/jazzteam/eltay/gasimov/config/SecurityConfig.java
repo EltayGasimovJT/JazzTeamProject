@@ -28,6 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String ADMIN_ROLE = "ADMIN";
     private static final String PROCESSING_POINT_WORKER_ROLE = "PROCESSING_POINT_WORKER";
     private static final String WAREHOUSE_WORKER_ROLE = "WAREHOUSE_WORKER";
+    private static final String START_PAGE_URL = "/";
+    private static final String CREATE_ORDER_URL = "/createOrder";
+    private static final String ORDERS_URL = "/orders/**";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,12 +39,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers(HttpMethod.POST, "/createOrder").hasAnyRole(ADMIN_ROLE, PROCESSING_POINT_WORKER_ROLE)
-                .antMatchers(HttpMethod.POST, "/orders/**").hasRole(ADMIN_ROLE)
-                .antMatchers(HttpMethod.DELETE, "/orders").hasRole(ADMIN_ROLE)
-                .antMatchers(HttpMethod.PUT, "/orders").hasRole(ADMIN_ROLE)
-                .antMatchers(HttpMethod.GET, "/orders/**").permitAll()
+                .antMatchers(START_PAGE_URL).permitAll()
+                .antMatchers(HttpMethod.POST, CREATE_ORDER_URL).hasAnyRole(ADMIN_ROLE, PROCESSING_POINT_WORKER_ROLE)
+                .antMatchers(HttpMethod.POST, ORDERS_URL).hasRole(ADMIN_ROLE)
+                .antMatchers(HttpMethod.DELETE, ORDERS_URL).hasRole(ADMIN_ROLE)
+                .antMatchers(HttpMethod.PUT, ORDERS_URL).hasRole(ADMIN_ROLE)
+                .antMatchers(HttpMethod.GET, ORDERS_URL).permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }

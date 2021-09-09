@@ -81,11 +81,11 @@ public class CustomModelMapper {
                 .password(userToConvert.getPassword())
                 .workingPlace(modelMapper.map(userToConvert.getWorkingPlace(), AbstractBuildingDto.class))
                 .build();
-        if (roleToMap.getRole().equals(Role.ADMIN.toString())) {
-            convertedToDto.setRole(Role.ADMIN);
+        if (roleToMap.getRole().equals(Role.ROLE_ADMIN.toString())) {
+            convertedToDto.setRole(Role.ROLE_ADMIN);
         }
-        if (roleToMap.getRole().equals(Role.PROCESSING_POINT_WORKER.toString())) {
-            convertedToDto.setRole(Role.PROCESSING_POINT_WORKER);
+        if (roleToMap.getRole().equals(Role.ROLE_PROCESSING_POINT_WORKER.toString())) {
+            convertedToDto.setRole(Role.ROLE_PROCESSING_POINT_WORKER);
         }
         return convertedToDto;
     }
@@ -99,14 +99,14 @@ public class CustomModelMapper {
                 .workingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
                 .build();
 
-       /* if (userDtoToConvert.getRole().toString().equals("ADMIN")) {
+       /* if (userDtoToConvert.getRole().toString().equals("ROLE_ADMIN")) {
             Set<UserRoles> userRoles = new HashSet<>();
             userRoles.add(UserRoles.builder()
                     .role(userDtoToConvert.getRole().toString())
                     .build());
             convertedToUser.setRoles(userRoles);
         }
-        if (userDtoToConvert.getRole().toString().equals("PROCESSING_POINT_WORKER")) {
+        if (userDtoToConvert.getRole().toString().equals("ROLE_PROCESSING_POINT_WORKER")) {
             Set<UserRoles> userRoles = new HashSet<>();
             userRoles.add(UserRoles.builder()
                     .role(userDtoToConvert.getRole().toString())

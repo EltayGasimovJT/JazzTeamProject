@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 
 @Getter
 public enum Role {
-    ADMIN(Stream.of(Permission.ORDER_CREATE, Permission.ADD_USER).collect(Collectors.toCollection(HashSet::new)))
-    ,PROCESSING_POINT_WORKER(Stream.of(Permission.ORDER_CREATE).collect(Collectors.toCollection(HashSet::new)));
+    ROLE_ADMIN(Stream.of(Permission.ORDER_CREATE, Permission.ADD_USER).collect(Collectors.toCollection(HashSet::new)))
+    , ROLE_PROCESSING_POINT_WORKER(Stream.of(Permission.ORDER_CREATE).collect(Collectors.toCollection(HashSet::new)));
 
     private final Set<Permission> permissions;
 
