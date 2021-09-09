@@ -43,4 +43,9 @@ public class UserRolesServiceImpl implements UserRolesService {
     public UserRoles update(UserRolesDto userRolesDtoToUpdate) {
         return userRolesRepository.save(modelMapper.map(userRolesDtoToUpdate, UserRoles.class));
     }
+
+    @Override
+    public UserRoles findByRole(String role) {
+        return userRolesRepository.findByRole(role);
+    }
 }

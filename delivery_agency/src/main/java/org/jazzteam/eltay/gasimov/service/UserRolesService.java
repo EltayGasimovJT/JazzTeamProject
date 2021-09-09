@@ -15,4 +15,6 @@ public interface UserRolesService {
     UserRoles findOne(long idForSearch);
 
     UserRoles update(UserRolesDto userRolesDtoToUpdate);
+
+    UserRoles findByRole(String role);
 }

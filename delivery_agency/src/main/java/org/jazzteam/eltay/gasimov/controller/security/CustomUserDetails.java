@@ -3,10 +3,12 @@ package org.jazzteam.eltay.gasimov.controller.security;
 import lombok.NoArgsConstructor;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Collections;
 
 @NoArgsConstructor
 public class CustomUserDetails implements UserDetails {
@@ -19,7 +21,7 @@ public class CustomUserDetails implements UserDetails {
         CustomUserDetails c = new CustomUserDetails();
         c.login = userEntity.getName();
         c.password = userEntity.getPassword();
-        c.grantedAuthorities = userEntity.getRole().getAuthorities();
+        c.grantedAuthorities = Collections.singletonList(new SimpleGrantedAuthority(userEntity.getRole().name()));
         c.isActive = true;
         return c;
     }

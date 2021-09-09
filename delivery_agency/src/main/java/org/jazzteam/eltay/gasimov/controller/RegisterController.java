@@ -6,6 +6,7 @@ import org.jazzteam.eltay.gasimov.controller.security.model.AuthResponse;
 import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
 import org.jazzteam.eltay.gasimov.dto.UserDto;
 import org.jazzteam.eltay.gasimov.entity.User;
+import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,12 +23,8 @@ public class RegisterController {
     private JwtProvider jwtProvider;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
-        UserDto userDtoToSave = new UserDto();
-        userDtoToSave.setPassword(registrationRequest.getPassword());
-        userDtoToSave.setName(registrationRequest.getLogin());
-        userService.saveForRegistration(registrationRequest);
-        return "OK";
+    public UserDto registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
+        return CustomModelMapper.mapUserToDto(userService.saveForRegistration(registrationRequest));
     }
 
     @PostMapping("/auth")

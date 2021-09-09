@@ -11,5 +11,9 @@ public class RegistrationRequest {
     @NotEmpty
     private String password;
     @NotEmpty
+    private String surname;
+    @NotEmpty
+    private String role;
+    @NotEmpty
     private Long workingPlaceId;
 }

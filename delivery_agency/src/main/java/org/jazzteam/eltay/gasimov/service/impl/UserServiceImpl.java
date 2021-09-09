@@ -13,6 +13,7 @@ import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.UserRepository;
 import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
+import org.jazzteam.eltay.gasimov.service.UserRolesService;
 import org.jazzteam.eltay.gasimov.service.UserService;
 import org.jazzteam.eltay.gasimov.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service(value = "userService")
@@ -31,9 +34,11 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private OrderProcessingPointService processingPointService;
+    @Autowired
+    private UserRolesService userRolesService;
 
     @Override
-    public User save(UserDto userDtoToSave){
+    public User save(UserDto userDtoToSave) {
         User userToSave = CustomModelMapper.mapDtoToUser(userDtoToSave);
         UserValidator.validateOnSave(userToSave);
 
@@ -64,7 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User update(UserDto userDtoToUpdate)  {
+    public User update(UserDto userDtoToUpdate) {
         User userToUpdate = CustomModelMapper.mapDtoToUser(userDtoToUpdate);
         UserValidator.validateUser(userToUpdate);
         return userRepository.save(userToUpdate);
@@ -104,7 +109,7 @@ public class UserServiceImpl implements UserService {
     public User findByLoginAndPassword(String login, String password) {
         User userEntity = findByName(login);
         if (userEntity != null) {
-            if (passwordEncoder.matches(userEntity.getPassword(), password)) {
+            if (passwordEncoder.matches(password, userEntity.getPassword())) {
                 return userEntity;
             }
         }
@@ -123,7 +128,12 @@ public class UserServiceImpl implements UserService {
     public User saveForRegistration(RegistrationRequest registrationRequest) {
         User userToSave = User.builder()
                 .name(registrationRequest.getLogin())
-                .surname(registrationRequest.getLogin())
+                .surname(registrationRequest.getSurname())
+                .password(passwordEncoder.encode(registrationRequest.getPassword()))
+                .roles(
+                        Stream.of(userRolesService.findByRole(registrationRequest.getRole()))
+                        .collect(Collectors.toSet())
+                )
                 .workingPlace(processingPointService.findOne(registrationRequest.getWorkingPlaceId()))
                 .build();
         return userRepository.save(userToSave);

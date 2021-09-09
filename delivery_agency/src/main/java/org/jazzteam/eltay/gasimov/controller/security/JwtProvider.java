@@ -15,8 +15,11 @@ public class JwtProvider {
     @Value("$(jwt.secret)")
     private String jwtSecret;
 
+    private static final int EXPANSION = 15;
+
+
     public String generateToken(String login) {
-        Date date = Date.from(LocalDate.now().plusDays(15).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Date date = Date.from(LocalDate.now().plusDays(EXPANSION).atStartOfDay(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
                 .setSubject(login)
                 .setExpiration(date)

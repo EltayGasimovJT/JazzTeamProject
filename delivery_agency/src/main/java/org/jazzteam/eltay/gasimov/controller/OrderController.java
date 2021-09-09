@@ -46,7 +46,7 @@ public class OrderController {
     public @ResponseBody
     OrderResponseDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         CustomUserDetails principal = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        User foundUser = workerService.findByPassword(principal.getPassword());
+        User foundUser = workerService.findByName(principal.getUsername());
         requestOrder.setUserDto(CustomModelMapper.mapUserToDto(foundUser));
         OrderDto createdOrder = CustomModelMapper.mapOrderToDto(orderService.createOrder(requestOrder));
         return OrderResponseDto.builder()
