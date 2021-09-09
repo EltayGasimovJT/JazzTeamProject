@@ -1,7 +1,7 @@
 package org.jazzteam.eltay.gasimov.controller.security;
 
 import lombok.NoArgsConstructor;
-import org.jazzteam.eltay.gasimov.dto.UserDto;
+import org.jazzteam.eltay.gasimov.dto.WorkerDto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -17,7 +17,7 @@ public class CustomUserDetails implements UserDetails {
     private Collection<? extends GrantedAuthority> grantedAuthorities;
     private boolean isActive;
 
-    public static CustomUserDetails fromUserEntityToCustomUserDetails(UserDto userEntity) {
+    public static CustomUserDetails fromUserEntityToCustomUserDetails(WorkerDto userEntity) {
         CustomUserDetails c = new CustomUserDetails();
         c.login = userEntity.getName();
         c.password = userEntity.getPassword();
@@ -68,11 +68,11 @@ public class CustomUserDetails implements UserDetails {
         return this.isActive;
     }
 
-    public static UserDetails getUserDetailsFromUser(UserDto userDto){
+    public static UserDetails getUserDetailsFromUser(WorkerDto workerDto){
         return new User(
-                userDto.getName(),
-                userDto.getPassword(),
-                userDto.getRole().getAuthorities()
+                workerDto.getName(),
+                workerDto.getPassword(),
+                workerDto.getRole().getAuthorities()
         );
     }
 }

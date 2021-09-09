@@ -20,7 +20,7 @@ public class OrderHistory {
     private Long id;
     @ManyToOne
     @JoinColumn
-    private User user;
+    private Worker worker;
     @Column
     private String comment;
     @Column

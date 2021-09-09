@@ -1,14 +1,14 @@
 package org.jazzteam.eltay.gasimov.repository;
 
-import org.jazzteam.eltay.gasimov.entity.User;
+import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByName(String name);
+public interface UserRepository extends JpaRepository<Worker, Long> {
+    Optional<Worker> findByName(String name);
 
-    Optional<User> findByPassword(String password);
+    Optional<Worker> findByPassword(String password);
 }

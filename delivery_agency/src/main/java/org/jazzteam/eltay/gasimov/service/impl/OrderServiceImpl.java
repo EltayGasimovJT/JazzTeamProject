@@ -42,7 +42,7 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderHistoryService orderHistoryService;
     @Autowired
-    private UserService userService;
+    private WorkerService workerService;
 
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
@@ -240,9 +240,9 @@ public class OrderServiceImpl implements OrderService {
         OrderState orderState = updateState(OrderStates.READY_TO_SEND.toString());
         OrderHistoryDto orderHistoryForSave = OrderHistoryDto.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
-                .user(requestOrder.getUserDto())
+                .user(requestOrder.getWorkerDto())
                 .changedAt(LocalDateTime.now())
-                .comment("Заказ был подготовлен к отправке из пункта " + requestOrder.getUserDto().getWorkingPlace().getLocation())
+                .comment("Заказ был подготовлен к отправке из пункта " + requestOrder.getWorkerDto().getWorkingPlace().getLocation())
                 .build();
         OrderDto orderDtoToSave = OrderDto.builder()
                 .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
@@ -250,8 +250,8 @@ public class OrderServiceImpl implements OrderService {
                 .price(requestOrder.getPrice())
                 .recipient(requestOrder.getRecipient())
                 .sender(requestOrder.getSender())
-                .currentLocation(modelMapper.map(orderProcessingPointService.findByLocation(requestOrder.getUserDto().getWorkingPlace().getLocation()), OrderProcessingPointDto.class))
-                .departurePoint(modelMapper.map(orderProcessingPointService.findByLocation(requestOrder.getUserDto().getWorkingPlace().getLocation()), OrderProcessingPointDto.class))
+                .currentLocation(modelMapper.map(orderProcessingPointService.findByLocation(requestOrder.getWorkerDto().getWorkingPlace().getLocation()), OrderProcessingPointDto.class))
+                .departurePoint(modelMapper.map(orderProcessingPointService.findByLocation(requestOrder.getWorkerDto().getWorkingPlace().getLocation()), OrderProcessingPointDto.class))
                 .state(modelMapper.map(orderState, OrderStateDto.class))
                 .history(Stream.of(orderHistoryForSave).collect(Collectors.toCollection(HashSet::new)))
                 .build();

@@ -22,7 +22,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                 .changedAt(orderHistoryDtoToSave.getChangedAt())
                 .comment(orderHistoryDtoToSave.getComment())
                 .changedTypeEnum(orderHistoryDtoToSave.getChangedTypeEnum().toString())
-                .user(CustomModelMapper.mapDtoToUser(orderHistoryDtoToSave.getUser()))
+                .worker(CustomModelMapper.mapDtoToWorker(orderHistoryDtoToSave.getUser()))
                 .build();
         return orderHistoryRepository.save(orderHistoryToSave);
     }
@@ -50,7 +50,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
         foundHistory.setChangedAt(orderHistoryToUpdate.getChangedAt());
         foundHistory.setComment(orderHistoryToUpdate.getComment());
         foundHistory.setChangedTypeEnum(orderHistoryToUpdate.getChangedTypeEnum().toString());
-        foundHistory.setUser(CustomModelMapper.mapDtoToUser(orderHistoryToUpdate.getUser()));
+        foundHistory.setWorker(CustomModelMapper.mapDtoToWorker(orderHistoryToUpdate.getUser()));
         return orderHistoryRepository.save(foundHistory);
     }
 }

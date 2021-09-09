@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class CreateOrderRequestDto {
     private ClientDto sender;
     private ClientDto recipient;
-    private UserDto userDto;
+    private WorkerDto workerDto;
     private ParcelParametersDto parcelParameters;
     private String destinationPoint;
     private BigDecimal price;

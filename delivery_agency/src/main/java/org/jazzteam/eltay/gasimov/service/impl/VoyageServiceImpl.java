@@ -1,7 +1,6 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.VoyageDto;
-import org.jazzteam.eltay.gasimov.entity.User;
 import org.jazzteam.eltay.gasimov.entity.Voyage;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

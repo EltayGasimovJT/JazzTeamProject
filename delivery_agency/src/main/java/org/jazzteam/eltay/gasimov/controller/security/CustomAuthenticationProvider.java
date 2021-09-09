@@ -20,7 +20,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String password = authentication.getCredentials().toString();
 
         if (userService == null)
-            throw new InternalAuthenticationServiceException("UserService is null");
+            throw new InternalAuthenticationServiceException("WorkerService is null");
 
         UserDetails user = userService.loadUserByUsername(login);
         if (user == null)

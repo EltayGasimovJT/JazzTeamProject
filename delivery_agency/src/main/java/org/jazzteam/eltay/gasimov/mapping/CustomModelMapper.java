@@ -2,12 +2,14 @@ package org.jazzteam.eltay.gasimov.mapping;
 
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.*;
+import org.jazzteam.eltay.gasimov.service.impl.UserRolesServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component(value = "customModelMapper")
 public class CustomModelMapper {
@@ -71,15 +73,15 @@ public class CustomModelMapper {
         return convertedToOrder;
     }
 
-    public static UserDto mapUserToDto(User userToConvert) {
-        UserRoles roleToMap = userToConvert.getRoles().iterator().next();
+    public static WorkerDto mapUserToDto(Worker workerToConvert) {
+        UserRoles roleToMap = workerToConvert.getRoles().iterator().next();
 
-        UserDto convertedToDto = UserDto.builder()
-                .id(userToConvert.getId())
-                .name(userToConvert.getName())
-                .surname(userToConvert.getSurname())
-                .password(userToConvert.getPassword())
-                .workingPlace(modelMapper.map(userToConvert.getWorkingPlace(), AbstractBuildingDto.class))
+        WorkerDto convertedToDto = WorkerDto.builder()
+                .id(workerToConvert.getId())
+                .name(workerToConvert.getName())
+                .surname(workerToConvert.getSurname())
+                .password(workerToConvert.getPassword())
+                .workingPlace(modelMapper.map(workerToConvert.getWorkingPlace(), AbstractBuildingDto.class))
                 .build();
         if (roleToMap.getRole().equals(Role.ROLE_ADMIN.toString())) {
             convertedToDto.setRole(Role.ROLE_ADMIN);
@@ -90,30 +92,18 @@ public class CustomModelMapper {
         return convertedToDto;
     }
 
-    public static User mapDtoToUser(UserDto userDtoToConvert) {
-        User convertedToUser = User.builder()
-                .id(userDtoToConvert.getId())
-                .name(userDtoToConvert.getName())
-                .surname(userDtoToConvert.getSurname())
-                .password(userDtoToConvert.getPassword())
-                .workingPlace(modelMapper.map(userDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
+    public static Worker mapDtoToWorker(WorkerDto workerDtoToConvert) {
+        return Worker.builder()
+                .id(workerDtoToConvert.getId())
+                .name(workerDtoToConvert.getName())
+                .surname(workerDtoToConvert.getSurname())
+                .password(workerDtoToConvert.getPassword())
+                .workingPlace(modelMapper.map(workerDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
+                .roles(
+                        Stream.of(new UserRolesServiceImpl().findByRole(workerDtoToConvert.getRole().name()))
+                                .collect(Collectors.toSet())
+                )
                 .build();
-
-       /* if (userDtoToConvert.getRole().toString().equals("ROLE_ADMIN")) {
-            Set<UserRoles> userRoles = new HashSet<>();
-            userRoles.add(UserRoles.builder()
-                    .role(userDtoToConvert.getRole().toString())
-                    .build());
-            convertedToUser.setRoles(userRoles);
-        }
-        if (userDtoToConvert.getRole().toString().equals("ROLE_PROCESSING_POINT_WORKER")) {
-            Set<UserRoles> userRoles = new HashSet<>();
-            userRoles.add(UserRoles.builder()
-                    .role(userDtoToConvert.getRole().toString())
-                    .build());
-            convertedToUser.setRoles(userRoles);
-        }*/
-        return convertedToUser;
     }
 
     public static Warehouse mapDtoToWarehouse(WarehouseDto warehouseDtoToConvert) {
@@ -185,7 +175,7 @@ public class CustomModelMapper {
                 .sentAt(orderHistory.getSentAt())
                 .comment(orderHistory.getComment())
                 .changedTypeEnum(OrderStateChangeType.valueOf(orderHistory.getChangedTypeEnum()))
-                .user(mapUserToDto(orderHistory.getUser()))
+                .user(mapUserToDto(orderHistory.getWorker()))
                 .build();
     }
 
@@ -197,7 +187,7 @@ public class CustomModelMapper {
                 .sentAt(orderHistoryDto.getSentAt())
                 .comment(orderHistoryDto.getComment())
                 .changedTypeEnum(orderHistoryDto.getChangedTypeEnum().toString())
-                .user(mapDtoToUser(orderHistoryDto.getUser()))
+                .worker(mapDtoToWorker(orderHistoryDto.getUser()))
                 .build();
     }
 

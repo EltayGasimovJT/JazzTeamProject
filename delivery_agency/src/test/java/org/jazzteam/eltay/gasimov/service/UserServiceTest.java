@@ -3,8 +3,8 @@ package org.jazzteam.eltay.gasimov.service;
 
 import lombok.SneakyThrows;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
-import org.jazzteam.eltay.gasimov.dto.UserDto;
-import org.jazzteam.eltay.gasimov.entity.User;
+import org.jazzteam.eltay.gasimov.dto.WorkerDto;
+import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,25 +23,25 @@ import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.WAREHOUSE;
 @AutoConfigureMockMvc
 class UserServiceTest {
     @Autowired
-    private UserService userService;
+    private WorkerService userService;
 
     @Test
     void addUser() throws SQLException {
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
         orderProcessingPointDtoToTest.setId(1L);
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
-        UserDto expected = UserDto
+        WorkerDto expected = WorkerDto
                 .builder()
                 .id(1L)
                 .name("Igor")
                 .surname("Igor")
-                .roles(Arrays.asList("User", "Client"))
+                .roles(Arrays.asList("Worker", "Client"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
         userService.clear();
 
-        UserDto actual = CustomModelMapper.mapUserToDto(userService.save(expected));
+        WorkerDto actual = CustomModelMapper.mapUserToDto(userService.save(expected));
 
         Assertions.assertEquals(expected, actual);
     }
@@ -52,28 +52,28 @@ class UserServiceTest {
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
         orderProcessingPointDtoToTest.setId(1L);
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
-        UserDto firstUser = UserDto
+        WorkerDto firstUser = WorkerDto
                 .builder()
                 .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
-        UserDto secondUser = UserDto
+        WorkerDto secondUser = WorkerDto
                 .builder()
                 .id(2L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
-        UserDto thirdUser = UserDto
+        WorkerDto thirdUser = WorkerDto
                 .builder()
                 .id(3L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         userService.clear();
@@ -84,7 +84,7 @@ class UserServiceTest {
 
         userService.delete(firstUser.getId());
 
-        List<User> allUsers = userService.findAll();
+        List<Worker> allUsers = userService.findAll();
         int unexpected = 3;
 
         int actual = allUsers.size();
@@ -98,25 +98,25 @@ class UserServiceTest {
         orderProcessingPointDtoToTest.setId(1L);
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
 
-        UserDto firstUser = UserDto.builder()
+        WorkerDto firstUser = WorkerDto.builder()
                 .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
-        UserDto secondUser = UserDto.builder()
+        WorkerDto secondUser = WorkerDto.builder()
                 .id(2L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
-        UserDto thirdUser = UserDto.builder()
+        WorkerDto thirdUser = WorkerDto.builder()
                 .id(3L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         userService.clear();
@@ -125,7 +125,7 @@ class UserServiceTest {
         userService.save(secondUser);
         userService.save(thirdUser);
 
-        List<User> allUsers = userService.findAll();
+        List<Worker> allUsers = userService.findAll();
 
         int expected = 3;
 
@@ -135,32 +135,32 @@ class UserServiceTest {
     }
 
     @Test
-    void getUser() throws SQLException {
+    void getWorker() throws SQLException {
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
         orderProcessingPointDtoToTest.setId(1L);
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
-        UserDto firstUser = UserDto
+        WorkerDto firstUser = WorkerDto
                 .builder()
                 .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
-        UserDto expected = UserDto
+        WorkerDto expected = WorkerDto
                 .builder()
                 .id(2L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
-        UserDto thirdUser = UserDto
+        WorkerDto thirdUser = WorkerDto
                 .builder()
                 .id(3L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         userService.clear();
@@ -169,7 +169,7 @@ class UserServiceTest {
         userService.save(expected);
         userService.save(thirdUser);
 
-        UserDto actual = CustomModelMapper.mapUserToDto(userService.findOne(2));
+        WorkerDto actual = CustomModelMapper.mapUserToDto(userService.findOne(2));
 
         Assertions.assertEquals(expected, actual);
     }
@@ -179,26 +179,26 @@ class UserServiceTest {
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
         orderProcessingPointDtoToTest.setId(1L);
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
-        UserDto user = UserDto
+        WorkerDto worker = WorkerDto
                 .builder()
                 .id(1L)
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .name("Vlad")
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         userService.clear();
 
-        userService.save(user);
+        userService.save(worker);
 
         String expected = "Victor";
 
         orderProcessingPointDtoToTest.setId(2L);
-        UserDto newUser = UserDto
+        WorkerDto newUser = WorkerDto
                 .builder()
                 .id(1L)
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(orderProcessingPointDtoToTest)
                 .name(expected)
                 .build();
@@ -213,26 +213,26 @@ class UserServiceTest {
         OrderProcessingPointDto workingPlaceToTest = new OrderProcessingPointDto();
         workingPlaceToTest.setLocation("Minsk");
         workingPlaceToTest.setWorkingPlaceType(PROCESSING_POINT);
-        UserDto user = UserDto
+        WorkerDto worker = WorkerDto
                 .builder()
                 .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
-                .roles(Arrays.asList("user", "Admin"))
+                .roles(Arrays.asList("worker", "Admin"))
                 .workingPlace(workingPlaceToTest)
                 .build();
         userService.clear();
 
-        userService.save(user);
+        userService.save(worker);
 
         String expected = workingPlaceToTest.getLocation();
         workingPlaceToTest.setLocation("Polotsk");
         workingPlaceToTest.setWorkingPlaceType(WAREHOUSE);
 
 
-        userService.changeWorkingPlace(CustomModelMapper.mapUserToDto(userService.findOne(user.getId())), workingPlaceToTest);
+        userService.changeWorkingPlace(CustomModelMapper.mapUserToDto(userService.findOne(worker.getId())), workingPlaceToTest);
 
-        String actual = userService.findOne(user.getId())
+        String actual = userService.findOne(worker.getId())
                 .getWorkingPlace()
                 .getLocation();
 
