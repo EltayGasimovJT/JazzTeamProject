@@ -20,24 +20,24 @@
 <div class="defaultBar">
     <a href="homePage.html" class="defaultLogo">GasDel</a>
 </div>
-<div id="orderId" class="clientOrder">Order №</div>
+<div id="orderId" class="clientOrder">Заказ №</div>
 <div class="block-wrap">
     <div class="table-wrap">
-        <div class="tableName"><h2><b>Order information</b></h2></div>
+        <div class="tableName"><h2><b>Информация о заказе</b></h2></div>
         <table id="orderInfo" style="" class="custom-table table table-bordered table-sm table">
             <tr>
-                <td>Recipient name</td>
-                <td>Recipient surname</td>
-                <td>Sending time</td>
-                <td>Price, BYN</td>
-                <td>Order state</td>
-                <td>Departure Point</td>
-                <td>Current Location</td>
-                <td>Destination Point</td>
-                <td>Weight, mm</td>
-                <td>Height, mm</td>
-                <td>Width, mm</td>
-                <td>Length, mm</td>
+                <td>Имя адресата</td>
+                <td>Фамилия адресата</td>
+                <td>Время отправки</td>
+                <td>Стоимость, BYN</td>
+                <td>Состояние заказа</td>
+                <td>Точка отправки</td>
+                <td>Текущее местоположение</td>
+                <td>Место назначения</td>
+                <td>Вес, мм</td>
+                <td>Высота, мм</td>
+                <td>Ширина, мм</td>
+                <td>Длина, мм</td>
             </tr>
         </table>
     </div>
@@ -45,14 +45,14 @@
 
 <div class="block-wrap">
     <div class="table-wrap">
-        <div class="tableName"><h2><b>Order history</b></h2></div>
+        <div class="tableName"><h2><b>История заказа</b></h2></div>
         <table id="orderHistory" class="custom-table table table-bordered table-sm table">
             <tr>
-                <td>Changed at</td>
-                <td>Sent at</td>
-                <td>Comment</td>
-                <td>Worker name</td>
-                <td>Worker surname</td>
+                <td>Дата изменения</td>
+                <td>Был отправлен</td>
+                <td>Комментарий</td>
+                <td>Имя сотрудника</td>
+                <td>Фамилия сотрудника</td>
             </tr>
         </table>
     </div>
@@ -60,7 +60,7 @@
 <div class="backGround-modal">
     <div class="modal-custom">
         <form id="passportIdEnterForm" action="http://localhost:8081/clients/byPassport">
-            <span>Please enter your passport Id</span>
+            <span>Пожалуйста введите ваш номер паспорта</span>
             <span for="passportId"><b>Passport Id</b></span>
             <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
             <button type="submit" class="enter-passportId">Login</button>

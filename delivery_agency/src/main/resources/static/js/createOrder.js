@@ -73,19 +73,19 @@ function calcPrice() {
 
 function validateParams(params) {
     if (params.parcelWidth < 0) {
-        alert("Parcel width cannot be less than 0");
+        alert("Ширина не может быть меньше нуля");
         return false;
     }
     if (params.parcelLength < 0) {
-        alert("Parcel length cannot be less than 0");
+        alert("Длина не может быть меньше нуля");
         return false;
     }
     if (params.parcelHeight < 0) {
-        alert("Parcel height cannot be less than 0");
+        alert("Высота не может быть меньше нуля");
         return false;
     }
     if (params.parcelWeight < 0) {
-        alert("Parcel weight cannot be less than 0");
+        alert("Вес не может быть меньше нуля");
         return false;
     }
     return true;
@@ -139,7 +139,7 @@ $('#createOrderForm').submit(function (e) {
         price: price.innerText
     })
     if (validateParams(config) !== true) {
-        alert("Input data is not valid, please try again")
+        alert("Введенные вами данные не верны, пожалуйста попробуйте еще раз")
     } else {
         $.ajax({
             type: 'POST',

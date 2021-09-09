@@ -2,14 +2,12 @@ package org.jazzteam.eltay.gasimov.controller;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.extern.java.Log;
+import org.jazzteam.eltay.gasimov.controller.security.CustomUserDetails;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.Order;
 import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.jazzteam.eltay.gasimov.service.ClientService;
-import org.jazzteam.eltay.gasimov.service.OrderService;
-import org.jazzteam.eltay.gasimov.service.TicketService;
-import org.jazzteam.eltay.gasimov.service.WorkerService;
+import org.jazzteam.eltay.gasimov.service.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,6 +29,8 @@ public class OrderController {
     private TicketService ticketService;
     @Autowired
     private WorkerService workerService;
+    @Autowired
+    private ContextService contextService;
 
     @PostMapping(path = "/orders")
     @ResponseStatus(HttpStatus.CREATED)
@@ -43,8 +43,8 @@ public class OrderController {
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderResponseDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
-        //CustomUserDetails principal = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Worker foundWorker = workerService.findByName("Eltay");
+        CustomUserDetails principal = contextService.getCurrentUserFromContext();
+        Worker foundWorker = workerService.findByName(principal.getUsername());
         requestOrder.setWorkerDto(CustomModelMapper.mapUserToDto(foundWorker));
         OrderDto createdOrder = CustomModelMapper.mapOrderToDto(orderService.createOrder(requestOrder));
         return OrderResponseDto.builder()

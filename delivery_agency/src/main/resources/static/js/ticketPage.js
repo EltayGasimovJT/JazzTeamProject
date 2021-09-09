@@ -34,29 +34,28 @@ jQuery('document').ready(function () {
             content: [
                 {
                     text: 'Ticket #' + idFromUrl.ticketNumber,
-                    fontSize: 20,
-                    alignment: 'center'
+                    fontSize: 20
                 },
                 {
-                    text: 'Order tracking number: #' + order.orderTrackNumber + '\n' +
-                        'Sender name: ' + order.sender.name + '\n' +
-                        'Recipient name: ' + order.recipient.name + '\n' +
-                        'Departure point: ' + order.destinationPlace.location + '\n' +
-                        'Destination point: ' + order.destinationPlace.location + '\n' +
-                        'Sending time: ' + getTimeFormat(order.sendingTime) + '\n' +
-                        'Price: ' + order.price + ' BYN\n',
-                    fontSize: 15,
+                    text: 'Номер трекера: #' + order.orderTrackNumber + '\n' +
+                        'Фамилия и имя отправителя: ' + order.sender.name + " " + order.sender.surname + '\n' +
+                        'Фамилия и имя Адресата: ' + order.recipient.name + " " + order.recipient.surname + '\n' +
+                        'Место отправки: ' + order.destinationPlace.location + '\n' +
+                        'Место назначения: ' + order.destinationPlace.location + '\n' +
+                        'Вермя отправки: ' + getTimeFormat(order.sendingTime) + '\n' +
+                        'Итоговая стоимость: ' + order.price + ' BYN\n',
+                    fontSize: 13,
                     marginTop: 20
                 },
                 {
-                    text: 'Date__________' + "                      Worker sign__________",
-                    fontSize: 15,
-                    alignment: 'right',
+                    text: 'Дата__________' + '                    Подпись сторудника__________',
+                    fontSize: 13,
+                    alignment: 'left',
                     marginTop: 150
                 },
                 {
-                    text: "Client sign__________",
-                    fontSize: 15,
+                    text: "Подпись клиента__________",
+                    fontSize: 13,
                     alignment: 'right',
                     marginTop: 20
                 }

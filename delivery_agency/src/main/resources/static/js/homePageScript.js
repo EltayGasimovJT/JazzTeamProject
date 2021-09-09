@@ -98,7 +98,7 @@ jQuery('document').ready(function () {
             localStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `http://localhost:8081/clientsOrders.html`;
         }).fail(function () {
-            alert("Wrong code input");
+            alert("Неверный код, повторите попытку");
         });
     })
 

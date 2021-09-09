@@ -17,7 +17,6 @@ public class JwtProvider {
 
     private static final int EXPANSION = 15;
 
-
     public String generateToken(String login) {
         Date date = Date.from(LocalDate.now().plusDays(EXPANSION).atStartOfDay(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -39,11 +40,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(START_PAGE_URL).permitAll()
-                //.antMatchers(HttpMethod.POST, CREATE_ORDER_URL).hasAnyRole(ADMIN_ROLE, PROCESSING_POINT_WORKER_ROLE)
-                //.antMatchers(HttpMethod.POST, ORDERS_URL).hasRole(ADMIN_ROLE)
-                //.antMatchers(HttpMethod.DELETE, ORDERS_URL).hasRole(ADMIN_ROLE)
-                //.antMatchers(HttpMethod.PUT, ORDERS_URL).hasRole(ADMIN_ROLE)
-                //.antMatchers(HttpMethod.GET, ORDERS_URL).permitAll()
+                .antMatchers(HttpMethod.POST, CREATE_ORDER_URL).hasAnyRole(ADMIN_ROLE, PROCESSING_POINT_WORKER_ROLE)
+                .antMatchers(HttpMethod.POST, ORDERS_URL).hasRole(ADMIN_ROLE)
+                .antMatchers(HttpMethod.DELETE, ORDERS_URL).hasRole(ADMIN_ROLE)
+                .antMatchers(HttpMethod.PUT, ORDERS_URL).hasRole(ADMIN_ROLE)
+                .antMatchers(HttpMethod.GET, ORDERS_URL).permitAll()
                 .and()
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
