@@ -299,120 +299,120 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderState updateState(String state) {
-        Set<UserRoles> newRolesAllowedPutToState = new HashSet<>();
-        Set<UserRoles> newRolesAllowedToWithdrawFromState = new HashSet<>();
+        Set<WorkerRoles> newRolesAllowedPutToState = new HashSet<>();
+        Set<WorkerRoles> newRolesAllowedToWithdrawFromState = new HashSet<>();
         OrderState orderState = OrderState.builder()
                 .state(state).build();
         if (state.equals(OrderStates.READY_TO_SEND.toString())) {
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_PICKUP_WORKER)
                     .build());
 
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_PICKUP_WORKER)
                     .build());
         }
         if (state.equals(OrderStates.ON_THE_WAY_TO_THE_WAREHOUSE.toString())) {
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_PICKUP_WORKER)
                     .build());
 
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_WAREHOUSE_WORKER)
                     .build());
         }
         if (state.equals(OrderStates.ON_THE_WAREHOUSE.toString())) {
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_WAREHOUSE_WORKER)
                     .build());
 
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_WAREHOUSE_WORKER)
                     .build());
         }
         if (state.equals(OrderStates.ON_THE_WAY_TO_THE_FINAL_WAREHOUSE.toString())) {
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_WAREHOUSE_WORKER)
                     .build());
 
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_WAREHOUSE_WORKER)
                     .build());
         }
         if (state.equals(OrderStates.ON_THE_FINAL_WAREHOUSE.toString())) {
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_WAREHOUSE_WORKER)
                     .build());
 
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_WAREHOUSE_WORKER)
                     .build());
         }
         if (state.equals(OrderStates.ON_THE_WAY_TO_THE_RECEPTION.toString())) {
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_WAREHOUSE_WORKER)
                     .build());
 
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_PICKUP_WORKER)
                     .build());
         }
         if (state.equals(OrderStates.ORDER_COMPLETED.toString())) {
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_PICKUP_WORKER)
                     .build());
 
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_PICKUP_WORKER)
                     .build());
         }
         if (state.equals(OrderStates.ORDER_LOCKED.toString())) {
-            newRolesAllowedPutToState.add(UserRoles.builder()
+            newRolesAllowedPutToState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
-            newRolesAllowedToWithdrawFromState.add(UserRoles.builder()
+            newRolesAllowedToWithdrawFromState.add(WorkerRoles.builder()
                     .role(ROLE_ADMIN)
                     .build());
         }

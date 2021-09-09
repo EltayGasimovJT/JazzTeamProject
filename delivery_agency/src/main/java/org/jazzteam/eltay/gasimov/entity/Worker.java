@@ -30,5 +30,5 @@ public class Worker {
     @JoinTable(name = "worker_roles", joinColumns = {
             @JoinColumn(name = "user_id")
     }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Set<UserRoles> roles;
+    private Set<WorkerRoles> roles;
 }

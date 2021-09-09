@@ -2,7 +2,7 @@ package org.jazzteam.eltay.gasimov.mapping;
 
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.*;
-import org.jazzteam.eltay.gasimov.service.impl.UserRolesServiceImpl;
+import org.jazzteam.eltay.gasimov.service.impl.WorkerRolesServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -74,7 +74,7 @@ public class CustomModelMapper {
     }
 
     public static WorkerDto mapUserToDto(Worker workerToConvert) {
-        UserRoles roleToMap = workerToConvert.getRoles().iterator().next();
+        WorkerRoles roleToMap = workerToConvert.getRoles().iterator().next();
 
         WorkerDto convertedToDto = WorkerDto.builder()
                 .id(workerToConvert.getId())
@@ -100,7 +100,7 @@ public class CustomModelMapper {
                 .password(workerDtoToConvert.getPassword())
                 .workingPlace(modelMapper.map(workerDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
                 .roles(
-                        Stream.of(new UserRolesServiceImpl().findByRole(workerDtoToConvert.getRole().name()))
+                        Stream.of(new WorkerRolesServiceImpl().findByRole(workerDtoToConvert.getRole().name()))
                                 .collect(Collectors.toSet())
                 )
                 .build();

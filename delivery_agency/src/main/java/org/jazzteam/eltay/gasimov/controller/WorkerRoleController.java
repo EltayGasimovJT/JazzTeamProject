@@ -1,7 +1,7 @@
 package org.jazzteam.eltay.gasimov.controller;
 
-import org.jazzteam.eltay.gasimov.dto.UserRolesDto;
-import org.jazzteam.eltay.gasimov.service.UserRolesService;
+import org.jazzteam.eltay.gasimov.dto.WorkerRolesDto;
+import org.jazzteam.eltay.gasimov.service.WorkerRolesService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,45 +10,45 @@ import org.springframework.web.bind.annotation.*;
 import java.util.stream.Collectors;
 
 @RestController
-public class UserRoleController {
+public class WorkerRoleController {
     @Autowired
-    private UserRolesService userRolesService;
+    private WorkerRolesService workerRolesService;
     @Autowired
     private ModelMapper modelMapper;
 
     @PostMapping(path = "/userRoles")
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    UserRolesDto addNewUserRole(@RequestBody UserRolesDto newRoles) {
-        return modelMapper.map(userRolesService.save(newRoles), UserRolesDto.class);
+    WorkerRolesDto addNewUserRole(@RequestBody WorkerRolesDto newRoles) {
+        return modelMapper.map(workerRolesService.save(newRoles), WorkerRolesDto.class);
     }
 
     @GetMapping(path = "/userRoles/{id}")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    UserRolesDto findById(@PathVariable Long id) {
-        return modelMapper.map(userRolesService.findOne(id), UserRolesDto.class);
+    WorkerRolesDto findById(@PathVariable Long id) {
+        return modelMapper.map(workerRolesService.findOne(id), WorkerRolesDto.class);
     }
 
     @GetMapping(path = "/userRoles")
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<UserRolesDto> findAllUserRoles() {
-        return userRolesService.findAll()
+    Iterable<WorkerRolesDto> findAllUserRoles() {
+        return workerRolesService.findAll()
                 .stream()
-                .map(userRoles -> modelMapper.map(userRoles, UserRolesDto.class))
+                .map(userRoles -> modelMapper.map(userRoles, WorkerRolesDto.class))
                 .collect(Collectors.toList());
     }
 
     @DeleteMapping(path = "/userRoles/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRole(@PathVariable Long id) {
-        userRolesService.delete(id);
+        workerRolesService.delete(id);
     }
 
     @PutMapping("/userRoles")
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public UserRolesDto updateUserRole(@RequestBody UserRolesDto newUserRole) {
-        return modelMapper.map(userRolesService.update(newUserRole), UserRolesDto.class);
+    public WorkerRolesDto updateUserRole(@RequestBody WorkerRolesDto newUserRole) {
+        return modelMapper.map(workerRolesService.update(newUserRole), WorkerRolesDto.class);
     }
 }

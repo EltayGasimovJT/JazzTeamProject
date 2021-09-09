@@ -24,10 +24,10 @@ public class OrderState {
     @JoinTable(name = "roles_allowed_withdraw_from_state", joinColumns = {
             @JoinColumn(name = "order_state_id")
     }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Set<UserRoles> rolesAllowedWithdrawFromState;
+    private Set<WorkerRoles> rolesAllowedWithdrawFromState;
     @ManyToMany
     @JoinTable(name = "roles_allowed_put_to_state", joinColumns = {
             @JoinColumn(name = "order_state_id")
     }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
-    private Set<UserRoles> rolesAllowedPutToState;
+    private Set<WorkerRoles> rolesAllowedPutToState;
 }

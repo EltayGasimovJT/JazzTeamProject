@@ -11,9 +11,9 @@ import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.jazzteam.eltay.gasimov.repository.UserRepository;
+import org.jazzteam.eltay.gasimov.repository.WorkerRepository;
 import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
-import org.jazzteam.eltay.gasimov.service.UserRolesService;
+import org.jazzteam.eltay.gasimov.service.WorkerRolesService;
 import org.jazzteam.eltay.gasimov.service.WorkerService;
 import org.jazzteam.eltay.gasimov.validator.WorkerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,40 +29,40 @@ import java.util.stream.Stream;
 @Service(value = "userService")
 public class WorkerServiceImpl implements WorkerService {
     @Autowired
-    private UserRepository userRepository;
+    private WorkerRepository workerRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
     private OrderProcessingPointService processingPointService;
     @Autowired
-    private UserRolesService userRolesService;
+    private WorkerRolesService workerRolesService;
 
     @Override
     public Worker save(WorkerDto workerDtoToSave) {
         Worker workerToSave = CustomModelMapper.mapDtoToWorker(workerDtoToSave);
         WorkerValidator.validateOnSave(workerToSave);
 
-        return userRepository.save(workerToSave);
+        return workerRepository.save(workerToSave);
     }
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException {
-        Optional<Worker> foundClientFromRepository = userRepository.findById(idForDelete);
+        Optional<Worker> foundClientFromRepository = workerRepository.findById(idForDelete);
         Worker orderToUpdate = foundClientFromRepository.orElseGet(Worker::new);
         WorkerValidator.validateUser(orderToUpdate);
-        userRepository.deleteById(idForDelete);
+        workerRepository.deleteById(idForDelete);
     }
 
     @Override
     public List<Worker> findAll() throws IllegalArgumentException {
-        List<Worker> usersFromRepository = userRepository.findAll();
+        List<Worker> usersFromRepository = workerRepository.findAll();
         WorkerValidator.validateUsersList(usersFromRepository);
         return usersFromRepository;
     }
 
     @Override
     public Worker findOne(long idForSearch) throws IllegalArgumentException {
-        Optional<Worker> foundWorkerFromRepository = userRepository.findById(idForSearch);
+        Optional<Worker> foundWorkerFromRepository = workerRepository.findById(idForSearch);
         Worker foundWorker = foundWorkerFromRepository.orElseGet(Worker::new);
         WorkerValidator.validateUser(foundWorker);
         return foundWorker;
@@ -72,12 +72,12 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker update(WorkerDto workerDtoToUpdate) {
         Worker workerToUpdate = CustomModelMapper.mapDtoToWorker(workerDtoToUpdate);
         WorkerValidator.validateUser(workerToUpdate);
-        return userRepository.save(workerToUpdate);
+        return workerRepository.save(workerToUpdate);
     }
 
     @Override
     public Worker changeWorkingPlace(Long id, AbstractBuildingDto newWorkingPlace) throws IllegalArgumentException {
-        Optional<Worker> foundUser = userRepository.findById(id);
+        Optional<Worker> foundUser = workerRepository.findById(id);
         Worker workerFromOptional = foundUser.orElseGet(Worker::new);
 
         if (newWorkingPlace instanceof OrderProcessingPointDto) {
@@ -99,7 +99,7 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public Worker findByName(String name) {
-        Optional<Worker> foundClientFromRepository = userRepository.findByName(name);
+        Optional<Worker> foundClientFromRepository = workerRepository.findByName(name);
         Worker foundWorker = foundClientFromRepository.orElseGet(Worker::new);
         WorkerValidator.validateUser(foundWorker);
         return foundWorker;
@@ -118,7 +118,7 @@ public class WorkerServiceImpl implements WorkerService {
 
     @Override
     public Worker findByPassword(String password) {
-        Optional<Worker> foundClientFromRepository = userRepository.findByPassword(password);
+        Optional<Worker> foundClientFromRepository = workerRepository.findByPassword(password);
         Worker foundWorker = foundClientFromRepository.orElseGet(Worker::new);
         WorkerValidator.validateUser(foundWorker);
         return foundWorker;
@@ -131,11 +131,11 @@ public class WorkerServiceImpl implements WorkerService {
                 .surname(registrationRequest.getSurname())
                 .password(passwordEncoder.encode(registrationRequest.getPassword()))
                 .roles(
-                        Stream.of(userRolesService.findByRole(registrationRequest.getRole()))
+                        Stream.of(workerRolesService.findByRole(registrationRequest.getRole()))
                         .collect(Collectors.toSet())
                 )
                 .workingPlace(processingPointService.findOne(registrationRequest.getWorkingPlaceId()))
                 .build();
-        return userRepository.save(workerToSave);
+        return workerRepository.save(workerToSave);
     }
 }
