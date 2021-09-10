@@ -14,7 +14,8 @@ jQuery('document').ready(function () {
                 title: 'Ticket №' + idFromUrl.ticketNumber,
                 author: 'Eltay',
                 subject: 'Theme',
-                keywords: 'Keywords'
+                keywords: 'Keywords',
+                fontStyle: 'Calibri'
             },
 
             pageSize: 'A5',
