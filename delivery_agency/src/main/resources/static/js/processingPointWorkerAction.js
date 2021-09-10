@@ -1,4 +1,6 @@
 const createOrderBtn = document.querySelector('.create-order-btn');
+
+init()
 jQuery('document').ready(function () {
     if (localStorage.getItem('workersToken') !== null) {
         insertLogoutButton();
@@ -8,6 +10,12 @@ jQuery('document').ready(function () {
 createOrderBtn.addEventListener('click', (event) => {
     window.location.href = "http://localhost:8081/createOrder.html";
 })
+
+function init() {
+    if (localStorage.getItem('workersToken') === null) {
+        window.location.href = "http://localhost:8081/homePage.html";
+    }
+}
 
 function insertLogoutButton() {
     let table = document.getElementById("logoutButtonToInsert");

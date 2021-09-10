@@ -82,11 +82,11 @@ jQuery('document').ready(function () {
             url = $form.attr("action");
         let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
         geting.done(function (data) {
-            alert(data.code.generatedCode)
+            swal(data.code.generatedCode)
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
-        }).fail(function (exception) {
-            alert(exception.responseJSON.message);
+        }).fail(function () {
+            swal("Неверный номер телефона", "Пользователь с таким номером не зарегистрирован", 'error');
         });
     })
 
@@ -101,7 +101,11 @@ jQuery('document').ready(function () {
             localStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `http://localhost:8081/clientsOrders.html`;
         }).fail(function () {
-            alert("Неверный код, повторите попытку");
+            swal({
+                title: "Неверный код, повторите попытку",
+                text: "Введенный вами четырехзначный код неправильный, пожалуйста повторите попытку",
+                icon: "error",
+            });
         });
     })
 
@@ -124,8 +128,12 @@ jQuery('document').ready(function () {
             console.log(data)
             localStorage.setItem('workersToken', data.token)
             window.location.href = "http://localhost:8081/processingPointWorkerActionPage.html";
-        }).fail(function (exception) {
-            alert(exception.responseJSON.message);
+        }).fail(function () {
+            swal({
+                title: "Неправильный логин или пароль",
+                text: "Пожалуйста попробуйте ввести данные сотрудника еще раз",
+                icon: "error",
+            });
         });
     })
 
@@ -137,8 +145,13 @@ jQuery('document').ready(function () {
         let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
         geting.done(function (data) {
             window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
-        }).fail(function (exception) {
-            alert(exception.responseJSON.message);
+        }).fail(function () {
+            swal({
+                title: "Ошибка ввода",
+                text: "Данного заказа не существует",
+                icon: "error",
+            });
+
         });
     });
 })

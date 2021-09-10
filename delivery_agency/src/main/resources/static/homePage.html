@@ -7,6 +7,7 @@
     <link rel="shortcut icon" href="icons/waterFall.png" th:href="@{static/icons/waterFall.png}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -32,7 +33,7 @@
             <div class="form-group trackForm">
                 <label class="general-name" for="orderNumberId">Введите идентификационный номер заказа </label>
                 <input type="text" class="form-control" id="orderNumberId"
-                       placeholder="Введите идентификационный номер заказа"
+                       required placeholder="Введите идентификационный номер заказа"
                        name="orderNumber">
             </div>
             <button type="submit" class="btn btn-dark">Подтвердить</button>
@@ -44,9 +45,9 @@
             <form id="workerAuthInput" action="http://localhost:8081/auth">
                 <div class="form-group trackForm">
                     <label class="general-name" for="orderNumberId">Введите ваши данные пользователя</label>
-                    <input type="text" class="form-control" id="login" placeholder="Введите логин"
+                    <input type="text" class="form-control" id="login" placeholder="Введите логин" required
                            name="login">
-                    <input type="password" class="form-control" id="password" placeholder="Введите пароль"
+                    <input type="password" class="form-control" id="password" placeholder="Введите пароль" required
                            name="password">
                 </div>
                 <button id="processingPointWorker" type="submit" class="btn btn-dark open-modal">Подтвердить</button>
@@ -59,7 +60,7 @@
             <form id="phoneNumberInput" action="http://localhost:8081/clients/findByPhoneNumber">
                 <div class="form-group trackForm">
                     <label class="general-name" for="orderNumberId">Введите ваш номер телефона</label>
-                    <input type="text" class="form-control" id="phoneNumberForm" placeholder="Enter your phone number"
+                    <input type="text" class="form-control" id="phoneNumberForm" placeholder="Enter your phone number" required
                            name="phoneNumber">
                 </div>
                 <button type="submit" class="btn btn-dark">Подтвердить</button>
@@ -71,8 +72,8 @@
         <div class="modal-redirect input-codeForm">
             <form id="codeInput" action="http://localhost:8081/codes/findCode">
                 <div class="form-group trackForm">
-                    <label class="general-name" for="orderNumberId">Введите четырехзначный код</label>
-                    <input type="text" class="form-control" id="codeForm" placeholder="Enter code"
+                    <label class="general-name" for="orderNumberId" >Введите четырехзначный код</label>
+                    <input type="text" class="form-control" id="codeForm" required placeholder="Enter code"
                            name="code">
                 </div>
                 <button type="submit" class="btn btn-dark">Подтвердить</button>

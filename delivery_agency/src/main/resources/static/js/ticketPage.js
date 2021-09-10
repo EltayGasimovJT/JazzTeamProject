@@ -1,5 +1,9 @@
 jQuery('document').ready(function () {
     let idFromUrl = getIdFromUrl();
+    swal({
+        title: "Заказ успешно создан",
+        icon: "success",
+    });
 
     $('#ticketSpanId').append(idFromUrl.ticketNumber);
     getOrder(idFromUrl.orderId);

@@ -128,7 +128,7 @@
 
 .createOrderBar {
     width: 572px;
-    height: 720px;
+    height: 900px;;
 
     display: flex;
     flex-direction: column;
@@ -666,7 +666,7 @@ input:invalid:not(:placeholder-shown) + .form__error {
 .inputFieldForValidation {
     display: flex;
     flex-direction: column;
-    width: 173px;
+    width: 178px;
     height: 32px;
 }
 
@@ -694,4 +694,10 @@ input:invalid:not(:placeholder-shown) + .form__error {
     flex-wrap: wrap;
     align-content: space-around;
     margin-left: 85%;
+}
+
+.backToTheOrdersButton{
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5%;
 }

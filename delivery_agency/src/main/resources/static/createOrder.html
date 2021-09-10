@@ -9,6 +9,7 @@
     } </style>
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -73,7 +74,7 @@
                     <input type="text" name="recipientPassportId" required maxlength="40"
                            title="Input recipient passport number">
                 </div>
-                <div class="style-form">
+                <div class="style-form" style="margin-bottom: 20px">
                     <span class="createOrderTextField">Номер телефона</span>
                     <div class="inputFieldForValidation"><input type="text" name="recipientPhoneNumber" required
                                                                 maxlength="40"
@@ -95,22 +96,22 @@
             <div>
                 <div class="style-form">
                     <span class="createOrderTextField">Ширина, мм</span>
-                    <input id="parcelWidth" type="number" required name="width" title="Width">
+                    <input id="parcelWidth" max="2000" min="1" type="number" required name="width" title="Width">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Длина, мм</span>
-                    <input id="parcelLength" type="number" required name="length" title="Length">
+                    <input id="parcelLength" max="2000" min="1" type="number" required name="length" title="Length">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Высота, мм</span>
-                    <input id="parcelHeight" type="number" required name="height" title="Height">
+                    <input id="parcelHeight" max="2000" min="1" type="number" required name="height" title="Height">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Вес, грамм</span>
-                    <input id="parcelWeight" type="number" required name="weight" title="Weight">
+                    <input id="parcelWeight" max="50000" min="1" type="number" required name="weight" title="Weight">
                 </div>
                 <div class="price">
-                    <span>Стоимость, BYN: </span>
+                    <span>Стоимость, BYN : </span>
                     <span id="price"> </span>
                 </div>
             </div>

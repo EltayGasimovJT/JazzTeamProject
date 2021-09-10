@@ -92,6 +92,7 @@ public class CustomModelMapper {
     }
 
     public static Worker mapDtoToWorker(WorkerDto workerDtoToConvert) {
+
         return Worker.builder()
                 .id(workerDtoToConvert.getId())
                 .name(workerDtoToConvert.getName())
@@ -99,10 +100,12 @@ public class CustomModelMapper {
                 .password(workerDtoToConvert.getPassword())
                 .workingPlace(modelMapper.map(workerDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
                 .roles(
-                        Stream.of(//new WorkerRolesServiceImpl().findByRole(workerDtoToConvert.getRole().name()))
-                        WorkerRoles.builder()
-                                .role("ROLE_ADMIN")
-                                .build()).collect(Collectors.toSet())
+                        Stream.of(
+                                WorkerRoles
+                                        .builder()
+                                        .role(workerDtoToConvert.getRole().name())
+                                        .build())
+                                .collect(Collectors.toSet())
                 )
                 .build();
     }

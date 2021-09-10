@@ -14,7 +14,7 @@ function getUsersOrders() {
         contentType: 'application/json',
         data: {phoneNumber: phoneNumber},
         success: function (result) {
-            console.log()
+            let trackNumb;
             var r = [], j = -1;
             for (let key = 0, size = result.length; key < size; key++) {
                 r[++j] = '<tr class="text"><td>';
@@ -36,11 +36,12 @@ function getUsersOrders() {
                 r[++j] = '</td><td>';
                 r[++j] = result[key].currentLocation.location;
                 r[++j] = '</td><td>';
-                r[++j] = addBackToOrderListButton();
+                r[++j] = '<button class="customHiddenBtn buttonText additionalInfoButton" orderNumber="result[key].orderTrackNumber" type="button">'
+                    + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';//addBackToOrderListButton(result[key].orderTrackNumber);
                 r[++j] = '</td></tr>';
+                $('#orders').append(r.join(''));
+                r = []
             }
-
-            $('#orders').append(r.join(''));
             const clientOrders = document.querySelector('.text');
 
             /*clientOrders.addEventListener(
@@ -53,8 +54,8 @@ function getUsersOrders() {
                 }
             )*/
 
-            $(".hiddenButton").click(function () {
-                    let rowOfData = $(this).closest('tr')[0].outerText
+            $(".additionalInfoButton").click(function () {
+                    let rowOfData = this.getAttribute('orderNumber');
                     console.log(rowOfData)
                 }
             )
@@ -63,6 +64,10 @@ function getUsersOrders() {
             alert(exception.message);
         }
     });
+}
+
+function storeOrderNumber(orderNumber) {
+    console.log(orderNumber);
 }
 
 function getIdFromUrl() {
@@ -94,7 +99,7 @@ function checkSession() {
 }
 
 function addBackToOrderListButton() {
-    return '<button class="customHiddenBtn buttonText hiddenButton" type="button">'
+    return '<button class="customHiddenBtn buttonText additionalInfoButton" value=`${orderNumber}` onclick="storeOrderNumber(orderNumber)" type="button">'
         + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';
 }
 

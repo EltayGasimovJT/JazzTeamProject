@@ -5,15 +5,6 @@ jQuery("#backToTheActionPageBtnId").on('click', function () {
     location.href = "homePage.html";
 })
 
-jQuery('document').ready(function () {
-    if (localStorage.getItem('workersToken') !== null) {
-        insertLogoutButton();
-    }
-})
-
-const INITIAL_SIZE = 1400;
-const INITIAL_WEIGHT = 20;
-
 let allCoefficients;
 
 let config = {
@@ -28,26 +19,26 @@ const price = document.getElementById('price');
 
 document.getElementById('destinationPoint').oninput = function (event) {
     config.destinationPoint = allCoefficients.find(elem => elem.country === event.target.value);
-    calcPrice();
+    calculatePrice();
 };
 document.getElementById('parcelWidth').oninput = function (event) {
     config.parcelWidth = +event.target.value;
-    calcPrice();
+    calculatePrice();
 };
 document.getElementById('parcelLength').oninput = function (event) {
     config.parcelLength = +event.target.value;
-    calcPrice();
+    calculatePrice();
 };
 document.getElementById('parcelHeight').oninput = function (event) {
     config.parcelHeight = +event.target.value;
-    calcPrice();
+    calculatePrice();
 };
 document.getElementById('parcelWeight').oninput = (event) => {
     config.parcelWeight = +event.target.value;
-    calcPrice();
+    calculatePrice();
 };
 
-function calcPrice() {
+function calculatePrice() {
     if (config.parcelWeight !== null && config.parcelHeight !== null && config.parcelLength !== null && config.parcelWidth !== null && config.destinationPoint !== null) {
         let parcelParameters = new ParcelParametersDto(
             {
@@ -65,13 +56,20 @@ function calcPrice() {
             success: function (result) {
                 console.log(result);
                 if (validateParams(config) !== true) {
-                    alert("Input data is not valid, please try again")
+                    swal({
+                        title: "Введенные вами данные не соответствуют требованиям",
+                        icon: "error",
+                    })
                 } else {
-                    price.innerHTML = result.toFixed(2);
+                    price.innerHTML = " " + result.toFixed(2);
                 }
             },
             error: function (exception) {
-                alert(exception.responseJSON.message);
+                swal({
+                    title: "Ошибка подсчета суммы",
+                    text: exception.responseJSON.message,
+                    icon: "error",
+                });
             }
         });
     }
@@ -79,25 +77,45 @@ function calcPrice() {
 
 function validateParams(params) {
     if (params.parcelWidth < 0) {
-        alert("Ширина не может быть меньше нуля");
+        swal({
+            title: "Ширина не может быть меньше нуля",
+            icon: "error",
+        });
         return false;
     }
     if (params.parcelLength < 0) {
-        alert("Длина не может быть меньше нуля");
+        swal({
+            title: "Длина не может быть меньше нуля",
+            icon: "error",
+        });
         return false;
     }
     if (params.parcelHeight < 0) {
-        alert("Высота не может быть меньше нуля");
+        swal({
+            title: "Высота не может быть меньше нуля",
+            icon: "error",
+        });
         return false;
     }
     if (params.parcelWeight < 0) {
-        alert("Вес не может быть меньше нуля");
+        swal({
+            title: "Вес не может быть меньше нуля",
+            icon: "error",
+        });
         return false;
     }
     return true;
 }
 
 function init() {
+    if (localStorage.getItem('workersToken') === null) {
+        window.location.href = "http://localhost:8081/homePage.html";
+    }
+
+    if (localStorage.getItem('workersToken') !== null) {
+        insertLogoutButton();
+    }
+
     $.ajax({
         url: `http://localhost:8081/coefficients`,
         type: 'GET',
@@ -145,7 +163,11 @@ $('#createOrderForm').submit(function (e) {
         price: price.innerText
     })
     if (validateParams(config) !== true) {
-        alert("Введенные вами данные не верны, пожалуйста попробуйте еще раз")
+        swal({
+            title: "Ошибка ввода",
+            text: "Введенные вами данные не верны, пожалуйста попробуйте еще раз",
+            icon: "error",
+        });
     } else {
         $.ajax({
             type: 'POST',
@@ -161,7 +183,11 @@ $('#createOrderForm').submit(function (e) {
         }).done(function (data) {
             window.location.href = `http://localhost:8081/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
         }).fail(function (exception) {
-            alert(exception.responseJSON.message);
+            swal({
+                title: "Не удалось создать заказ",
+                text: exception.responseJSON.message,
+                icon: "error",
+            });
         });
 
         e.preventDefault();
