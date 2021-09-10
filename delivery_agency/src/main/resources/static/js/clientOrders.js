@@ -36,8 +36,7 @@ function getUsersOrders() {
                 r[++j] = '</td><td>';
                 r[++j] = result[key].currentLocation.location;
                 r[++j] = '</td><td>';
-                r[++j] = '<button class="customHiddenBtn buttonText additionalInfoButton" orderNumber="result[key].orderTrackNumber" type="button">'
-                    + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';//addBackToOrderListButton(result[key].orderTrackNumber);
+                r[++j] = addBackToOrderListButton(result[key].orderTrackNumber);//addBackToOrderListButton(result[key].orderTrackNumber);
                 r[++j] = '</td></tr>';
                 $('#orders').append(r.join(''));
                 r = []
@@ -64,10 +63,6 @@ function getUsersOrders() {
             alert(exception.message);
         }
     });
-}
-
-function storeOrderNumber(orderNumber) {
-    console.log(orderNumber);
 }
 
 function getIdFromUrl() {
@@ -98,8 +93,8 @@ function checkSession() {
     }
 }
 
-function addBackToOrderListButton() {
-    return '<button class="customHiddenBtn buttonText additionalInfoButton" value=`${orderNumber}` onclick="storeOrderNumber(orderNumber)" type="button">'
+function addBackToOrderListButton(orderNumber) {
+    return '<button class="customHiddenBtn buttonText additionalInfoButton" ordernumber="orderNumber" type="button">'
         + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';
 }
 

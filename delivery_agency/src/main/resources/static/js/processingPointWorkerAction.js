@@ -1,4 +1,5 @@
 const createOrderBtn = document.querySelector('.create-order-btn');
+const changeOrderStateBtn = document.querySelector('.change-order-state-btn');
 
 init()
 jQuery('document').ready(function () {
@@ -9,6 +10,10 @@ jQuery('document').ready(function () {
 
 createOrderBtn.addEventListener('click', (event) => {
     window.location.href = "http://localhost:8081/createOrder.html";
+})
+
+changeOrderStateBtn.addEventListener('click', (event) => {
+    window.location.href = "http://localhost:8081/changeOrderStatePage.html";
 })
 
 function init() {

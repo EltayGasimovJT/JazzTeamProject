@@ -16,23 +16,23 @@
     <a href="homePage.html" class="defaultLogo">GasDel</a>
     <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
 </div>
-
-
 <div class="modal-wrap">
-    <div class="processingPointOrderActionBar">
-        <div class="actionTabText" style="margin-left: 80px">Операции с заказом</div>
-        <div class="btnMargin" style="margin-left: 151px">
-            <button id="createOrderBtnId" class="me-btn buttonText create-order-btn">Создать новый заказ</button>
-        </div>
-        <div class="btnMargin" style="margin-left: 151px">
-            <button id="changeOrderStateButton" class="me-btn buttonText change-order-state-btn">Изменить состояние заказа</button>
-        </div>
+    <div class="track-number-form" style="margin-top: 200px">
+        <form id="trackOrderForm" action="http://localhost:8081/orders/findByTrackNumber">
+            <div class="form-group trackForm">
+                <label class="general-name" for="orderNumberId">Введите идентификационный номер заказа </label>
+                <input type="text" class="form-control" id="orderNumberId"
+                       required placeholder="Введите идентификационный номер заказа"
+                       name="orderNumber">
+            </div>
+            <button type="submit" class="btn btn-dark">Подтвердить</button>
+        </form>
     </div>
-
 </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/processingPointWorkerAction.js"></script>
+<script type="text/javascript" src="js/changeOrderState.js"></script>
 </body>
 </html>
