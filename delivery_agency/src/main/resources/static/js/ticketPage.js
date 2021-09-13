@@ -53,7 +53,7 @@ jQuery('document').ready(function () {
                     marginTop: 20
                 },
                 {
-                    text: 'Дата__________' + '                    Подпись сторудника__________',
+                    text: 'Дата__________' + '                    Подпись сотрудника__________',
                     fontSize: 13,
                     alignment: 'left',
                     marginTop: 150
