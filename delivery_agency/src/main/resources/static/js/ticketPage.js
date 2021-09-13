@@ -17,7 +17,6 @@ jQuery('document').ready(function () {
                 keywords: 'Keywords',
                 fontStyle: 'Calibri'
             },
-
             pageSize: 'A5',
             pageOrientation: 'portrait',
             pageMargins: [50, 50, 30, 60],
