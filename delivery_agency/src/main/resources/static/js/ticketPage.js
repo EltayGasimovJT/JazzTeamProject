@@ -80,7 +80,6 @@ function getOrder(orderId) {
         order = data;
         insetValuesIntoTicket(data);
     }).fail(function () {
-        console.log('fail');
     });
 }
 

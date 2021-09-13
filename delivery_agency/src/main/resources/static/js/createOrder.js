@@ -54,7 +54,6 @@ function calculatePrice() {
             contentType: 'application/json',
             data: JSON.stringify(parcelParameters),
             success: function (result) {
-                console.log(result);
                 if (validateParams(config) !== true) {
                     swal({
                         title: "Введенные вами данные не соответствуют требованиям",

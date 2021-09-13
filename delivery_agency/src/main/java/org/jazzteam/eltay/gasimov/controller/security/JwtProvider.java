@@ -30,16 +30,8 @@ public class JwtProvider {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException expEx) {
-            log.severe("Token expired");
-        } catch (UnsupportedJwtException unsEx) {
-            log.severe("Unsupported jwt");
-        } catch (MalformedJwtException mjEx) {
-            log.severe("Malformed jwt");
-        } catch (SignatureException sEx) {
-            log.severe("Invalid signature");
-        } catch (Exception e) {
-            log.severe("invalid token");
+        } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException expEx) {
+            log.severe(expEx.getMessage());
         }
         return false;
     }

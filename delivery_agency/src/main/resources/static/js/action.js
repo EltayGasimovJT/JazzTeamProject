@@ -29,7 +29,6 @@ jQuery('document').ready(function () {
         let $form = $(this),
             passportId = $form.find("input[name='passportId']").val(),
             url = $form.attr("action");
-        console.log(url);
         let geting = $.get(url, {passportId: passportId});
         geting.done(function (data) {
             window.location.href = `http://localhost:8081/clientsOrders.html?clientId=${data.id}`;

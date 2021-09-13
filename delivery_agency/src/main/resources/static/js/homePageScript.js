@@ -125,7 +125,6 @@ jQuery('document').ready(function () {
                 password: `${password}`
             })
         }).done(function (data) {
-            console.log(data)
             localStorage.setItem('workersToken', data.token)
             window.location.href = "http://localhost:8081/processingPointWorkerActionPage.html";
         }).fail(function () {
