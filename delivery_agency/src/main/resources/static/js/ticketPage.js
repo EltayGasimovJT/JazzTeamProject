@@ -84,7 +84,7 @@ function getOrder(orderId) {
 }
 
 function getIdFromUrl() {
-    let params = window
+    return window
         .location
         .search
         .replace('?', '')
@@ -97,7 +97,6 @@ function getIdFromUrl() {
             },
             {}
         );
-    return params;
 }
 
 function insetValuesIntoTicket(data) {
