@@ -9,16 +9,16 @@ jQuery('document').ready(function () {
 })
 
 createOrderBtn.addEventListener('click', (event) => {
-    window.location.href = "http://localhost:8081/createOrder.html";
+    window.location.href = "/createOrder.html";
 })
 
 changeOrderStateBtn.addEventListener('click', (event) => {
-    window.location.href = "http://localhost:8081/changeOrderStatePage.html";
+    window.location.href = "/changeOrderStatePage.html";
 })
 
 function init() {
     if (localStorage.getItem('workersToken') === null) {
-        window.location.href = "http://localhost:8081/homePage.html";
+        window.location.href = "/homePage.html";
     }
 }
 
@@ -29,7 +29,7 @@ function insertLogoutButton() {
     hiddenButton.addEventListener(
         'click', () => {
             localStorage.removeItem('workersToken');
-            window.location.href = `http://localhost:8081/homePage.html`;
+            window.location.href = `/homePage.html`;
         }
     )
 }

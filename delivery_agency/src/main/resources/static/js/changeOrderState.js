@@ -1,6 +1,6 @@
 jQuery('document').ready(function () {
     if (localStorage.getItem('workersToken') === null) {
-        window.location.href = "http://localhost:8081/homePage.html";
+        window.location.href = "/homePage.html";
     }
 
     if (localStorage.getItem('workersToken') !== null) {
@@ -46,7 +46,7 @@ $("#trackOrderForm").submit(function (event) {
 
 function initStates() {
     $.ajax({
-        url: `http://localhost:8081/users/getStatesByRole`,
+        url: `/users/getStatesByRole`,
         type: 'GET',
         contentType: 'application/json',
         beforeSend: function (xhr) {
@@ -86,7 +86,7 @@ $('#changeOrderState').submit(function (event) {
     let $form = $(this),
         state = $form.find("input[name='newState']").val();
     $.ajax({
-        url: `http://localhost:8081/changeOrderState`,
+        url: `/changeOrderState`,
         type: 'PUT',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -125,7 +125,7 @@ function insertLogoutButton() {
     hiddenButton.addEventListener(
         'click', () => {
             localStorage.removeItem('workersToken');
-            window.location.href = `http://localhost:8081/homePage.html`;
+            window.location.href = `/homePage.html`;
         }
     )
 }

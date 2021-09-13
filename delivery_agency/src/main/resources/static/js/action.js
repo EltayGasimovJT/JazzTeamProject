@@ -32,7 +32,7 @@ jQuery('document').ready(function () {
         console.log(url);
         let geting = $.get(url, {passportId: passportId});
         geting.done(function (data) {
-            window.location.href = `http://localhost:8081/clientsOrders.html?clientId=${data.id}`;
+            window.location.href = `/clientsOrders.html?clientId=${data.id}`;
         });
     });
 })

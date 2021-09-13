@@ -49,7 +49,7 @@ function calculatePrice() {
             }
         )
         $.ajax({
-            url: `http://localhost:8081/calculatePrice/${config.destinationPoint.country}`,
+            url: `/calculatePrice/${config.destinationPoint.country}`,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(parcelParameters),
@@ -109,7 +109,7 @@ function validateParams(params) {
 
 function init() {
     if (localStorage.getItem('workersToken') === null) {
-        window.location.href = "http://localhost:8081/homePage.html";
+        window.location.href = "/homePage.html";
     }
 
     if (localStorage.getItem('workersToken') !== null) {
@@ -117,7 +117,7 @@ function init() {
     }
 
     $.ajax({
-        url: `http://localhost:8081/coefficients`,
+        url: `/coefficients`,
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
@@ -171,7 +171,7 @@ $('#createOrderForm').submit(function (e) {
     } else {
         $.ajax({
             type: 'POST',
-            url: `http://localhost:8081/createOrder`,
+            url: `/createOrder`,
             contentType: 'application/json; charset=utf-8',
             beforeSend: function (xhr) {
             let jwtToken = localStorage.getItem('workersToken');
@@ -181,7 +181,7 @@ $('#createOrderForm').submit(function (e) {
         },
             data: JSON.stringify(dataForSend)
         }).done(function (data) {
-            window.location.href = `http://localhost:8081/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
+            window.location.href = `/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
         }).fail(function (exception) {
             swal({
                 title: "Не удалось создать заказ",
@@ -201,7 +201,7 @@ function insertLogoutButton() {
     hiddenButton.addEventListener(
         'click', () => {
             localStorage.removeItem('workersToken');
-            window.location.href = `http://localhost:8081/homePage.html`;
+            window.location.href = `/homePage.html`;
         }
     )
 }

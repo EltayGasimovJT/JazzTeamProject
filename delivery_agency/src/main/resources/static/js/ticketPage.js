@@ -75,7 +75,7 @@ let order;
 function getOrder(orderId) {
     $.ajax({
         type: 'GET',
-        url: `http://localhost:8081/orders/${orderId}`,
+        url: `/orders/${orderId}`,
         contentType: 'application/json; charset=utf-8',
     }).done(function (data) {
         order = data;

@@ -2,7 +2,7 @@ getUsersOrders();
 
 jQuery("#backToTheActionPageBtnId").on('click', function () {
     checkSession();
-    window.location.href = `http://localhost:8081/homePage.html`;
+    window.location.href = `/homePage.html`;
 })
 const idUnik = Date.now()
 
@@ -10,7 +10,7 @@ function getUsersOrders() {
     checkSession();
     let phoneNumber = localStorage.getItem('clientPhone');
     $.ajax({
-        url: `http://localhost:8081/clients/ordersByPhoneNumber/${phoneNumber}`,
+        url: `/clients/ordersByPhoneNumber/${phoneNumber}`,
         type: 'GET',
         contentType: 'application/json',
         data: {phoneNumber: phoneNumber},
@@ -44,7 +44,7 @@ function getUsersOrders() {
 
             $(".additionalInfoButton").click(function (event) {
                     let orderId = event.target.parentElement.parentElement.firstChild.innerText;
-                    let geting = $.get(`http://localhost:8081/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json');
+                    let geting = $.get(`/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json');
                     geting.done(function (data) {
                         window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${orderId}`;
                     }).fail(function () {
@@ -85,7 +85,7 @@ function checkSession() {
     if ((new Date().getMinutes() - sessionTimeMinutes) > 4) {
         localStorage.removeItem('clientPhone');
         localStorage.removeItem('sessionTime');
-        window.location.href = `http://localhost:8081/homePage.html`;
+        window.location.href = `/homePage.html`;
     } else {
         localStorage.setItem('sessionTime', (new Date()).toString())
     }
