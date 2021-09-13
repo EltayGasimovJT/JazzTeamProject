@@ -4,6 +4,7 @@ jQuery("#backToTheActionPageBtnId").on('click', function () {
     checkSession();
     window.location.href = `http://localhost:8081/homePage.html`;
 })
+const idUnik = Date.now()
 
 function getUsersOrders() {
     checkSession();
@@ -14,12 +15,11 @@ function getUsersOrders() {
         contentType: 'application/json',
         data: {phoneNumber: phoneNumber},
         success: function (result) {
-            let trackNumb;
             var r = [], j = -1;
             for (let key = 0, size = result.length; key < size; key++) {
                 r[++j] = '<tr class="text"><td>';
                 r[++j] = result[key].orderTrackNumber;
-                r[++j] = '</td><td>';
+                r[++j] = '</td><td class="orderNum">';
                 r[++j] = result[key].recipient.name;
                 r[++j] = '</td><td>';
                 r[++j] = result[key].recipient.surname;
@@ -36,26 +36,25 @@ function getUsersOrders() {
                 r[++j] = '</td><td>';
                 r[++j] = result[key].currentLocation.location;
                 r[++j] = '</td><td>';
-                r[++j] = addBackToOrderListButton(result[key].orderTrackNumber);//addBackToOrderListButton(result[key].orderTrackNumber);
+                r[++j] = addBackToOrderListButton();
                 r[++j] = '</td></tr>';
                 $('#orders').append(r.join(''));
                 r = []
             }
-            const clientOrders = document.querySelector('.text');
 
-            /*clientOrders.addEventListener(
-                'click', (event) => {
-                    console.log(event.target.outerText);
-                    console.log(event);
-                    console.log(result);
+            $(".additionalInfoButton").click(function (event) {
+                    let orderId = event.target.parentElement.parentElement.firstChild.innerText;
+                    let geting = $.get(`http://localhost:8081/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json');
+                    geting.done(function (data) {
+                        window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${orderId}`;
+                    }).fail(function () {
+                        swal({
+                            title: "Ошибка ввода",
+                            text: "Данного заказа не существует",
+                            icon: "error",
+                        });
 
-                    //window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${localStorage.getItem('clientPhone')}`;
-                }
-            )*/
-
-            $(".additionalInfoButton").click(function () {
-                    let rowOfData = this.getAttribute('orderNumber');
-                    console.log(rowOfData)
+                    });
                 }
             )
         },
@@ -66,7 +65,7 @@ function getUsersOrders() {
 }
 
 function getIdFromUrl() {
-    let params = window
+    return window
         .location
         .search
         .replace('?', '')
@@ -79,7 +78,6 @@ function getIdFromUrl() {
             },
             {}
         );
-    return params;
 }
 
 function checkSession() {
@@ -93,8 +91,8 @@ function checkSession() {
     }
 }
 
-function addBackToOrderListButton(orderNumber) {
-    return '<button class="customHiddenBtn buttonText additionalInfoButton" ordernumber="orderNumber" type="button">'
+function addBackToOrderListButton() {
+    return '<button class="customHiddenBtn buttonText additionalInfoButton" type="button">'
         + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';
 }
 
