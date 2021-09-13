@@ -36,6 +36,11 @@ public class WorkerServiceImpl implements WorkerService {
     private WarehouseService warehouseService;
     @Autowired
     private OrderStateService orderStateService;
+    private static final int ZERO = 0;
+    private static final int TWO = 2;
+    private static final int FOUR = 4;
+    private static final int SIX = 6;
+
 
     @Override
     public Worker save(WorkerDto workerDtoToSave) {
@@ -162,19 +167,19 @@ public class WorkerServiceImpl implements WorkerService {
             return orderStatesAsStrings;
         }
         if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_WAREHOUSE_WORKER.name())) {
-            orderStatesAsStrings.remove(0);
-            orderStatesAsStrings.remove(0);
-            orderStatesAsStrings.remove(2);
-            orderStatesAsStrings.remove(4);
-            orderStatesAsStrings.remove(4);
-            orderStatesAsStrings.remove(4);
+            orderStatesAsStrings.remove(ZERO);
+            orderStatesAsStrings.remove(ZERO);
+            orderStatesAsStrings.remove(TWO);
+            orderStatesAsStrings.remove(FOUR);
+            orderStatesAsStrings.remove(FOUR);
+            orderStatesAsStrings.remove(FOUR);
             return orderStatesAsStrings;
         }
         if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_PROCESSING_POINT_WORKER.name())) {
-            orderStatesAsStrings.remove(2);
-            orderStatesAsStrings.remove(4);
-            orderStatesAsStrings.remove(4);
-            orderStatesAsStrings.remove(6);
+            orderStatesAsStrings.remove(TWO);
+            orderStatesAsStrings.remove(FOUR);
+            orderStatesAsStrings.remove(FOUR);
+            orderStatesAsStrings.remove(SIX);
             return orderStatesAsStrings;
         }
         return null;
