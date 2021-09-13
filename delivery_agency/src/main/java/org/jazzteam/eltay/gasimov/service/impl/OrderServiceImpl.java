@@ -260,6 +260,13 @@ public class OrderServiceImpl implements OrderService {
         return getOrderFoSave(orderDtoToSave);
     }
 
+    @Override
+    public Object changeOrderState(String orderNumber, String orderState) {
+        Order foundOrder = findByTrackNumber(orderNumber);
+        foundOrder.setState(orderStateService.findByState(orderState));
+        return orderRepository.save(foundOrder);
+    }
+
     private Order getOrderFoSave(OrderDto orderDtoToSave) throws ObjectNotFoundException {
         OrderValidator.validateOrder(CustomModelMapper.mapDtoToOrder(orderDtoToSave));
 

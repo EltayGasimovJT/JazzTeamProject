@@ -701,3 +701,13 @@ input:invalid:not(:placeholder-shown) + .form__error {
     justify-content: flex-end;
     margin-right: 5%;
 }
+
+.change-state-form {
+    margin-bottom: 1rem;
+    margin-left: 90px;
+
+}
+
+.changeStateBtn {
+    margin-left: 60%;
+}

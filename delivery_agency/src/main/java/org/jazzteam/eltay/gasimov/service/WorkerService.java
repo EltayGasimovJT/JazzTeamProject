@@ -4,8 +4,10 @@ import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.WorkerDto;
 import org.jazzteam.eltay.gasimov.entity.Worker;
+import org.jazzteam.eltay.gasimov.entity.WorkerRoles;
 
 import java.util.List;
+import java.util.Set;
 
 public interface WorkerService {
     Worker save(WorkerDto userToSave);
@@ -27,4 +29,8 @@ public interface WorkerService {
     Worker findByPassword(String password);
 
     Worker saveForRegistration(RegistrationRequest registrationRequest);
+
+    Set<WorkerRoles> findWorkerRoles(String username);
+
+    Iterable<String> findStatesByRole(Worker foundByName);
 }

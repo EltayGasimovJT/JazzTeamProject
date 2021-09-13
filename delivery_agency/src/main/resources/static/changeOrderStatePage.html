@@ -9,6 +9,7 @@
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link rel="shortcut icon" href="icons/waterFall.png"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 </head>
 <body>
@@ -26,6 +27,22 @@
                        name="orderNumber">
             </div>
             <button type="submit" class="btn btn-dark">Подтвердить</button>
+        </form>
+    </div>
+</div>
+
+<div class="backGround-modal">
+    <div class="modal-redirect">
+        <form id="changeOrderState" autocomplete="off">
+            <div class="change-state-form">
+                <span class="createOrderTextField">Выберите новое состояние заказа: </span>
+                <input list="states" id="newOrderState" required name="newState">
+                <datalist id="states" class="listMargin">
+
+                </datalist>
+
+            </div>
+            <button id="processingPointWorker" type="submit" class="btn btn-dark open-modal changeStateBtn">Подтвердить</button>
         </form>
     </div>
 </div>

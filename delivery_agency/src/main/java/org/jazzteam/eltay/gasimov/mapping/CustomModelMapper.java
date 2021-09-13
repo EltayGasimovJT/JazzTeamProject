@@ -88,6 +88,9 @@ public class CustomModelMapper {
         if (roleToMap.getRole().equals(Role.ROLE_PROCESSING_POINT_WORKER.toString())) {
             convertedToDto.setRole(Role.ROLE_PROCESSING_POINT_WORKER);
         }
+        if (roleToMap.getRole().equals(Role.ROLE_WAREHOUSE_WORKER.toString())) {
+            convertedToDto.setRole(Role.ROLE_WAREHOUSE_WORKER);
+        }
         return convertedToDto;
     }
 

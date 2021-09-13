@@ -103,6 +103,12 @@ public class OrderController {
         orderService.delete(id);
     }
 
+    @PutMapping("/changeOrderState")
+    @ResponseStatus(HttpStatus.RESET_CONTENT)
+    public OrderDto changeOrderState(@RequestBody OrderChangeStateDto newState) {
+        return modelMapper.map(orderService.changeOrderState(newState.getOrderNumber(), newState.getOrderState()), OrderDto.class);
+    }
+
     @PutMapping("/orders")
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public OrderDto updateOrder(@RequestBody OrderDto newOrder) {

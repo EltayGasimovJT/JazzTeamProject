@@ -43,4 +43,6 @@ public interface OrderService {
     Order findByTrackNumber(String trackNumber);
 
     Order createOrder(CreateOrderRequestDto orderDtoToSave) throws ObjectNotFoundException;
+
+    Object changeOrderState(String orderNumber, String orderState);
 }

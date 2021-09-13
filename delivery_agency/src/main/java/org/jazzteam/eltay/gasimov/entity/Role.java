@@ -11,7 +11,8 @@ import java.util.stream.Stream;
 @Getter
 public enum Role {
     ROLE_ADMIN(Stream.of(Permission.ORDER_CREATE, Permission.ADD_USER).collect(Collectors.toCollection(HashSet::new)))
-    , ROLE_PROCESSING_POINT_WORKER(Stream.of(Permission.ORDER_CREATE).collect(Collectors.toCollection(HashSet::new)));
+    , ROLE_PROCESSING_POINT_WORKER(Stream.of(Permission.ORDER_CREATE).collect(Collectors.toCollection(HashSet::new))),
+    ROLE_WAREHOUSE_WORKER(Stream.of(Permission.SEND_ORDERS).collect(Collectors.toCollection(HashSet::new)));
 
     private final Set<Permission> permissions;
 

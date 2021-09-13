@@ -4,17 +4,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
 import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
-import org.jazzteam.eltay.gasimov.dto.WorkerDto;
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
-import org.jazzteam.eltay.gasimov.entity.AbstractBuilding;
-import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
-import org.jazzteam.eltay.gasimov.entity.Worker;
-import org.jazzteam.eltay.gasimov.entity.Warehouse;
+import org.jazzteam.eltay.gasimov.dto.WorkerDto;
+import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.WorkerRepository;
-import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
-import org.jazzteam.eltay.gasimov.service.WorkerRolesService;
-import org.jazzteam.eltay.gasimov.service.WorkerService;
+import org.jazzteam.eltay.gasimov.service.*;
 import org.jazzteam.eltay.gasimov.validator.WorkerValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,6 +32,10 @@ public class WorkerServiceImpl implements WorkerService {
     private OrderProcessingPointService processingPointService;
     @Autowired
     private WorkerRolesService workerRolesService;
+    @Autowired
+    private WarehouseService warehouseService;
+    @Autowired
+    private OrderStateService orderStateService;
 
     @Override
     public Worker save(WorkerDto workerDtoToSave) {
@@ -132,10 +132,51 @@ public class WorkerServiceImpl implements WorkerService {
                 .password(passwordEncoder.encode(registrationRequest.getPassword()))
                 .roles(
                         Stream.of(workerRolesService.findByRole(registrationRequest.getRole()))
-                        .collect(Collectors.toSet())
+                                .collect(Collectors.toSet())
                 )
-                .workingPlace(processingPointService.findOne(registrationRequest.getWorkingPlaceId()))
                 .build();
+        if (registrationRequest.getWorkingPlaceType().equals("WAREHOUSE")) {
+            workerToSave.setWorkingPlace(warehouseService.findOne(registrationRequest.getWorkingPlaceId()));
+        }
+        if (registrationRequest.getWorkingPlaceType().equals("PROCESSING_POINT")) {
+            workerToSave.setWorkingPlace(processingPointService.findOne(registrationRequest.getWorkingPlaceId()));
+        }
         return workerRepository.save(workerToSave);
+    }
+
+    @Override
+    public Set<WorkerRoles> findWorkerRoles(String username) {
+        Worker foundWorker = findByName(username);
+        return foundWorker.getRoles();
+    }
+
+    @Override
+    public Iterable<String> findStatesByRole(Worker foundByName) {
+        List<OrderState> allStatesFromRepository = orderStateService.findAll();
+
+        List<String> orderStatesAsStrings = allStatesFromRepository.stream()
+                .map(OrderState::getState)
+                .collect(Collectors.toList());
+
+        if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_ADMIN.name())) {
+            return orderStatesAsStrings;
+        }
+        if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_WAREHOUSE_WORKER.name())) {
+            orderStatesAsStrings.remove(0);
+            orderStatesAsStrings.remove(0);
+            orderStatesAsStrings.remove(2);
+            orderStatesAsStrings.remove(4);
+            orderStatesAsStrings.remove(4);
+            orderStatesAsStrings.remove(4);
+            return orderStatesAsStrings;
+        }
+        if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_PROCESSING_POINT_WORKER.name())) {
+            orderStatesAsStrings.remove(2);
+            orderStatesAsStrings.remove(4);
+            orderStatesAsStrings.remove(4);
+            orderStatesAsStrings.remove(6);
+            return orderStatesAsStrings;
+        }
+        return null;
     }
 }

@@ -394,5 +394,4 @@ function setupCountries(countries) {
         r[++j] = '</option>';
     }
     $('#towns').append(r.join(''));
-
 }

@@ -16,4 +16,6 @@ public class RegistrationRequest {
     private String role;
     @NotEmpty
     private Long workingPlaceId;
+    @NotEmpty
+    private String workingPlaceType;
 }
