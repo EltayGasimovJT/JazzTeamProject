@@ -28,7 +28,7 @@ function getIdFromUrl() {
 
 function getOrderHistories(idFromUrl) {
     $.ajax({
-        url: `http://localhost:8081/orders/findHistory/${idFromUrl}`,
+        url: `/orders/findHistory/${idFromUrl}`,
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
@@ -58,14 +58,14 @@ function addBackToOrderListButton() {
     const hiddenButton = document.querySelector('.hiddenButton');
     hiddenButton.addEventListener(
         'click', () => {
-            window.location.href = `http://localhost:8081/clientsOrders.html`;
+            window.location.href = `/clientsOrders.html`;
         }
     )
 }
 
 function getOrder(idFromUrl) {
     $.ajax({
-        url: `http://localhost:8081/orders/${idFromUrl}`,
+        url: `/orders/${idFromUrl}`,
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {

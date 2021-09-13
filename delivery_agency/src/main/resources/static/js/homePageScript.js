@@ -47,7 +47,7 @@ jQuery('document').ready(function () {
             localStorage.removeItem('workersToken');
         }
         if (localStorage.getItem('clientPhone') !== null) {
-            window.location.href = "http://localhost:8081/clientsOrders.html";
+            window.location.href = "/clientsOrders.html";
         } else {
             clientBackgroundModal.style.visibility = 'visible';
         }
@@ -67,7 +67,7 @@ jQuery('document').ready(function () {
             localStorage.removeItem('sessionTime');
         }
         if (localStorage.getItem('workersToken') !== null) {
-            window.location.href = "http://localhost:8081/processingPointWorkerActionPage.html";
+            window.location.href = "/processingPointWorkerActionPage.html";
         } else {
             backgroundModal.style.visibility = 'visible';
         }
@@ -99,7 +99,7 @@ jQuery('document').ready(function () {
         geting.done(function () {
             localStorage.setItem('clientPhone', clientPhoneNumber);
             localStorage.setItem('sessionTime', (new Date()).toString())
-            window.location.href = `http://localhost:8081/clientsOrders.html`;
+            window.location.href = `/clientsOrders.html`;
         }).fail(function () {
             swal({
                 title: "Неверный код, повторите попытку",
@@ -126,7 +126,7 @@ jQuery('document').ready(function () {
             })
         }).done(function (data) {
             localStorage.setItem('workersToken', data.token)
-            window.location.href = "http://localhost:8081/processingPointWorkerActionPage.html";
+            window.location.href = "/processingPointWorkerActionPage.html";
         }).fail(function () {
             swal({
                 title: "Неправильный логин или пароль",
@@ -143,7 +143,7 @@ jQuery('document').ready(function () {
             url = $form.attr("action");
         let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
         geting.done(function (data) {
-            window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
+            window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
         }).fail(function () {
             swal({
                 title: "Ошибка ввода",
@@ -160,7 +160,7 @@ function checkSession() {
     if ((new Date().getMinutes() - sessionTimeMinutes) > 5) {
         localStorage.removeItem('clientPhone');
         localStorage.removeItem('sessionTime');
-        window.location.href = `http://localhost:8081/homePage.html`;
+        window.location.href = `/homePage.html`;
     } else {
         localStorage.setItem('sessionTime', (new Date()).toString())
     }
