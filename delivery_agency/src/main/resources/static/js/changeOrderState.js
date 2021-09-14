@@ -4,6 +4,7 @@ jQuery('document').ready(function () {
     }
 
     if (localStorage.getItem('workersToken') !== null) {
+        insertWorkerInfo();
         insertLogoutButton();
     }
     initStates()
@@ -128,4 +129,32 @@ function insertLogoutButton() {
             window.location.href = `/homePage.html`;
         }
     )
+}
+
+function insertWorkerInfo() {
+    let name = document.getElementById("worker-name-nav");
+    let surname = document.getElementById("worker-surname-nav");
+    let roles = document.getElementById("worker-role-nav");
+    $.ajax({
+        type: 'GET',
+        url: `/users/getCurrentWorker`,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: function (xhr) {
+            let jwtToken = localStorage.getItem('workersToken');
+            if (jwtToken !== null) {
+                xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
+            }
+        },
+    }).done(function (data) {
+        name.innerHTML = `Имя: ${data.name}`
+        surname.innerHTML = `Фамилия: ${data.surname}`
+        roles.innerHTML = `Роли: ${data.role}`
+        console.log(data)
+    }).fail(function () {
+        swal({
+            title: "Что-то пошло не так",
+            text: "Ошибка при поиске сотрудника",
+            icon: "error",
+        });
+    });
 }

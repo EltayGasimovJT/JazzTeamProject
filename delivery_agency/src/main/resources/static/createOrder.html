@@ -16,6 +16,11 @@
 <div class="defaultBar">
 
     <a href="homePage.html" class="defaultLogo">GasDel</a>
+    <div id="worker-nav-info" class="worker-nav">
+        <div id="worker-name-nav"></div>
+        <div id="worker-surname-nav"></div>
+        <div id="worker-role-nav"></div>
+    </div>
     <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
 </div>
 
@@ -39,7 +44,8 @@
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Фамилия отправителя</span>
-                    <input align="right" type="text" required name="senderSurname" maxlength="40" pattern="^[a-zA-ZА-Яа-я]+$"
+                    <input align="right" type="text" required name="senderSurname" maxlength="40"
+                           pattern="^[a-zA-ZА-Яа-я]+$"
                            title="Input sender surname">
                 </div>
                 <div class="style-form">

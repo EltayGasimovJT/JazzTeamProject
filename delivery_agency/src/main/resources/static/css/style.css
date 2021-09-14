@@ -694,7 +694,7 @@ input:invalid:not(:placeholder-shown) + .form__error {
     align-items: flex-start;
     flex-wrap: wrap;
     align-content: space-around;
-    margin-left: 85%;
+    margin-left: 15%;
 }
 
 .backToTheOrdersButton {
@@ -782,7 +782,7 @@ input:invalid:not(:placeholder-shown) + .form__error {
 .worker-nav {
     display: flex;
     font-size: 70%;
-    margin-left: 70%;
+    margin-left: 54%;
     color: white;
     flex-direction: column;
     justify-content: flex-start;

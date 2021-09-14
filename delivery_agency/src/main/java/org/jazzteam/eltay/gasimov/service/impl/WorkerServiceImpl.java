@@ -173,6 +173,7 @@ public class WorkerServiceImpl implements WorkerService {
             orderStatesAsStrings.remove(FOUR);
             orderStatesAsStrings.remove(FOUR);
             orderStatesAsStrings.remove(FOUR);
+            orderStatesAsStrings.remove(FOUR);
             return orderStatesAsStrings;
         }
         if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_PROCESSING_POINT_WORKER.name())) {
