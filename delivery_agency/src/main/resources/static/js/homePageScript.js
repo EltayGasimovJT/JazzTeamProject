@@ -44,7 +44,19 @@ jQuery('document').ready(function () {
 
     asClientModal.addEventListener('click', () => {
         if (localStorage.getItem('workersToken') !== null) {
-            localStorage.removeItem('workersToken');
+            swal({
+                title: "Вы уверены, что хотите выйти из рабочей учетной записи?",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        localStorage.removeItem('workersToken');
+                    } else {
+                        window.location.href = "/homePage.html";
+                    }
+                });
         }
         if (localStorage.getItem('clientPhone') !== null) {
             window.location.href = "/clientsOrders.html";

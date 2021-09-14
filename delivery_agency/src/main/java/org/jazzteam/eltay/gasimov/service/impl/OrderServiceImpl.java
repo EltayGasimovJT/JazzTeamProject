@@ -268,7 +268,7 @@ public class OrderServiceImpl implements OrderService {
         Order foundOrder = findByTrackNumber(orderNumber);
         OrderState foundState = orderStateService.findByState(orderState);
         foundOrder.setState(foundState);
-        foundOrder.getHistory().add(getNewHistory(foundState, orderNumber));
+     /*   foundOrder.getHistory().add(getNewHistory(foundState, orderNumber));*/
         return orderRepository.save(foundOrder);
     }
 

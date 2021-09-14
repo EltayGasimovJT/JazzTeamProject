@@ -697,7 +697,7 @@ input:invalid:not(:placeholder-shown) + .form__error {
     margin-left: 85%;
 }
 
-.backToTheOrdersButton{
+.backToTheOrdersButton {
     display: flex;
     justify-content: flex-end;
     margin-right: 5%;
@@ -705,10 +705,76 @@ input:invalid:not(:placeholder-shown) + .form__error {
 
 .change-state-form {
     margin-bottom: 1rem;
-    margin-left: 90px;
-
+    margin-left: 12%;
 }
 
 .changeStateBtn {
-    margin-left: 60%;
+    margin-left: 64%;
+}
+
+.accept-button {
+    margin-left: 67%;
+}
+
+.input-numberForm {
+    width: 400px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+
+    flex-direction: column;
+}
+
+.phone-input-text {
+    align-self: center;
+    margin-left: 5%;
+}
+
+.input-codeForm {
+    width: 400px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+
+    flex-direction: column;
+}
+
+.worker-data-input {
+    align-self: center;
+
+}
+
+.input-worker-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-number {
+    margin-left: 17%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.input-code {
+    margin-left: 26%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.change-state-span {
+    margin-bottom: 10%;
+}
+
+.change-state-div {
+    margin-bottom: 13%;
+}
+
+.change-state-datalist {
+    width: 80%;
 }

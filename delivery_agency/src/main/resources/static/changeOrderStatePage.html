@@ -38,14 +38,17 @@
     <div class="modal-redirect">
         <form id="changeOrderState" autocomplete="off">
             <div class="change-state-form">
-                <span class="createOrderTextField">Выберите новое состояние заказа: </span>
-                <input list="states" id="newOrderState" required name="newState">
-                <datalist id="states" class="listMargin">
-
-                </datalist>
-
+                <div class="change-state-span">
+                    <span class="createOrderTextField general-name">Выберите новое состояние заказа: </span>
+                </div>
+                <div class="change-state-div">
+                    <input class="change-state-datalist" list="states" id="newOrderState" required name="newState">
+                    <datalist id="states" class="listMargin"></datalist>
+                </div>
             </div>
-            <button id="processingPointWorker" type="submit" class="btn btn-dark open-modal changeStateBtn">Подтвердить</button>
+            <button id="processingPointWorker" type="submit" class="btn btn-primary open-modal changeStateBtn">
+                Подтвердить
+            </button>
         </form>
     </div>
 </div>
