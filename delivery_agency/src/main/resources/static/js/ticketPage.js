@@ -17,7 +17,6 @@ jQuery('document').ready(function () {
                 keywords: 'Keywords',
                 fontStyle: 'Calibri'
             },
-
             pageSize: 'A5',
             pageOrientation: 'portrait',
             pageMargins: [50, 50, 30, 60],
@@ -81,12 +80,11 @@ function getOrder(orderId) {
         order = data;
         insetValuesIntoTicket(data);
     }).fail(function () {
-        console.log('fail');
     });
 }
 
 function getIdFromUrl() {
-    let params = window
+    return window
         .location
         .search
         .replace('?', '')
@@ -99,7 +97,6 @@ function getIdFromUrl() {
             },
             {}
         );
-    return params;
 }
 
 function insetValuesIntoTicket(data) {

@@ -46,7 +46,7 @@ function getUsersOrders() {
                     let orderId = event.target.parentElement.parentElement.firstChild.innerText;
                     let geting = $.get(`/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json');
                     geting.done(function (data) {
-                        window.location.href = `http://localhost:8081/orderInfo.html?orderId=${data.id}&orderNumber=${orderId}`;
+                        window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderId}`;
                     }).fail(function () {
                         swal({
                             title: "Ошибка ввода",
