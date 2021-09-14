@@ -16,7 +16,10 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -263,8 +266,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Object changeOrderState(String orderNumber, String orderState) {
         Order foundOrder = findByTrackNumber(orderNumber);
-        foundOrder.setState(orderStateService.findByState(orderState));
+        OrderState foundState = orderStateService.findByState(orderState);
+        foundOrder.setState(foundState);
+        foundOrder.getHistory().add(getNewHistory(foundState, orderNumber));
         return orderRepository.save(foundOrder);
+    }
+
+    private OrderHistory getNewHistory(OrderState orderState, String orderNumber) {
+        OrderHistory newHistory = OrderHistory.builder().build();
+        newHistory.setChangedAt(LocalDateTime.now());
+        if (orderState.getId() == 2) {
+            newHistory.setComment("Заказ с номером # " + orderNumber + "был принят к отправке и помещен на склад пункта выдачи/приема");
+            newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
+            //newHistory.setWorker();
+        }
+
+        return newHistory;
     }
 
     private Order getOrderFoSave(OrderDto orderDtoToSave) throws ObjectNotFoundException {

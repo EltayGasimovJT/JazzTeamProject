@@ -106,6 +106,7 @@ public class OrderController {
     @PutMapping("/changeOrderState")
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public OrderDto changeOrderState(@RequestBody OrderChangeStateDto newState) {
+        CustomUserDetails principal = contextService.getCurrentUserFromContext();
         return modelMapper.map(orderService.changeOrderState(newState.getOrderNumber(), newState.getOrderState()), OrderDto.class);
     }
 
