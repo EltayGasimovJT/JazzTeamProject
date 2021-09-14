@@ -3,6 +3,7 @@ package org.jazzteam.eltay.gasimov.service.impl;
 import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jazzteam.eltay.gasimov.controller.security.CustomUserDetails;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
@@ -22,6 +23,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.jazzteam.eltay.gasimov.util.Constants.*;
+
 
 @Slf4j
 @Service(value = "orderService")
@@ -45,7 +49,10 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderHistoryService orderHistoryService;
     @Autowired
+    private ContextService contextService;
+    @Autowired
     private WorkerService workerService;
+
 
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
@@ -268,20 +275,44 @@ public class OrderServiceImpl implements OrderService {
         Order foundOrder = findByTrackNumber(orderNumber);
         OrderState foundState = orderStateService.findByState(orderState);
         foundOrder.setState(foundState);
-     /*   foundOrder.getHistory().add(getNewHistory(foundState, orderNumber));*/
+        foundOrder.getHistory().add(getNewHistory(foundOrder, foundState, orderNumber));
         return orderRepository.save(foundOrder);
     }
 
-    private OrderHistory getNewHistory(OrderState orderState, String orderNumber) {
+    private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber) {
+        CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
+        Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         OrderHistory newHistory = OrderHistory.builder().build();
-        newHistory.setChangedAt(LocalDateTime.now());
-        if (orderState.getId() == 2) {
-            newHistory.setComment("Заказ с номером # " + orderNumber + "был принят к отправке и помещен на склад пункта выдачи/приема");
+        newHistory.setSentAt(foundOrder.getHistory().iterator().next().getSentAt());
+
+        if (orderState.getId() == ONE) {
+            newHistory.setComment("Заказ с номером # " + orderNumber + " был принят к отправке и помещен на склад пункта выдачи/приема");
             newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
-            //newHistory.setWorker();
+            newHistory.setWorker(foundWorker);
+            newHistory.setChangedAt(LocalDateTime.now());
+        }
+        if (orderState.getId() == TWO) {
+            if (foundWorker.getWorkingPlace() instanceof OrderProcessingPoint) {
+                String[] currentLocationSplit = foundWorker.getWorkingPlace().getLocation().split("-");
+                newHistory.setComment(ORDER_WAS_SENT + orderNumber + " был отправлен на промежуточный склад страны " + currentLocationSplit[1]);
+                newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
+                newHistory.setWorker(foundWorker);
+                newHistory.setChangedAt(LocalDateTime.now());
+            } else {
+                newHistory.setComment(ORDER_WAS_SENT + orderNumber + " был отправлен на промежуточный склад страны " + foundWorker.getWorkingPlace().getLocation());
+                newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
+                newHistory.setWorker(foundWorker);
+                newHistory.setChangedAt(LocalDateTime.now());
+            }
+        }
+        if (orderState.getId() == THREE) {
+            newHistory.setComment(ORDER_WAS_SENT + orderNumber + " был помещен на хранение на промежуточный склад страны " + foundWorker.getWorkingPlace().getLocation());
+            newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
+            newHistory.setWorker(foundWorker);
+            newHistory.setChangedAt(LocalDateTime.now());
         }
 
-        return newHistory;
+        return orderHistoryService.save(CustomModelMapper.mapHistoryToDto(newHistory));
     }
 
     private Order getOrderFoSave(OrderDto orderDtoToSave) throws ObjectNotFoundException {

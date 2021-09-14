@@ -21,6 +21,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.*;
+
 @Slf4j
 @Service(value = "userService")
 public class WorkerServiceImpl implements WorkerService {
@@ -36,10 +38,7 @@ public class WorkerServiceImpl implements WorkerService {
     private WarehouseService warehouseService;
     @Autowired
     private OrderStateService orderStateService;
-    private static final int ZERO = 0;
-    private static final int TWO = 2;
-    private static final int FOUR = 4;
-    private static final int SIX = 6;
+
 
 
     @Override

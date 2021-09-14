@@ -23,6 +23,7 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
                 .comment(orderHistoryDtoToSave.getComment())
                 .changedTypeEnum(orderHistoryDtoToSave.getChangedTypeEnum().toString())
                 .worker(CustomModelMapper.mapDtoToWorker(orderHistoryDtoToSave.getWorker()))
+                .sentAt(orderHistoryDtoToSave.getSentAt())
                 .build();
         return orderHistoryRepository.save(orderHistoryToSave);
     }
