@@ -53,6 +53,7 @@ jQuery('document').ready(function () {
                 .then((willDelete) => {
                     if (willDelete) {
                         localStorage.removeItem('workersToken');
+                        localStorage.removeItem('workerSession');
                     } else {
                         window.location.href = "/homePage.html";
                     }
@@ -138,6 +139,7 @@ jQuery('document').ready(function () {
             })
         }).done(function (data) {
             localStorage.setItem('workersToken', data.token)
+            localStorage.setItem('workerSession', (new Date()).toString())
             window.location.href = "/processingPointWorkerActionPage.html";
         }).fail(function () {
             swal({

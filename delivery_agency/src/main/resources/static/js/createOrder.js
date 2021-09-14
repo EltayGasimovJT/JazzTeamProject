@@ -2,6 +2,7 @@ let $form;
 init()
 
 jQuery("#backToTheActionPageBtnId").on('click', function () {
+    checkSession();
     location.href = "homePage.html";
 })
 
@@ -131,6 +132,7 @@ function init() {
 }
 
 $('#createOrderForm').submit(function (e) {
+    checkSession();
     $form = $(this).serializeArray();
     let sender = new ClientDto({
         name: `${$form[0].value}`,
@@ -413,7 +415,7 @@ function insertWorkerInfo() {
     }).done(function (data) {
         name.innerHTML = `Имя: ${data.name}`
         surname.innerHTML = `Фамилия: ${data.surname}`
-        roles.innerHTML = `Роли: ${data.role}`
+        roles.innerHTML = `Роль: ${data.role}`
         console.log(data)
     }).fail(function () {
         swal({
@@ -422,4 +424,15 @@ function insertWorkerInfo() {
             icon: "error",
         });
     });
+}
+
+function checkSession(){
+    let sessionTimeMinutes = new Date(localStorage.getItem('workerSession')).getMinutes()
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 4) {
+        localStorage.removeItem('workersToken');
+        localStorage.removeItem('workerSession');
+        window.location.href = `/homePage.html`;
+    } else {
+        localStorage.setItem('workerSession', (new Date()).toString())
+    }
 }

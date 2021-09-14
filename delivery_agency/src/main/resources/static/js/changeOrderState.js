@@ -27,6 +27,7 @@ modal.addEventListener('click', (event) => {
 })
 
 $("#trackOrderForm").submit(function (event) {
+    checkSession();
     event.preventDefault();
     let $form = $(this),
         orderNumber = $form.find("input[name='orderNumber']").val(),
@@ -83,6 +84,7 @@ function setupOrderStates(states) {
 
 
 $('#changeOrderState').submit(function (event) {
+    checkSession();
     event.preventDefault();
     let $form = $(this),
         state = $form.find("input[name='newState']").val();
@@ -148,7 +150,7 @@ function insertWorkerInfo() {
     }).done(function (data) {
         name.innerHTML = `Имя: ${data.name}`
         surname.innerHTML = `Фамилия: ${data.surname}`
-        roles.innerHTML = `Роли: ${data.role}`
+        roles.innerHTML = `Роль: ${data.role}`
         console.log(data)
     }).fail(function () {
         swal({
@@ -157,4 +159,15 @@ function insertWorkerInfo() {
             icon: "error",
         });
     });
+}
+
+function checkSession(){
+    let sessionTimeMinutes = new Date(localStorage.getItem('workerSession')).getMinutes()
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 4) {
+        localStorage.removeItem('workersToken');
+        localStorage.removeItem('workerSession');
+        window.location.href = `/homePage.html`;
+    } else {
+        localStorage.setItem('workerSession', (new Date()).toString())
+    }
 }
