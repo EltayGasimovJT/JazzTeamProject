@@ -78,6 +78,15 @@ public class WorkerController {
         return workerService.findStatesByRole(foundByName);
     }
 
+    @GetMapping(path = "/users/getCurrentWorker")
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    WorkerDto getCurrentWorker() {
+        CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
+        return CustomModelMapper.mapUserToDto(workerService.findByName(currentUserFromContext.getUsername()));
+    }
+
+
     @PutMapping("/users")
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public Worker updateUser(@RequestBody WorkerDto newUser) {

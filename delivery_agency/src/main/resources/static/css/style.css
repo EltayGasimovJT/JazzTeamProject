@@ -778,3 +778,14 @@ input:invalid:not(:placeholder-shown) + .form__error {
 .change-state-datalist {
     width: 80%;
 }
+
+.worker-nav {
+    display: flex;
+    font-size: 70%;
+    margin-left: 70%;
+    color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
