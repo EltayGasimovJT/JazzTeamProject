@@ -13,6 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.WAREHOUSES_BY_ID_URL;
+import static org.jazzteam.eltay.gasimov.util.Constants.WAREHOUSES_URL;
+
 @RestController
 public class WarehouseController {
     @Autowired
@@ -20,13 +23,13 @@ public class WarehouseController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = "/warehouses")
+    @PostMapping(path = WAREHOUSES_URL)
     public @ResponseBody
     WarehouseDto addNewWarehouse(@RequestBody WarehouseDto warehouseDto) {
         return modelMapper.map(warehouseService.save(warehouseDto), WarehouseDto.class);
     }
 
-    @GetMapping(path = "/warehouses")
+    @GetMapping(path = WAREHOUSES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<Long> findAllWarehouses() {
@@ -37,13 +40,13 @@ public class WarehouseController {
         return listOfWarehousesId;
     }
 
-    @DeleteMapping(path = "/warehouses/{id}")
+    @DeleteMapping(path = WAREHOUSES_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteWarehouse(@PathVariable Long id) {
         warehouseService.delete(id);
     }
 
-    @PutMapping("/warehouses")
+    @PutMapping(path = WAREHOUSES_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public List<String> updateWarehouse(@RequestBody WarehouseDto newWarehouse) {
         List<String> processingPointsIds = new ArrayList<>();
@@ -54,7 +57,7 @@ public class WarehouseController {
         return getWarehouseAsString(updateWarehouse, processingPointsIds);
     }
 
-    @GetMapping(path = "/warehouses/{id}")
+    @GetMapping(path = WAREHOUSES_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     List<String> findById(@PathVariable Long id) {

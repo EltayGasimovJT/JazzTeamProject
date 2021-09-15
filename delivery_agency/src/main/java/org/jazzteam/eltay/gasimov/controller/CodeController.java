@@ -6,13 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.CODE_FIND_URL;
+
 @RestController
 @Log
 public class CodeController {
     @Autowired
     private CodeService codeService;
 
-    @GetMapping(path = "/codes/findCode")
+    @GetMapping(path = CODE_FIND_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     boolean findPersonalCode(@RequestParam String code) {

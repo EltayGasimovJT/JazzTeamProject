@@ -14,6 +14,8 @@ import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.*;
+
 @RestController
 @Log
 public class CoefficientForPriceCalculationController {
@@ -22,21 +24,21 @@ public class CoefficientForPriceCalculationController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = "/coefficients")
+    @PostMapping(path = COEFFICIENTS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficientToSave) throws ObjectNotFoundException {
         return modelMapper.map(calculationService.save(coefficientToSave), CoefficientForPriceCalculationDto.class);
     }
 
-    @GetMapping(path = "/coefficients/{id}")
+    @GetMapping(path = COEFFICIENTS_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     CoefficientForPriceCalculationDto findById(@PathVariable Long id) throws ObjectNotFoundException {
         return modelMapper.map(calculationService.findOne(id), CoefficientForPriceCalculationDto.class);
     }
 
-    @GetMapping(path = "/coefficients")
+    @GetMapping(path = COEFFICIENTS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<CoefficientForPriceCalculationDto> findAll() throws ObjectNotFoundException {
@@ -45,19 +47,19 @@ public class CoefficientForPriceCalculationController {
                 .collect(Collectors.toSet());
     }
 
-    @PostMapping(path = "/calculatePrice/{country}")
+    @PostMapping(path = CALCULATE_PRICE_URL)
     public @ResponseBody
     BigDecimal calculatePrice(@PathVariable String country, @RequestBody ParcelParametersDto parametersToCalculate) {
         return calculationService.calculatePrice(parametersToCalculate, country);
     }
 
-    @DeleteMapping(path = "/coefficients/{id}")
+    @DeleteMapping(path = COEFFICIENTS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCoefficient(@PathVariable Long id) throws ObjectNotFoundException {
         calculationService.delete(id);
     }
 
-    @PutMapping("/coefficients")
+    @PutMapping(path = COEFFICIENTS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public CoefficientForPriceCalculationDto updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) throws ObjectNotFoundException {
         return modelMapper.map(calculationService.update(newCoefficient), CoefficientForPriceCalculationDto.class);

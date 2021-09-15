@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.stream.Collectors;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.ORDER_STATES_BY_ID_URL;
+import static org.jazzteam.eltay.gasimov.util.Constants.ORDER_STATES_URL;
+
 @RestController
 public class OrderStateController {
     @Autowired
@@ -16,21 +19,21 @@ public class OrderStateController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = "/orderStates")
+    @PostMapping(path = ORDER_STATES_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderStateDto addNewState(@RequestBody OrderStateDto orderStateToSave) {
         return modelMapper.map(orderStateService.save(orderStateToSave), OrderStateDto.class);
     }
 
-    @GetMapping(path = "/orderStates/{id}")
+    @GetMapping(path = ORDER_STATES_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     OrderStateDto findById(@PathVariable Long id) {
         return modelMapper.map(orderStateService.findOne(id), OrderStateDto.class);
     }
 
-    @GetMapping(path = "/orderStates")
+    @GetMapping(path = ORDER_STATES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderStateDto> findAllStates() {
@@ -40,13 +43,13 @@ public class OrderStateController {
                 .collect(Collectors.toList());
     }
 
-    @DeleteMapping(path = "/orderStates/{id}")
+    @DeleteMapping(path = ORDER_STATES_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteState(@PathVariable Long id) {
         orderStateService.delete(id);
     }
 
-    @PutMapping("/orderStates")
+    @PutMapping(ORDER_STATES_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public OrderStateDto updateState(@RequestBody OrderStateDto orderStateDto) {
         return modelMapper.map(orderStateService.update(orderStateDto), OrderStateDto.class);

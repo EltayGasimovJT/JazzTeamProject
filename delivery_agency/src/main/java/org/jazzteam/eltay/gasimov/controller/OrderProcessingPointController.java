@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.PROCESSING_POINTS_BY_ID_URL;
+import static org.jazzteam.eltay.gasimov.util.Constants.PROCESSING_POINTS_URL;
+
 @RestController
 public class OrderProcessingPointController {
     @Autowired
@@ -18,14 +21,14 @@ public class OrderProcessingPointController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = "/processingPoints")
+    @PostMapping(path = PROCESSING_POINTS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderProcessingPointDto addNewProcessingPoint(@RequestBody OrderProcessingPointDto processingPointDto) {
         return modelMapper.map(processingPointService.save(processingPointDto), OrderProcessingPointDto.class);
     }
 
-    @GetMapping(path = "/processingPoints")
+    @GetMapping(path = PROCESSING_POINTS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<Long> findAllProcessingPoints() {
@@ -36,19 +39,19 @@ public class OrderProcessingPointController {
         return listOfWarehousesId;
     }
 
-    @DeleteMapping(path = "/processingPoints/{id}")
+    @DeleteMapping(path = PROCESSING_POINTS_BY_ID_URL)
     public void deleteProcessingPoint(@PathVariable Long id) {
         processingPointService.delete(id);
     }
 
-    @GetMapping(path = "/processingPoints/{id}")
+    @GetMapping(path = PROCESSING_POINTS_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     OrderProcessingPointDto findById(@PathVariable Long id) {
         return modelMapper.map(processingPointService.findOne(id), OrderProcessingPointDto.class);
     }
 
-    @PutMapping("/processingPoints")
+    @PutMapping(PROCESSING_POINTS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public OrderProcessingPointDto updateProcessingPoint(@RequestBody OrderProcessingPointDto newProcessingPoint) {
         return modelMapper.map(processingPointService.update(newProcessingPoint), OrderProcessingPointDto.class);

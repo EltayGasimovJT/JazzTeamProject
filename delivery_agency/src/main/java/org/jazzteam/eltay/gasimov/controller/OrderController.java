@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.*;
+
 @RestController
 @Log
 public class OrderController {
@@ -32,14 +34,14 @@ public class OrderController {
     @Autowired
     private ContextService contextService;
 
-    @PostMapping(path = "/orders")
+    @PostMapping(path = ORDERS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderDto addNewOrder(@RequestBody OrderDto orderDtoToSave) throws ObjectNotFoundException {
         return modelMapper.map(orderService.save(orderDtoToSave), OrderDto.class);
     }
 
-    @PostMapping(path = "/createOrder")
+    @PostMapping(path = ORDERS_CREATE_ORDER_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     OrderResponseDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
@@ -53,7 +55,7 @@ public class OrderController {
                 .build();
     }
 
-    @GetMapping(path = "/orders/findBySenderPassport")
+    @GetMapping(path = ORDERS_FIND_BY_SENDER_PASSPORT_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderDto> findByClientsPassportId(@RequestParam String passportId) throws ObjectNotFoundException {
@@ -63,7 +65,7 @@ public class OrderController {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping(path = "/orders/findHistory/{id}")
+    @GetMapping(path = ORDERS_FIND_HISTORY_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderHistoryDto> findOrderHistoryById(@PathVariable Long id) {
@@ -73,21 +75,21 @@ public class OrderController {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping(path = "/orders/findByTrackNumber")
+    @GetMapping(path = ORDERS_FIND_BY_TRACK_NUMBER_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     OrderDto findByOrderTrackNumber(@RequestParam String orderNumber) {
         return modelMapper.map(orderService.findByTrackNumber(orderNumber), OrderDto.class);
     }
 
-    @GetMapping(path = "/orders/{id}")
+    @GetMapping(path = ORDERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     OrderDto findById(@PathVariable Long id) {
         return modelMapper.map(orderService.findOne(id), OrderDto.class);
     }
 
-    @GetMapping(path = "/orders")
+    @GetMapping(path = ORDERS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<OrderDto> findAllOrders() {
@@ -97,20 +99,19 @@ public class OrderController {
                 .collect(Collectors.toSet());
     }
 
-    @DeleteMapping(path = "/orders/{id}")
+    @DeleteMapping(path = ORDERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable Long id) {
         orderService.delete(id);
     }
 
-    @PutMapping("/changeOrderState")
+    @PutMapping(path = ORDERS_CHANGE_ORDER_STATE_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public OrderDto changeOrderState(@RequestBody OrderChangeStateDto newState) {
-        CustomUserDetails principal = contextService.getCurrentUserFromContext();
         return modelMapper.map(orderService.changeOrderState(newState.getOrderNumber(), newState.getOrderState()), OrderDto.class);
     }
 
-    @PutMapping("/orders")
+    @PutMapping(path = ORDERS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public OrderDto updateOrder(@RequestBody OrderDto newOrder) {
         return modelMapper.map(orderService.update(newOrder), OrderDto.class);

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.*;
+
 @RestController
 @Log
 public class WorkerController {
@@ -24,41 +26,41 @@ public class WorkerController {
     @Autowired
     private ContextService contextService;
 
-    @PostMapping(path = "/users")
+    @PostMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
     Worker addNewUser(@RequestBody WorkerDto workerDtoToSave) {
         return workerService.save(workerDtoToSave);
     }
 
-    @PostMapping(path = "/users/changeWorkingPlace/{id}")
+    @PostMapping(path = WORKERS_CHANGE_WORKING_PLACE_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public @ResponseBody
     Worker changeWorkingPlace(@PathVariable Long id, @RequestBody AbstractBuildingDto newWorkingPlace) {
         return workerService.changeWorkingPlace(id, newWorkingPlace);
     }
 
-    @GetMapping(path = "/users")
+    @GetMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<Worker> findAllUsers() {
         return workerService.findAll();
     }
 
-    @DeleteMapping(path = "/users/{id}")
+    @DeleteMapping(path = WORKERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
         workerService.delete(id);
     }
 
-    @GetMapping(path = "/users/{id}")
+    @GetMapping(path = WORKERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     WorkerDto findById(@PathVariable Long id) {
         return CustomModelMapper.mapUserToDto(workerService.findOne(id));
     }
 
-    @GetMapping(path = "/users/findRoles")
+    @GetMapping(path = WORKERS_FIND_ROLES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<String> findRoles() {
@@ -69,7 +71,7 @@ public class WorkerController {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping(path = "/users/getStatesByRole")
+    @GetMapping(path = WORKERS_GET_STATES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     Iterable<String> getStatesByRole() {
@@ -78,7 +80,7 @@ public class WorkerController {
         return workerService.findStatesByRole(foundByName);
     }
 
-    @GetMapping(path = "/users/getCurrentWorker")
+    @GetMapping(path = WORKERS_GET_CURRENT_WORKER_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     WorkerDto getCurrentWorker() {
@@ -87,7 +89,7 @@ public class WorkerController {
     }
 
 
-    @PutMapping("/users")
+    @PutMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public Worker updateUser(@RequestBody WorkerDto newUser) {
         return workerService.update(newUser);

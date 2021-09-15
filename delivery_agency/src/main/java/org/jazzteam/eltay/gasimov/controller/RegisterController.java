@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.AUTHORIZATION_URL;
+import static org.jazzteam.eltay.gasimov.util.Constants.REGISTRATION_URL;
+
 @RestController
 public class RegisterController {
     @Autowired
@@ -22,12 +25,12 @@ public class RegisterController {
     @Autowired
     private JwtProvider jwtProvider;
 
-    @PostMapping("/register")
+    @PostMapping(REGISTRATION_URL)
     public WorkerDto registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
         return CustomModelMapper.mapUserToDto(workerService.saveForRegistration(registrationRequest));
     }
 
-    @PostMapping("/auth")
+    @PostMapping(AUTHORIZATION_URL)
     public AuthResponse auth(@RequestBody AuthRequest request) {
         Worker workerEntity = workerService.findByLoginAndPassword(request.getLogin(), request.getPassword());
         String token = jwtProvider.generateToken(workerEntity.getName());
