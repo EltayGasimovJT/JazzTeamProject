@@ -38,8 +38,8 @@ public class WorkerServiceImpl implements WorkerService {
     private WarehouseService warehouseService;
     @Autowired
     private OrderStateService orderStateService;
-
-
+    @Autowired
+    private OrderService orderService;
 
     @Override
     public Worker save(WorkerDto workerDtoToSave) {
@@ -155,12 +155,14 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public Iterable<String> findStatesByRole(Worker foundByName) {
+    public Iterable<String> findStatesByRole(Worker foundByName, String orderNumber) {
         List<OrderState> allStatesFromRepository = orderStateService.findAll();
+        Order foundOrder = orderService.findByTrackNumber(orderNumber);
 
         List<String> orderStatesAsStrings = allStatesFromRepository.stream()
                 .map(OrderState::getState)
                 .collect(Collectors.toList());
+        orderStatesAsStrings.remove(ZERO);
 
         if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_ADMIN.name())) {
             return orderStatesAsStrings;
@@ -168,20 +170,54 @@ public class WorkerServiceImpl implements WorkerService {
         if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_WAREHOUSE_WORKER.name())) {
             orderStatesAsStrings.remove(ZERO);
             orderStatesAsStrings.remove(ZERO);
-            orderStatesAsStrings.remove(TWO);
             orderStatesAsStrings.remove(FOUR);
             orderStatesAsStrings.remove(FOUR);
             orderStatesAsStrings.remove(FOUR);
             orderStatesAsStrings.remove(FOUR);
+            String nextState = findNextStateForWarehouseWorker(orderStatesAsStrings, foundOrder.getState().getState());
+            orderStatesAsStrings.clear();
+            orderStatesAsStrings.add(nextState);
             return orderStatesAsStrings;
         }
         if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_PROCESSING_POINT_WORKER.name())) {
             orderStatesAsStrings.remove(TWO);
-            orderStatesAsStrings.remove(FOUR);
-            orderStatesAsStrings.remove(FOUR);
+            orderStatesAsStrings.remove(THREE);
+            orderStatesAsStrings.remove(THREE);
             orderStatesAsStrings.remove(SIX);
+            String nextState = findNextStateForProcessingPointWorker(orderStatesAsStrings, foundOrder.getState().getState());
+            orderStatesAsStrings.clear();
+            orderStatesAsStrings.add(nextState);
             return orderStatesAsStrings;
         }
         return null;
+    }
+
+    private String findNextStateForProcessingPointWorker(List<String> orderStatesAsStrings, String state) {
+        int index = 0;
+        if (orderStatesAsStrings.contains(state) || state.equals(orderStateService.findOne(FIVE).getState())) {
+            for (String orderStateAsString : orderStatesAsStrings) {
+                if (orderStateAsString.equals(state)) {
+                    index = orderStatesAsStrings.indexOf(orderStateAsString) + ONE;
+                }
+            }
+        } else if (index == orderStatesAsStrings.size() - ONE) {
+            throw new IndexOutOfBoundsException("У вас нет полномочий для дальнейшего изменения статусов у этого заказа");
+        }
+        return orderStatesAsStrings.get(index);
+    }
+
+    private String findNextStateForWarehouseWorker(List<String> orderStatesAsStrings, String state) {
+        int index = 0;
+        if (orderStatesAsStrings.contains(state) || state.equals(orderStateService.findOne(THREE).getState())) {
+            for (String orderStateAsString : orderStatesAsStrings) {
+                if (orderStateAsString.equals(state)) {
+                    index = orderStatesAsStrings.indexOf(orderStateAsString) + ONE;
+                }
+            }
+        }
+        if (index == orderStatesAsStrings.size()) {
+            throw new IndexOutOfBoundsException("У вас нет полномочий для дальнейшего изменения статусов у этого заказа");
+        }
+        return orderStatesAsStrings.get(index);
     }
 }

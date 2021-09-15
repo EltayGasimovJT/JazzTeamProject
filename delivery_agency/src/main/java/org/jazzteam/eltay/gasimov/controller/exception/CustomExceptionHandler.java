@@ -7,7 +7,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @Log
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
-
     /*@ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<CustomResponseError> handleIllegalArgumentException(Exception e) {

@@ -67,5 +67,5 @@ public class Constants {
     public static final String ROLE_ADMIN = "Admin";
     public static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     public static final String ROLE_PICKUP_WORKER = "Pick up Worker";
-    public static final String READY_TO_SEND = "Готов к отправке из пункта ";
+    public static final String READY_TO_SEND = "Готов к отправке";
 }

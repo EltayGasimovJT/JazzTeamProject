@@ -7,7 +7,6 @@ jQuery('document').ready(function () {
         insertWorkerInfo();
         insertLogoutButton();
     }
-    initStates()
 })
 
 const backgroundModal = document.querySelector('.backGround-modal');
@@ -35,6 +34,7 @@ $("#trackOrderForm").submit(function (event) {
     let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
     geting.done(function (data) {
         order = data
+        initStates()
         backgroundModal.style.visibility = 'visible';
     }).fail(function () {
         swal({
@@ -51,6 +51,7 @@ function initStates() {
         url: `/users/getStatesByRole`,
         type: 'GET',
         contentType: 'application/json',
+        data: {orderNumber: order.orderTrackNumber},
         beforeSend: function (xhr) {
             let jwtToken = localStorage.getItem('workersToken');
             if (jwtToken !== null) {
@@ -72,7 +73,6 @@ function initStates() {
 }
 
 function setupOrderStates(states) {
-    console.log(states)
     var r = [], j = -1;
     for (let key = 0, size = states.length; key < size; key++) {
         r[++j] = '<option>';
@@ -102,8 +102,7 @@ $('#changeOrderState').submit(function (event) {
                 xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
             }
         },
-        success: function (result) {
-            console.log(result)
+        success: function () {
             swal({
                 title: "Статус успешно обновлен",
                 text: `Для заказа с номером #${order.orderTrackNumber} был успешно установлен новый статус - ${state}`,
@@ -151,7 +150,6 @@ function insertWorkerInfo() {
         name.innerHTML = `Имя: ${data.name}`
         surname.innerHTML = `Фамилия: ${data.surname}`
         roles.innerHTML = `Роль: ${data.role}`
-        console.log(data)
     }).fail(function () {
         swal({
             title: "Что-то пошло не так",
@@ -161,7 +159,7 @@ function insertWorkerInfo() {
     });
 }
 
-function checkSession(){
+function checkSession() {
     let sessionTimeMinutes = new Date(localStorage.getItem('workerSession')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
         localStorage.removeItem('workersToken');

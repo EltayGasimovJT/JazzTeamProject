@@ -239,12 +239,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order createOrder(CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
-        OrderState orderState = orderStateService.findByState(OrderStates.READY_TO_SEND.toString());
+        OrderState orderState = orderStateService.findByState(OrderStates.READY_TO_SEND.getState());
         OrderHistoryDto orderHistoryForSave = OrderHistoryDto.builder()
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .worker(requestOrder.getWorkerDto())
                 .changedAt(LocalDateTime.now())
-                .comment(orderStateService.findOne(ONE).getState() + requestOrder.getWorkerDto().getWorkingPlace().getLocation())
+                .comment(orderState.getPrefix() + " " + requestOrder.getWorkerDto().getWorkingPlace().getLocation() + orderState.getSuffix())
                 .build();
         OrderDto orderDtoToSave = OrderDto.builder()
                 .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
