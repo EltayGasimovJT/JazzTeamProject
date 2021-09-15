@@ -57,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
     private static final String ROLE_ADMIN = "Admin";
     private static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     private static final String ROLE_PICKUP_WORKER = "Pick up Worker";
+    private static final String READY_TO_SEND = "Готов к отправке";
 
     @Override
     public Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) throws IllegalArgumentException {
@@ -252,7 +253,7 @@ public class OrderServiceImpl implements OrderService {
                 .changedTypeEnum(OrderStateChangeType.READY_TO_SEND)
                 .worker(requestOrder.getWorkerDto())
                 .changedAt(LocalDateTime.now())
-                .comment("Заказ был подготовлен к отправке из пункта " + requestOrder.getWorkerDto().getWorkingPlace().getLocation())
+                .comment(orderStateService.findOne(ONE) + requestOrder.getWorkerDto().getWorkingPlace().getLocation())
                 .build();
         OrderDto orderDtoToSave = OrderDto.builder()
                 .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
@@ -284,34 +285,10 @@ public class OrderServiceImpl implements OrderService {
         Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         OrderHistory newHistory = OrderHistory.builder().build();
         newHistory.setSentAt(foundOrder.getHistory().iterator().next().getSentAt());
-
-        if (orderState.getId() == ONE) {
-            newHistory.setComment("Заказ с номером # " + orderNumber + " был принят к отправке и помещен на склад пункта выдачи/приема");
-            newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
-            newHistory.setWorker(foundWorker);
-            newHistory.setChangedAt(LocalDateTime.now());
-        }
-        if (orderState.getId() == TWO) {
-            if (foundWorker.getWorkingPlace() instanceof OrderProcessingPoint) {
-                String[] currentLocationSplit = foundWorker.getWorkingPlace().getLocation().split("-");
-                newHistory.setComment(ORDER_WAS_SENT + orderNumber + " был отправлен на промежуточный склад страны " + currentLocationSplit[1]);
-                newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
-                newHistory.setWorker(foundWorker);
-                newHistory.setChangedAt(LocalDateTime.now());
-            } else {
-                newHistory.setComment(ORDER_WAS_SENT + orderNumber + " был отправлен на промежуточный склад страны " + foundWorker.getWorkingPlace().getLocation());
-                newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
-                newHistory.setWorker(foundWorker);
-                newHistory.setChangedAt(LocalDateTime.now());
-            }
-        }
-        if (orderState.getId() == THREE) {
-            newHistory.setComment(ORDER_WAS_SENT + orderNumber + " был помещен на хранение на промежуточный склад страны " + foundWorker.getWorkingPlace().getLocation());
-            newHistory.setChangedTypeEnum(OrderStateChangeType.FROM_READY_TO_STORE.name());
-            newHistory.setWorker(foundWorker);
-            newHistory.setChangedAt(LocalDateTime.now());
-        }
-
+        newHistory.setWorker(foundWorker);
+        newHistory.setChangedAt(LocalDateTime.now());
+        newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation());
+        newHistory.setChangedTypeEnum(OrderStateChangeType.READY_TO_SEND.name());
         return orderHistoryService.save(CustomModelMapper.mapHistoryToDto(newHistory));
     }
 
@@ -321,7 +298,7 @@ public class OrderServiceImpl implements OrderService {
         BigDecimal price = orderDtoToSave.getPrice();
         OrderState orderState = orderStateService.findByState(OrderStates.READY_TO_SEND.getState());
         orderDtoToSave.setPrice(price);
-        orderDtoToSave.setState(modelMapper.map(orderStateService.findOne(1), OrderStateDto.class));
+        orderDtoToSave.setState(modelMapper.map(orderStateService.findByState(READY_TO_SEND), OrderStateDto.class));
 
         OrderHistory savedHistory = orderHistoryService.save(modelMapper.map(orderDtoToSave.getHistory().iterator().next(), OrderHistoryDto.class));
         savedHistory.setSentAt(LocalDateTime.now());

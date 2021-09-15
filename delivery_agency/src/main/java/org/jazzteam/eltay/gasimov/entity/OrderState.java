@@ -30,4 +30,10 @@ public class OrderState {
             @JoinColumn(name = "order_state_id")
     }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<WorkerRoles> rolesAllowedPutToState;
+
+    @Column(name = "history_prefix")
+    private String prefix;
+
+    @Column(name = "history_suffix")
+    private String suffix;
 }
