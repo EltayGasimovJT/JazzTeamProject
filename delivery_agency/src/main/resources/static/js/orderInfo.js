@@ -58,6 +58,7 @@ function addBackToOrderListButton() {
     const hiddenButton = document.querySelector('.hiddenButton');
     hiddenButton.addEventListener(
         'click', () => {
+            checkSession()
             window.location.href = `/clientsOrders.html`;
         }
     )
@@ -109,4 +110,15 @@ function getTimeFormat(time) {
     return ('0' + date.getDate()).slice(-2) + '.'
         + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
         + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+}
+
+function checkSession(){
+    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getSeconds()
+    if ((new Date().getSeconds() - sessionTimeMinutes) > 30) {
+        localStorage.removeItem('clientPhone');
+        localStorage.removeItem('sessionTime');
+        window.location.href = `/homePage.html`;
+    } else {
+        localStorage.setItem('sessionTime', (new Date()).toString())
+    }
 }

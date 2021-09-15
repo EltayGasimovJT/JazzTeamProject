@@ -81,8 +81,8 @@ function getIdFromUrl() {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 4) {
+    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getSeconds()
+    if ((new Date().getSeconds() - sessionTimeMinutes) > 30) {
         localStorage.removeItem('clientPhone');
         localStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;

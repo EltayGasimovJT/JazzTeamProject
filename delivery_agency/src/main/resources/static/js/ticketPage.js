@@ -9,6 +9,7 @@ jQuery('document').ready(function () {
     getOrder(idFromUrl.orderId);
 
     jQuery("#downloadTicketPdf").on('click', function () {
+        checkSession()
         let docInfo = {
             info: {
                 title: 'Ticket №' + idFromUrl.ticketNumber,
@@ -117,4 +118,15 @@ function getTimeFormat(time) {
     return ('0' + date.getDate()).slice(-2) + '.'
         + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
         + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+}
+
+function checkSession() {
+    let sessionTimeMinutes = new Date(localStorage.getItem('workerSession')).getMinutes()
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
+        localStorage.removeItem('workersToken');
+        localStorage.removeItem('workerSession');
+        window.location.href = `/homePage.html`;
+    } else {
+        localStorage.setItem('workerSession', (new Date()).toString())
+    }
 }
