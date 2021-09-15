@@ -14,7 +14,6 @@ import java.util.Date;
 public class JwtProvider {
     @Value("$(jwt.secret)")
     private String jwtSecret;
-
     private static final int EXPANSION = 15;
 
     public String generateToken(String login) {

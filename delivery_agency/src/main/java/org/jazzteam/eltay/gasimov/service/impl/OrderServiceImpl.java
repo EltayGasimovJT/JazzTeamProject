@@ -247,7 +247,7 @@ public class OrderServiceImpl implements OrderService {
                 .comment(orderState.getPrefix() + " " + requestOrder.getWorkerDto().getWorkingPlace().getLocation() + orderState.getSuffix())
                 .build();
         OrderDto orderDtoToSave = OrderDto.builder()
-                .destinationPlace(modelMapper.map(clientService.determineCurrentDestinationPlace(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
+                .destinationPlace(modelMapper.map(orderProcessingPointService.findByLocation(requestOrder.getDestinationPoint()), OrderProcessingPointDto.class))
                 .parcelParameters(requestOrder.getParcelParameters())
                 .price(requestOrder.getPrice())
                 .recipient(requestOrder.getRecipient())
@@ -262,16 +262,19 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Object changeOrderState(String orderNumber, String orderState) {
+        CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
+        Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         Order foundOrder = findByTrackNumber(orderNumber);
         OrderState foundState = orderStateService.findByState(orderState);
         foundOrder.setState(foundState);
-        foundOrder.getHistory().add(getNewHistory(foundOrder, foundState, orderNumber));
+        foundOrder.setCurrentLocation(foundWorker.getWorkingPlace());
+        orderRepository.save(foundOrder);
+        foundOrder.getHistory().add(getNewHistory(foundOrder, foundState, orderNumber, foundWorker));
         return orderRepository.save(foundOrder);
     }
 
-    private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber) {
-        CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
-        Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
+    private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber, Worker foundWorker) {
+
         OrderHistory newHistory = OrderHistory.builder().build();
         newHistory.setSentAt(foundOrder.getHistory().iterator().next().getSentAt());
         newHistory.setWorker(foundWorker);

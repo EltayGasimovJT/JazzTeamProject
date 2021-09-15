@@ -171,7 +171,7 @@ jQuery('document').ready(function () {
 
 function checkSession() {
     let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 5) {
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
         localStorage.removeItem('clientPhone');
         localStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;

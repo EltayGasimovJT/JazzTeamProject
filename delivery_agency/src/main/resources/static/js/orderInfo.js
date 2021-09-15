@@ -114,7 +114,7 @@ function getTimeFormat(time) {
 
 function checkSession(){
     let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getSeconds()
-    if ((new Date().getSeconds() - sessionTimeMinutes) > 30) {
+    if (Math.abs((new Date()).getSeconds() - sessionTimeMinutes) > 30) {
         localStorage.removeItem('clientPhone');
         localStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;

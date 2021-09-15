@@ -7,7 +7,6 @@ jQuery("#backToTheActionPageBtnId").on('click', function () {
 const idUnik = Date.now()
 
 function getUsersOrders() {
-    checkSession();
     let phoneNumber = localStorage.getItem('clientPhone');
     $.ajax({
         url: `/clients/ordersByPhoneNumber/${phoneNumber}`,
@@ -43,7 +42,8 @@ function getUsersOrders() {
             }
 
             $(".additionalInfoButton").click(function (event) {
-                    let orderId = event.target.parentElement.parentElement.firstChild.innerText;
+                checkSession();
+                let orderId = event.target.parentElement.parentElement.firstChild.innerText;
                     let geting = $.get(`/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json');
                     geting.done(function (data) {
                         window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderId}`;
@@ -81,8 +81,8 @@ function getIdFromUrl() {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getSeconds()
-    if ((new Date().getSeconds() - sessionTimeMinutes) > 30) {
+    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
         localStorage.removeItem('clientPhone');
         localStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;

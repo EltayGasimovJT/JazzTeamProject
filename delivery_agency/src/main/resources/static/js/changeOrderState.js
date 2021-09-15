@@ -127,6 +127,7 @@ function insertLogoutButton() {
     hiddenButton.addEventListener(
         'click', () => {
             localStorage.removeItem('workersToken');
+            localStorage.removeItem('workerSession');
             window.location.href = `/homePage.html`;
         }
     )
