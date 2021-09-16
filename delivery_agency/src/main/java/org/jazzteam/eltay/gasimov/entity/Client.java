@@ -29,6 +29,6 @@ public class Client {
     @OneToMany(mappedBy = "sender", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Set<Order> orders;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.MERGE)
     private ClientsCode code;
 }

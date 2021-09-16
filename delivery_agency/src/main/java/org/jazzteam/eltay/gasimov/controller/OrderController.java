@@ -102,7 +102,14 @@ public class OrderController {
     @DeleteMapping(path = ORDERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable Long id) {
+        log.severe(id.toString());
         orderService.delete(id);
+    }
+
+    @DeleteMapping(path = ORDERS_BY_TRACK_NUMBER)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteByTrackNumber(@PathVariable String orderNumber) {
+        orderService.deleteByTrackNumber(orderNumber);
     }
 
     @PutMapping(path = ORDERS_CHANGE_ORDER_STATE_URL)

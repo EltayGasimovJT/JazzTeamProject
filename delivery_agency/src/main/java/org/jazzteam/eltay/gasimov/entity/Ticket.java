@@ -18,6 +18,6 @@ public class Ticket {
     @Column(name = "generated_ticket_number")
     private String ticketNumber;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Order order;
 }

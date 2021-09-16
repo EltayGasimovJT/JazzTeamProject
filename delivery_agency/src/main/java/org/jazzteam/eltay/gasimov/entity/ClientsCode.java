@@ -18,6 +18,6 @@ public class ClientsCode {
     @Column(name = "generated_code")
     private String generatedCode;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Client client;
 }

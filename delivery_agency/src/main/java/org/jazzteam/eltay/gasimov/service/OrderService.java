@@ -45,4 +45,6 @@ public interface OrderService {
     Order createOrder(CreateOrderRequestDto orderDtoToSave) throws ObjectNotFoundException;
 
     Object changeOrderState(String orderNumber, String orderState);
+
+    void deleteByTrackNumber(String orderNumber);
 }

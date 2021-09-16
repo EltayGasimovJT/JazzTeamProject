@@ -12,4 +12,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Order findBySender(Client senderForSearch);
 
     Order findByTrackNumber(String trackNumber);
+
+    void deleteByTrackNumber(String orderNumber);
 }

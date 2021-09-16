@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -271,6 +272,12 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(foundOrder);
         foundOrder.getHistory().add(getNewHistory(foundOrder, foundState, orderNumber, foundWorker));
         return orderRepository.save(foundOrder);
+    }
+
+    @Override
+    @Transactional
+    public void deleteByTrackNumber(String orderNumber) {
+        orderRepository.deleteByTrackNumber(orderNumber);
     }
 
     private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber, Worker foundWorker) {

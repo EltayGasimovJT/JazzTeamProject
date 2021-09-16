@@ -24,18 +24,23 @@
     </div>
     <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
 </div>
-<div class="modal-wrap">
-    <div class="track-number-form">
-        <form id="trackOrderForm" autocomplete="off" action="/orders/findByTrackNumber">
-            <div class="form-group trackForm">
-                <label class="general-name" for="orderNumberId">Введите идентификационный номер заказа </label>
-                <input type="text" class="form-control" id="orderNumberId"
-                       required placeholder="Введите идентификационный номер заказа"
-                       name="orderNumber">
-            </div>
-            <button type="submit" class="btn btn-primary">Подтвердить</button>
-        </form>
-    </div>
+
+<div class="table-wrap">
+    <table id="orders" class="custom-table table table-bordered table-sm table">
+        <tr onclick="">
+            <td>Номер заказа</td>
+            <td>Имя адресата</td>
+            <td>Фамилия адресата</td>
+            <td>Время отправки заказа</td>
+            <td>Стоимость, BYN</td>
+            <td>Состояние заказа</td>
+            <td>Пункт отправки</td>
+            <td>Местоположение посылки</td>
+            <td>Пункт назначения</td>
+            <td>Изменить состояние у заказа</td>
+            <td>Отменить заказ</td>
+        </tr>
+    </table>
 </div>
 
 <div class="backGround-modal">
@@ -50,9 +55,11 @@
                     <datalist id="states" class="listMargin"></datalist>
                 </div>
             </div>
-            <button id="processingPointWorker" type="submit" class="btn btn-primary open-modal changeStateBtn">
-                Подтвердить
-            </button>
+            <div class="worker-actions-with-order-modal">
+                <button id="processingPointWorker" type="submit" class="btn btn-primary open-modal changeStateBtn">
+                    Подтвердить
+                </button>
+            </div>
         </form>
     </div>
 </div>

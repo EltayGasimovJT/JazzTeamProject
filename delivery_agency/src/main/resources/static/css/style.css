@@ -685,9 +685,6 @@ input:invalid:not(:placeholder-shown) + .form__error {
     border-radius: 10px;
 }
 
-.logout-button-margin {
-}
-
 .logoutButtonDiv {
     display: flex;
     flex-direction: row;
@@ -707,10 +704,6 @@ input:invalid:not(:placeholder-shown) + .form__error {
 .change-state-form {
     margin-bottom: 1rem;
     margin-left: 12%;
-}
-
-.changeStateBtn {
-    margin-left: 64%;
 }
 
 .accept-button {
@@ -809,4 +802,14 @@ input:invalid:not(:placeholder-shown) + .form__error {
     margin-left: 20%;
     width: 70%;
     justify-content: space-between;
+}
+
+.worker-actions-with-order-modal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.order-info-text {
+    color: #5176FA;
 }

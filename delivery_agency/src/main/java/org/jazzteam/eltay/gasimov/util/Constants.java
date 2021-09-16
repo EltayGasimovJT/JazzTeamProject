@@ -5,6 +5,7 @@ public class Constants {
 
     }
 
+
     public static final int INITIAL_WEIGHT = 50000;
     public static final double PRICE_FOR_PACKAGE = 1.9;
     public static final double COEFFICIENT_FOR_KILOGRAMS_CONVERT = 1000;
@@ -42,6 +43,7 @@ public class Constants {
     public static final String ORDERS_CHANGE_ORDER_STATE_URL = "/changeOrderState";
     public static final String ORDERS_CREATE_ORDER_URL = "/createOrder";
     public static final String ORDERS_FIND_BY_SENDER_PASSPORT_URL = ORDERS_URL + "/findBySenderPassport";
+    public static final String ORDERS_BY_TRACK_NUMBER = ORDERS_URL + "/deleteByTrackNumber/{orderNumber}";
     public static final String ORDERS_FIND_BY_TRACK_NUMBER_URL = ORDERS_URL + "/findByTrackNumber";
     public static final String ORDERS_FIND_HISTORY_URL = ORDERS_URL + "/findHistory" + ID;
     public static final String PROCESSING_POINTS_URL = "/processingPoints";

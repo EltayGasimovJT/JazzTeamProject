@@ -18,7 +18,7 @@ public class OrderHistory {
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "worker_id")
     private Worker worker;
     @Column

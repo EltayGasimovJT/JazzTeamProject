@@ -17,10 +17,10 @@ public abstract class AbstractLocation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "expected_orders_id")
     private List<Order> expectedOrders;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "dispatched_orders_id")
     private List<Order> dispatchedOrders;
 }

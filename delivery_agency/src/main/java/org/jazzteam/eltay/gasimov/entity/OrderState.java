@@ -20,12 +20,12 @@ public class OrderState {
     private Long id;
     @Column(name = "state")
     private String state;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "roles_allowed_withdraw_from_state", joinColumns = {
             @JoinColumn(name = "order_state_id")
     }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private Set<WorkerRoles> rolesAllowedWithdrawFromState;
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "roles_allowed_put_to_state", joinColumns = {
             @JoinColumn(name = "order_state_id")
     }, inverseJoinColumns = {@JoinColumn(name = "role_id")})

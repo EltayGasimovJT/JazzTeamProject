@@ -21,10 +21,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private OrderState state;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private ParcelParameters parcelParameters;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "sender_id")
@@ -48,7 +48,7 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn
     private AbstractBuilding currentLocation;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Set<OrderHistory> history;
 }
