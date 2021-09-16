@@ -389,13 +389,10 @@ export class ParcelParametersDto {
 }
 
 function setupCountries(countries) {
-    var r = [], j = -1;
     for (let key = 0, size = countries.length; key < size; key++) {
-        r[++j] = '<option>';
-        r[++j] = countries[key].country;
-        r[++j] = '</option>';
+        let row = '<option>' + countries[key].country + '</option>';
+        $('#towns').append(row);
     }
-    $('#towns').append(r.join(''));
 }
 
 function insertWorkerInfo() {
