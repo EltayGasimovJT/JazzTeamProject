@@ -10,7 +10,7 @@ jQuery('document').ready(function () {
 let backToTheClientsOrdersButton = document.getElementById('backToTheClientsOrdersButton');
 
 function getIdFromUrl() {
-    let params = window
+    return window
         .location
         .search
         .replace('?', '')
@@ -23,7 +23,6 @@ function getIdFromUrl() {
             },
             {}
         );
-    return params;
 }
 
 function getOrderHistories(idFromUrl) {

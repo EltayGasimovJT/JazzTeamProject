@@ -1,5 +1,9 @@
-const createOrderBtn = document.querySelector('.create-order-btn');
-const changeOrderStateBtn = document.querySelector('.change-order-state-btn');
+document.querySelector('.create-order-btn').addEventListener('click', (event) => {
+    window.location.href = "/createOrder.html";
+});
+document.querySelector('.change-order-state-btn').addEventListener('click', (event) => {
+    window.location.href = "/changeOrderStatePage.html";
+});
 
 init()
 jQuery('document').ready(function () {
@@ -8,13 +12,7 @@ jQuery('document').ready(function () {
     }
 })
 
-createOrderBtn.addEventListener('click', (event) => {
-    window.location.href = "/createOrder.html";
-})
 
-changeOrderStateBtn.addEventListener('click', (event) => {
-    window.location.href = "/changeOrderStatePage.html";
-})
 
 function init() {
     if (localStorage.getItem('workersToken') === null) {
@@ -23,8 +21,8 @@ function init() {
 }
 
 function insertLogoutButton() {
-    let table = document.getElementById("logoutButtonToInsert");
-    table.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
+    let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
+    logoutButtonDiv.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
     const hiddenButton = document.querySelector('.logout-button-margin');
     hiddenButton.addEventListener(
         'click', () => {

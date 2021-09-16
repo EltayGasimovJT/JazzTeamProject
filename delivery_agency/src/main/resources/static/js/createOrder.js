@@ -194,8 +194,8 @@ $('#createOrderForm').submit(function (e) {
 });
 
 function insertLogoutButton() {
-    let table = document.getElementById("logoutButtonToInsert");
-    table.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
+    let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
+    logoutButtonDiv.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
     const hiddenButton = document.querySelector('.logout-button-margin');
     hiddenButton.addEventListener(
         'click', () => {
