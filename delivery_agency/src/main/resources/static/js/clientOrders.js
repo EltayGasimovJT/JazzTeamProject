@@ -15,31 +15,15 @@ function getUsersOrders() {
         contentType: 'application/json',
         data: {phoneNumber: phoneNumber},
         success: function (result) {
-            var r = [], j = -1;
             for (let key = 0, size = result.length; key < size; key++) {
-                r[++j] = '<tr class="text"><td>';
-                r[++j] = result[key].orderTrackNumber;
-                r[++j] = '</td><td class="orderNum">';
-                r[++j] = result[key].recipient.name;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].recipient.surname;
-                r[++j] = '</td><td>';
-                r[++j] = getTimeFormat(result[key].sendingTime);
-                r[++j] = '</td><td>';
-                r[++j] = result[key].price;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].state.state;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].departurePoint.location;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].currentLocation.location;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].currentLocation.location;
-                r[++j] = '</td><td>';
-                r[++j] = addBackToOrderListButton();
-                r[++j] = '</td></tr>';
-                $('#orders').append(r.join(''));
-                r = []
+                let row = '<tr class="text"><td>' + result[key].orderTrackNumber +
+                    '</td><td class="orderNum">' + result[key].recipient.name + '</td><td>' +
+                    result[key].recipient.surname + '</td><td>' + getTimeFormat(result[key].sendingTime) +
+                    '</td><td>' + result[key].price + '</td><td>' + result[key].state.state + '</td><td>' +
+                    result[key].departurePoint.location + '</td><td>' + result[key].currentLocation.location +
+                    '</td><td>' + result[key].destinationPlace.location + '</td><td>' + addBackToOrderListButton() +
+                    '</td></tr>';
+                $('#orders').append(row);
             }
 
             $(".additionalInfoButton").click(function (event) {
