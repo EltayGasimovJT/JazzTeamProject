@@ -3,7 +3,7 @@ jQuery('document').ready(function () {
     getOrderHistories(order.orderId);
     getOrder(order.orderId);
     $('#orderId').append(order.orderNumber);
-    if (localStorage.getItem('clientPhone') !== null) {
+    if (sessionStorage.getItem('clientPhone') !== null) {
         addBackToOrderListButton();
     }
 })
@@ -86,12 +86,12 @@ function getTimeFormat(time) {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getSeconds()
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getSeconds()
     if (Math.abs((new Date()).getSeconds() - sessionTimeMinutes) > 30) {
-        localStorage.removeItem('clientPhone');
-        localStorage.removeItem('sessionTime');
+        sessionStorage.removeItem('clientPhone');
+        sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;
     } else {
-        localStorage.setItem('sessionTime', (new Date()).toString())
+        sessionStorage.setItem('sessionTime', (new Date()).toString())
     }
 }

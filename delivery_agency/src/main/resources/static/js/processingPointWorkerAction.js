@@ -3,7 +3,7 @@ const changeOrderStateBtn = document.querySelector('.change-order-state-btn');
 
 init()
 jQuery('document').ready(function () {
-    if (localStorage.getItem('workersToken') !== null) {
+    if (sessionStorage.getItem('workersToken') !== null) {
         insertWorkerInfo();
         insertLogoutButton();
     }
@@ -20,7 +20,7 @@ changeOrderStateBtn.addEventListener('click', (event) => {
 })
 
 function init() {
-    if (localStorage.getItem('workersToken') === null) {
+    if (sessionStorage.getItem('workersToken') === null) {
         window.location.href = "/homePage.html";
     }
 }
@@ -31,8 +31,8 @@ function insertLogoutButton() {
     const hiddenButton = document.querySelector('.logout-button-margin');
     hiddenButton.addEventListener(
         'click', () => {
-            localStorage.removeItem('workersToken');
-            localStorage.removeItem('workerSession');
+            sessionStorage.removeItem('workersToken');
+            sessionStorage.removeItem('workerSession');
             window.location.href = `/homePage.html`;
         }
     )
@@ -47,7 +47,7 @@ function insertWorkerInfo() {
         url: `/users/getCurrentWorker`,
         contentType: 'application/json; charset=utf-8',
         beforeSend: function (xhr) {
-            let jwtToken = localStorage.getItem('workersToken');
+            let jwtToken = sessionStorage.getItem('workersToken');
             if (jwtToken !== null) {
                 xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
             }
@@ -66,12 +66,12 @@ function insertWorkerInfo() {
 }
 
 function checkSession(){
-    let sessionTimeMinutes = new Date(localStorage.getItem('workerSession')).getMinutes()
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 4) {
-        localStorage.removeItem('workersToken');
-        localStorage.removeItem('workerSession');
+        sessionStorage.removeItem('workersToken');
+        sessionStorage.removeItem('workerSession');
         window.location.href = `/homePage.html`;
     } else {
-        localStorage.setItem('workerSession', (new Date()).toString())
+        sessionStorage.setItem('workerSession', (new Date()).toString())
     }
 }

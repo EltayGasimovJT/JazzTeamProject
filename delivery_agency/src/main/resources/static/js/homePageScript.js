@@ -1,5 +1,5 @@
 jQuery('document').ready(function () {
-    if (localStorage.getItem('clientsPhone') !== null) {
+    if (sessionStorage.getItem('clientsPhone') !== null) {
         checkSession();
     }
 
@@ -43,7 +43,7 @@ jQuery('document').ready(function () {
     })
 
     asClientModal.addEventListener('click', () => {
-        if (localStorage.getItem('workersToken') !== null) {
+        if (sessionStorage.getItem('workersToken') !== null) {
             swal({
                 title: "Вы уверены, что хотите выйти из рабочей учетной записи?",
                 icon: "warning",
@@ -52,14 +52,14 @@ jQuery('document').ready(function () {
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        localStorage.removeItem('workersToken');
-                        localStorage.removeItem('workerSession');
+                        sessionStorage.removeItem('workersToken');
+                        sessionStorage.removeItem('workerSession');
                     } else {
                         window.location.href = "/homePage.html";
                     }
                 });
         }
-        if (localStorage.getItem('clientPhone') !== null) {
+        if (sessionStorage.getItem('clientPhone') !== null) {
             window.location.href = "/clientsOrders.html";
         } else {
             clientBackgroundModal.style.visibility = 'visible';
@@ -75,11 +75,11 @@ jQuery('document').ready(function () {
     })
 
     asUserModal.addEventListener('click', () => {
-        if (localStorage.getItem('clientPhone') !== null) {
-            localStorage.removeItem('clientPhone');
-            localStorage.removeItem('sessionTime');
+        if (sessionStorage.getItem('clientPhone') !== null) {
+            sessionStorage.removeItem('clientPhone');
+            sessionStorage.removeItem('sessionTime');
         }
-        if (localStorage.getItem('workersToken') !== null) {
+        if (sessionStorage.getItem('workersToken') !== null) {
             window.location.href = "/processingPointWorkerActionPage.html";
         } else {
             backgroundModal.style.visibility = 'visible';
@@ -95,7 +95,10 @@ jQuery('document').ready(function () {
             url = $form.attr("action");
         let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
         geting.done(function (data) {
-            swal(data.code.generatedCode)
+            swal({
+                title: "Четырехзначный код из смс",
+                text: data.code.generatedCode
+            })
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
         }).fail(function () {
@@ -110,8 +113,8 @@ jQuery('document').ready(function () {
             url = $form.attr("action");
         let geting = $.get(url, {code: code}, 'application/json');
         geting.done(function () {
-            localStorage.setItem('clientPhone', clientPhoneNumber);
-            localStorage.setItem('sessionTime', (new Date()).toString())
+            sessionStorage.setItem('clientPhone', clientPhoneNumber);
+            sessionStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `/clientsOrders.html`;
         }).fail(function () {
             swal({
@@ -138,8 +141,8 @@ jQuery('document').ready(function () {
                 password: `${password}`
             })
         }).done(function (data) {
-            localStorage.setItem('workersToken', data.token)
-            localStorage.setItem('workerSession', (new Date()).toString())
+            sessionStorage.setItem('workersToken', data.token)
+            sessionStorage.setItem('workerSession', (new Date()).toString())
             window.location.href = "/processingPointWorkerActionPage.html";
         }).fail(function () {
             swal({
@@ -170,12 +173,12 @@ jQuery('document').ready(function () {
 })
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
-        localStorage.removeItem('clientPhone');
-        localStorage.removeItem('sessionTime');
+        sessionStorage.removeItem('clientPhone');
+        sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;
     } else {
-        localStorage.setItem('sessionTime', (new Date()).toString())
+        sessionStorage.setItem('sessionTime', (new Date()).toString())
     }
 }

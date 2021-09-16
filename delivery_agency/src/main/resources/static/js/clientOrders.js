@@ -7,7 +7,7 @@ jQuery("#backToTheActionPageBtnId").on('click', function () {
 const idUnik = Date.now()
 
 function getUsersOrders() {
-    let phoneNumber = localStorage.getItem('clientPhone');
+    let phoneNumber = sessionStorage.getItem('clientPhone');
     $.ajax({
         url: `/clients/ordersByPhoneNumber/${phoneNumber}`,
         type: 'GET',
@@ -65,13 +65,13 @@ function getIdFromUrl() {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
-        localStorage.removeItem('clientPhone');
-        localStorage.removeItem('sessionTime');
+        sessionStorage.removeItem('clientPhone');
+        sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;
     } else {
-        localStorage.setItem('sessionTime', (new Date()).toString())
+        sessionStorage.setItem('sessionTime', (new Date()).toString())
     }
 }
 

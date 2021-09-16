@@ -44,7 +44,7 @@ jQuery('document').ready(function () {
                 {
                     text: 'Номер трекера: #' + order.orderTrackNumber + '\n' +
                         'Фамилия и имя отправителя: ' + order.sender.name + " " + order.sender.surname + '\n' +
-                        'Фамилия и имя Адресата: ' + order.recipient.name + " " + order.recipient.surname + '\n' +
+                        'Фамилия и имя адресата: ' + order.recipient.name + " " + order.recipient.surname + '\n' +
                         'Место отправки: ' + order.departurePoint.location + '\n' +
                         'Место назначения: ' + order.destinationPlace.location + '\n' +
                         'Время отправки: ' + getTimeFormat(order.sendingTime) + '\n' +
@@ -121,12 +121,12 @@ function getTimeFormat(time) {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(localStorage.getItem('workerSession')).getMinutes()
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
-        localStorage.removeItem('workersToken');
-        localStorage.removeItem('workerSession');
+        sessionStorage.removeItem('workersToken');
+        sessionStorage.removeItem('workerSession');
         window.location.href = `/homePage.html`;
     } else {
-        localStorage.setItem('workerSession', (new Date()).toString())
+        sessionStorage.setItem('workerSession', (new Date()).toString())
     }
 }
