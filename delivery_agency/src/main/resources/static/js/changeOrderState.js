@@ -1,3 +1,4 @@
+getAllOrders();
 jQuery('document').ready(function () {
     if (sessionStorage.getItem('workersToken') === null) {
         window.location.href = "/homePage.html";
@@ -24,34 +25,18 @@ let currentWorkerRole;
 
 
 $("#trackOrderForm").submit(function (event) {
-    checkSession();
-    event.preventDefault();
-    let $form = $(this),
-        orderNumber = $form.find("input[name='orderNumber']").val(),
-        url = $form.attr("action");
-    let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
-    geting.done(function (data) {
-        order = data
-        initStates()
-        backgroundModal.style.visibility = 'visible';
-    }).fail(function () {
-        swal({
-            title: "Ошибка ввода",
-            text: "Данного заказа не существует",
-            icon: "error",
-        });
 
-    });
 });
 
-function initStates() {
+function initStates(orderNumber) {
     $.ajax({
         url: `/users/getStatesByRole`,
         type: 'GET',
         contentType: 'application/json',
-        data: {orderNumber: order.orderTrackNumber},
+        data: {orderNumber: orderNumber},
         beforeSend: function (xhr) {
-            if (sessionStorage.getItem('workersToken') !== null) {
+            let jwtToken = sessionStorage.getItem('workersToken');
+            if (jwtToken !== null) {
                 xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
             }
         },
@@ -73,10 +58,82 @@ function setupOrderStates(states) {
     for (let key = 0, size = states.length; key < size; key++) {
         let row = '<option>' + states[key] +
             '</option>';
-        $('#states').append(row);
+        $('#states').append(undefined).append(row);
     }
 }
 
+function getAllOrders() {
+    let phoneNumber = sessionStorage.getItem('clientPhone');
+    $.ajax({
+        url: `/orders`,
+        type: 'GET',
+        contentType: 'application/json',
+        success: function (result) {
+            for (let key = 0, size = result.length; key < size; key++) {
+                let row = '<tr class="text"><td>' + result[key].orderTrackNumber +
+                    '</td><td class="orderNum">' + result[key].recipient.name + '</td><td>' +
+                    result[key].recipient.surname + '</td><td>' + getTimeFormat(result[key].sendingTime) +
+                    '</td><td>' + result[key].price + '</td><td>' + result[key].state.state + '</td><td>' +
+                    result[key].departurePoint.location + '</td><td>' + result[key].currentLocation.location +
+                    '</td><td>' + result[key].destinationPlace.location + '</td><td>' + addChangeStateButton() +
+                    '</td><td>' + insertCancelButton() + '</td></tr>';
+                $('#orders').append(row);
+            }
+
+            $(".change-state-button").click(function (event) {
+                    checkSession();
+                    let orderId = event.target.parentElement.parentElement.firstChild.innerText;
+                    let geting = $.get(`/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json');
+                    geting.done(function (data) {
+                        order = data
+                        initStates(orderId)
+                        backgroundModal.style.visibility = 'visible';
+                    }).fail(function () {
+                        swal({
+                            title: "Ошибка ввода",
+                            text: "Данного заказа не существует",
+                            icon: "error",
+                        });
+
+                    });
+                }
+            )
+
+            $(".cancel-button").click(function (event) {
+                    checkSession();
+                    let orderId = event.target.parentElement.parentElement.firstChild.innerText;
+                    $.ajax({
+                        type: 'DELETE',
+                        url: `/orders/deleteByTrackNumber/${orderId}`,
+                        contentType: 'application/json; charset=utf-8',
+                        beforeSend: function (xhr) {
+                            let jwtToken = sessionStorage.getItem('workersToken');
+                            if (jwtToken !== null) {
+                                xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
+                            }
+                        },
+                    }).done(function () {
+                        swal({
+                            title: "Заказ был успешно отменен",
+                            icon: 'success'
+                        })
+                        window.location.href = "/changeOrderState.html";
+                    }).fail(function () {
+                        swal({
+                            title: "Ошибка ввода",
+                            text: "Данного заказа не существует",
+                            icon: "error",
+                        });
+
+                    });
+                }
+            )
+        },
+        error: function (exception) {
+            alert(exception.message);
+        }
+    });
+}
 
 $('#changeOrderState').submit(function (event) {
     checkSession();
@@ -154,6 +211,17 @@ function insertLogoutButton() {
     )
 }
 
+function insertCancelButton() {
+    return `<button id="cancelOrderBtn" type="submit" class="btn btn-primary open-modal cancel-button">
+            Отменить заказ
+        </button>`;
+}
+
+function addChangeStateButton() {
+    return '<button class="btn btn-primary change-state-button" type="button">'
+        + '<span class="glyphicon glyphicon-pencil"></span>Изменить состояние</button>';
+}
+
 function checkSession() {
     let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
@@ -163,4 +231,14 @@ function checkSession() {
     } else {
         sessionStorage.setItem('workerSession', (new Date()).toString())
     }
+}
+
+function getTimeFormat(time) {
+    let date = new Date(time);
+
+    date.setDate(date.getDate() + 20);
+
+    return ('0' + date.getDate()).slice(-2) + '.'
+        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
+        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 }
