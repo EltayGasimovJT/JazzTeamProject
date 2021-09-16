@@ -52,16 +52,15 @@ function getOrderHistories(idFromUrl) {
 }
 
 function addBackToOrderListButton() {
-    let table = document.getElementById("backToTheClientsOrdersButton");
-    table.innerHTML = '<button class="customBtn buttonText hiddenButton"  type="button">'
+    let backToTheClientsOrdersDiv = document.getElementById("backToTheClientsOrdersButton");
+    backToTheClientsOrdersDiv.innerHTML = '<button class="customBtn buttonText hiddenButton"  type="button">'
         + '<span class="glyphicon glyphicon-pencil"></span>На страницу заказов</button>';
-    const hiddenButton = document.querySelector('.hiddenButton');
-    hiddenButton.addEventListener(
+    document.querySelector('.hiddenButton').addEventListener(
         'click', () => {
             checkSession()
             window.location.href = `/clientsOrders.html`;
         }
-    )
+    );
 }
 
 function getOrder(idFromUrl) {
@@ -112,7 +111,7 @@ function getTimeFormat(time) {
         + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 }
 
-function checkSession(){
+function checkSession() {
     let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getSeconds()
     if (Math.abs((new Date()).getSeconds() - sessionTimeMinutes) > 30) {
         localStorage.removeItem('clientPhone');

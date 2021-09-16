@@ -45,9 +45,9 @@ jQuery('document').ready(function () {
                     text: 'Номер трекера: #' + order.orderTrackNumber + '\n' +
                         'Фамилия и имя отправителя: ' + order.sender.name + " " + order.sender.surname + '\n' +
                         'Фамилия и имя Адресата: ' + order.recipient.name + " " + order.recipient.surname + '\n' +
-                        'Место отправки: ' + order.destinationPlace.location + '\n' +
+                        'Место отправки: ' + order.departurePoint.location + '\n' +
                         'Место назначения: ' + order.destinationPlace.location + '\n' +
-                        'Вермя отправки: ' + getTimeFormat(order.sendingTime) + '\n' +
+                        'Время отправки: ' + getTimeFormat(order.sendingTime) + '\n' +
                         'Итоговая стоимость: ' + order.price + ' BYN\n',
                     fontSize: 13,
                     marginTop: 20
