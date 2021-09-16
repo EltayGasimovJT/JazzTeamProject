@@ -32,21 +32,13 @@ function getOrderHistories(idFromUrl) {
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
-            var r = [], j = -1;
             for (let key = 0, size = result.length; key < size; key++) {
-                r[++j] = '<tr class="text"><td>';
-                r[++j] = getTimeFormat(result[key].changedAt);
-                r[++j] = '</td><td>';
-                r[++j] = getTimeFormat(result[key].sentAt);
-                r[++j] = '</td><td>';
-                r[++j] = result[key].comment;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].worker.name;
-                r[++j] = '</td><td>';
-                r[++j] = result[key].worker.surname;
-                r[++j] = '</td></tr>';
+                let row = '<tr class="text"><td>' + getTimeFormat(result[key].changedAt) +
+                    '</td><td>' + getTimeFormat(result[key].sentAt) + '</td><td>' + result[key].comment +
+                    '</td><td>' + result[key].worker.name + '</td><td>' + result[key].worker.surname +
+                    '</td></tr>';
+                $('#orderHistory').append(row);
             }
-            $('#orderHistory').append(r.join(''));
         }
     });
 }
