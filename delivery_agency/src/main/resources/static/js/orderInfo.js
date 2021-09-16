@@ -44,15 +44,15 @@ function getOrderHistories(idFromUrl) {
 }
 
 function addBackToOrderListButton() {
-    let table = document.getElementById("backToTheClientsOrdersButton");
-    table.innerHTML = '<button class="customBtn buttonText hiddenButton"  type="button">'
+    let backToTheClientsOrdersDiv = document.getElementById("backToTheClientsOrdersButton");
+    backToTheClientsOrdersDiv.innerHTML = '<button class="customBtn buttonText hiddenButton"  type="button">'
         + '<span class="glyphicon glyphicon-pencil"></span>На страницу заказов</button>';
-    const hiddenButton = document.querySelector('.hiddenButton');
-    hiddenButton.addEventListener(
+    document.querySelector('.hiddenButton').addEventListener(
         'click', () => {
+            checkSession()
             window.location.href = `/clientsOrders.html`;
         }
-    )
+    );
 }
 
 function getOrder(idFromUrl) {
