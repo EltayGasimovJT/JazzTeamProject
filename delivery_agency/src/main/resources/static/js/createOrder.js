@@ -417,7 +417,6 @@ function insertWorkerInfo() {
         name.innerHTML = `Имя: ${data.name}`
         surname.innerHTML = `Фамилия: ${data.surname}`
         roles.innerHTML = `Роль: ${data.role}`
-        console.log(data)
     }).fail(function () {
         swal({
             title: "Что-то пошло не так",
@@ -429,7 +428,7 @@ function insertWorkerInfo() {
 
 function checkSession(){
     let sessionTimeMinutes = new Date(localStorage.getItem('workerSession')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 3) {
         localStorage.removeItem('workersToken');
         localStorage.removeItem('workerSession');
         window.location.href = `/homePage.html`;

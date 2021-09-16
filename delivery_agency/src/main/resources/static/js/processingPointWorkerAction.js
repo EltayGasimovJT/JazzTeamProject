@@ -56,7 +56,6 @@ function insertWorkerInfo() {
         name.innerHTML = `Имя: ${data.name}`
         surname.innerHTML = `Фамилия: ${data.surname}`
         roles.innerHTML = `Роль: ${data.role}`
-        console.log(data)
     }).fail(function () {
         swal({
             title: "Что-то пошло не так",
