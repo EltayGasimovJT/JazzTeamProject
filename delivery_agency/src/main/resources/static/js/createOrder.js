@@ -173,11 +173,11 @@ $('#createOrderForm').submit(function (e) {
             url: `/createOrder`,
             contentType: 'application/json; charset=utf-8',
             beforeSend: function (xhr) {
-            let jwtToken = localStorage.getItem('workersToken');
-            if (jwtToken !== null) {
-                xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
-            }
-        },
+                let jwtToken = localStorage.getItem('workersToken');
+                if (jwtToken !== null) {
+                    xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
+                }
+            },
             data: JSON.stringify(dataForSend)
         }).done(function (data) {
             window.location.href = `/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
@@ -386,12 +386,9 @@ export class ParcelParametersDto {
 }
 
 function setupCountries(countries) {
-    var r = [], j = -1;
     for (let key = 0, size = countries.length; key < size; key++) {
-        r[++j] = '<option>';
-        r[++j] = countries[key].country;
-        r[++j] = '</option>';
+        let row = '<option>' + countries[key].country +
+            '</option>';
+        $('#towns').append(row);
     }
-    $('#towns').append(r.join(''));
-
 }
