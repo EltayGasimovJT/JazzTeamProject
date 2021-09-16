@@ -1,6 +1,7 @@
 /*
 package org.jazzteam.eltay.gasimov.service;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.Voyage;
 import org.junit.jupiter.api.Assertions;
@@ -13,8 +14,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -26,12 +25,14 @@ class VoyageServiceTest {
     @Autowired
     private VoyageService voyageService;
     @Autowired
+    private OrderService orderService;
+    @Autowired
     private ModelMapper modelMapper;
 
     public static Stream<Arguments> ordersAndProcessingPointsForTest() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
         processingPointToTest.setLocation("Russia");
-        processingPointToTest.setWarehouseId(new WarehouseDto());
+        processingPointToTest.setWarehouseId(1L);
         OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -39,13 +40,11 @@ class VoyageServiceTest {
                         .width(1.0)
                         .length(1.0)
                         .weight(20.0).build())
-                .destinationPoint(processingPointToTest)
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(new OrderProcessingPointDto())
                 .state(OrderStateDto.builder().build())
                 .recipient(ClientDto.builder().build())
-                .history(new ArrayList<>())
                 .build();
 
         return Stream.of(
@@ -55,14 +54,14 @@ class VoyageServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void addVoyage(OrderDto orderToTest) throws SQLException {
+    void addVoyage(OrderDto orderToTest) throws ObjectNotFoundException {
+        orderService.save(orderToTest);
         GregorianCalendar sentAt = new GregorianCalendar();
         sentAt.set(Calendar.HOUR_OF_DAY, 12);
         sentAt.set(Calendar.MINUTE, 30);
 
         VoyageDto voyageToTest = new VoyageDto();
         voyageToTest.setId(1L);
-        voyageToTest.setSentAt(sentAt);
         voyageToTest.setDispatchedOrders(Arrays.asList(
                 orderToTest,
                 orderToTest));
@@ -73,8 +72,6 @@ class VoyageServiceTest {
         String expected = "Moscow";
         voyageToTest.setDestinationPoint(expected);
 
-        voyageService.clear();
-
         Voyage savedVoyage = voyageService.save(voyageToTest);
 
         String actual = savedVoyage.getDestinationPoint();
@@ -84,7 +81,7 @@ class VoyageServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void deleteVoyage(OrderDto orderToTest) throws SQLException {
+    void deleteVoyage(OrderDto orderToTest) {
         VoyageDto firstVoyageToTest = new VoyageDto();
         firstVoyageToTest.setId(1L);
         firstVoyageToTest.setDestinationPoint("Moskov");
@@ -115,7 +112,6 @@ class VoyageServiceTest {
         thirdVoyageToTest.setExpectedOrders(Arrays.asList(
                 orderToTest,
                 orderToTest));
-        voyageService.clear();
 
         voyageService.save(firstVoyageToTest);
         voyageService.save(secondVoyageToTest);
@@ -131,7 +127,7 @@ class VoyageServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void findAllVoyages(OrderDto orderToTest) throws SQLException {
+    void findAllVoyages(OrderDto orderToTest) {
         VoyageDto firstVoyage = new VoyageDto();
         firstVoyage.setDispatchedOrders(Arrays.asList(
                 orderToTest,
@@ -165,7 +161,6 @@ class VoyageServiceTest {
                 orderToTest,
                 orderToTest
         ));
-        voyageService.clear();
 
         voyageService.save(firstVoyage);
         voyageService.save(secondVoyage);
@@ -180,10 +175,10 @@ class VoyageServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void getVoyage(OrderDto orderDtoToTest) throws SQLException {
+    void getVoyage(OrderDto orderDtoToTest) {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setLocation("Russia");
-        orderProcessingPointToTest.setWarehouseId(new WarehouseDto());
+        orderProcessingPointToTest.setWarehouseId(1L);
         VoyageDto voyageToTest = new VoyageDto();
         voyageToTest.setId(1L);
         voyageToTest.setDispatchedOrders(Arrays.asList(
@@ -214,19 +209,17 @@ class VoyageServiceTest {
 
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);
         expectedTime.set(Calendar.MINUTE, 30);
-        voyageToTest.setSentAt(expectedTime);
-        voyageService.clear();
 
-        voyageService.save(voyageToTest);
+        Voyage expected = voyageService.save(voyageToTest);
 
-        Calendar actualTime = voyageService.findOne(1).getSentAt();
+        Voyage actual = voyageService.findOne(1);
 
-        Assertions.assertEquals(expectedTime, actualTime);
+        Assertions.assertEquals(expected, actual);
     }
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointsForTest")
-    void update(OrderDto orderToSave) throws SQLException {
+    void update(OrderDto orderToSave) {
         VoyageDto expectedVoyage = new VoyageDto();
         expectedVoyage.setId(1L);
         expectedVoyage.setDestinationPoint("Moskov");
@@ -245,16 +238,11 @@ class VoyageServiceTest {
         sentAt.set(Calendar.HOUR_OF_DAY, 12);
         sentAt.set(Calendar.MINUTE, 30);
 
-        expectedVoyage.setSentAt(sentAt);
-        voyageService.clear();
-
         voyageService.save(expectedVoyage);
 
         GregorianCalendar expectedTime = new GregorianCalendar();
         expectedTime.set(Calendar.HOUR_OF_DAY, 15);
         expectedTime.set(Calendar.MINUTE, 30);
-
-        expectedVoyage.setSentAt(expectedTime);
 
         Voyage actualVoyage = voyageService.update(expectedVoyage);
 
