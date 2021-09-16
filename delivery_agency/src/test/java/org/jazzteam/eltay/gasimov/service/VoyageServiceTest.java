@@ -1,4 +1,3 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
 import javassist.tools.rmi.ObjectNotFoundException;
@@ -12,6 +11,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -19,6 +20,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.stream.Stream;
 
+@Sql(scripts = "/drop-tables.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+@Rollback
 @SpringBootTest
 @AutoConfigureMockMvc
 class VoyageServiceTest {
@@ -251,4 +254,3 @@ class VoyageServiceTest {
         Assertions.assertEquals(expectedVoyage, actualDto);
     }
 }
-*/
