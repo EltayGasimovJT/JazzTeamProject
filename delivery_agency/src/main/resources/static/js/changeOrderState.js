@@ -10,20 +10,18 @@ jQuery('document').ready(function () {
 })
 
 const backgroundModal = document.querySelector('.backGround-modal');
-const modal = document.querySelector('.modal-redirect');
-const openModel = document.querySelector('.open-modal');
-
-let allStates;
-let order;
-let currentWorkerRole;
-
 backgroundModal.addEventListener('click', () => {
     backgroundModal.style.visibility = 'hidden';
 })
 
-modal.addEventListener('click', (event) => {
+document.querySelector('.modal-redirect').addEventListener('click', (event) => {
     event.stopPropagation();
-})
+});
+let allStates;
+let order;
+
+let currentWorkerRole;
+
 
 $("#trackOrderForm").submit(function (event) {
     checkSession();
@@ -53,8 +51,7 @@ function initStates() {
         contentType: 'application/json',
         data: {orderNumber: order.orderTrackNumber},
         beforeSend: function (xhr) {
-            let jwtToken = sessionStorage.getItem('workersToken');
-            if (jwtToken !== null) {
+            if (sessionStorage.getItem('workersToken') !== null) {
                 xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
             }
         },
@@ -73,13 +70,11 @@ function initStates() {
 }
 
 function setupOrderStates(states) {
-    var r = [], j = -1;
     for (let key = 0, size = states.length; key < size; key++) {
-        r[++j] = '<option>';
-        r[++j] = states[key];
-        r[++j] = '</option>';
+        let row = '<option>' + states[key] +
+            '</option>';
+        $('#states').append(row);
     }
-    $('#states').append(r.join(''));
 }
 
 

@@ -4,24 +4,19 @@ jQuery('document').ready(function () {
     })
 
     const backgroundModal = document.querySelector('.backGround-modal');
-    const modal = document.querySelector('.modal-custom');
-    const closeModel = document.querySelector('.modal-close');
-    const openModel = document.querySelector('.open-modal');
+
+    document.querySelector('.modal-custom').addEventListener('click', (event) => {
+        event.stopPropagation();
+    });
+    document.querySelector('.modal-close').addEventListener('click', () => {
+        backgroundModal.style.visibility = 'hidden';
+    });
+    document.querySelector('.open-modal').addEventListener('click', () => {
+        backgroundModal.style.visibility = 'visible';
+    });
 
     backgroundModal.addEventListener('click', () => {
         backgroundModal.style.visibility = 'hidden';
-    })
-
-    modal.addEventListener('click', (event) => {
-        event.stopPropagation();
-    })
-
-    closeModel.addEventListener('click', () => {
-        backgroundModal.style.visibility = 'hidden';
-    })
-
-    openModel.addEventListener('click', () => {
-        backgroundModal.style.visibility = 'visible';
     })
 
     $("#passportIdEnterForm").submit(function (event) {
