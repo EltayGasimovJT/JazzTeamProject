@@ -120,19 +120,6 @@ $('#changeOrderState').submit(function (event) {
     });
 })
 
-function insertLogoutButton() {
-    let table = document.getElementById("logoutButtonToInsert");
-    table.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
-    const hiddenButton = document.querySelector('.logout-button-margin');
-    hiddenButton.addEventListener(
-        'click', () => {
-            sessionStorage.removeItem('workersToken');
-            sessionStorage.removeItem('workerSession');
-            window.location.href = `/homePage.html`;
-        }
-    )
-}
-
 function insertWorkerInfo() {
     let name = document.getElementById("worker-name-nav");
     let surname = document.getElementById("worker-surname-nav");
@@ -158,6 +145,18 @@ function insertWorkerInfo() {
             icon: "error",
         });
     });
+}
+
+function insertLogoutButton() {
+    let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
+    logoutButtonDiv.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
+    document.querySelector('.logout-button-margin').addEventListener(
+        'click', () => {
+            sessionStorage.removeItem('workersToken');
+            sessionStorage.removeItem('workerSession');
+            window.location.href = `/homePage.html`;
+        }
+    )
 }
 
 function checkSession() {

@@ -50,4 +50,9 @@ public class CodeServiceImpl implements CodeService {
     public ClientsCode findByCode(String code) {
         return codeRepository.findByGeneratedCode(code);
     }
+
+    @Override
+    public void clear() {
+        codeRepository.deleteAll();
+    }
 }

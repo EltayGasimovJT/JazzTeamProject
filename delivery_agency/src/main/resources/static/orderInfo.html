@@ -12,6 +12,7 @@
     <link rel="shortcut icon" href="icons/waterFall.png"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -19,6 +20,14 @@
 <body>
 <div class="defaultBar">
     <a href="homePage.html" class="defaultLogo">GasDel</a>
+    <div class="nav-info-div">
+        <div class="createOrderText">Список заказов клиента</div>
+        <div id="client-nav-info" class="client-nav">
+            <div id="client-name-nav"></div>
+            <div id="client-surname-nav"></div>
+        </div>
+        <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
+    </div>
 </div>
 <div id="orderId" class="clientOrder">Заказ №</div>
 <div id="backToTheClientsOrdersButton" class="backToTheOrdersButton">

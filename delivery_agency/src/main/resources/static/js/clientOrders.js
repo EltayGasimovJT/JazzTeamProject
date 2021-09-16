@@ -1,4 +1,10 @@
 getUsersOrders();
+jQuery('document').ready(function () {
+    if (sessionStorage.getItem('clientPhone') !== null) {
+        insertClientInfo();
+        insertLogoutButton();
+    }
+})
 
 jQuery("#backToTheActionPageBtnId").on('click', function () {
     checkSession();
@@ -88,4 +94,34 @@ function getTimeFormat(time) {
     return ('0' + date.getDate()).slice(-2) + '.'
         + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
         + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+}
+
+function insertClientInfo() {
+    let name = document.getElementById("client-name-nav");
+    let surname = document.getElementById("client-surname-nav");
+    $.get(`/clients/findByPhoneNumber`,
+        {phoneNumber: sessionStorage.getItem('clientPhone')},
+        'application/json')
+        .done(function (data) {
+            name.innerHTML = `Имя: ${data.name}`
+            surname.innerHTML = `Фамилия: ${data.surname}`
+        }).fail(function () {
+        swal({
+            title: "Что-то пошло не так",
+            text: "Ошибка при поиске сотрудника",
+            icon: "error",
+        });
+    });
+}
+
+function insertLogoutButton() {
+    let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
+    logoutButtonDiv.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
+    document.querySelector('.logout-button-margin').addEventListener(
+        'click', () => {
+            sessionStorage.removeItem('clientPhone');
+            sessionStorage.removeItem('sessionTime');
+            window.location.href = `/homePage.html`;
+        }
+    )
 }

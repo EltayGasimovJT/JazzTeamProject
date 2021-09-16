@@ -20,4 +20,6 @@ public interface CodeService {
     ClientsCode save(ClientsCodeDto clientsCode);
 
     ClientsCode findByCode(String code);
+
+    void clear();
 }

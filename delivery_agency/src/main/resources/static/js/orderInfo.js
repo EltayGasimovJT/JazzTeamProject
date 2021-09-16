@@ -5,6 +5,8 @@ jQuery('document').ready(function () {
     $('#orderId').append(order.orderNumber);
     if (sessionStorage.getItem('clientPhone') !== null) {
         addBackToOrderListButton();
+        insertClientInfo()
+        insertLogoutButton()
     }
 })
 let backToTheClientsOrdersButton = document.getElementById('backToTheClientsOrdersButton');
@@ -94,4 +96,34 @@ function checkSession() {
     } else {
         sessionStorage.setItem('sessionTime', (new Date()).toString())
     }
+}
+
+function insertLogoutButton() {
+    let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
+    logoutButtonDiv.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
+    document.querySelector('.logout-button-margin').addEventListener(
+        'click', () => {
+            sessionStorage.removeItem('clientPhone');
+            sessionStorage.removeItem('sessionTime');
+            window.location.href = `/homePage.html`;
+        }
+    )
+}
+
+function insertClientInfo() {
+    let name = document.getElementById("client-name-nav");
+    let surname = document.getElementById("client-surname-nav");
+    $.get(`/clients/findByPhoneNumber`,
+        {phoneNumber: sessionStorage.getItem('clientPhone')},
+        'application/json')
+        .done(function (data) {
+            name.innerHTML = `Имя: ${data.name}`
+            surname.innerHTML = `Фамилия: ${data.surname}`
+        }).fail(function () {
+        swal({
+            title: "Что-то пошло не так",
+            text: "Ошибка при поиске сотрудника",
+            icon: "error",
+        });
+    });
 }

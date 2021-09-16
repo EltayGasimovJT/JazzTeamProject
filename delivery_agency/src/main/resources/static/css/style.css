@@ -794,3 +794,19 @@ input:invalid:not(:placeholder-shown) + .form__error {
 .input-field {
     padding-left: 1%;
 }
+
+.client-nav {
+    display: flex;
+    font-size: 60%;
+    color: white;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 200px;
+}
+
+.nav-info-div {
+    display: flex;
+    margin-left: 20%;
+    width: 70%;
+    justify-content: space-between;
+}

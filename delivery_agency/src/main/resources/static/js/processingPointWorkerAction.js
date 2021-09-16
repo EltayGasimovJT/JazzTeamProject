@@ -26,10 +26,9 @@ function init() {
 }
 
 function insertLogoutButton() {
-    let table = document.getElementById("logoutButtonToInsert");
-    table.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
-    const hiddenButton = document.querySelector('.logout-button-margin');
-    hiddenButton.addEventListener(
+    let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
+    logoutButtonDiv.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
+    document.querySelector('.logout-button-margin').addEventListener(
         'click', () => {
             sessionStorage.removeItem('workersToken');
             sessionStorage.removeItem('workerSession');
