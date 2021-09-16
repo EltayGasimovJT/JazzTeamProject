@@ -132,32 +132,32 @@ function init() {
 $('#createOrderForm').submit(function (e) {
     $form = $(this).serializeArray();
     let sender = new ClientDto({
-        name: `${$form[0].value}`,
-        surname: `${$form[1].value}`,
-        passportId: `${$form[2].value}`,
-        phoneNumber: `${$form[3].value}`
+        name: `${document.getElementById('senderName').value}`,
+        surname: `${document.getElementById('senderSurname').value}`,
+        passportId: `${document.getElementById('senderPassportId').value}`,
+        phoneNumber: `${document.getElementById('senderPhoneNumber').value}`
     });
 
     let recipient = new ClientDto({
-        name: `${$form[4].value}`,
-        surname: `${$form[5].value}`,
-        passportId: `${$form[6].value}`,
-        phoneNumber: `${$form[7].value}`
+        name: `${document.getElementById('recipientName').value}`,
+        surname: `${document.getElementById('recipientSurname').value}`,
+        passportId: `${document.getElementById('recipientPassportId').value}`,
+        phoneNumber: `${document.getElementById('recipientPhoneNumber').value}`
     });
 
     let parcelParameters = new ParcelParametersDto(
         {
-            width: `${$form[9].value}`,
-            length: `${$form[10].value}`,
-            height: `${$form[11].value}`,
-            weight: `${$form[12].value}`
+            width: `${document.getElementById('parcelWidth').value}`,
+            length: `${document.getElementById('parcelLength').value}`,
+            height: `${document.getElementById('parcelHeight').value}`,
+            weight: `${document.getElementById('parcelWeight').value}`
         }
     )
 
     let dataForSend = new CreateOrderRequestDto({
         sender: sender,
         recipient: recipient,
-        destinationPoint: `${$form[8].value}`,
+        destinationPoint: `${document.getElementById('destinationPoint').value}`,
         parcelParameters: parcelParameters,
         price: price.innerText
     })
