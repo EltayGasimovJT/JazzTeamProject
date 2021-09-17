@@ -25,7 +25,6 @@ public class WarehouseServiceImpl implements WarehouseService {
     @Override
     public Warehouse save(WarehouseDto warehouseDtoToSave) throws IllegalArgumentException {
         Warehouse warehouseToSave = CustomModelMapper.mapDtoToWarehouse(warehouseDtoToSave);
-
         WarehouseValidator.validateOnSave(warehouseToSave);
         return warehouseRepository.save(warehouseToSave);
     }

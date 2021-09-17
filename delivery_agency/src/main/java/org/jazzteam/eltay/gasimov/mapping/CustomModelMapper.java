@@ -198,4 +198,27 @@ public class CustomModelMapper {
                 .build();
     }
 
+
+    public static OrderProcessingPointDto mapProcessingPointToDto(OrderProcessingPoint orderProcessingPoint) {
+        OrderProcessingPointDto convertedToDto = new OrderProcessingPointDto();
+        convertedToDto.setId(orderProcessingPoint.getId());
+        convertedToDto.setLocation(orderProcessingPoint.getLocation());
+        convertedToDto.setWorkingPlaceType(WorkingPlaceType.valueOf(orderProcessingPoint.getWorkingPlaceType()));
+        convertedToDto.setDispatchedOrders(
+                orderProcessingPoint
+                        .getDispatchedOrders()
+                        .stream()
+                        .map(CustomModelMapper::mapOrderToDto)
+                        .collect(Collectors.toList()));
+        convertedToDto.setExpectedOrders(
+                orderProcessingPoint
+                        .getExpectedOrders()
+                        .stream()
+                        .map(CustomModelMapper::mapOrderToDto)
+                        .collect(Collectors.toList())
+        );
+
+        convertedToDto.setWarehouseId(orderProcessingPoint.getWarehouse().getId());
+        return convertedToDto;
+    }
 }
