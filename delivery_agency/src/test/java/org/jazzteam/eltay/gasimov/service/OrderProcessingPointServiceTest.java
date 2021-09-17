@@ -34,7 +34,6 @@ class OrderProcessingPointServiceTest {
     @Autowired
     private WarehouseService warehouseService;
 
-
     private static Stream<Arguments> testOrderProcessingPoints() {
         OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
         firstProcessingPointToTest.setId(1L);
