@@ -23,4 +23,6 @@ public class OrderStateDto {
     private List<String> rolesAllowedWithdrawFromState;
     @NotEmpty(message = "State must have at least one role, which allows put to state")
     private List<String> rolesAllowedPutToState;
+    private String prefix;
+    private String suffix;
 }
