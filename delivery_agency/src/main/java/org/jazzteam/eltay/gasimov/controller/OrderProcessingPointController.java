@@ -1,19 +1,13 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
-import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.service.OrderProcessingPointService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
-
-import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.PROCESSING_POINTS_BY_ID_URL;
-import static org.jazzteam.eltay.gasimov.controller.constants.ControllerConstant.PROCESSING_POINTS_URL;
 
 import static org.jazzteam.eltay.gasimov.util.Constants.PROCESSING_POINTS_BY_ID_URL;
 import static org.jazzteam.eltay.gasimov.util.Constants.PROCESSING_POINTS_URL;
