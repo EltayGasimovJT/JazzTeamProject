@@ -108,12 +108,6 @@ public class ClientServiceImpl implements ClientService {
     public Client findByPhoneNumber(String phoneNumber) throws ObjectNotFoundException {
         Client foundClient = clientRepository.findByPhoneNumber(phoneNumber);
         ClientValidator.validateOnFindByPhoneNumber(foundClient, phoneNumber);
-        String generatedCode = generateNewCode();
-        ClientsCode generatedCodeObject = ClientsCode.builder()
-                .client(foundClient)
-                .generatedCode(generatedCode)
-                .build();
-        foundClient.setCode(codeRepository.save(generatedCodeObject));
         return foundClient;
     }
 
@@ -123,6 +117,19 @@ public class ClientServiceImpl implements ClientService {
         return foundClient.getOrders().stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Client generateCodeForClient(String phoneNumber) throws ObjectNotFoundException {
+        Client foundClient = clientRepository.findByPhoneNumber(phoneNumber);
+        ClientValidator.validateOnFindByPhoneNumber(foundClient, phoneNumber);
+        String generatedCode = generateNewCode();
+        ClientsCode generatedCodeObject = ClientsCode.builder()
+                .client(foundClient)
+                .generatedCode(generatedCode)
+                .build();
+        foundClient.setCode(codeRepository.save(generatedCodeObject));
+        return foundClient;
     }
 
     private String generateNewCode() {

@@ -49,7 +49,7 @@ function getUsersOrders() {
             )
         },
         error: function (exception) {
-            alert(exception.message);
+            swal(exception.message);
         }
     });
 }

@@ -27,4 +27,6 @@ public interface ClientService {
     Client findByPhoneNumber(String phoneNumber) throws ObjectNotFoundException;
 
     Set<OrderDto> findOrdersByClientPhoneNumber(String phoneNumber);
+
+    Client generateCodeForClient(String phoneNumber) throws ObjectNotFoundException;
 }

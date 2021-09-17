@@ -35,6 +35,7 @@ public class Constants {
     public static final String CLIENTS_BY_PASSPORT_PATH_VARIABLE_URL = CLIENTS_URL + "/ordersByPhoneNumber/{phoneNumber}";
     public static final String CLIENTS_BY_ID_URL = CLIENTS_URL + ID;
     public static final String CLIENTS_BY_PHONE_NUMBER_URL = CLIENTS_URL + "/findByPhoneNumber";
+    public static final String GET_GENERATED_CODE_URL = CLIENTS_URL + "/getCode";
     public static final String FIND_CODE_URL = "/codes/findCode";
     public static final String COEFFICIENTS_URL = "/coefficients";
     public static final String COEFFICIENTS_BY_ID_URL = COEFFICIENTS_URL + ID;

@@ -51,6 +51,13 @@ public class ClientController {
         return modelMapper.map(clientService.findByPhoneNumber(phoneNumber), ClientDto.class);
     }
 
+    @GetMapping(path = GET_GENERATED_CODE_URL)
+    @ResponseStatus(HttpStatus.OK)
+    public @ResponseBody
+    ClientDto getGeneratedCode(@RequestParam String phoneNumber) throws ObjectNotFoundException {
+        return modelMapper.map(clientService.generateCodeForClient(phoneNumber), ClientDto.class);
+    }
+
     @GetMapping(path = CLIENTS_BY_PASSPORT_PATH_VARIABLE_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
