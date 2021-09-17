@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -25,6 +26,7 @@ import java.util.stream.Stream;
 @SpringBootTest
 @AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
+@Transactional
 class OrderProcessingPointServiceTest {
     @Autowired
     private OrderProcessingPointService orderProcessingPointService;
@@ -84,10 +86,14 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
         firstProcessingPointToTest.setLocation("Polotsk-Belarus");
         firstProcessingPointToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
-        firstProcessingPointToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
         firstProcessingPointToTest.setWarehouseId(savedWarehouse.getId());
+        OrderProcessingPointDto secondProcessingPointToSave = new OrderProcessingPointDto();
+        secondProcessingPointToSave.setLocation("Grodno-Belarus");
+        secondProcessingPointToSave.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
+        secondProcessingPointToSave.setWarehouseId(savedWarehouse.getId());
 
         OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(firstProcessingPointToTest);
+        orderProcessingPointService.save(secondProcessingPointToSave);
 
         orderProcessingPointService.delete(savedProcessingPoint.getId());
 

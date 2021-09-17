@@ -15,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManagerFactory;
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,12 +25,14 @@ import java.util.stream.Stream;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class ClientServiceTest {
     @Autowired
     private ClientService clientService;
-
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()
@@ -203,3 +207,4 @@ class ClientServiceTest {
         Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
 }
+
