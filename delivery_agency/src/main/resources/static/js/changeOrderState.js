@@ -55,6 +55,7 @@ function initStates(orderNumber) {
 }
 
 function setupOrderStates(states) {
+    jQuery('#states').html('');
     let row = '<option>' + states +
         '</option>';
     $('#states').append(undefined).append(row);
