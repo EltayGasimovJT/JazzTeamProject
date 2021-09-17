@@ -80,8 +80,7 @@ jQuery('document').ready(function () {
         let $form = $(this),
             phoneNumber = $form.find("input[name='phoneNumber']").val(),
             url = $form.attr("action");
-        let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
-        geting.done(function (data) {
+        $.get(url, {phoneNumber: phoneNumber}, 'application/json').done(function (data) {
             swal(data.code.generatedCode)
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
@@ -95,8 +94,7 @@ jQuery('document').ready(function () {
         let $form = $(this),
             code = $form.find("input[name='code']").val(),
             url = $form.attr("action");
-        let geting = $.get(url, {code: code}, 'application/json');
-        geting.done(function () {
+        $.get(url, {code: code}, 'application/json').done(function () {
             localStorage.setItem('clientPhone', clientPhoneNumber);
             localStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `/clientsOrders.html`;
@@ -141,8 +139,7 @@ jQuery('document').ready(function () {
         let $form = $(this),
             orderNumber = $form.find("input[name='orderNumber']").val(),
             url = $form.attr("action");
-        let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
-        geting.done(function (data) {
+        $.get(url, {orderNumber: orderNumber}, 'application/json').done(function (data) {
             window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
         }).fail(function () {
             swal({

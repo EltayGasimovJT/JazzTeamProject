@@ -3,8 +3,7 @@ $("#trackOrderForm").submit(function (event) {
     let $form = $(this),
         orderNumber = $form.find("input[name='orderNumber']").val(),
         url = $form.attr("action");
-    let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
-    geting.done(function (data) {
+    $.get(url, {orderNumber: orderNumber}, 'application/json').done(function (data) {
     }).fail(function () {
         swal({
             title: "Ошибка ввода",

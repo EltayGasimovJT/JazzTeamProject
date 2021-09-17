@@ -130,7 +130,6 @@ function init() {
 }
 
 $('#createOrderForm').submit(function (e) {
-    $form = $(this).serializeArray();
     let sender = new ClientDto({
         name: `${document.getElementById('senderName').value}`,
         surname: `${document.getElementById('senderSurname').value}`,
