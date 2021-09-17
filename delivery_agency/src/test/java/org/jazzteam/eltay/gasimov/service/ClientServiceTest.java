@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.persistence.EntityManagerFactory;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
@@ -31,8 +30,6 @@ class ClientServiceTest {
     private ClientService clientService;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
 
     private static Stream<Arguments> testClients() {
         ClientDto firstClientToTest = ClientDto.builder()

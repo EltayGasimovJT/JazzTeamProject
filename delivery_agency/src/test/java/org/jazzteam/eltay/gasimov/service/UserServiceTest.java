@@ -19,8 +19,10 @@ import java.util.List;
 import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.PROCESSING_POINT;
 import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.WAREHOUSE;
 
+@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 class UserServiceTest {
     @Autowired
     private WorkerService userService;
