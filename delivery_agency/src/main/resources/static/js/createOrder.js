@@ -176,7 +176,7 @@ $('#createOrderForm').submit(function (e) {
             url: `/createOrder`,
             contentType: 'application/json; charset=utf-8',
             beforeSend: function (xhr) {
-                let jwtToken = localStorage.getItem('workersToken');
+                let jwtToken = sessionStorage.getItem('workersToken');
                 if (jwtToken !== null) {
                     xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
                 }
