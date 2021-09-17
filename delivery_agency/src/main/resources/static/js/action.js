@@ -7,13 +7,13 @@ jQuery('document').ready(function () {
 
     document.querySelector('.modal-custom').addEventListener('click', (event) => {
         event.stopPropagation();
-    });
+    })
     document.querySelector('.modal-close').addEventListener('click', () => {
         backgroundModal.style.visibility = 'hidden';
-    });
+    })
     document.querySelector('.open-modal').addEventListener('click', () => {
         backgroundModal.style.visibility = 'visible';
-    });
+    })
 
     backgroundModal.addEventListener('click', () => {
         backgroundModal.style.visibility = 'hidden';

@@ -2,7 +2,6 @@ let $form;
 init()
 
 jQuery("#backToTheActionPageBtnId").on('click', function () {
-    checkSession();
     location.href = "homePage.html";
 })
 
@@ -108,12 +107,11 @@ function validateParams(params) {
 }
 
 function init() {
-    if (sessionStorage.getItem('workersToken') === null) {
+    if (localStorage.getItem('workersToken') === null) {
         window.location.href = "/homePage.html";
     }
 
-    if (sessionStorage.getItem('workersToken') !== null) {
-        insertWorkerInfo();
+    if (localStorage.getItem('workersToken') !== null) {
         insertLogoutButton();
     }
 
@@ -132,8 +130,6 @@ function init() {
 }
 
 $('#createOrderForm').submit(function (e) {
-    checkSession()
-    $form = $(this).serializeArray();
     let sender = new ClientDto({
         name: `${document.getElementById('senderName').value}`,
         surname: `${document.getElementById('senderSurname').value}`,
@@ -199,10 +195,10 @@ $('#createOrderForm').submit(function (e) {
 function insertLogoutButton() {
     let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
     logoutButtonDiv.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
-    document.querySelector('.logout-button-margin').addEventListener(
+    const hiddenButton = document.querySelector('.logout-button-margin');
+    hiddenButton.addEventListener(
         'click', () => {
-            sessionStorage.removeItem('workersToken');
-            sessionStorage.removeItem('workerSession');
+            localStorage.removeItem('workersToken');
             window.location.href = `/homePage.html`;
         }
     )
@@ -390,45 +386,8 @@ export class ParcelParametersDto {
 
 function setupCountries(countries) {
     for (let key = 0, size = countries.length; key < size; key++) {
-        let row = '<option>' + countries[key].country + '</option>';
+        let row = '<option>' + countries[key].country +
+            '</option>';
         $('#towns').append(row);
-    }
-}
-
-function insertWorkerInfo() {
-    let name = document.getElementById("worker-name-nav");
-    let surname = document.getElementById("worker-surname-nav");
-    let roles = document.getElementById("worker-role-nav");
-    $.ajax({
-        type: 'GET',
-        url: `/users/getCurrentWorker`,
-        contentType: 'application/json; charset=utf-8',
-        beforeSend: function (xhr) {
-            let jwtToken = sessionStorage.getItem('workersToken');
-            if (jwtToken !== null) {
-                xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
-            }
-        },
-    }).done(function (data) {
-        name.innerHTML = `Имя: ${data.name}`
-        surname.innerHTML = `Фамилия: ${data.surname}`
-        roles.innerHTML = `Роль: ${data.role}`
-    }).fail(function () {
-        swal({
-            title: "Что-то пошло не так",
-            text: "Ошибка при поиске сотрудника",
-            icon: "error",
-        });
-    });
-}
-
-function checkSession(){
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 3) {
-        sessionStorage.removeItem('workersToken');
-        sessionStorage.removeItem('workerSession');
-        window.location.href = `/homePage.html`;
-    } else {
-        sessionStorage.setItem('workerSession', (new Date()).toString())
     }
 }

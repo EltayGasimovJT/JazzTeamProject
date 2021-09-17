@@ -16,11 +16,6 @@
 <div class="defaultBar">
 
     <a href="homePage.html" class="defaultLogo">GasDel</a>
-    <div id="worker-nav-info" class="worker-nav">
-        <div id="worker-name-nav"></div>
-        <div id="worker-surname-nav"></div>
-        <div id="worker-role-nav"></div>
-    </div>
     <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
 </div>
 
@@ -35,75 +30,70 @@
 
 <div class="modal-wrap">
     <div class="createOrderBar">
-        <form id="createOrderForm" class="createOrderForm" autocomplete="off">
+        <form id="createOrderForm" class="createOrderForm">
             <div class="form-group">
                 <div class="style-form">
                     <span class="createOrderTextField">Имя отправителя</span>
-                    <input id="senderName" type="text" name="senderName" required maxlength="40" class="input-field"
+                    <input type="text" id="senderName" name="senderName" required maxlength="40"
                            pattern="^[a-zA-ZА-Яа-я]+$"
                            title="Input sender name">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Фамилия отправителя</span>
-                    <input id="senderSurname" align="right" type="text" required name="senderSurname"
-                           class="input-field" maxlength="40"
+                    <input align="right" id="senderSurname" type="text" required name="senderSurname" maxlength="40"
                            pattern="^[a-zA-ZА-Яа-я]+$"
                            title="Input sender surname">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Номер паспорта отправителя</span>
-                    <input id="senderPassportId" type="text" name="senderPassportId" class="input-field" required
-                           maxlength="40"
+                    <input type="text" id="senderPassportId" name="senderPassportId" required maxlength="40"
                            title="Input sender passport number">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Номер телефона отправителя</span>
-                    <div class="inputFieldForValidation input-field">
+                    <div class="inputFieldForValidation">
                         <input align="right" name="senderPhoneNumber"
-                               pattern="[\(]\d{2}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}" required type="text"
-                               id="senderPhoneNumber"
+                               pattern="[\(]\d{2}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}" id="senderPhoneNumber" required
+                               type="text"
                                maxlength="40"
                                title="Input sender phone number">
-                        <span class="form__error">Введите номер в правильном формате, например:<br>(44) 456-78-90</span>
+                        <span class="form__error">Номер телефона должен быть в формате (44) 456-78-90</span>
                     </div>
                 </div>
             </div>
             <div>
                 <div class="style-form">
                     <span class="createOrderTextField">Имя адресата</span>
-                    <input id="recipientName" type="text" name="recipientName" class="input-field" required
-                           maxlength="40" pattern="^[a-zA-ZА-Яа-я]+$"
+                    <input type="text" id="recipientName" name="recipientName" required maxlength="40"
+                           pattern="^[a-zA-ZА-Яа-я]+$"
                            title="Input recipient name">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Фамилия адресата</span>
-                    <input id="recipientSurname" type="text" name="recipientSurname" class="input-field" required
-                           maxlength="40" pattern="^[a-zA-ZА-Яа-я]+$"
+                    <input type="text" id="recipientSurname" name="recipientSurname" required maxlength="40"
+                           pattern="^[a-zA-ZА-Яа-я]+$"
                            title="Input recipient surname">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Номер паспорта адресата</span>
-                    <input id="recipientPassportId" type="text" name="recipientPassportId" class="input-field" required
-                           maxlength="40"
+                    <input type="text" id="recipientPassportId" name="recipientPassportId" required maxlength="40"
                            title="Input recipient passport number">
                 </div>
                 <div class="style-form mb-3">
-                    <span class="createOrderTextField">Номер телефона адресата</span>
-                    <div class="inputFieldForValidation input-field">
-                        <input type="text" name="recipientPhoneNumber"
-                               required
-                               maxlength="40"
-                               id="recipientPhoneNumber"
-                               pattern="[\(]\d{2}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}"
-                               title="Input recipient phone number">
-                        <span class="form__error">Введите номер в правильном формате, например:<br>(44) 456-78-90</span>
+                    <span class="createOrderTextField">Номер телефона</span>
+                    <div class="inputFieldForValidation"><input type="text" name="recipientPhoneNumber" required
+                                                                maxlength="40"
+                                                                id="recipientPhoneNumber"
+                                                                pattern="[\(]\d{2}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}"
+                                                                title="Input recipient phone number">
+                        <span class="form__error">Номер телефона должен быть в формате (44) 456-78-90</span>
                     </div>
                 </div>
             </div>
-            <div class="datalist-for-destination-place">
+            <div>
                 <div class="style-form">
                     <span class="createOrderTextField">Пункт назначения:</span>
-                    <input list="towns" id="destinationPoint" class="input-field" required name="destinationPlaceTown">
+                    <input list="towns" id="destinationPoint" required name="destinationPlaceTown">
                     <datalist id="towns" class="listMargin">
                     </datalist>
                 </div>
@@ -111,32 +101,29 @@
             <div>
                 <div class="style-form">
                     <span class="createOrderTextField">Ширина, мм</span>
-                    <input id="parcelWidth" max="2000" min="1" type="number" class="input-field" required name="width"
-                           title="Width">
+                    <input id="parcelWidth" max="2000" min="1" type="number" required name="width" title="Width">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Длина, мм</span>
-                    <input id="parcelLength" max="2000" min="1" type="number" class="input-field" required name="length"
-                           title="Length">
+                    <input id="parcelLength" max="2000" min="1" type="number" required name="length" title="Length">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Высота, мм</span>
-                    <input id="parcelHeight" max="2000" min="1" type="number" class="input-field" required name="height"
-                           title="Height">
+                    <input id="parcelHeight" max="2000" min="1" type="number" required name="height" title="Height">
                 </div>
                 <div class="style-form">
                     <span class="createOrderTextField">Вес, грамм</span>
-                    <input id="parcelWeight" max="50000" min="1" type="number" class="input-field" required
-                           name="weight" title="Weight">
+                    <input id="parcelWeight" max="50000" min="1" type="number" required name="weight" title="Weight">
                 </div>
                 <div class="price">
                     <span>Стоимость, BYN : </span>
                     <span id="price"> </span>
                 </div>
             </div>
-            <input class="customBtn buttonText createOrderButton ml-auto" type="submit" value="Создать заказ">
+            <input class="customBtn buttonText createOrderButton ml-auto" type="submit" value="Create new Order">
         </form>
     </div>
+
 </div>
 <script type="module" src="js/createOrder.js"></script>
 

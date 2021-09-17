@@ -204,4 +204,3 @@ class ClientServiceTest {
         Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
 }
-

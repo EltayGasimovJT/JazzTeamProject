@@ -1,5 +1,5 @@
 jQuery('document').ready(function () {
-    if (sessionStorage.getItem('clientsPhone') !== null) {
+    if (localStorage.getItem('clientsPhone') !== null) {
         checkSession();
     }
 
@@ -43,23 +43,10 @@ jQuery('document').ready(function () {
     })
 
     asClientModal.addEventListener('click', () => {
-        if (sessionStorage.getItem('workersToken') !== null) {
-            swal({
-                title: "Вы уверены, что хотите выйти из рабочей учетной записи?",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        sessionStorage.removeItem('workersToken');
-                        sessionStorage.removeItem('workerSession');
-                    } else {
-                        window.location.href = "/homePage.html";
-                    }
-                });
+        if (localStorage.getItem('workersToken') !== null) {
+            localStorage.removeItem('workersToken');
         }
-        if (sessionStorage.getItem('clientPhone') !== null) {
+        if (localStorage.getItem('clientPhone') !== null) {
             window.location.href = "/clientsOrders.html";
         } else {
             clientBackgroundModal.style.visibility = 'visible';
@@ -75,11 +62,11 @@ jQuery('document').ready(function () {
     })
 
     asUserModal.addEventListener('click', () => {
-        if (sessionStorage.getItem('clientPhone') !== null) {
-            sessionStorage.removeItem('clientPhone');
-            sessionStorage.removeItem('sessionTime');
+        if (localStorage.getItem('clientPhone') !== null) {
+            localStorage.removeItem('clientPhone');
+            localStorage.removeItem('sessionTime');
         }
-        if (sessionStorage.getItem('workersToken') !== null) {
+        if (localStorage.getItem('workersToken') !== null) {
             window.location.href = "/processingPointWorkerActionPage.html";
         } else {
             backgroundModal.style.visibility = 'visible';
@@ -93,12 +80,8 @@ jQuery('document').ready(function () {
         let $form = $(this),
             phoneNumber = $form.find("input[name='phoneNumber']").val(),
             url = $form.attr("action");
-        let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
-        geting.done(function (data) {
-            swal({
-                title: "Четырехзначный код из смс",
-                text: data.code.generatedCode
-            })
+        $.get(url, {phoneNumber: phoneNumber}, 'application/json').done(function (data) {
+            swal(data.code.generatedCode)
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
         }).fail(function () {
@@ -111,10 +94,9 @@ jQuery('document').ready(function () {
         let $form = $(this),
             code = $form.find("input[name='code']").val(),
             url = $form.attr("action");
-        let geting = $.get(url, {code: code}, 'application/json');
-        geting.done(function () {
-            sessionStorage.setItem('clientPhone', clientPhoneNumber);
-            sessionStorage.setItem('sessionTime', (new Date()).toString())
+        $.get(url, {code: code}, 'application/json').done(function () {
+            localStorage.setItem('clientPhone', clientPhoneNumber);
+            localStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `/clientsOrders.html`;
         }).fail(function () {
             swal({
@@ -141,8 +123,7 @@ jQuery('document').ready(function () {
                 password: `${password}`
             })
         }).done(function (data) {
-            sessionStorage.setItem('workersToken', data.token)
-            sessionStorage.setItem('workerSession', (new Date()).toString())
+            localStorage.setItem('workersToken', data.token)
             window.location.href = "/processingPointWorkerActionPage.html";
         }).fail(function () {
             swal({
@@ -158,8 +139,7 @@ jQuery('document').ready(function () {
         let $form = $(this),
             orderNumber = $form.find("input[name='orderNumber']").val(),
             url = $form.attr("action");
-        let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
-        geting.done(function (data) {
+        $.get(url, {orderNumber: orderNumber}, 'application/json').done(function (data) {
             window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
         }).fail(function () {
             swal({
@@ -173,12 +153,12 @@ jQuery('document').ready(function () {
 })
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
-        sessionStorage.removeItem('clientPhone');
-        sessionStorage.removeItem('sessionTime');
+    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
+    if ((new Date().getMinutes() - sessionTimeMinutes) > 5) {
+        localStorage.removeItem('clientPhone');
+        localStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;
     } else {
-        sessionStorage.setItem('sessionTime', (new Date()).toString())
+        localStorage.setItem('sessionTime', (new Date()).toString())
     }
 }
