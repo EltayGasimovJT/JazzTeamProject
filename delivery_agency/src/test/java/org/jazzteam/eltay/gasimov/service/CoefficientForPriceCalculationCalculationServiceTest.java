@@ -40,10 +40,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(1L)
                 .parcelParameters(
                         ParcelParametersDto.builder()
-                                .height(1.0)
-                                .width(1.0)
-                                .length(1.0)
-                                .weight(20.0).build()
+                                .height(132.0)
+                                .width(132.0)
+                                .length(133.0)
+                                .weight(2032.0).build()
                 )
                 .destinationPlace(destinationPlaceToTest)
                 .build();
@@ -62,9 +62,9 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(2L)
                 .parcelParameters(
                         ParcelParametersDto.builder()
-                                .height(4.0)
-                                .width(10.0)
-                                .length(1.0)
+                                .height(432.0)
+                                .width(130.0)
+                                .length(211.0)
                                 .weight(20.0).build()
                 )
                 .destinationPlace(destinationPlaceToTest)
@@ -82,10 +82,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(3L)
                 .parcelParameters(
                         ParcelParametersDto.builder()
-                                .height(4.0)
-                                .width(5.0)
-                                .length(10.0)
-                                .weight(30.0).build())
+                                .height(424.0)
+                                .width(334.0)
+                                .length(130.0)
+                                .weight(340.0).build())
                 .destinationPlace(destinationPlaceToTest)
                 .build();
 
@@ -98,17 +98,18 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .build();
 
         return Stream.of(
-                Arguments.of(firstOrder, firstCoefficientToTest, BigDecimal.valueOf(64.0)),
-                Arguments.of(secondOrder, secondCoefficientToTest, BigDecimal.valueOf(108.0)),
-                Arguments.of(thirdOrder, thirdCoefficientToTest, BigDecimal.valueOf(342.0))
+                Arguments.of(firstOrder, firstCoefficientToTest, BigDecimal.valueOf(7.4462)),
+                Arguments.of(secondOrder, secondCoefficientToTest, BigDecimal.valueOf(6.6011)),
+                Arguments.of(thirdOrder, thirdCoefficientToTest, BigDecimal.valueOf(6.5218))
         );
     }
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
-    void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) {
-        //BigDecimal actual = priceCalculationRuleService.calculatePrice(order, rule);
-        //Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
+    void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) throws ObjectNotFoundException {
+        priceCalculationRuleService.save(rule);
+        BigDecimal actual = priceCalculationRuleService.calculatePrice(order.getParcelParameters(), rule.getCountry());
+        Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
     }
 
     @Test

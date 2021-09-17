@@ -158,8 +158,7 @@ jQuery('document').ready(function () {
         let $form = $(this),
             orderNumber = $form.find("input[name='orderNumber']").val(),
             url = $form.attr("action");
-        let geting = $.get(url, {orderNumber: orderNumber}, 'application/json');
-        geting.done(function (data) {
+        $.get(url, {orderNumber: orderNumber}, 'application/json').done(function (data) {
             window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
         }).fail(function () {
             swal({

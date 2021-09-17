@@ -84,7 +84,11 @@ function getOrder(orderId) {
     }).done(function (data) {
         order = data;
         insetValuesIntoTicket(data);
-    }).fail(function () {
+    }).fail(function (exception) {
+        swal({
+            title: `${exception.message}`,
+            icons: 'error'
+        })
     });
 }
 
@@ -116,9 +120,7 @@ function insetValuesIntoTicket(data) {
 
 function getTimeFormat(time) {
     let date = new Date(time);
-
     date.setDate(date.getDate() + 20);
-
     return ('0' + date.getDate()).slice(-2) + '.'
         + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
         + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
