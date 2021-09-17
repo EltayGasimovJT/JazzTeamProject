@@ -14,7 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(exclude = "orderProcessingPoints")
 @Table(name = "warehouse")
 public class Warehouse extends AbstractBuilding {
-    @OneToMany(mappedBy = "warehouse", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "warehouse", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonManagedReference
     private List<OrderProcessingPoint> orderProcessingPoints;
 }

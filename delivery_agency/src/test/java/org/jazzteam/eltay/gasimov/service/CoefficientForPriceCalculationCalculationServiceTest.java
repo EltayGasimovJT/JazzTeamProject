@@ -114,15 +114,16 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     void findAllPriceCalculationRules() throws ObjectNotFoundException {
         CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
-                .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
 
         priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
+        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
+        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
-        int expectedSize = 5;
+        int expectedSize = 3;
 
         int actualSize = priceCalculationRuleService.findAll().size();
 
