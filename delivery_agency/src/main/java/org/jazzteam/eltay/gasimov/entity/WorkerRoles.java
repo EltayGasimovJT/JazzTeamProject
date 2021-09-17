@@ -1,11 +1,13 @@
 package org.jazzteam.eltay.gasimov.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Builder
@@ -19,4 +21,11 @@ public class WorkerRoles {
     private Long id;
     @Column(name = "role", unique = true)
     private String role;
+
+    @ManyToMany(fetch=FetchType.EAGER, cascade = {CascadeType.DETACH , CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(name = "worker_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    @JsonBackReference
+    private Set<Worker> workers;
 }

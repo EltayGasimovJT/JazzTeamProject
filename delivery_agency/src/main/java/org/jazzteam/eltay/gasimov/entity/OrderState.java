@@ -36,4 +36,7 @@ public class OrderState {
 
     @Column(name = "history_suffix")
     private String suffix;
+
+    @Column(name = "next_state_id")
+    private Long nextStateId;
 }

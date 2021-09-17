@@ -1,6 +1,7 @@
 package org.jazzteam.eltay.gasimov.util;
 
 public class Constants {
+
     private Constants(){
 
     }
@@ -70,4 +71,6 @@ public class Constants {
     public static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     public static final String ROLE_PICKUP_WORKER = "Pick up Worker";
     public static final String READY_TO_SEND = "Готов к отправке";
+    public static final String WAREHOUSE_NOT_ALLOWED_STATE_CHANGING_MESSAGE = "Вданный момент вы не можете установить статус для этого заказа";
+
 }

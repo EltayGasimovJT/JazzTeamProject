@@ -281,14 +281,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber, Worker foundWorker) {
-
         OrderHistory newHistory = OrderHistory.builder().build();
         newHistory.setSentAt(foundOrder.getHistory().iterator().next().getSentAt());
         newHistory.setWorker(foundWorker);
         newHistory.setChangedAt(LocalDateTime.now());
         newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation());
         newHistory.setChangedTypeEnum(OrderStateChangeType.READY_TO_SEND.name());
-        return orderHistoryService.save(CustomModelMapper.mapHistoryToDto(newHistory));
+        return newHistory;
     }
 
     private Order getOrderFoSave(OrderDto orderDtoToSave) throws ObjectNotFoundException {

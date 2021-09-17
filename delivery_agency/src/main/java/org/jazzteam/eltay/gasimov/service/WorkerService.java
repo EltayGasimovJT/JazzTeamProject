@@ -32,5 +32,5 @@ public interface WorkerService {
 
     Set<WorkerRoles> findWorkerRoles(String username);
 
-    Iterable<String> findStatesByRole(Worker foundByName, String orderNumber);
+    String findStatesByRole(Worker foundByName, String orderNumber);
 }

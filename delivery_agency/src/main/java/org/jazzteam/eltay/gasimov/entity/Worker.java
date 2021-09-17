@@ -1,9 +1,7 @@
 package org.jazzteam.eltay.gasimov.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -13,6 +11,8 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode(exclude = "roles")
+@ToString(exclude = "roles")
 @Table(name = "workers")
 public class Worker {
     @Id
@@ -26,9 +26,7 @@ public class Worker {
     private String password;
     @ManyToOne(cascade = CascadeType.ALL)
     private AbstractBuilding workingPlace;
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "worker_roles", joinColumns = {
-            @JoinColumn(name = "user_id")
-    }, inverseJoinColumns = {@JoinColumn(name = "role_id")})
+    @ManyToMany(mappedBy = "workers")
+    @JsonManagedReference
     private Set<WorkerRoles> roles;
 }

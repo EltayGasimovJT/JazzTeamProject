@@ -74,7 +74,7 @@ public class WorkerController {
     @GetMapping(path = WORKERS_GET_STATES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<String> getStatesByRole(@RequestParam String orderNumber) {
+    String getStatesByRole(@RequestParam String orderNumber) {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundByName = workerService.findByName(currentUserFromContext.getUsername());
         return workerService.findStatesByRole(foundByName, orderNumber);

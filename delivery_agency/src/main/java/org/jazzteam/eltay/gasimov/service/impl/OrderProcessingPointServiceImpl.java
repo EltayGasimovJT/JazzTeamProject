@@ -69,17 +69,19 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         Optional<OrderProcessingPoint> foundClientFromRepository = orderProcessingPointRepository.findById(processingPointDtoToUpdate.getId());
         OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
         OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
-        OrderProcessingPoint orderProcessingPointUpdate = new OrderProcessingPoint();
-        orderProcessingPointUpdate.setId(processingPointDtoToUpdate.getId());
-        orderProcessingPointUpdate.setLocation(processingPointDtoToUpdate.getLocation());
-        orderProcessingPointUpdate.setWarehouse(modelMapper.map(processingPointDtoToUpdate.getWarehouseId(), Warehouse.class));
-        orderProcessingPointUpdate.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList()));
-        orderProcessingPointUpdate.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList()));
-        return orderProcessingPointRepository.save(orderProcessingPointUpdate);
+        foundProcessingPoint.setLocation(processingPointDtoToUpdate.getLocation());
+        foundProcessingPoint.setWarehouse(modelMapper.map(warehouseService.findOne(processingPointDtoToUpdate.getWarehouseId()), Warehouse.class));
+        if (processingPointDtoToUpdate.getExpectedOrders() != null) {
+            foundProcessingPoint.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toList()));
+        }
+        if (processingPointDtoToUpdate.getDispatchedOrders() != null) {
+            foundProcessingPoint.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toList()));
+        }
+        return orderProcessingPointRepository.save(foundProcessingPoint);
     }
 
     @Override
