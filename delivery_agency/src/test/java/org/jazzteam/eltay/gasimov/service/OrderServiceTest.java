@@ -1,10 +1,12 @@
 /*
 package org.jazzteam.eltay.gasimov.service;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import lombok.SneakyThrows;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.Order;
 import org.jazzteam.eltay.gasimov.entity.OrderHistory;
+import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
@@ -12,13 +14,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,6 +36,8 @@ class OrderServiceTest {
     private OrderService orderService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private WarehouseService warehouseService;
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
@@ -79,7 +85,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void updateOrderCurrentLocation() throws SQLException {
+    void updateOrderCurrentLocation() throws ObjectNotFoundException {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setLocation("Russia");
         orderProcessingPointToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
@@ -101,7 +107,6 @@ class OrderServiceTest {
                 .currentLocation(orderProcessingPointToTest)
                 .build();
 
-        orderService.clear();
 
         orderService.save(expectedDto);
 
@@ -117,7 +122,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void updateOrderHistory() throws SQLException {
+    void updateOrderHistory() throws ObjectNotFoundException {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setLocation("Russia");
         orderProcessingPointToTest.setWarehouseId(new WarehouseDto());
@@ -141,7 +146,6 @@ class OrderServiceTest {
                 .state(OrderStateDto.builder().build())
                 .recipient(ClientDto.builder().build())
                 .build();
-        orderService.clear();
 
         orderService.save(order);
 
@@ -163,7 +167,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void create() throws SQLException {
+    void create() throws ObjectNotFoundException {
         AbstractBuildingDto currentLocationToTest = new OrderProcessingPointDto();
         currentLocationToTest.setId(1L);
         currentLocationToTest.setLocation("Russia");
@@ -206,7 +210,6 @@ class OrderServiceTest {
                 .history(Collections.singletonList(OrderHistoryDto.builder().build()))
                 .build();
 
-        orderService.clear();
         expectedOrder.setHistory(Collections.singletonList(OrderHistoryDto.builder().worker(WorkerDto.builder().build()).build()));
 
         orderService.save(expectedOrder);
@@ -219,7 +222,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void findById() throws SQLException {
+    void findById() throws ObjectNotFoundException {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setLocation("Russia");
         OrderDto expectedOrder = OrderDto.builder()
@@ -237,7 +240,6 @@ class OrderServiceTest {
                 .currentLocation(new OrderProcessingPointDto())
                 .history(Collections.singletonList(OrderHistoryDto.builder().worker(WorkerDto.builder().build()).build()))
                 .build();
-        orderService.clear();
 
         orderService.save(expectedOrder);
 
@@ -249,7 +251,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void findByRecipient() throws SQLException {
+    void findByRecipient() throws ObjectNotFoundException {
         ClientDto recipientToTest = ClientDto.builder()
                 .id(1L)
                 .name("Igor")
@@ -273,7 +275,6 @@ class OrderServiceTest {
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().worker(WorkerDto.builder().build()).build()))
                 .build();
-        orderService.clear();
 
         orderService.save(expectedOrder);
 
@@ -310,7 +311,6 @@ class OrderServiceTest {
                 .state(OrderStateDto.builder().build())
                 .history(Collections.singletonList(OrderHistoryDto.builder().worker(WorkerDto.builder().build()).build()))
                 .build();
-        orderService.clear();
 
         orderService.save(expectedOrder);
 
@@ -323,7 +323,7 @@ class OrderServiceTest {
     }
 
     @Test
-    void send() throws SQLException {
+    void send() throws ObjectNotFoundException {
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setId(1L);
         orderProcessingPointToTest.setLocation("Russia");
@@ -347,7 +347,6 @@ class OrderServiceTest {
         List<OrderDto> expectedOrders = Collections.singletonList(
                 orderToTest
         );
-        orderService.clear();
 
         orderService.save(orderToTest);
 
@@ -368,112 +367,45 @@ class OrderServiceTest {
     }
 
     @Test
-    void getState() throws SQLException {
+    void getState() throws ObjectNotFoundException {
+        WarehouseDto warehouseToSave = new WarehouseDto();
+        warehouseToSave.setLocation("Belarus");
+        warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
+        warehouseToSave.setExpectedOrders(new ArrayList<>());
+        warehouseToSave.setDispatchedOrders(new ArrayList<>());
+        Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
-        orderProcessingPointToTest.setId(1L);
         orderProcessingPointToTest.setLocation("Russia");
-        orderProcessingPointToTest.setWarehouseId(new WarehouseDto());
+        orderProcessingPointToTest.setWarehouseId(savedWarehouse.getId());
 
         OrderDto orderToTest = OrderDto.builder()
-                .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
                         .height(1.0)
                         .width(1.0)
                         .length(1.0)
                         .weight(20.0).build())
-                .destinationPoint(orderProcessingPointToTest)
+                .destinationPlace(orderProcessingPointToTest)
                 .currentLocation(orderProcessingPointToTest)
                 .price(BigDecimal.valueOf(1))
                 .recipient(ClientDto.builder().build())
                 .sender(ClientDto.builder().build())
                 .state(OrderStateDto.builder().build())
-                .history(Collections.singletonList(OrderHistoryDto.builder().worker(WorkerDto.builder().build()).build()))
+                .history(Stream.of(OrderHistoryDto.builder().worker(WorkerDto.builder().build()).build()).collect(Collectors.toSet()))
                 .build();
-        orderService.clear();
 
-        orderService.save(orderToTest);
+        Order savedOrder = orderService.save(orderToTest);
 
-        String actual = orderService.getState(1);
+        String actual = orderService.getState(savedOrder.getId());
 
         String expected = "READY_TO_SEND";
 
         Assertions.assertEquals(expected, actual);
     }
 
-    @Test
-    void compareOrders() throws SQLException {
-        OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
-        firstProcessingPointToTest.setId(1L);
-        firstProcessingPointToTest.setLocation("Russia");
-        firstProcessingPointToTest.setWarehouseId(new WarehouseDto());
-
-        OrderProcessingPointDto secondProcessingPointToTest = new OrderProcessingPointDto();
-        secondProcessingPointToTest.setId(2L);
-        secondProcessingPointToTest.setLocation("Russia");
-        secondProcessingPointToTest.setWarehouseId(new WarehouseDto());
-
-        OrderDto firstOrderToTest = OrderDto.builder()
-                .id(1L)
-                .parcelParameters(ParcelParametersDto.builder()
-                        .height(1.0)
-                        .width(1.0)
-                        .length(1.0)
-                        .weight(20.0).build())
-                .recipient(ClientDto.builder().build())
-                .sender(ClientDto.builder().build())
-                .destinationPoint(firstProcessingPointToTest)
-                .price(BigDecimal.valueOf(1))
-                .currentLocation(firstProcessingPointToTest)
-                .state(OrderStateDto.builder().build())
-                .history(Collections.singletonList(OrderHistoryDto.builder().worker(WorkerDto.builder().build()).build()))
-                .recipient(ClientDto.builder().build())
-                .build();
-
-        OrderDto secondOrderToTest = OrderDto.builder()
-                .id(2L)
-                .parcelParameters(ParcelParametersDto.builder()
-                        .height(1.0)
-                        .width(1.0)
-                        .length(1.0)
-                        .weight(20.0).build())
-                .destinationPoint(secondProcessingPointToTest)
-                .currentLocation(secondProcessingPointToTest)
-                .sender(ClientDto.builder().build())
-                .recipient(ClientDto.builder().build())
-                .price(BigDecimal.valueOf(1))
-                .state(OrderStateDto.builder().build())
-                .history(Collections.singletonList(OrderHistoryDto.builder().worker(WorkerDto.builder().build()).build()))
-                .recipient(ClientDto.builder().build())
-                .build();
-        orderService.clear();
-
-        orderService.save(firstOrderToTest);
-        orderService.save(secondOrderToTest);
-
-        List<OrderDto> actual = Arrays.asList(
-                firstOrderToTest, secondOrderToTest
-        );
-
-        orderService.send(actual);
-
-        List<List<Order>> ordersOnTheWay = orderService.getOrdersOnTheWay();
-
-        actual.get(0).setId(5L);
-
-        List<Order> expected = ordersOnTheWay.get(0);
-
-        final List<OrderDto> actualOrderDtos = expected.stream()
-                .map(CustomModelMapper::mapOrderToDto)
-                .collect(Collectors.toList());
-
-        Assertions.assertNotEquals(expected, actualOrderDtos);
-    }
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
-    void calculatePrice(OrderDto order, BigDecimal expectedPrice) throws SQLException {
-        orderService.clear();
-
+    void calculatePrice(OrderDto order, BigDecimal expectedPrice) throws ObjectNotFoundException {
         BigDecimal actualPrice = orderService.calculatePrice(order);
 
         Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
