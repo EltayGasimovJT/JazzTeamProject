@@ -151,7 +151,6 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(firstProcessingPointToTest);
 
         warehouseToSave.setId(savedProcessingPoint.getId());
-
         OrderProcessingPoint actual = orderProcessingPointService.findOne(savedProcessingPoint.getId());
 
         OrderProcessingPoint expected = modelMapper.map(firstProcessingPointToTest, OrderProcessingPoint.class);
