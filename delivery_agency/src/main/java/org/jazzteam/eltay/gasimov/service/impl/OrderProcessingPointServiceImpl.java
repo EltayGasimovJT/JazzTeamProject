@@ -72,13 +72,17 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         OrderProcessingPoint orderProcessingPointUpdate = new OrderProcessingPoint();
         orderProcessingPointUpdate.setId(processingPointDtoToUpdate.getId());
         orderProcessingPointUpdate.setLocation(processingPointDtoToUpdate.getLocation());
-        orderProcessingPointUpdate.setWarehouse(modelMapper.map(processingPointDtoToUpdate.getWarehouseId(), Warehouse.class));
-        orderProcessingPointUpdate.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList()));
-        orderProcessingPointUpdate.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList()));
+        orderProcessingPointUpdate.setWarehouse(modelMapper.map(warehouseService.findOne(processingPointDtoToUpdate.getWarehouseId()), Warehouse.class));
+        if (processingPointDtoToUpdate.getExpectedOrders() != null) {
+            orderProcessingPointUpdate.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toList()));
+        }
+        if (processingPointDtoToUpdate.getDispatchedOrders() != null) {
+            orderProcessingPointUpdate.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toList()));
+        }
         return orderProcessingPointRepository.save(orderProcessingPointUpdate);
     }
 

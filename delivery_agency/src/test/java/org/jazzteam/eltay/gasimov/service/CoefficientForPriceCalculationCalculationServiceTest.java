@@ -12,16 +12,21 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@RunWith(SpringRunner.class)
+@Transactional
 class CoefficientForPriceCalculationCalculationServiceTest {
     @Autowired
     private CoefficientForPriceCalculationService priceCalculationRuleService;
@@ -35,10 +40,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(1L)
                 .parcelParameters(
                         ParcelParametersDto.builder()
-                                .height(1.0)
-                                .width(1.0)
-                                .length(1.0)
-                                .weight(20.0).build()
+                                .height(132.0)
+                                .width(132.0)
+                                .length(133.0)
+                                .weight(2032.0).build()
                 )
                 .destinationPlace(destinationPlaceToTest)
                 .build();
@@ -57,9 +62,9 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(2L)
                 .parcelParameters(
                         ParcelParametersDto.builder()
-                                .height(4.0)
-                                .width(10.0)
-                                .length(1.0)
+                                .height(432.0)
+                                .width(130.0)
+                                .length(211.0)
                                 .weight(20.0).build()
                 )
                 .destinationPlace(destinationPlaceToTest)
@@ -77,10 +82,10 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .id(3L)
                 .parcelParameters(
                         ParcelParametersDto.builder()
-                                .height(4.0)
-                                .width(5.0)
-                                .length(10.0)
-                                .weight(30.0).build())
+                                .height(424.0)
+                                .width(334.0)
+                                .length(130.0)
+                                .weight(340.0).build())
                 .destinationPlace(destinationPlaceToTest)
                 .build();
 
@@ -93,32 +98,34 @@ class CoefficientForPriceCalculationCalculationServiceTest {
                 .build();
 
         return Stream.of(
-                Arguments.of(firstOrder, firstCoefficientToTest, BigDecimal.valueOf(64.0)),
-                Arguments.of(secondOrder, secondCoefficientToTest, BigDecimal.valueOf(108.0)),
-                Arguments.of(thirdOrder, thirdCoefficientToTest, BigDecimal.valueOf(342.0))
+                Arguments.of(firstOrder, firstCoefficientToTest, BigDecimal.valueOf(7.4462)),
+                Arguments.of(secondOrder, secondCoefficientToTest, BigDecimal.valueOf(6.6011)),
+                Arguments.of(thirdOrder, thirdCoefficientToTest, BigDecimal.valueOf(6.5218))
         );
     }
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
-    void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) {
-        //BigDecimal actual = priceCalculationRuleService.calculatePrice(order, rule);
-        //Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
+    void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) throws ObjectNotFoundException {
+        priceCalculationRuleService.save(rule);
+        BigDecimal actual = priceCalculationRuleService.calculatePrice(order.getParcelParameters(), rule.getCountry());
+        Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
     }
 
     @Test
     void findAllPriceCalculationRules() throws ObjectNotFoundException {
         CoefficientForPriceCalculationDto coefficientForPriceCalculationToTest = CoefficientForPriceCalculationDto
                 .builder()
-                .id(1L)
                 .countryCoefficient(1.6)
                 .country("Russia")
                 .parcelSizeLimit(50)
                 .build();
 
         priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
+        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
+        priceCalculationRuleService.save(coefficientForPriceCalculationToTest);
 
-        int expectedSize = 5;
+        int expectedSize = 3;
 
         int actualSize = priceCalculationRuleService.findAll().size();
 
