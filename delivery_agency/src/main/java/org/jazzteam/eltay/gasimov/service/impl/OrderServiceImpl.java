@@ -269,7 +269,6 @@ public class OrderServiceImpl implements OrderService {
         OrderState foundState = orderStateService.findByState(orderState);
         foundOrder.setState(foundState);
         foundOrder.setCurrentLocation(foundWorker.getWorkingPlace());
-        orderRepository.save(foundOrder);
         foundOrder.getHistory().add(getNewHistory(foundOrder, foundState, orderNumber, foundWorker));
         return orderRepository.save(foundOrder);
     }
@@ -281,7 +280,6 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber, Worker foundWorker) {
-
         OrderHistory newHistory = OrderHistory.builder().build();
         newHistory.setSentAt(foundOrder.getHistory().iterator().next().getSentAt());
         newHistory.setWorker(foundWorker);

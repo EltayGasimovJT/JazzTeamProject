@@ -55,15 +55,13 @@ function initStates(orderNumber) {
 }
 
 function setupOrderStates(states) {
-    for (let key = 0, size = states.length; key < size; key++) {
-        let row = '<option>' + states[key] +
-            '</option>';
-        $('#states').append(undefined).append(row);
-    }
+    let row = '<option>' + states +
+        '</option>';
+    $('#states').append(undefined).append(row);
+
 }
 
 function getAllOrders() {
-    let phoneNumber = sessionStorage.getItem('clientPhone');
     $.ajax({
         url: `/orders`,
         type: 'GET',

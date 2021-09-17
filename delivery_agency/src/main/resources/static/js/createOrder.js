@@ -422,7 +422,7 @@ function insertWorkerInfo() {
     });
 }
 
-function checkSession(){
+function checkSession() {
     let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getMinutes()
     if ((new Date().getMinutes() - sessionTimeMinutes) > 3) {
         sessionStorage.removeItem('workersToken');

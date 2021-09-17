@@ -27,7 +27,7 @@ public class RegisterController {
 
     @PostMapping(REGISTRATION_URL)
     public WorkerDto registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
-        return CustomModelMapper.mapUserToDto(workerService.saveForRegistration(registrationRequest));
+        return CustomModelMapper.mapWorkerToDto(workerService.saveForRegistration(registrationRequest));
     }
 
     @PostMapping(AUTHORIZATION_URL)

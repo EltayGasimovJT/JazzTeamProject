@@ -47,7 +47,7 @@ public class OrderController {
     OrderResponseDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         CustomUserDetails principal = contextService.getCurrentUserFromContext();
         Worker foundWorker = workerService.findByName(principal.getUsername());
-        requestOrder.setWorkerDto(CustomModelMapper.mapUserToDto(foundWorker));
+        requestOrder.setWorkerDto(CustomModelMapper.mapWorkerToDto(foundWorker));
         OrderDto createdOrder = CustomModelMapper.mapOrderToDto(orderService.createOrder(requestOrder));
         return OrderResponseDto.builder()
                 .orderDto(createdOrder)
@@ -102,7 +102,6 @@ public class OrderController {
     @DeleteMapping(path = ORDERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable Long id) {
-        log.severe(id.toString());
         orderService.delete(id);
     }
 

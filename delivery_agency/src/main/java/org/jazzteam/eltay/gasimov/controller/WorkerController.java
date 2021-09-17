@@ -57,7 +57,7 @@ public class WorkerController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     WorkerDto findById(@PathVariable Long id) {
-        return CustomModelMapper.mapUserToDto(workerService.findOne(id));
+        return CustomModelMapper.mapWorkerToDto(workerService.findOne(id));
     }
 
     @GetMapping(path = WORKERS_FIND_ROLES_URL)
@@ -74,7 +74,7 @@ public class WorkerController {
     @GetMapping(path = WORKERS_GET_STATES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<String> getStatesByRole(@RequestParam String orderNumber) {
+    String getStatesByRole(@RequestParam String orderNumber) {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundByName = workerService.findByName(currentUserFromContext.getUsername());
         return workerService.findStatesByRole(foundByName, orderNumber);
@@ -85,7 +85,7 @@ public class WorkerController {
     public @ResponseBody
     WorkerDto getCurrentWorker() {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
-        return CustomModelMapper.mapUserToDto(workerService.findByName(currentUserFromContext.getUsername()));
+        return CustomModelMapper.mapWorkerToDto(workerService.findByName(currentUserFromContext.getUsername()));
     }
 
 

@@ -70,4 +70,5 @@ public class Constants {
     public static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     public static final String ROLE_PICKUP_WORKER = "Pick up Worker";
     public static final String READY_TO_SEND = "Готов к отправке";
+    public static final String WAREHOUSE_NOT_ALLOWED_STATE_CHANGING_MESSAGE = "Вы не можете сменить состояние заказа под данной ролью";
 }
