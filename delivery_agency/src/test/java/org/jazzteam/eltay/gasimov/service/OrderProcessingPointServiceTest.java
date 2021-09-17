@@ -50,7 +50,6 @@ class OrderProcessingPointServiceTest {
         thirdProcessingPointToTest.setLocation("Grodno-Belarus");
         thirdProcessingPointToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
 
-
         return Stream.of(
                 Arguments.of(firstProcessingPointToTest, "Minsk-Belarus"),
                 Arguments.of(secondProcessingPointToTest, "Moscow-Belarus"),
