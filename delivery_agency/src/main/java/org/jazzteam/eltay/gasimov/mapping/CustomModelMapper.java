@@ -164,13 +164,14 @@ public class CustomModelMapper {
                         .map(CustomModelMapper::mapOrderToDto)
                         .collect(Collectors.toList())
         );
-
-        convertedToDto.setOrderProcessingPoints(
-                warehouseToConvert.getOrderProcessingPoints()
-                        .stream()
-                        .map(processingPointToConvert -> modelMapper.map(processingPointToConvert, OrderProcessingPointDto.class))
-                        .collect(Collectors.toList())
-        );
+        if (convertedToDto.getOrderProcessingPoints() != null) {
+            convertedToDto.setOrderProcessingPoints(
+                    warehouseToConvert.getOrderProcessingPoints()
+                            .stream()
+                            .map(processingPointToConvert -> modelMapper.map(processingPointToConvert, OrderProcessingPointDto.class))
+                            .collect(Collectors.toList())
+            );
+        }
         return convertedToDto;
     }
 

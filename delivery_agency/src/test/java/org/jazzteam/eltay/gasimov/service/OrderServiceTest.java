@@ -1,5 +1,3 @@
-/*
-
 package org.jazzteam.eltay.gasimov.service;
 
 import javassist.tools.rmi.ObjectNotFoundException;
@@ -22,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -129,20 +128,21 @@ class OrderServiceTest {
         warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
         warehouseToSave.setExpectedOrders(new ArrayList<>());
         warehouseToSave.setDispatchedOrders(new ArrayList<>());
-        Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
         OrderStateDto stateDtoToSave = OrderStateDto.builder()
                 .state(OrderStates.READY_TO_SEND.getState())
                 .prefix(" weq")
                 .suffix(" weq")
                 .build();
         orderStateService.save(stateDtoToSave);
+
         AbstractBuildingDto currentLocationToTest = new OrderProcessingPointDto();
         currentLocationToTest.setLocation("Полоцк-Беларусь");
 
         OrderProcessingPointDto destinationPlaceToTest = new OrderProcessingPointDto();
         destinationPlaceToTest.setLocation("Минск-Беларусь");
         destinationPlaceToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
-        destinationPlaceToTest.setWarehouseId(savedWarehouse.getId());
+        warehouseToSave.setOrderProcessingPoints(Collections.singletonList(destinationPlaceToTest));
+        warehouseService.save(warehouseToSave);
 
         WorkerDto workerToSave = WorkerDto.builder()
                 .name("Вася")
@@ -151,8 +151,6 @@ class OrderServiceTest {
                 .password("rqweqwqwe")
                 .workingPlace(destinationPlaceToTest)
                 .build();
-
-        workerService.save(workerToSave);
 
         CreateOrderRequestDto expectedOrder = CreateOrderRequestDto.builder()
                 .destinationPoint("Минск-Беларусь")
@@ -303,7 +301,7 @@ class OrderServiceTest {
         Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
         OrderProcessingPointDto orderProcessingPointToTest = new OrderProcessingPointDto();
         orderProcessingPointToTest.setLocation("Russia");
-        orderProcessingPointToTest.setWarehouseId(savedWarehouse.getId());
+        orderProcessingPointToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
 
         OrderDto orderToTest = OrderDto.builder()
                 .parcelParameters(ParcelParametersDto.builder()
@@ -337,4 +335,4 @@ class OrderServiceTest {
 
         Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
-}*/
+}

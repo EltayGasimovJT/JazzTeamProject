@@ -70,7 +70,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
         OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
         foundProcessingPoint.setLocation(processingPointDtoToUpdate.getLocation());
-        foundProcessingPoint.setWarehouse(modelMapper.map(warehouseService.findOne(processingPointDtoToUpdate.getWarehouseId()), Warehouse.class));
+        foundProcessingPoint.setWarehouse(modelMapper.map(warehouseService.findOne(processingPointDtoToUpdate.getWarehouse().getId()), Warehouse.class));
         if (processingPointDtoToUpdate.getExpectedOrders() != null) {
             foundProcessingPoint.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
                     .map(CustomModelMapper::mapDtoToOrder)

@@ -6,6 +6,7 @@ import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
+import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -67,7 +68,7 @@ class OrderProcessingPointServiceTest {
         warehouseToSave.setExpectedOrders(new ArrayList<>());
         warehouseToSave.setDispatchedOrders(new ArrayList<>());
         Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
-        orderProcessingPoint.setWarehouseId(savedWarehouse.getId());
+        orderProcessingPoint.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
         OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(orderProcessingPoint);
 
         String actualLocation = orderProcessingPointService.findOne(savedProcessingPoint.getId()).getLocation();
@@ -86,11 +87,11 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPointDto firstProcessingPointToTest = new OrderProcessingPointDto();
         firstProcessingPointToTest.setLocation("Polotsk-Belarus");
         firstProcessingPointToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
-        firstProcessingPointToTest.setWarehouseId(savedWarehouse.getId());
+        firstProcessingPointToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
         OrderProcessingPointDto secondProcessingPointToSave = new OrderProcessingPointDto();
         secondProcessingPointToSave.setLocation("Grodno-Belarus");
         secondProcessingPointToSave.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
-        secondProcessingPointToSave.setWarehouseId(savedWarehouse.getId());
+        secondProcessingPointToSave.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
 
         OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(firstProcessingPointToTest);
         orderProcessingPointService.save(secondProcessingPointToSave);
@@ -106,21 +107,23 @@ class OrderProcessingPointServiceTest {
     void findAllOrderProcessingPoints() {
         WarehouseDto warehouseToSave = new WarehouseDto();
         warehouseToSave.setLocation("Belarus");
+        warehouseToSave.setExpectedOrders(new ArrayList<>());
+        warehouseToSave.setDispatchedOrders(new ArrayList<>());
         warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
         Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
 
         OrderProcessingPointDto firstProcessingPointTest = new OrderProcessingPointDto();
-        firstProcessingPointTest.setWarehouseId(savedWarehouse.getId());
+        firstProcessingPointTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
         firstProcessingPointTest.setLocation("Minsk-Belarus");
         firstProcessingPointTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
         OrderProcessingPointDto secondProcessingPointTest = new OrderProcessingPointDto();
-        secondProcessingPointTest.setWarehouseId(savedWarehouse.getId());
+        secondProcessingPointTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
         secondProcessingPointTest.setLocation("Gomel-Belarus");
         secondProcessingPointTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
 
         OrderProcessingPointDto thirdProcessingPointTest = new OrderProcessingPointDto();
-        thirdProcessingPointTest.setWarehouseId(savedWarehouse.getId());
+        thirdProcessingPointTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
         thirdProcessingPointTest.setLocation("Polotsk-Belarus");
         thirdProcessingPointTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
 
@@ -148,7 +151,7 @@ class OrderProcessingPointServiceTest {
         firstProcessingPointToTest.setLocation("Polotsk-Belarus");
         firstProcessingPointToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
         firstProcessingPointToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
-        firstProcessingPointToTest.setWarehouseId(savedWarehouse.getId());
+        firstProcessingPointToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
 
         OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(firstProcessingPointToTest);
 
@@ -163,12 +166,14 @@ class OrderProcessingPointServiceTest {
     void update() {
         WarehouseDto warehouseToSave = new WarehouseDto();
         warehouseToSave.setLocation("Belarus");
+        warehouseToSave.setExpectedOrders(new ArrayList<>());
+        warehouseToSave.setDispatchedOrders(new ArrayList<>());
         warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
         Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
 
         OrderProcessingPointDto expectedProcessingPointDto = new OrderProcessingPointDto();
         expectedProcessingPointDto.setLocation("Minsk-Belarus");
-        expectedProcessingPointDto.setWarehouseId(savedWarehouse.getId());
+        expectedProcessingPointDto.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
         expectedProcessingPointDto.setExpectedOrders(new ArrayList<>());
         expectedProcessingPointDto.setDispatchedOrders(new ArrayList<>());
         expectedProcessingPointDto.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
@@ -183,7 +188,7 @@ class OrderProcessingPointServiceTest {
 
         OrderProcessingPointDto actualProcessingPointDto = modelMapper.map(actual, OrderProcessingPointDto.class);
 
-        actualProcessingPointDto.setWarehouseId(actual.getWarehouse().getId());
+        actualProcessingPointDto.setWarehouse(CustomModelMapper.mapWarehouseToDto(actual.getWarehouse()));
 
         Assertions.assertEquals(expectedProcessingPointDto, actualProcessingPointDto);
     }
