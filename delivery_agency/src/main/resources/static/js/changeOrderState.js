@@ -229,7 +229,7 @@ function insertCancelButton() {
 }
 
 function addEditPanel() {
-    return '<img src="icons/pen.png" alt="Редактировать" class="change-state-button icon-location" title="Редактировать" aria-placeholder="Редактировать">';
+    return '<img src="icons/pen.png" alt="Изменить состояние заказа" class="change-state-button icon-location" title="Изменить состояние заказа" aria-placeholder="Редактировать">';
 }
 
 function checkSession() {
