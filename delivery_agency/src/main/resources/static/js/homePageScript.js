@@ -172,8 +172,8 @@ jQuery('document').ready(function () {
 })
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getHours()
+    if ((new Date().getHours() - sessionTimeMinutes) > 1) {
         sessionStorage.removeItem('clientPhone');
         sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;

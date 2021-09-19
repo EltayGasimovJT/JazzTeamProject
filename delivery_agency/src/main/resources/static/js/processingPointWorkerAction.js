@@ -65,8 +65,8 @@ function insertWorkerInfo() {
 }
 
 function checkSession(){
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 4) {
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getHours()
+    if ((new Date().getHours() - sessionTimeMinutes) > 1) {
         sessionStorage.removeItem('workersToken');
         sessionStorage.removeItem('workerSession');
         window.location.href = `/homePage.html`;

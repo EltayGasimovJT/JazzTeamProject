@@ -9,6 +9,7 @@
     } </style>
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/moment.min.js"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -70,25 +71,25 @@
             </div>
             <div>
                 <div class="style-form">
-                    <span class="createOrderTextField">Имя адресата</span>
+                    <span class="createOrderTextField">Имя получателя</span>
                     <input id="recipientName" type="text" name="recipientName" class="input-field" required
                            maxlength="40" pattern="^[a-zA-ZА-Яа-я]+$"
                            title="Input recipient name">
                 </div>
                 <div class="style-form">
-                    <span class="createOrderTextField">Фамилия адресата</span>
+                    <span class="createOrderTextField">Фамилия получателя</span>
                     <input id="recipientSurname" type="text" name="recipientSurname" class="input-field" required
                            maxlength="40" pattern="^[a-zA-ZА-Яа-я]+$"
                            title="Input recipient surname">
                 </div>
                 <div class="style-form">
-                    <span class="createOrderTextField">Номер паспорта адресата</span>
+                    <span class="createOrderTextField">Номер паспорта получателя</span>
                     <input id="recipientPassportId" type="text" name="recipientPassportId" class="input-field" required
                            maxlength="40"
                            title="Input recipient passport number">
                 </div>
                 <div class="style-form mb-3">
-                    <span class="createOrderTextField">Номер телефона адресата</span>
+                    <span class="createOrderTextField">Номер телефона получателя</span>
                     <div class="inputFieldForValidation input-field">
                         <input type="text" name="recipientPhoneNumber"
                                required

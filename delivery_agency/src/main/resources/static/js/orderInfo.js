@@ -62,6 +62,7 @@ function getOrder(idFromUrl) {
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
+            console.log(result.sendingTime)
             let row = '<tr class="text"><td>' + result.recipient.name +
                 '</td><td>' + result.recipient.surname + '</td><td>' +
                 getTimeFormat(result.sendingTime) + '</td><td>' + result.price +
@@ -77,18 +78,12 @@ function getOrder(idFromUrl) {
 
 
 function getTimeFormat(time) {
-    let date = new Date(time);
-
-    date.setDate(date.getDate() + 20);
-
-    return ('0' + date.getDate()).slice(-2) + '.'
-        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
-        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+    return moment(time).format('DD.MM.YYYY') + " " + moment(time).format('h:mm:ss');
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getSeconds()
-    if (Math.abs((new Date()).getSeconds() - sessionTimeMinutes) > 30) {
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getHours()
+    if (Math.abs((new Date()).getHours() - sessionTimeMinutes) > 1) {
         sessionStorage.removeItem('clientPhone');
         sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;

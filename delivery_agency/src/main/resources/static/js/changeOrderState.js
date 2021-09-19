@@ -222,8 +222,8 @@ function addChangeStateButton() {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getHours()
+    if ((new Date().getHours() - sessionTimeMinutes) > 1) {
         sessionStorage.removeItem('workersToken');
         sessionStorage.removeItem('workerSession');
         window.location.href = `/homePage.html`;
@@ -233,11 +233,5 @@ function checkSession() {
 }
 
 function getTimeFormat(time) {
-    let date = new Date(time);
-
-    date.setDate(date.getDate() + 20);
-
-    return ('0' + date.getDate()).slice(-2) + '.'
-        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
-        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+    return moment(time).format('DD.MM.YYYY') + " " + moment(time).format('h:mm:ss');
 }
