@@ -151,7 +151,7 @@ function init() {
 
 $('#createOrderForm').submit(function (e) {
     checkSession()
-    $form = $(this).serializeArray();
+
     let sender = new ClientDto({
         name: `${document.getElementById('senderName').value}`,
         surname: `${document.getElementById('senderSurname').value}`,
@@ -213,6 +213,17 @@ $('#createOrderForm').submit(function (e) {
         e.preventDefault();
     }
 });
+$('#cancel-order-on-create').click(function () {
+    Swal.fire({
+        title: "Создание заказа было отменено",
+        icon: "info",
+        timer: 2000,
+        showConfirmButton: false,
+        position: 'top-end'
+    }).then(() => {
+        window.location.reload();
+    });
+})
 
 function insertLogoutButton() {
     let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
@@ -443,7 +454,7 @@ function insertWorkerInfo() {
     });
 }
 
-function checkSession(){
+function checkSession() {
     let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getHours()
     if ((new Date().getHours() - sessionTimeMinutes) > 3) {
         sessionStorage.removeItem('workersToken');

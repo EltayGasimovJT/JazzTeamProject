@@ -825,3 +825,8 @@ input:invalid:not(:placeholder-shown) + .form__error {
     flex-direction: row;
     align-content: flex-end;
 }
+
+.create-cancel-btn-margin {
+    display: flex;
+    justify-content: space-between;
+}
