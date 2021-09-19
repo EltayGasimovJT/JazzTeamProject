@@ -6,6 +6,7 @@ jQuery('document').ready(function () {
     Swal.fire({
         title: "Заказ успешно создан",
         icon: "success",
+        position: 'top-end',
         showConfirmButton: false
     });
     if (sessionStorage.getItem('workersToken') !== null) {

@@ -102,15 +102,16 @@ jQuery('document').ready(function () {
                 title: "На ваш номер телефона был выслан четырехзначный код подтверждения",
                 showConfirmButton: false,
                 timer: 5000
+            }).then(function () {
+                Swal.fire({
+                    text: data.code.generatedCode,
+                    position: 'top-end',
+                    icon: 'info',
+                    title: "Четырехзначный код из смс",
+                    showConfirmButton: false,
+                    timer: 7000
+                })
             });
-            Swal.fire({
-                text: data.code.generatedCode,
-                position: 'top-end',
-                icon: 'success',
-                title: "Четырехзначный код из смс",
-                showConfirmButton: false,
-                timer: 7000
-            })
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
         }).fail(function () {
