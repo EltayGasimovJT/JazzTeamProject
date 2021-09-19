@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/style.css" type="text/css">
     <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
     <script src="js/moment.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
@@ -65,7 +66,7 @@
                                id="senderPhoneNumber"
                                maxlength="40"
                                title="Input sender phone number">
-                        <span class="form__error">Введите номер в правильном формате, например:<br>(44) 456-78-90</span>
+                        <span class="form__error">Введите номер в правильном формате, например:<br>(**) 456-78-90</span>
                     </div>
                 </div>
             </div>
@@ -97,7 +98,7 @@
                                id="recipientPhoneNumber"
                                pattern="[\(]\d{2}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}"
                                title="Input recipient phone number">
-                        <span class="form__error">Введите номер в правильном формате, например:<br>(44) 456-78-90</span>
+                        <span class="form__error">Введите номер в правильном формате, например:<br>(**) 456-78-90</span>
                     </div>
                 </div>
             </div>

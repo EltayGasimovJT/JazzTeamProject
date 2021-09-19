@@ -18,12 +18,7 @@ backgroundModal.addEventListener('click', () => {
 document.querySelector('.modal-redirect').addEventListener('click', (event) => {
     event.stopPropagation();
 });
-let allStates;
 let order;
-
-let currentWorkerRole;
-
-
 $("#trackOrderForm").submit(function (event) {
 
 });
@@ -62,7 +57,6 @@ function setupOrderStates(states) {
 }
 
 function getAllOrders() {
-    let phoneNumber = sessionStorage.getItem('clientPhone');
     $.ajax({
         url: `/orders`,
         type: 'GET',
@@ -74,8 +68,7 @@ function getAllOrders() {
                     result[key].recipient.surname + '</td><td>' + getTimeFormat(result[key].sendingTime) +
                     '</td><td>' + result[key].price + '</td><td>' + result[key].state.state + '</td><td>' +
                     result[key].departurePoint.location + '</td><td>' + result[key].currentLocation.location +
-                    '</td><td>' + result[key].destinationPlace.location + '</td><td>' + addChangeStateButton() +
-                    '</td><td>' + insertCancelButton() + '</td></tr>';
+                    '</td><td>' + result[key].destinationPlace.location + '</td><td class="icons-location">' + addEditPanel() + insertCancelButton() + '</td></tr>';
                 $('#orders').append(row);
             }
 
@@ -154,14 +147,18 @@ $('#changeOrderState').submit(function (event) {
             }
         },
         success: function () {
-            swal({
+            Swal.fire({
                 title: "Статус успешно обновлен",
                 text: `Для заказа с номером #${order.orderTrackNumber} был успешно установлен новый статус - ${state}`,
-                icon: 'success'
+                icon: 'success',
+                timer: 7000
+            }).then((willDelete) => {
+                if (willDelete.isConfirmed) {
+                    window.location.reload();
+                }
             })
         },
         error: function (exception) {
-            swal();
             swal({
                 title: 'Что-то пошло не так',
                 text: `${exception.responseJSON.message}`,
@@ -211,14 +208,11 @@ function insertLogoutButton() {
 }
 
 function insertCancelButton() {
-    return `<button id="cancelOrderBtn" type="submit" class="btn btn-primary open-modal cancel-button">
-            Отменить заказ
-        </button>`;
+    return '<img src="icons/cross.png" alt="Отменить заказ" class="cancel-button icon-location" aria-placeholder="Отменить заказ">';
 }
 
-function addChangeStateButton() {
-    return '<button class="btn btn-primary change-state-button" type="button">'
-        + '<span class="glyphicon glyphicon-pencil"></span>Изменить состояние</button>';
+function addEditPanel() {
+    return '<img src="icons/pen.png" alt="Редактировать" class="change-state-button icon-location" aria-placeholder="Редактировать">';
 }
 
 function checkSession() {

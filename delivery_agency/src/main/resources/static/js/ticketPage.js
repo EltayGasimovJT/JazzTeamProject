@@ -1,4 +1,7 @@
 jQuery('document').ready(function () {
+    if (sessionStorage.getItem('workersToken') === null) {
+        window.location.href = "/homePage.html";
+    }
     let idFromUrl = getIdFromUrl();
     swal({
         title: "Заказ успешно создан",

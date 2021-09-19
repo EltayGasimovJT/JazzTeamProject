@@ -44,17 +44,18 @@ jQuery('document').ready(function () {
 
     asClientModal.addEventListener('click', () => {
         if (sessionStorage.getItem('workersToken') !== null) {
-            swal({
+            Swal.fire({
                 title: "Вы уверены, что хотите выйти из рабочей учетной записи?",
                 icon: "warning",
-                buttons: true,
-                dangerMode: true,
+                showDenyButton: true,
+                confirmButtonText: 'Выйти',
+                denyButtonText: `Отмена`,
             })
                 .then((willDelete) => {
-                    if (willDelete) {
+                    if (willDelete.isConfirmed) {
                         sessionStorage.removeItem('workersToken');
                         sessionStorage.removeItem('workerSession');
-                    } else {
+                    } else if (willDelete.isDenied) {
                         window.location.href = "/homePage.html";
                     }
                 });
@@ -95,14 +96,32 @@ jQuery('document').ready(function () {
             url = $form.attr("action");
         let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
         geting.done(function (data) {
-            swal({
+            Swal.fire({
+                position: 'top-end',
+                icon: 'info',
+                title: "На ваш номер телефона был выслан четырехзначный код подтверждения",
+                showConfirmButton: false,
+                timer: 5000
+            });
+            Swal.fire({
+                text: data.code.generatedCode,
+                position: 'top-end',
+                icon: 'success',
                 title: "Четырехзначный код из смс",
-                text: data.code.generatedCode
+                showConfirmButton: false,
+                timer: 7000
             })
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
         }).fail(function () {
-            swal("Неверный номер телефона", "Пользователь с таким номером не зарегистрирован", 'error');
+            Swal.fire({
+                text: "Пользователь с таким номером не зарегистрирован",
+                position: 'top-end',
+                icon: 'error',
+                title: "Неверный номер телефона",
+                showConfirmButton: false,
+                timer: 7000
+            })
         });
     })
 

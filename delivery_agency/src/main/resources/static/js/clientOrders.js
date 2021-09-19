@@ -3,6 +3,8 @@ jQuery('document').ready(function () {
     if (sessionStorage.getItem('clientPhone') !== null) {
         insertClientInfo();
         insertLogoutButton();
+    } else if (sessionStorage.getItem('clientPhone') === null && sessionStorage.getItem('workersToken') === null) {
+        window.location.href = "/homePage.html";
     }
 })
 
@@ -80,7 +82,7 @@ function checkSession() {
 }
 
 function addBackToOrderListButton() {
-    return '<button class="customHiddenBtn buttonText additionalInfoButton" type="button">'
+    return '<button class="btn btn-primary buttonText additionalInfoButton" type="button">'
         + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';
 }
 
