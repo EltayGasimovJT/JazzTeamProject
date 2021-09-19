@@ -3,9 +3,10 @@ jQuery('document').ready(function () {
         window.location.href = "/homePage.html";
     }
     let idFromUrl = getIdFromUrl();
-    swal({
+    Swal.fire({
         title: "Заказ успешно создан",
         icon: "success",
+        showConfirmButton: false
     });
     if (sessionStorage.getItem('workersToken') !== null) {
         insertWorkerInfo();
@@ -88,7 +89,8 @@ function getOrder(orderId) {
         order = data;
         insetValuesIntoTicket(data);
     }).fail(function (exception) {
-        swal({
+        Swal.fire({
+            text: 'Не удалось найти заказ',
             title: `${exception.message}`,
             icons: 'error'
         })
@@ -122,7 +124,7 @@ function insetValuesIntoTicket(data) {
 }
 
 function getTimeFormat(time) {
-    return moment(time).format('DD.MM.YYYY') + " " + moment(time).format('h:mm:ss');
+    return moment(time).format("YYYY-MM-DD HH:mm:ss z");
 }
 
 function checkSession() {
@@ -169,10 +171,11 @@ function insertWorkerInfo() {
         surname.innerHTML = `Фамилия: ${data.surname}`
         roles.innerHTML = `Роль: ${data.role}`
     }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
+            showConfirmButton: false
         });
     });
 }

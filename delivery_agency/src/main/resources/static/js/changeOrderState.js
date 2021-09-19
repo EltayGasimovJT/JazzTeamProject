@@ -39,11 +39,13 @@ function initStates(orderNumber) {
             setupOrderStates(result)
         },
         error: function (exception) {
-            swal();
-            swal({
-                title: 'Что-то пошло не так',
+            Swal.fire({
+                title: "Что-то пошло не так",
+                icon: "error",
                 text: `${exception.responseJSON.message}`,
-                icon: 'error'
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 5000
             })
         }
     });
@@ -80,11 +82,14 @@ function getAllOrders() {
                         order = data
                         initStates(orderId)
                         backgroundModal.style.visibility = 'visible';
-                    }).fail(function () {
-                        swal({
-                            title: "Ошибка ввода",
-                            text: "Данного заказа не существует",
+                    }).fail(function (exception) {
+                        Swal.fire({
+                            title: "Не удалось изменить состояние",
+                            text: exception.responseJSON.message,
                             icon: "error",
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 5000
                         });
 
                     });
@@ -105,16 +110,22 @@ function getAllOrders() {
                             }
                         },
                     }).done(function () {
-                        swal({
-                            title: "Заказ был успешно отменен",
+                        Swal.fire({
+                            title: "Заказ был отменен",
                             icon: 'success'
+                        }).then((willDelete) => {
+                            if (willDelete.isConfirmed) {
+                                window.location.reload();
+                            }
                         })
-                        window.location.href = "/changeOrderState.html";
-                    }).fail(function () {
-                        swal({
-                            title: "Ошибка ввода",
-                            text: "Данного заказа не существует",
+                    }).fail(function (exception) {
+                        Swal.fire({
+                            title: "Не удалось отменить заказ",
+                            text: exception.responseJSON.message,
                             icon: "error",
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 5000
                         });
 
                     });
@@ -159,10 +170,13 @@ $('#changeOrderState').submit(function (event) {
             })
         },
         error: function (exception) {
-            swal({
+            Swal.fire({
                 title: 'Что-то пошло не так',
                 text: `${exception.responseJSON.message}`,
-                icon: 'error'
+                icon: 'error',
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 5000
             })
         }
     });
@@ -187,10 +201,13 @@ function insertWorkerInfo() {
         surname.innerHTML = `Фамилия: ${data.surname}`
         roles.innerHTML = `Роль: ${data.role}`
     }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 5000
         });
     });
 }
@@ -208,11 +225,11 @@ function insertLogoutButton() {
 }
 
 function insertCancelButton() {
-    return '<img src="icons/cross.png" alt="Отменить заказ" class="cancel-button icon-location" aria-placeholder="Отменить заказ">';
+    return '<img src="icons/cross.png" alt="Отменить заказ" class="cancel-button icon-location" title="Отменить заказ" aria-placeholder="Отменить заказ">';
 }
 
 function addEditPanel() {
-    return '<img src="icons/pen.png" alt="Редактировать" class="change-state-button icon-location" aria-placeholder="Редактировать">';
+    return '<img src="icons/pen.png" alt="Редактировать" class="change-state-button icon-location" title="Редактировать" aria-placeholder="Редактировать">';
 }
 
 function checkSession() {
@@ -227,5 +244,5 @@ function checkSession() {
 }
 
 function getTimeFormat(time) {
-    return moment(time).format('DD.MM.YYYY') + " " + moment(time).format('h:mm:ss');
+    return moment(time).format('DD.MM.YYYY') + " " + moment(time).format('hh:mm:ss');
 }

@@ -102,7 +102,6 @@ public class OrderController {
     @DeleteMapping(path = ORDERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteOrder(@PathVariable Long id) {
-        log.severe(id.toString());
         orderService.delete(id);
     }
 

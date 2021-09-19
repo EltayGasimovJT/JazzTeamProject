@@ -78,7 +78,7 @@ function getOrder(idFromUrl) {
 
 
 function getTimeFormat(time) {
-    return moment(time).format('DD.MM.YYYY') + " " + moment(time).format('h:mm:ss');
+    return moment(time).format("YYYY-MM-DD HH:mm:ss z");
 }
 
 function checkSession() {
@@ -114,10 +114,13 @@ function insertClientInfo() {
             name.innerHTML = `Имя: ${data.name}`
             surname.innerHTML = `Фамилия: ${data.surname}`
         }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 5000
         });
     });
 }

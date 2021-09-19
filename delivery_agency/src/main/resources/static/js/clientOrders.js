@@ -38,10 +38,13 @@ function getUsersOrders() {
                     $.get(`/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json').done(function (data) {
                         window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderId}`;
                     }).fail(function () {
-                        swal({
+                        Swal.fire({
                             title: "Ошибка ввода",
                             text: "Данного заказа не существует",
                             icon: "error",
+                            position: "top-end",
+                            showConfirmButton: false,
+                            timer: 5000
                         });
 
                     });
@@ -87,7 +90,7 @@ function addBackToOrderListButton() {
 }
 
 function getTimeFormat(time) {
-    return moment(time).format('DD.MM.YYYY') + " " + moment(time).format('h:mm:ss');
+    return moment(time).format("YYYY-MM-DD HH:mm:ss z");
 }
 
 function insertClientInfo() {
@@ -100,10 +103,13 @@ function insertClientInfo() {
             name.innerHTML = `Имя: ${data.name}`
             surname.innerHTML = `Фамилия: ${data.surname}`
         }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 5000
         });
     });
 }

@@ -53,6 +53,8 @@ public class OrderServiceImpl implements OrderService {
     private ContextService contextService;
     @Autowired
     private WorkerService workerService;
+    @Autowired
+    private TicketService ticketService;
 
     @Override
     public Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) throws IllegalArgumentException {
@@ -267,9 +269,11 @@ public class OrderServiceImpl implements OrderService {
         Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         Order foundOrder = findByTrackNumber(orderNumber);
         OrderState foundState = orderStateService.findByState(orderState);
+        if (!foundState.getRolesAllowedPutToState().contains(foundWorker.getRoles().iterator().next())) {
+            throw new IllegalStateException(CANNOT_CHANGE_STATE);
+        }
         foundOrder.setState(foundState);
         foundOrder.setCurrentLocation(foundWorker.getWorkingPlace());
-        orderRepository.save(foundOrder);
         foundOrder.getHistory().add(getNewHistory(foundOrder, foundState, orderNumber, foundWorker));
         return orderRepository.save(foundOrder);
     }
@@ -277,7 +281,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void deleteByTrackNumber(String orderNumber) {
-        orderRepository.deleteByTrackNumber(orderNumber);
+        Order foundOrder = orderRepository.findByTrackNumber(orderNumber);
+        if (foundOrder.getState().getId() >= THREE) {
+            throw new IllegalStateException(CANNOT_CANCEL_ORDER);
+        }
+        ticketService.delete(foundOrder.getTicket().getId());
     }
 
     private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber, Worker foundWorker) {

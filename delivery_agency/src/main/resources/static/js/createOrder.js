@@ -56,20 +56,26 @@ function calculatePrice() {
             data: JSON.stringify(parcelParameters),
             success: function (result) {
                 if (validateParams(config) !== true) {
-                    swal({
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'error',
                         title: "Введенные вами данные не соответствуют требованиям",
-                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 5000
                     })
                 } else {
                     price.innerHTML = " " + result.toFixed(2);
                 }
             },
             error: function (exception) {
-                swal({
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'error',
                     title: "Ошибка подсчета суммы",
                     text: exception.responseJSON.message,
-                    icon: "error",
-                });
+                    showConfirmButton: false,
+                    timer: 5000
+                })
             }
         });
     }
@@ -77,31 +83,43 @@ function calculatePrice() {
 
 function validateParams(params) {
     if (params.parcelWidth < 0) {
-        swal({
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
             title: "Ширина не может быть меньше нуля",
-            icon: "error",
-        });
+            showConfirmButton: false,
+            timer: 2000
+        })
         return false;
     }
     if (params.parcelLength < 0) {
-        swal({
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
             title: "Длина не может быть меньше нуля",
-            icon: "error",
-        });
+            showConfirmButton: false,
+            timer: 2000
+        })
         return false;
     }
     if (params.parcelHeight < 0) {
-        swal({
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
             title: "Высота не может быть меньше нуля",
-            icon: "error",
-        });
+            showConfirmButton: false,
+            timer: 2000
+        })
         return false;
     }
     if (params.parcelWeight < 0) {
-        swal({
+        Swal.fire({
+            position: 'top-end',
+            icon: 'error',
             title: "Вес не может быть меньше нуля",
-            icon: "error",
-        });
+            showConfirmButton: false,
+            timer: 2000
+        })
         return false;
     }
     return true;
@@ -185,7 +203,7 @@ $('#createOrderForm').submit(function (e) {
         }).done(function (data) {
             window.location.href = `/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
         }).fail(function (exception) {
-            swal({
+            Swal.fire({
                 title: "Не удалось создать заказ",
                 text: exception.responseJSON.message,
                 icon: "error",
@@ -414,10 +432,13 @@ function insertWorkerInfo() {
         surname.innerHTML = `Фамилия: ${data.surname}`
         roles.innerHTML = `Роль: ${data.role}`
     }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 5000
         });
     });
 }

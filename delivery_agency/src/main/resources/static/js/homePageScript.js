@@ -116,11 +116,11 @@ jQuery('document').ready(function () {
         }).fail(function () {
             Swal.fire({
                 text: "Пользователь с таким номером не зарегистрирован",
-                position: 'top-end',
-                icon: 'error',
                 title: "Неверный номер телефона",
+                icon: 'error',
+                position: "top-end",
                 showConfirmButton: false,
-                timer: 7000
+                timer: 5000
             })
         });
     })
@@ -136,10 +136,13 @@ jQuery('document').ready(function () {
             sessionStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `/clientsOrders.html`;
         }).fail(function () {
-            swal({
+            Swal.fire({
                 title: "Неверный код, повторите попытку",
                 text: "Введенный вами четырехзначный код неправильный, пожалуйста повторите попытку",
                 icon: "error",
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 5000
             });
         });
     })
@@ -164,10 +167,13 @@ jQuery('document').ready(function () {
             sessionStorage.setItem('workerSession', (new Date()).toString())
             window.location.href = "/processingPointWorkerActionPage.html";
         }).fail(function () {
-            swal({
+            Swal.fire({
                 title: "Неправильный логин или пароль",
                 text: "Пожалуйста попробуйте ввести данные сотрудника еще раз",
                 icon: "error",
+                position: "top-end",
+                showConfirmButton: false,
+                timer: 5000
             });
         });
     })
@@ -180,7 +186,7 @@ jQuery('document').ready(function () {
         $.get(url, {orderNumber: orderNumber}, 'application/json').done(function (data) {
             window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
         }).fail(function () {
-            swal({
+            Swal.fire({
                 title: "Ошибка ввода",
                 text: "Данного заказа не существует",
                 icon: "error",
