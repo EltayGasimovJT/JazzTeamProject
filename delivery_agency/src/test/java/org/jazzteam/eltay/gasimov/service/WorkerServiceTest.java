@@ -59,7 +59,6 @@ class WorkerServiceTest {
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
         WorkerDto firstUser = WorkerDto
                 .builder()
-                .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
                 .role(Role.ROLE_ADMIN)
@@ -67,18 +66,16 @@ class WorkerServiceTest {
                 .build();
         WorkerDto secondUser = WorkerDto
                 .builder()
-                .id(2L)
                 .name("Vlad")
                 .surname("Vlad")
-                .role(Role.ROLE_ADMIN)
+                .role(Role.ROLE_WAREHOUSE_WORKER)
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         WorkerDto thirdUser = WorkerDto
                 .builder()
-                .id(3L)
                 .name("Vlad")
                 .surname("Vlad")
-                .role(Role.ROLE_ADMIN)
+                .role(Role.ROLE_PROCESSING_POINT_WORKER)
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
@@ -157,7 +154,7 @@ class WorkerServiceTest {
                 .builder()
                 .id(1L)
                 .surname("Vlad")
-                .role(Role.ROLE_ADMIN)
+                .role(Role.ROLE_WAREHOUSE_WORKER)
                 .workingPlace(orderProcessingPointDtoToTest)
                 .name(expected)
                 .build();

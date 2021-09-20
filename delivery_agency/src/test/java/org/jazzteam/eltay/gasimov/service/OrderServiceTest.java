@@ -1,7 +1,6 @@
 package org.jazzteam.eltay.gasimov.service;
 
 import javassist.tools.rmi.ObjectNotFoundException;
-import lombok.SneakyThrows;
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.Order;
 import org.jazzteam.eltay.gasimov.entity.OrderStates;
@@ -122,9 +121,8 @@ class OrderServiceTest {
         Assertions.assertEquals(expectedOrder, actualOrder);
     }
 
-    @SneakyThrows
     @Test
-    void findBySender() {
+    void findBySender() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrderDto = getOrder();
 
         Order expectedOrder = orderService.createOrder(expectedOrderDto);

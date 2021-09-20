@@ -783,7 +783,6 @@ input:invalid:not(:placeholder-shown) + .form__error {
 }
 
 .input-field {
-    padding-left: 1%;
 }
 
 .client-nav {

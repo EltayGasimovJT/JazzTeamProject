@@ -86,6 +86,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order findByRecipient(ClientDto recipientForSearch) throws IllegalArgumentException {
         Order foundOrder = orderRepository.findByRecipient(modelMapper.map(recipientForSearch, Client.class));
         OrderValidator.validateOrder(foundOrder);
@@ -93,6 +94,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order findBySender(ClientDto senderForSearch) throws IllegalArgumentException {
         Order foundOrder = orderRepository.findBySender(modelMapper.map(senderForSearch, Client.class));
         OrderValidator.validateOrder(foundOrder);
