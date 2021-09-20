@@ -92,7 +92,6 @@ function calculatePrice() {
             success: function (result) {
                 if (validateParams(config) !== true) {
                     Swal.fire({
-                        position: 'top-end',
                         icon: 'error',
                         title: "Введенные вами данные не соответствуют требованиям",
                         showConfirmButton: false,
@@ -104,7 +103,6 @@ function calculatePrice() {
             },
             error: function (exception) {
                 Swal.fire({
-                    position: 'top-end',
                     icon: 'error',
                     title: "Ошибка подсчета суммы",
                     text: exception.responseJSON.message,
@@ -119,7 +117,6 @@ function calculatePrice() {
 function validateParams(params) {
     if (params.parcelWidth < 0) {
         Swal.fire({
-            position: 'top-end',
             icon: 'error',
             title: "Ширина не может быть меньше нуля",
             showConfirmButton: false,
@@ -129,7 +126,6 @@ function validateParams(params) {
     }
     if (params.parcelLength < 0) {
         Swal.fire({
-            position: 'top-end',
             icon: 'error',
             title: "Длина не может быть меньше нуля",
             showConfirmButton: false,
@@ -139,7 +135,6 @@ function validateParams(params) {
     }
     if (params.parcelHeight < 0) {
         Swal.fire({
-            position: 'top-end',
             icon: 'error',
             title: "Высота не может быть меньше нуля",
             showConfirmButton: false,
@@ -149,7 +144,6 @@ function validateParams(params) {
     }
     if (params.parcelWeight < 0) {
         Swal.fire({
-            position: 'top-end',
             icon: 'error',
             title: "Вес не может быть меньше нуля",
             showConfirmButton: false,
@@ -253,8 +247,7 @@ $('#cancel-order-on-create').click(function () {
         title: "Создание заказа было отменено",
         icon: "info",
         timer: 2000,
-        showConfirmButton: false,
-        position: 'top-end'
+        showConfirmButton: false
     }).then(() => {
         window.location.reload();
     });
@@ -482,7 +475,6 @@ function insertWorkerInfo() {
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
-            position: "top-end",
             showConfirmButton: false,
             timer: 5000
         });

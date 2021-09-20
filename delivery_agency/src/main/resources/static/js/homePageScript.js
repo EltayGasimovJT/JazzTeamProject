@@ -97,7 +97,6 @@ jQuery('document').ready(function () {
         let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
         geting.done(function (data) {
             Swal.fire({
-                position: 'top-end',
                 icon: 'info',
                 title: "На ваш номер телефона был выслан четырехзначный код подтверждения",
                 showConfirmButton: false,
@@ -105,7 +104,6 @@ jQuery('document').ready(function () {
             }).then(function () {
                 Swal.fire({
                     text: data.code.generatedCode,
-                    position: 'top-end',
                     icon: 'info',
                     title: "Четырехзначный код из смс",
                     showConfirmButton: false,
@@ -119,7 +117,6 @@ jQuery('document').ready(function () {
                 text: "Пользователь с таким номером не зарегистрирован",
                 title: "Неверный номер телефона",
                 icon: 'error',
-                position: "top-end",
                 showConfirmButton: false,
                 timer: 5000
             })
@@ -141,7 +138,6 @@ jQuery('document').ready(function () {
                 title: "Неверный код, повторите попытку",
                 text: "Введенный вами четырехзначный код неправильный, пожалуйста повторите попытку",
                 icon: "error",
-                position: "top-end",
                 showConfirmButton: false,
                 timer: 5000
             });
@@ -172,7 +168,6 @@ jQuery('document').ready(function () {
                 title: "Неправильный логин или пароль",
                 text: "Пожалуйста попробуйте ввести данные сотрудника еще раз",
                 icon: "error",
-                position: "top-end",
                 showConfirmButton: false,
                 timer: 5000
             });

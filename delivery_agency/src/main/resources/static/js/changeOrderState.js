@@ -43,7 +43,6 @@ function initStates(orderNumber) {
                 title: "Что-то пошло не так",
                 icon: "error",
                 text: `${exception.responseJSON.message}`,
-                position: "top-end",
                 showConfirmButton: false,
                 timer: 5000
             })
@@ -87,7 +86,6 @@ function getAllOrders() {
                             title: "Не удалось изменить состояние",
                             text: exception.responseJSON.message,
                             icon: "error",
-                            position: "top-end",
                             showConfirmButton: false,
                             timer: 5000
                         });
@@ -123,7 +121,6 @@ function getAllOrders() {
                             title: "Не удалось отменить заказ",
                             text: exception.responseJSON.message,
                             icon: "error",
-                            position: "top-end",
                             showConfirmButton: false,
                             timer: 5000
                         });
@@ -174,7 +171,6 @@ $('#changeOrderState').submit(function (event) {
                 title: 'Что-то пошло не так',
                 text: `${exception.responseJSON.message}`,
                 icon: 'error',
-                position: "top-end",
                 showConfirmButton: false,
                 timer: 5000
             })
@@ -205,7 +201,6 @@ function insertWorkerInfo() {
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
-            position: "top-end",
             showConfirmButton: false,
             timer: 5000
         });

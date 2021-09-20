@@ -118,7 +118,6 @@ function insertClientInfo() {
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
-            position: "top-end",
             showConfirmButton: false,
             timer: 5000
         });
