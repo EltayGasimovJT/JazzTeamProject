@@ -3,18 +3,21 @@ package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.*;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
+import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Stream;
@@ -30,7 +33,7 @@ class WarehouseServiceTest {
     public static Stream<Arguments> ordersAndProcessingPointToTest() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
         processingPointToTest.setLocation("Russia");
-        processingPointToTest.setWarehouseId(new WarehouseDto());
+        processingPointToTest.setWarehouse(new WarehouseDto());
         OrderDto firstOrderToTest = OrderDto.builder()
                 .id(1L)
                 .parcelParameters(ParcelParametersDto.builder()
@@ -38,13 +41,12 @@ class WarehouseServiceTest {
                         .width(1.0)
                         .length(1.0)
                         .weight(20.0).build())
-                .destinationPoint(processingPointToTest)
+                .destinationPlace(processingPointToTest)
                 .sender(ClientDto.builder().build())
                 .price(BigDecimal.valueOf(1))
                 .currentLocation(new OrderProcessingPointDto())
                 .state(OrderStateDto.builder().build())
                 .recipient(ClientDto.builder().build())
-                .history(new ArrayList<>())
                 .build();
 
         return Stream.of(
@@ -54,7 +56,7 @@ class WarehouseServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointToTest")
-    void addWarehouse(OrderDto orderDtoToTest) throws SQLException {
+    void addWarehouse(OrderDto orderDtoToTest) {
         WarehouseDto warehouseToTest = new WarehouseDto();
         warehouseToTest.setId(1L);
         String expected = "Minsk";
@@ -74,75 +76,62 @@ class WarehouseServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointToTest")
-    void deleteWarehouse(OrderDto orderDtoToTest) throws SQLException {
+    void deleteWarehouse(OrderDto orderDtoToTest) {
         WarehouseDto firstWarehouseToTest = new WarehouseDto();
         firstWarehouseToTest.setId(1L);
-        firstWarehouseToTest.setLocation("");
-        firstWarehouseToTest.setExpectedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
-        firstWarehouseToTest.setDispatchedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
+        firstWarehouseToTest.setLocation("Minsk");
         firstWarehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
+        firstWarehouseToTest.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
         firstWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
         WarehouseDto secondWarehouseToTest = new WarehouseDto();
         secondWarehouseToTest.setId(2L);
-        secondWarehouseToTest.setLocation("");
-        secondWarehouseToTest.setExpectedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
-        secondWarehouseToTest.setDispatchedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
+        secondWarehouseToTest.setLocation("Moscow");
         secondWarehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
+        secondWarehouseToTest.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
         secondWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        WarehouseDto thirdWarehouseToTest = new WarehouseDto();
-        thirdWarehouseToTest.setId(3L);
-        thirdWarehouseToTest.setLocation("");
-        thirdWarehouseToTest.setExpectedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
-        thirdWarehouseToTest.setDispatchedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
-        thirdWarehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
-        thirdWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
-                new OrderProcessingPointDto()
-        ));
+
 
         warehouseService.save(firstWarehouseToTest);
-        warehouseService.save(secondWarehouseToTest);
-        warehouseService.save(thirdWarehouseToTest);
+        Warehouse savedWarehouse = warehouseService.save(secondWarehouseToTest);
 
-        warehouseService.delete(secondWarehouseToTest.getId());
+        warehouseService.delete(savedWarehouse.getId());
 
-        int expected = 2;
+        int expected = 1;
 
         int actual = warehouseService.findAll().size();
 
         Assertions.assertEquals(expected, actual);
     }
 
-    @ParameterizedTest
-    @MethodSource("ordersAndProcessingPointToTest")
-    void findAllWarehouses(OrderDto orderDtoToTest) throws SQLException {
+    @Test
+    void findAllWarehouses() {
         WarehouseDto firstWarehouseToTest = new WarehouseDto();
         firstWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
         firstWarehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
-        firstWarehouseToTest.setLocation("Moscow");
-        firstWarehouseToTest.setExpectedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
-        firstWarehouseToTest.setDispatchedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
+        firstWarehouseToTest.setLocation("Belarus");
+        firstWarehouseToTest.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
+
         WarehouseDto secondWarehouse = new WarehouseDto();
         secondWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        secondWarehouse.setExpectedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
-        secondWarehouse.setDispatchedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
         secondWarehouse.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
         secondWarehouse.setLocation("Moscow");
+        secondWarehouse.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
+
         WarehouseDto thirdWarehouse = new WarehouseDto();
         thirdWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        thirdWarehouse.setExpectedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
-        thirdWarehouse.setDispatchedOrders(Arrays.asList(orderDtoToTest, orderDtoToTest));
         thirdWarehouse.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
-        thirdWarehouse.setLocation("Moscow");
+        thirdWarehouse.setLocation("London");
+        thirdWarehouse.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
         warehouseService.save(firstWarehouseToTest);
         warehouseService.save(secondWarehouse);
@@ -157,7 +146,7 @@ class WarehouseServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointToTest")
-    void getWarehouseId(OrderDto orderDtoToTest) throws SQLException {
+    void getWarehouseId(OrderDto orderDtoToTest) {
         WarehouseDto warehouseToTest = new WarehouseDto();
         warehouseToTest.setId(1L);
         String expected = "Vitebsk";
@@ -178,7 +167,7 @@ class WarehouseServiceTest {
 
     @ParameterizedTest
     @MethodSource("ordersAndProcessingPointToTest")
-    void update(OrderDto orderDtoToTest) throws SQLException {
+    void update(OrderDto orderDtoToTest) {
         WarehouseDto expectedDto = new WarehouseDto();
         expectedDto.setId(1L);
         expectedDto.setLocation("Vitebsk");

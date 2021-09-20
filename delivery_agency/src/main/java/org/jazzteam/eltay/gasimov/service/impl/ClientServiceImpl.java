@@ -60,7 +60,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException, ObjectNotFoundException {
+    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException {
         return clientRepository.findByPassportId(passportIdForSearch);
     }
 

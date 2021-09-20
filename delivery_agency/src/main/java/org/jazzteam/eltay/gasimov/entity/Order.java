@@ -25,7 +25,7 @@ public class Order {
     private OrderState state;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private ParcelParameters parcelParameters;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "sender_id")
     @JsonBackReference
     private Client sender;
