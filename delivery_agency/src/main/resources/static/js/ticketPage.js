@@ -166,8 +166,6 @@ function insertWorkerInfo() {
             }
         },
     }).done(function (data) {
-        console.log(data)
-        console.log(data.name)
         name.innerHTML = `Имя: ${data.name}`
         surname.innerHTML = `Фамилия: ${data.surname}`
         roles.innerHTML = `Роль: ${data.role}`

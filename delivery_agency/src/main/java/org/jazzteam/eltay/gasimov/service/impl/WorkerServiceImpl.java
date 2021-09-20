@@ -45,8 +45,7 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker save(WorkerDto workerDtoToSave) {
         Worker workerToSave = CustomModelMapper.mapDtoToWorker(workerDtoToSave);
         WorkerValidator.validateOnSave(workerToSave);
-        final Worker save = workerRepository.save(workerToSave);
-        return save;
+        return workerRepository.save(workerToSave);
     }
 
     @Override

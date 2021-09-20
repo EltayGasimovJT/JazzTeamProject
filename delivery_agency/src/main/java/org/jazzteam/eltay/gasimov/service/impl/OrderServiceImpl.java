@@ -73,8 +73,8 @@ public class OrderServiceImpl implements OrderService {
 
     private String generateNewTrackNumber() {
         int randomStringLength = 9;
-        String charset = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZ";
-        return RandomStringUtils.random(randomStringLength, charset);
+        String trackerGenerationCharset = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZ";
+        return RandomStringUtils.random(randomStringLength, trackerGenerationCharset);
     }
 
     @Override
@@ -267,7 +267,11 @@ public class OrderServiceImpl implements OrderService {
         Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         Order foundOrder = findByTrackNumber(orderNumber);
         OrderState foundState = orderStateService.findByState(orderState);
-        if (!foundState.getRolesAllowedPutToState().contains(foundWorker.getRoles().iterator().next())) {
+        Set<WorkerRoles> result = foundState.getRolesAllowedPutToState().stream()
+                .distinct()
+                .filter(foundWorker.getRoles()::contains)
+                .collect(Collectors.toSet());
+        if (result.isEmpty()) {
             throw new IllegalStateException(CANNOT_CHANGE_STATE);
         }
         foundOrder.setState(foundState);

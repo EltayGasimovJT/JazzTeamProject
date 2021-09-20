@@ -71,21 +71,18 @@ class ClientServiceTest {
     @Test
     void deleteClient() throws ObjectNotFoundException {
         ClientDto firstClientToTest = ClientDto.builder()
-                .id(1L)
                 .name("firstClient")
                 .surname("igor")
                 .phoneNumber("4")
                 .passportId("4")
                 .build();
         ClientDto secondClientToTest = ClientDto.builder()
-                .id(2L)
                 .name("secondClient")
                 .surname("igor")
                 .phoneNumber("5")
                 .passportId("5")
                 .build();
         ClientDto thirdClientToTest = ClientDto.builder()
-                .id(3L)
                 .name("thirdClient")
                 .surname("igor")
                 .phoneNumber("6")
@@ -104,7 +101,7 @@ class ClientServiceTest {
                 .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest), actualClientDtos);
+         Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest), actualClientDtos);
     }
 
     @Test
@@ -152,12 +149,44 @@ class ClientServiceTest {
                 .build();
 
         Client savedClient = clientService.save(expectedClientDto);
-
+        expectedClientDto.setId(savedClient.getId());
         Client actualClient = clientService.findById(savedClient.getId());
+        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
+    }
+
+    @Test
+    void findByPhoneNumber() throws ObjectNotFoundException {
+        ClientDto expectedClientDto = ClientDto.builder()
+                .name("firstClient")
+                .surname("Vasya")
+                .phoneNumber("10")
+                .passportId("10")
+                .build();
+
+        Client savedClient = clientService.save(expectedClientDto);
+        expectedClientDto.setId(savedClient.getId());
+        Client actualClient = clientService.findByPhoneNumber(savedClient.getPhoneNumber());
 
         ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
 
-        Assertions.assertEquals(actualClientDto, actualClientDto);
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
+    }
+
+    @Test
+    void generateCodeForClient() throws ObjectNotFoundException {
+        ClientDto expectedClientDto = ClientDto.builder()
+                .name("firstClient")
+                .surname("Vasya")
+                .phoneNumber("10")
+                .passportId("10")
+                .build();
+
+        Client savedClient = clientService.save(expectedClientDto);
+        expectedClientDto.setId(savedClient.getId());
+        Client actualClient = clientService.generateCodeForClient(savedClient.getPhoneNumber());
+        Assertions.assertNotNull(actualClient.getCode().getGeneratedCode());
     }
 
     @Test

@@ -26,7 +26,7 @@ public class Worker {
     private String password;
     @ManyToOne(cascade = CascadeType.MERGE)
     private AbstractBuilding workingPlace;
-    @ManyToMany(mappedBy = "workers", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "workers", cascade = CascadeType.MERGE)
     @JsonManagedReference
     private Set<WorkerRoles> roles;
 }

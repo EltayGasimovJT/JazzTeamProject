@@ -29,7 +29,7 @@ public class Order {
     @JoinColumn(name = "sender_id")
     @JsonBackReference
     private Client sender;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
     private Client recipient;
     @Column

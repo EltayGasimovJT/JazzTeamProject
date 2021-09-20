@@ -27,12 +27,13 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Override
-    public Optional<ClientsCode> findById(Long idForFind) {
-        return codeRepository.findById(idForFind);
+    public ClientsCode findById(Long idForFind) {
+        Optional<ClientsCode> foundOptional = codeRepository.findById(idForFind);
+        return foundOptional.orElseGet(ClientsCode::new);
     }
 
     @Override
-    public List<ClientsCode> findAll(Long idForFind) {
+    public List<ClientsCode> findAll() {
         return codeRepository.findAll();
     }
 
@@ -49,10 +50,5 @@ public class CodeServiceImpl implements CodeService {
     @Override
     public ClientsCode findByCode(String code) {
         return codeRepository.findByGeneratedCode(code);
-    }
-
-    @Override
-    public void clear() {
-        codeRepository.deleteAll();
     }
 }

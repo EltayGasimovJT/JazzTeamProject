@@ -39,6 +39,41 @@ document.getElementById('parcelWeight').oninput = (event) => {
     calculatePrice();
 };
 
+document.getElementById('recipientPhoneNumber').oninput = (event) => {
+    if (event.target.value.length === 14) {
+        $.ajax({
+            url: `/clients/findByPhoneNumber`,
+            type: 'GET',
+            contentType: 'application/json',
+            data: {phoneNumber: event.target.value},
+            success: function (result) {
+                document.getElementById('recipientName').value = result.name;
+                document.getElementById('recipientSurname').value = result.surname;
+                document.getElementById('recipientPassportId').value = result.passportId;
+
+            }
+        });
+    }
+};
+
+document.getElementById('senderPhoneNumber').oninput = (event) => {
+    if (event.target.value.length === 14) {
+        $.ajax({
+            url: `/clients/findByPhoneNumber`,
+            type: 'GET',
+            contentType: 'application/json',
+            data: {phoneNumber: event.target.value},
+            success: function (result) {
+                console.log(result)
+                document.getElementById('senderName').value = result.name;
+                document.getElementById('senderSurname').value = result.surname;
+                document.getElementById('senderPassportId').value = result.passportId;
+
+            }
+        });
+    }
+};
+
 function calculatePrice() {
     if (config.parcelWeight !== null && config.parcelHeight !== null && config.parcelLength !== null && config.parcelWidth !== null && config.destinationPoint !== null) {
         let parcelParameters = new ParcelParametersDto(

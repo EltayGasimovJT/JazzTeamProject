@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClientsCodeDto {
+    private Long id;
     private String generatedCode;
 }

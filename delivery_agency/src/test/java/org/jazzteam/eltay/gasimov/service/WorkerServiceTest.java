@@ -1,12 +1,9 @@
 package org.jazzteam.eltay.gasimov.service;
 
-import lombok.SneakyThrows;
-import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
-import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.dto.WorkerDto;
-import org.jazzteam.eltay.gasimov.dto.WorkerRolesDto;
-import org.jazzteam.eltay.gasimov.entity.*;
+import org.jazzteam.eltay.gasimov.entity.Role;
+import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,12 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.PROCESSING_POINT;
-import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.WAREHOUSE;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -58,7 +52,6 @@ class WorkerServiceTest {
         Assertions.assertEquals(CustomModelMapper.mapDtoToWorker(expected), actual);
     }
 
-    @SneakyThrows
     @Test
     void deleteUser() {
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
@@ -104,30 +97,27 @@ class WorkerServiceTest {
     }
 
     @Test
-    void findAllUsers() throws SQLException {
+    void findAllUsers() {
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
         orderProcessingPointDtoToTest.setId(1L);
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
 
         WorkerDto firstUser = WorkerDto.builder()
-                .id(1L)
                 .name("Vlad")
                 .surname("Vlad")
                 .role(Role.ROLE_ADMIN)
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         WorkerDto secondUser = WorkerDto.builder()
-                .id(2L)
                 .name("Vlad")
                 .surname("Vlad")
-                .role(Role.ROLE_ADMIN)
+                .role(Role.ROLE_PROCESSING_POINT_WORKER)
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
         WorkerDto thirdUser = WorkerDto.builder()
-                .id(3L)
                 .name("Vlad")
                 .surname("Vlad")
-                .role(Role.ROLE_ADMIN)
+                .role(Role.ROLE_WAREHOUSE_WORKER)
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
