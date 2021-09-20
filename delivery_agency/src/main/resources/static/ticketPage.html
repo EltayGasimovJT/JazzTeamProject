@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="icons/waterFall.png"/>
+    <title>Order ticket</title>
+    <meta charset="UTF8">
+    <style> a {
+        text-decoration: none;
+    } </style>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="js/pdfmake.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="text/javascript" src="js/vfs_fonts.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="defaultBar">
+    <a href="homePage.html" class="defaultLogo">GasDel</a>
+    <div id="worker-nav-info" class="worker-nav">
+        <div id="worker-name-nav"></div>
+        <div id="worker-surname-nav"></div>
+        <div id="worker-role-nav"></div>
+    </div>
+    <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
+</div>
+
+<div class="ticketFormat">
+    <div id="ticketSpanId">Чек №</div>
+    <div class="ticket-info mt-auto">
+        <pre id="trackNumber">Номер трекера: #</pre>
+        <pre id="senderName">Фамилия и имя отправителя: </pre>
+        <pre id="recipientName">Фамилия и имя адресата: </pre>
+        <pre id="departurePoint">Пункт отправки: </pre>
+        <pre id="destinationPoint">Место назначения: </pre>
+        <pre id="sendingTime">Время отправки: </pre>
+        <pre id="price">Стоимость: </pre>
+    </div>
+</div>
+<div class="downloadBtn">
+    <button id="downloadTicketPdf" class="downloadButton buttonText">Скачать</button>
+</div>
+
+<script type="text/javascript" src="js/ticketPage.js"></script>
+</body>
+</html>
+

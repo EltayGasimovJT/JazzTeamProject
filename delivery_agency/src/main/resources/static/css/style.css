@@ -1,0 +1,815 @@
+.defaultBar {
+    width: 100%;
+    height: 66px;
+
+    background-color: #5176FA;
+
+    font-family: Roboto, serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 24px;
+    line-height: 28px;
+
+    display: inline-flex;
+}
+
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.track-number-form {
+    width: 500px;
+    margin-top: 200px;
+}
+
+.general-name {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.defaultLogo {
+    width: 144px;
+    height: 55px;
+
+    font-family: Comic Neue, serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 48px;
+    line-height: 55px;
+
+    color: #FFFFFF;
+}
+
+.navBarHomePage {
+    width: 120px;
+    height: 28.57px;
+}
+
+.navBarHomeArrowDown {
+    width: 22px;
+    height: 22.45px;
+
+    color: white;
+}
+
+.price {
+    display: flex;
+    font-family: Calibri, serif;
+    margin-top: 20px;
+}
+
+.actionTabText {
+    width: 394px;
+    height: 42px;
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    margin-top: 20px;
+    margin-left: 20px;
+    font-family: Calibri, serif;
+    font-size: 24px;
+}
+
+.actionTab {
+    width: 572px;
+    height: 605px;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+
+    font-family: Roboto, serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 36px;
+    line-height: 42px;
+    display: flex;
+
+    align-items: center;
+    flex-direction: column;
+    margin-left: 520px;
+    margin-top: 200px;
+    color: black;
+}
+
+.customBtn {
+    width: 250px;
+    height: 72px;
+    transition: .3s;
+
+    background: #5176FA;
+    border-radius: 10px;
+}
+
+.buttonText {
+    color: white;
+    font-family: Calibri, serif;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.btnMargin {
+    margin-top: 100px;
+}
+
+.createOrderText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Calibri, serif;
+    font-size: 30px;
+    width: 100%;
+    color: white;
+}
+
+.createOrderBar {
+    width: 572px;
+    height: 900px;;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.inputField {
+    width: 219px;
+    height: 22px;
+
+    background: #FFFFFF;
+    border: 1px solid #000000;
+    box-sizing: border-box;
+    align: right;
+}
+
+.recipientInputFields {
+    margin-top: 50px;
+}
+
+.createOrderTextField {
+    font-family: Calibri, serif;
+    color: #000000;
+    margin-right: 30px;
+    width: 180px;
+}
+
+.navBarMargin {
+    margin-top: 20px;
+    margin-left: 300px;
+}
+
+.listMargin {
+    align-self: flex-end;
+}
+
+.topNav {
+    overflow: hidden;
+    margin-left: 200px;
+}
+
+.table-wrap, .custom-table {
+    padding: 50px;
+}
+
+.topNavA {
+    float: left;
+    text-align: center;
+    height: 100%;
+    transition: .3s;
+    background-color: #5176FA;
+    text-decoration: none;
+    font-size: 20px;
+}
+
+.topNavA:hover {
+    background-color: gray;
+    color: black;
+}
+
+.topNavA.active {
+    color: green;
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 15px;
+    border: 3px solid #f1f1f1;
+}
+
+.form-container {
+    max-width: 300px;
+    padding: 10px;
+    background-color: white;
+}
+
+.wrap {
+    width: 100%;
+    height: 88vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-bar {
+    width: 100%;
+    height: 70px;
+    background-color: rgb(91, 91, 253);
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+    color: white;
+    margin-left: 10px;
+    margin-right: 50px;
+}
+
+.link {
+    margin-left: 10px;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.link:hover, h1 {
+    color: black
+}
+
+.menu {
+    width: 400px;
+    height: 500px;
+    background-color: rgb(91, 91, 253);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.me-btn {
+    width: 250px;
+    height: 72px;
+    margin: 5px 0;
+    border-radius: 5px;
+    border: 0;
+    background: #5176FA;
+    transition: .3s;
+}
+
+.me-btn:hover {
+    background: gray;
+    transition: .3s;
+    color: white;
+}
+
+.passport-login-form {
+    width: 100%;
+}
+
+.login-form-header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+    font-size: 24px;
+}
+
+.passport-login {
+    display: flex;
+    justify-content: space-between;
+    font-size: 24px;
+    margin-bottom: 80px;
+}
+
+.navigate-btn {
+    display: flex;
+    justify-content: space-between;
+}
+
+.backGround-modal {
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(68, 66, 66, 0.8);
+}
+
+.modal-custom {
+    width: 400px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    padding: 20px;
+}
+
+.modal-close {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    margin: 5px;
+    background: red;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 24px;
+    border: 1px solid black;
+
+}
+
+.unauthorized {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    margin: 5px;
+    background: blue;
+    color: white;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 24px;
+    border: 1px solid black;
+
+}
+
+.modal-close:hover {
+    background: white;
+    color: black;
+    border: 1px solid black;
+}
+
+
+.enter-passportId {
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+    margin: 5px;
+    background: green;
+    color: white;
+    border-radius: 5px;
+    align-items: flex-end;
+    font-weight: bold;
+    align-self: flex-end;
+    font-size: 24px;
+    border: 1px solid black;
+}
+
+.enter-passportId:hover {
+    background: white;
+    color: black;
+    border: 1px solid black;
+}
+
+.blockForPersonalDataInput {
+    width: 572px;
+    height: 415px;
+    margin-top: 230px;
+    margin-left: 500px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.personalDataInputText {
+    width: 405px;
+    height: 81px;
+
+    font-family: Calibri, serif;
+    font-size: 30px;
+    text-align: center;
+    margin-left: 80px;
+    margin-top: 5%;
+    color: #000000;
+}
+
+.storeActionsBar {
+    width: 572px;
+    height: 827.69px;
+
+    margin-left: 300px;
+    margin-top: 120px;
+
+    display: flex;
+    justify-content: center;
+
+    flex-direction: column;
+
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.storeActionsBtnMargin {
+    margin-left: 160px;
+    margin-top: 100px;
+}
+
+.storeActionText {
+    align-self: flex-start;
+}
+
+.orderActionsBar {
+    width: 572px;
+    height: 600px;
+    margin-left: 300px;
+    margin-top: 120px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.modal-redirect {
+    width: 400px;
+    height: 250px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+
+    flex-direction: column;
+}
+
+.processingPointOrderActionBar {
+    width: 572px;
+    height: 500px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 50px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+}
+
+.createOrderForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.style-form {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.modal-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    width: 100%;
+    height: 100%;
+}
+
+.navigate {
+    display: flex;
+}
+
+.redirect {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.table {
+    border: 1px solid #eee;
+    table-layout: fixed;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.table th {
+    font-weight: bold;
+    padding: 5px;
+    background: #efefef;
+    border: 1px solid #dddddd;
+}
+
+.table td {
+    padding: 5px 10px;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+.table tbody tr:nth-child(odd) {
+    background: #fff;
+}
+
+.table tbody tr:nth-child(even) {
+    background: #F7F7F7;
+}
+
+.table tbody tr:nth-child(1) {
+    font-weight: bold;
+}
+
+.client-backGround-modal {
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(68, 66, 66, 0.8);
+}
+
+.clientOrder {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Calibri, serif;
+    font-weight: bold;
+    font-size: 30px;
+    width: 100%;
+    color: Black;
+}
+
+.code-backGround-modal {
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(68, 66, 66, 0.8);
+}
+
+.ticketFormat {
+    font-family: Calibri, serif;
+    font-size: 30px;
+    width: 100%;
+    color: Black;
+    margin-left: 40%;
+    margin-top: 10%;
+}
+
+.ticket-info {
+    margin-top: 50px;
+    font-size: 20px;
+}
+
+.downloadBtn {
+    margin-right: 40%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.downloadButton {
+    width: 200px;
+    height: 50px;
+    transition: .3s;
+
+    background: #5176FA;
+    border-radius: 10px;
+}
+
+.tableName {
+    margin-top: 20px;
+    font-weight: bold;
+    font-family: Calibri, serif;
+}
+
+.block-wrap {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.form__error {
+    color: red;
+    text-align: left;
+    font-size: 12px;
+    margin-top: 3px;
+    display: none;
+}
+
+input:valid:not(:placeholder-shown) {
+    border-color: green;
+}
+
+input:invalid:not(:placeholder-shown) {
+    border-color: red;
+}
+
+input:invalid:not(:placeholder-shown) + .form__error {
+    display: block;
+}
+
+.form {
+    display: inline-block;
+    padding: 25px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 500px;
+}
+
+.form__field {
+    margin-bottom: 10px;
+}
+
+.form__error {
+    color: red;
+    text-align: left;
+    font-size: 12px;
+    display: block;
+    margin-top: 3px;
+    display: none;
+}
+
+.form input {
+    outline: none;
+    display: block;
+    width: 100%;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.form button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 2px;
+    border: 0;
+    background-color: #ccc;
+    color: #fff;
+}
+
+input:valid:not(:placeholder-shown) {
+    border-color: green;
+}
+
+input:invalid:not(:placeholder-shown) {
+    border-color: red;
+}
+
+input:invalid:not(:placeholder-shown) + .form__error {
+    display: block;
+}
+
+.inputFieldForValidation {
+    display: flex;
+    flex-direction: column;
+    width: 178px;
+    height: 50px;
+}
+
+.buttonMargin {
+    margin-left: 4.5%;
+}
+
+.customHiddenBtn {
+    width: 100%;
+    height: 50px;
+    transition: .3s;
+    font-size: 100%;
+    background: #5176FA;
+    border-radius: 10px;
+}
+
+.logoutButtonDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    align-content: space-around;
+    margin-left: 15%;
+}
+
+.backToTheOrdersButton {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 5%;
+}
+
+.change-state-form {
+    margin-bottom: 1rem;
+    margin-left: 12%;
+}
+
+.accept-button {
+    margin-left: 67%;
+}
+
+.input-numberForm {
+    width: 400px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+
+    flex-direction: column;
+}
+
+.phone-input-text {
+    align-self: center;
+    margin-left: 5%;
+}
+
+.input-codeForm {
+    width: 400px;
+    height: 200px;
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+
+    flex-direction: column;
+}
+
+.worker-data-input {
+    align-self: center;
+
+}
+
+.input-worker-data {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.input-number {
+    margin-left: 17%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.input-code {
+    margin-left: 26%;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.change-state-span {
+    margin-bottom: 10%;
+}
+
+.change-state-div {
+    margin-bottom: 13%;
+}
+
+.change-state-datalist {
+    width: 80%;
+}
+
+.worker-nav {
+    display: flex;
+    font-size: 70%;
+    margin-left: 54%;
+    color: white;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.input-field {
+    padding-left: 1%;
+}
+
+.client-nav {
+    display: flex;
+    font-size: 60%;
+    color: white;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 200px;
+}
+
+.nav-info-div {
+    display: flex;
+    margin-left: 20%;
+    width: 70%;
+    justify-content: space-between;
+}
+
+.worker-actions-with-order-modal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.order-info-text {
+    color: #5176FA;
+}

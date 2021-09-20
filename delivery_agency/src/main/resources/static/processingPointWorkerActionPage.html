@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF8">
+    <style> a {
+        text-decoration: none;
+    } </style>
+    <title>GasDel general</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="icons/waterFall.png"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="defaultBar">
+    <a href="homePage.html" class="defaultLogo">GasDel</a>
+
+    <div id="worker-nav-info" class="worker-nav">
+        <div id="worker-name-nav"></div>
+        <div id="worker-surname-nav"></div>
+        <div id="worker-role-nav"></div>
+    </div>
+    <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
+
+</div>
+
+
+<div class="modal-wrap">
+    <div class="processingPointOrderActionBar">
+        <div class="actionTabText mx-auto">Операции с заказом</div>
+        <div class="btnMargin">
+            <button id="createOrderBtnId" class="me-btn buttonText create-order-btn mx-auto">Создать новый заказ</button>
+        </div>
+        <div class="btnMargin">
+            <button id="changeOrderStateButton" class="me-btn buttonText change-order-state-btn mx-auto">Перейти к списку текущих заказов</button>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript" src="js/processingPointWorkerAction.js"></script>
+</body>
+</html>

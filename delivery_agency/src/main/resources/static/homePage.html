@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF8">
+    <title>GasDel general</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="icons/waterFall.png" th:href="@{static/icons/waterFall.png}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="defaultBar">
+    <div class="defaultLogo">GasDel</div>
+
+    <div class="topNav">
+        <div class="topNavA">
+            <a class="asClient redirect" style="color: white; text-decoration: none" role="button">Войти как клиент</a>
+        </div>
+        <div class="topNavA">
+            <a class="asUserId redirect" role="button" style="color: white; text-decoration: none">Войти как
+                сотрудник</a>
+        </div>
+    </div>
+</div>
+
+<div class="modal-wrap">
+    <div class="track-number-form">
+        <form id="trackOrderForm" action="/orders/findByTrackNumber" autocomplete="off">
+            <div class="form-group trackForm">
+                <label class="general-name" for="orderNumberId">Введите идентификационный номер заказа </label>
+                <input type="text" class="form-control" id="orderNumberId"
+                       required placeholder="Введите идентификационный номер заказа"
+                       name="orderNumber">
+            </div>
+            <button type="submit" class="btn btn-primary">Подтвердить</button>
+        </form>
+    </div>
+
+    <div class="backGround-modal">
+        <div class="modal-redirect">
+            <form id="workerAuthInput" action="/auth" autocomplete="off">
+                <div class="form-group trackForm">
+                    <div align="center">
+                        <label class="general-name worker-data-input mb-4" for="orderNumberId">Введите ваши данные
+                            пользователя</label>
+                    </div>
+                    <div class="input-worker-data">
+                        <div class="mb-2">
+                            <input type="text" class="form-control-sm alert-primary" id="login"
+                                   placeholder="Введите логин"
+                                   required
+                                   name="login">
+                        </div>
+                        <div class="mb-2">
+                            <input type="password" class="form-control-sm alert-primary" id="password"
+                                   placeholder="Введите пароль" required
+                                   name="password">
+                        </div>
+                    </div>
+                </div>
+                <button id="processingPointWorker" type="submit" class="btn btn-primary open-modal accept-button">
+                    Подтвердить
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="client-backGround-modal">
+        <div class="input-numberForm">
+            <form id="phoneNumberInput" action="/clients/getCode" autocomplete="off">
+                <div class="form-group trackForm">
+                    <label class="general-name phone-input-text" for="orderNumberId">Введите ваш номер телефона</label>
+                    <div class="ml-md-5 mt-auto mt-auto">
+                        <input type="text" class="form-control-sm alert-primary input-number" id="phoneNumberForm"
+                               placeholder="Введите номер телефона"
+                               pattern="[\(]\d{2}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}"
+                               required
+                               name="phoneNumber">
+                        <span class="form__error">Номер телефона должен быть в формате (44) 456-78-90</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary accept-button">Подтвердить</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="code-backGround-modal">
+        <div class="modal-redirect input-codeForm ">
+            <form id="codeInput" action="/codes/findCode" autocomplete="off">
+                <div class="form-group trackForm">
+                    <label class="general-name phone-input-text" for="orderNumberId">Введите четырехзначный код</label>
+                    <input type="text" class="form-control-sm alert-primary input-code" id="codeForm" required
+                           placeholder="Enter code"
+                           name="code">
+                </div>
+                <button type="submit" class="btn btn-primary accept-button">Подтвердить</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/homePageScript.js"></script>
+</body>
+</html>
