@@ -104,10 +104,10 @@ public class CustomModelMapper {
                 .workingPlace(modelMapper.map(workerDtoToConvert.getWorkingPlace(), OrderProcessingPoint.class))
                 .roles(
                         Stream.of(
-                                WorkerRoles
-                                        .builder()
-                                        .role(workerDtoToConvert.getRole().name())
-                                        .build())
+                                        WorkerRoles
+                                                .builder()
+                                                .role(workerDtoToConvert.getRole().name())
+                                                .build())
                                 .collect(Collectors.toSet())
                 )
                 .build();
@@ -151,19 +151,23 @@ public class CustomModelMapper {
         convertedToDto.setId(warehouseToConvert.getId());
         convertedToDto.setLocation(warehouseToConvert.getLocation());
         convertedToDto.setWorkingPlaceType(WorkingPlaceType.valueOf(warehouseToConvert.getWorkingPlaceType()));
-        convertedToDto.setDispatchedOrders(
-                warehouseToConvert
-                        .getDispatchedOrders()
-                        .stream()
-                        .map(CustomModelMapper::mapOrderToDto)
-                        .collect(Collectors.toList()));
-        convertedToDto.setExpectedOrders(
-                warehouseToConvert
-                        .getExpectedOrders()
-                        .stream()
-                        .map(CustomModelMapper::mapOrderToDto)
-                        .collect(Collectors.toList())
-        );
+        if (warehouseToConvert.getDispatchedOrders() != null) {
+            convertedToDto.setDispatchedOrders(
+                    warehouseToConvert
+                            .getDispatchedOrders()
+                            .stream()
+                            .map(CustomModelMapper::mapOrderToDto)
+                            .collect(Collectors.toList()));
+        }
+        if (warehouseToConvert.getExpectedOrders() != null) {
+            convertedToDto.setExpectedOrders(
+                    warehouseToConvert
+                            .getExpectedOrders()
+                            .stream()
+                            .map(CustomModelMapper::mapOrderToDto)
+                            .collect(Collectors.toList())
+            );
+        }
         if (convertedToDto.getOrderProcessingPoints() != null) {
             convertedToDto.setOrderProcessingPoints(
                     warehouseToConvert.getOrderProcessingPoints()
@@ -195,7 +199,6 @@ public class CustomModelMapper {
                 .sentAt(orderHistoryDto.getSentAt())
                 .comment(orderHistoryDto.getComment())
                 .changedTypeEnum(orderHistoryDto.getChangedTypeEnum().toString())
-                .worker(mapDtoToWorker(orderHistoryDto.getWorker()))
                 .build();
     }
 

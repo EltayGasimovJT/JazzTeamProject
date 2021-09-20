@@ -1,6 +1,7 @@
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
+import org.jazzteam.eltay.gasimov.entity.ParcelParameters;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -35,9 +36,11 @@ class ParcelParametersServiceTest {
                 .width(50.0)
                 .length(50.0)
                 .build();
-        ParcelParametersDto savedParcelParameters = modelMapper.map(parcelParametersService.save(expected), ParcelParametersDto.class);
+        ParcelParameters save = parcelParametersService.save(expected);
+        ParcelParametersDto savedParcelParameters = modelMapper.map(save, ParcelParametersDto.class);
         expected.setId(savedParcelParameters.getId());
-        ParcelParametersDto actual = modelMapper.map(parcelParametersService.findById(savedParcelParameters.getId()), ParcelParametersDto.class);
+        ParcelParameters byId = parcelParametersService.findById(savedParcelParameters.getId());
+        ParcelParametersDto actual = modelMapper.map(byId, ParcelParametersDto.class);
         Assertions.assertEquals(expected, actual);
     }
 

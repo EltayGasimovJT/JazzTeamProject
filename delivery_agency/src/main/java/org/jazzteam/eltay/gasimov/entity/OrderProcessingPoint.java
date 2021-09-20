@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table
 public class OrderProcessingPoint extends AbstractBuilding {
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JsonBackReference
     private Warehouse warehouse;
 }

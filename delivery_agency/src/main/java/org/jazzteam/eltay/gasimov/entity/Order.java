@@ -20,12 +20,12 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn
     private OrderState state;
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private ParcelParameters parcelParameters;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id")
     @JsonBackReference
     private Client sender;
@@ -44,7 +44,7 @@ public class Order {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "departure_point_id")
     private OrderProcessingPoint departurePoint;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn
     private AbstractBuilding currentLocation;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

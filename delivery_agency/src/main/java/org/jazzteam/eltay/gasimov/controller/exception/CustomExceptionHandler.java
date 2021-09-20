@@ -1,4 +1,3 @@
-/*
 package org.jazzteam.eltay.gasimov.controller.exception;
 
 import lombok.extern.java.Log;
@@ -45,4 +44,3 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, status);
     }
 }
-*/

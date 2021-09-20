@@ -24,9 +24,9 @@ public class Worker {
     private String surname;
     @Column(name = "password")
     private String password;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.MERGE)
     private AbstractBuilding workingPlace;
-    @ManyToMany(mappedBy = "workers")
+    @ManyToMany(mappedBy = "workers", cascade = CascadeType.ALL)
     @JsonManagedReference
     private Set<WorkerRoles> roles;
 }

@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -97,7 +94,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findBySender(ClientDto senderForSearch) throws IllegalArgumentException {
-        Order foundOrder = orderRepository.findByRecipient(modelMapper.map(senderForSearch, Client.class));
+        Order foundOrder = orderRepository.findBySender(modelMapper.map(senderForSearch, Client.class));
         OrderValidator.validateOrder(foundOrder);
         return foundOrder;
     }
@@ -241,6 +238,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order createOrder(CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         OrderState orderState = orderStateService.findByState(OrderStates.READY_TO_SEND.getState());
         OrderHistoryDto orderHistoryForSave = OrderHistoryDto.builder()
@@ -307,6 +305,7 @@ public class OrderServiceImpl implements OrderService {
         orderDtoToSave.setState(modelMapper.map(orderStateService.findByState(READY_TO_SEND), OrderStateDto.class));
 
         OrderHistory savedHistory = CustomModelMapper.mapDtoToHistory(orderDtoToSave.getHistory().iterator().next());
+        savedHistory.setWorker(workerService.findByName(orderDtoToSave.getHistory().iterator().next().getWorker().getName()));
         savedHistory.setSentAt(LocalDateTime.now());
         Set<OrderHistory> orderHistories = new HashSet<>();
         orderHistories.add(savedHistory);
@@ -332,7 +331,11 @@ public class OrderServiceImpl implements OrderService {
                 .trackNumber(generateNewTrackNumber())
                 .sendingTime(savedHistory.getSentAt())
                 .build();
-
+        if (senderToSave.getOrders() != null) {
+            senderToSave.getOrders().add(orderToSave);
+        } else {
+            senderToSave.setOrders(Stream.of(CustomModelMapper.mapDtoToOrder(orderDtoToSave)).collect(Collectors.toSet()));
+        }
         return orderRepository.save(orderToSave);
     }
 
@@ -341,26 +344,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Client getClientToSave(ClientDto client) throws ObjectNotFoundException {
-        Client clientToSave;
         Client foundSender = clientService.findClientByPassportId(client.getPassportId());
         if (foundSender != null) {
-            clientToSave = Client.builder()
-                    .id(foundSender.getId())
-                    .name(foundSender.getName())
-                    .surname(foundSender.getSurname())
-                    .passportId(foundSender.getPassportId())
-                    .phoneNumber(foundSender.getPhoneNumber())
-                    .build();
-        } else {
-            clientToSave = Client.builder()
-                    .name(client.getName())
-                    .surname(client.getSurname())
-                    .passportId(client.getPassportId())
-                    .phoneNumber(client.getPhoneNumber())
-                    .build();
-            Client savedClient = clientService.save(modelMapper.map(clientToSave, ClientDto.class));
-            clientToSave.setId(savedClient.getId());
+
+            return foundSender;
         }
-        return clientToSave;
+        return Client.builder()
+                .name(client.getName())
+                .surname(client.getSurname())
+                .passportId(client.getPassportId())
+                .phoneNumber(client.getPhoneNumber())
+                .build();
     }
 }

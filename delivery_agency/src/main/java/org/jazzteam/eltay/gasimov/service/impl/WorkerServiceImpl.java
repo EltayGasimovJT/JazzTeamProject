@@ -45,8 +45,8 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker save(WorkerDto workerDtoToSave) {
         Worker workerToSave = CustomModelMapper.mapDtoToWorker(workerDtoToSave);
         WorkerValidator.validateOnSave(workerToSave);
-
-        return workerRepository.save(workerToSave);
+        final Worker save = workerRepository.save(workerToSave);
+        return save;
     }
 
     @Override
@@ -165,7 +165,8 @@ public class WorkerServiceImpl implements WorkerService {
                         && (foundOrder.getState().getId() > SEVEN && foundOrder.getState().getId() < FOUR)) {
                     throw new IllegalStateException(WAREHOUSE_NOT_ALLOWED_STATE_CHANGING_MESSAGE);
                 }
-                return orderStateService.findOne(foundOrder.getState().getNextStateId()).getState();
+                final OrderState one = orderStateService.findOne(foundOrder.getState().getNextStateId());
+                return one.getState();
             }
         }
         return null;
