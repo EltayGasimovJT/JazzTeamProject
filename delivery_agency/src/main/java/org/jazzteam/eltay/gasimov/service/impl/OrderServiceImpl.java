@@ -306,7 +306,7 @@ public class OrderServiceImpl implements OrderService {
         orderDtoToSave.setPrice(price);
         orderDtoToSave.setState(modelMapper.map(orderStateService.findByState(READY_TO_SEND), OrderStateDto.class));
 
-        OrderHistory savedHistory = orderHistoryService.save(modelMapper.map(orderDtoToSave.getHistory().iterator().next(), OrderHistoryDto.class));
+        OrderHistory savedHistory = CustomModelMapper.mapDtoToHistory(orderDtoToSave.getHistory().iterator().next());
         savedHistory.setSentAt(LocalDateTime.now());
         Set<OrderHistory> orderHistories = new HashSet<>();
         orderHistories.add(savedHistory);
@@ -317,7 +317,7 @@ public class OrderServiceImpl implements OrderService {
 
         OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
         OrderProcessingPoint departurePointToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDeparturePoint().getLocation());
-        ParcelParameters savedParameters = parcelParametersService.save(orderDtoToSave.getParcelParameters());
+        ParcelParameters savedParameters = modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class);
 
         Order orderToSave = Order.builder()
                 .sender(senderToSave)

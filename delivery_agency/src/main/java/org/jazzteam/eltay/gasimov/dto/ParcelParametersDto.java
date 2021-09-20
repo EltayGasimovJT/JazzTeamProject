@@ -13,6 +13,7 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ParcelParametersDto {
+    private Long id;
     @Positive(message = "Height must be not zero and must be positive")
     @NotEmpty(message = "Height must have value")
     private Double height;

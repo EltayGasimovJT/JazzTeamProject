@@ -1,4 +1,3 @@
-/*
 package org.jazzteam.eltay.gasimov.service;
 
 import javassist.tools.rmi.ObjectNotFoundException;
@@ -359,4 +358,3 @@ class OrderServiceTest {
         Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
 }
-*/
