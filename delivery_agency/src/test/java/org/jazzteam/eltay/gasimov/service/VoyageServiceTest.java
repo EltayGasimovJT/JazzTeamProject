@@ -19,7 +19,6 @@ import java.util.GregorianCalendar;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
 @Transactional
 class VoyageServiceTest {
     @Autowired

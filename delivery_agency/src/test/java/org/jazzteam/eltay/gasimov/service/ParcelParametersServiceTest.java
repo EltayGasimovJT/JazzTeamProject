@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @Transactional
 class ParcelParametersServiceTest {

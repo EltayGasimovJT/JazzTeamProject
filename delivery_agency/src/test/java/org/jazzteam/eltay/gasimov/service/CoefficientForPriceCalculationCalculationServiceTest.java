@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -24,7 +23,6 @@ import java.math.BigDecimal;
 import java.util.stream.Stream;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @Transactional
 class CoefficientForPriceCalculationCalculationServiceTest {

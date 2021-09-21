@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
 @Transactional
 class CodeServiceTest {
     @Autowired

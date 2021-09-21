@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 @RunWith(SpringRunner.class)
 @Transactional
 class OrderStateServiceTest {
