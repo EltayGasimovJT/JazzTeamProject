@@ -100,7 +100,6 @@ class WorkerServiceTest {
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
         orderProcessingPointDtoToTest.setId(1L);
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
-
         WorkerDto firstUser = WorkerDto.builder()
                 .name("Vlad")
                 .surname("Vlad")
