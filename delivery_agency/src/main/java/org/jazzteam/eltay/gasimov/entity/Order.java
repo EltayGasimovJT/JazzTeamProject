@@ -29,7 +29,7 @@ public class Order {
     @JoinColumn(name = "sender_id")
     @JsonBackReference
     private Client sender;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.PERSIST})
     @JoinColumn
     private Client recipient;
     @Column
@@ -38,13 +38,13 @@ public class Order {
     private String trackNumber;
     @Column(name = "sending_time")
     private LocalDateTime sendingTime;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "destination_point_id")
     private OrderProcessingPoint destinationPlace;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "departure_point_id")
     private OrderProcessingPoint departurePoint;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn
     private AbstractBuilding currentLocation;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)

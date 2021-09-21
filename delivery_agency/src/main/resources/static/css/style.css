@@ -812,17 +812,16 @@ input:invalid:not(:placeholder-shown) + .form__error {
 }
 
 .icon-location {
+    margin: 0 25px;
+    vertical-align: middle;
     width: 15%;
     height: 15%;
 }
 
 .icons-location {
-    margin-top: 10%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    flex-direction: row;
-    align-content: flex-end;
+
+    border: none;
+    vertical-align: middle;
 }
 
 .create-cancel-btn-margin {
