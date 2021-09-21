@@ -41,7 +41,7 @@ function getUsersOrders() {
                         Swal.fire({
                             title: "Ошибка ввода",
                             text: "Данного заказа не существует",
-                            icon: "error",
+                            icon: "info",
                             showConfirmButton: false,
                             timer: 5000
                         });

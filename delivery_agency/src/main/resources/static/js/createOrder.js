@@ -92,7 +92,7 @@ function calculatePrice() {
             success: function (result) {
                 if (validateParams(config) !== true) {
                     Swal.fire({
-                        icon: 'error',
+                        icon: 'info',
                         title: "Введенные вами данные не соответствуют требованиям",
                         showConfirmButton: false,
                         timer: 5000
@@ -103,7 +103,7 @@ function calculatePrice() {
             },
             error: function (exception) {
                 Swal.fire({
-                    icon: 'error',
+                    icon: 'info',
                     title: "Ошибка подсчета суммы",
                     text: exception.responseJSON.message,
                     showConfirmButton: false,
@@ -117,7 +117,7 @@ function calculatePrice() {
 function validateParams(params) {
     if (params.parcelWidth < 0) {
         Swal.fire({
-            icon: 'error',
+            icon: 'info',
             title: "Ширина не может быть меньше нуля",
             showConfirmButton: false,
             timer: 2000
@@ -126,7 +126,7 @@ function validateParams(params) {
     }
     if (params.parcelLength < 0) {
         Swal.fire({
-            icon: 'error',
+            icon: 'info',
             title: "Длина не может быть меньше нуля",
             showConfirmButton: false,
             timer: 2000
@@ -135,7 +135,7 @@ function validateParams(params) {
     }
     if (params.parcelHeight < 0) {
         Swal.fire({
-            icon: 'error',
+            icon: 'info',
             title: "Высота не может быть меньше нуля",
             showConfirmButton: false,
             timer: 2000
@@ -144,7 +144,7 @@ function validateParams(params) {
     }
     if (params.parcelWeight < 0) {
         Swal.fire({
-            icon: 'error',
+            icon: 'info',
             title: "Вес не может быть меньше нуля",
             showConfirmButton: false,
             timer: 2000
@@ -215,7 +215,7 @@ $('#createOrderForm').submit(function (e) {
         swal({
             title: "Ошибка ввода",
             text: "Введенные вами данные не верны, пожалуйста попробуйте еще раз",
-            icon: "error",
+            icon: "info",
         });
     } else {
         $.ajax({
@@ -231,11 +231,11 @@ $('#createOrderForm').submit(function (e) {
             data: JSON.stringify(dataForSend)
         }).done(function (data) {
             window.location.href = `/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
-        }).fail(function (exception) {
+        }).fail(function () {
             Swal.fire({
-                title: "Не удалось создать заказ",
-                text: exception.responseJSON.message,
-                icon: "error",
+                title: "Что-то пошло не так",
+                text: "Не удалось создать заказ",
+                icon: "info",
             });
         });
 
@@ -474,7 +474,7 @@ function insertWorkerInfo() {
         Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
-            icon: "error",
+            icon: "info",
             showConfirmButton: false,
             timer: 5000
         });

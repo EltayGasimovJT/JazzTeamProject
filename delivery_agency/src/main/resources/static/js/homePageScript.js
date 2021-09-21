@@ -116,7 +116,7 @@ jQuery('document').ready(function () {
             Swal.fire({
                 text: "Пользователь с таким номером не зарегистрирован",
                 title: "Неверный номер телефона",
-                icon: 'error',
+                icon: 'info',
                 showConfirmButton: false,
                 timer: 5000
             })
@@ -137,7 +137,7 @@ jQuery('document').ready(function () {
             Swal.fire({
                 title: "Неверный код, повторите попытку",
                 text: "Введенный вами четырехзначный код неправильный, пожалуйста повторите попытку",
-                icon: "error",
+                icon: "info",
                 showConfirmButton: false,
                 timer: 5000
             });
@@ -167,7 +167,7 @@ jQuery('document').ready(function () {
             Swal.fire({
                 title: "Неправильный логин или пароль",
                 text: "Пожалуйста попробуйте ввести данные сотрудника еще раз",
-                icon: "error",
+                icon: "info",
                 showConfirmButton: false,
                 timer: 5000
             });
@@ -185,7 +185,7 @@ jQuery('document').ready(function () {
             Swal.fire({
                 title: "Ошибка ввода",
                 text: "Данного заказа не существует",
-                icon: "error",
+                icon: "info",
             });
 
         });

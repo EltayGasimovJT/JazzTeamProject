@@ -59,7 +59,7 @@ function insertWorkerInfo() {
         Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
-            icon: "error",
+            icon: "info",
         });
     });
 }

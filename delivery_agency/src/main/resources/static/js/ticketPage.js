@@ -88,11 +88,11 @@ function getOrder(orderId) {
     }).done(function (data) {
         order = data;
         insetValuesIntoTicket(data);
-    }).fail(function (exception) {
+    }).fail(function () {
         Swal.fire({
-            text: 'Не удалось найти заказ',
-            title: `${exception.message}`,
-            icons: 'error'
+            text: 'Что-то пошло не так',
+            title: `Данного заказа не существует`,
+            icons: 'info'
         })
     });
 }
@@ -172,7 +172,7 @@ function insertWorkerInfo() {
         Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
-            icon: "error",
+            icon: "info",
             showConfirmButton: false
         });
     });

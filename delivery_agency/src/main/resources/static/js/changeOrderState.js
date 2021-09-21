@@ -38,11 +38,11 @@ function initStates(orderNumber) {
         success: function (result) {
             setupOrderStates(result)
         },
-        error: function (exception) {
+        error: function () {
             Swal.fire({
                 title: "Что-то пошло не так",
-                icon: "error",
-                text: `${exception.responseJSON.message}`,
+                icon: "info",
+                text: `Не удалось установить, состояния заказов из хранилища`,
                 showConfirmButton: false,
                 timer: 5000
             })
@@ -85,7 +85,7 @@ function getAllOrders() {
                         Swal.fire({
                             title: "Не удалось изменить состояние",
                             text: exception.responseJSON.message,
-                            icon: "error",
+                            icon: "info",
                             showConfirmButton: false,
                             timer: 5000
                         });
@@ -110,7 +110,7 @@ function getAllOrders() {
                     }).done(function () {
                         Swal.fire({
                             title: "Заказ был отменен",
-                            icon: 'success'
+                            icon: 'info'
                         }).then((willDelete) => {
                             if (willDelete.isConfirmed) {
                                 window.location.reload();
@@ -120,7 +120,7 @@ function getAllOrders() {
                         Swal.fire({
                             title: "Не удалось отменить заказ",
                             text: exception.responseJSON.message,
-                            icon: "error",
+                            icon: "info",
                             showConfirmButton: false,
                             timer: 5000
                         });
@@ -166,11 +166,11 @@ $('#changeOrderState').submit(function (event) {
                 }
             })
         },
-        error: function (exception) {
+        error: function () {
             Swal.fire({
                 title: 'Что-то пошло не так',
-                text: `${exception.responseJSON.message}`,
-                icon: 'error',
+                text: `Не удалось обновить состояние заказа`,
+                icon: 'info',
                 showConfirmButton: false,
                 timer: 5000
             })
@@ -200,7 +200,7 @@ function insertWorkerInfo() {
         Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
-            icon: "error",
+            icon: "info",
             showConfirmButton: false,
             timer: 5000
         });
