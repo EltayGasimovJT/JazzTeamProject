@@ -156,8 +156,9 @@ class ClientServiceTest {
         Client actualClient = clientService.findById(savedClient.getId());
 
         ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+        expectedClientDto.setId(savedClient.getId());
 
-        Assertions.assertEquals(actualClientDto, actualClientDto);
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
 
     @Test
