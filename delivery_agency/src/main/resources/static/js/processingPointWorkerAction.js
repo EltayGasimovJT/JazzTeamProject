@@ -54,7 +54,15 @@ function insertWorkerInfo() {
     }).done(function (data) {
         name.innerHTML = `Имя: ${data.name}`
         surname.innerHTML = `Фамилия: ${data.surname}`
-        roles.innerHTML = `Роль: ${data.role}`
+        if (data.role === "ROLE_ADMIN") {
+            roles.innerHTML = `Роль: Администратор`
+        }
+        if (data.role === "ROLE_WAREHOUSE_WORKER") {
+            roles.innerHTML = `Роль: Работник промежуточного склада`
+        }
+        if (data.role === "ROLE_PROCESSING_POINT_WORKER") {
+            roles.innerHTML = `Роль: Работник пункта отправки/выдачи`
+        }
     }).fail(function () {
         Swal.fire({
             title: "Что-то пошло не так",
