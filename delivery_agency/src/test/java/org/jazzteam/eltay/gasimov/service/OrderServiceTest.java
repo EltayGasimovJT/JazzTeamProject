@@ -7,8 +7,8 @@ import org.jazzteam.eltay.gasimov.entity.OrderStates;
 import org.jazzteam.eltay.gasimov.entity.Role;
 import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -108,7 +108,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @Ignore
+    @Disabled("Transactional error")
     void findByRecipient() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrderDto = getOrder();
 
@@ -122,7 +122,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @Ignore
+    @Disabled("Transactional error")
     void findBySender() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrderDto = getOrder();
 
