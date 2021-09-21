@@ -74,7 +74,7 @@ public class WorkerController {
     @GetMapping(path = WORKERS_GET_STATES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    String getStatesByRole(@RequestParam String orderNumber) {
+    String getStatesByOrderNumber(@RequestParam String orderNumber) {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundByName = workerService.findByName(currentUserFromContext.getUsername());
         return workerService.findStatesByRole(foundByName, orderNumber);
@@ -91,7 +91,7 @@ public class WorkerController {
 
     @PutMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public Worker updateUser(@RequestBody WorkerDto newUser) {
+    public Worker updateWorker(@RequestBody WorkerDto newUser) {
         return workerService.update(newUser);
     }
 }

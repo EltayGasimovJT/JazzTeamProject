@@ -1,6 +1,5 @@
 package org.jazzteam.eltay.gasimov.controller;
 
-import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.service.WarehouseService;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.jazzteam.eltay.gasimov.util.Constants.WAREHOUSES_BY_ID_URL;
