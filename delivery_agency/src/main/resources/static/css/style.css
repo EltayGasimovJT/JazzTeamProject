@@ -826,5 +826,10 @@ input:invalid:not(:placeholder-shown) + .form__error {
 
 .create-cancel-btn-margin {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
+}
+
+.cancel-order-style {
+    align-self: self-end;
+    margin-right: 16%;
 }
