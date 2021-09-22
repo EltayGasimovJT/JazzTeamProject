@@ -172,10 +172,10 @@ $('#changeOrderState').submit(function (event) {
                 window.location.reload();
             })
         },
-        error: function () {
+        error: function (exception) {
             Swal.fire({
                 title: 'Нет прав',
-                text: `У вас нет прав устанавливать данное состояние заказа`,
+                text: `${exception.responseJSON.message}`,
                 icon: 'info',
                 showConfirmButton: false,
                 timer: 5000

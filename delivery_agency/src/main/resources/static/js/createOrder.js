@@ -52,7 +52,7 @@ function checkIfSenderFieldsAreNotEmpty() {
 }
 
 document.getElementById('recipientPhoneNumber').oninput = (event) => {
-    if (event.target.value.length === 14 && checkIfRecipientFieldsAreNotEmpty() && checkIfSenderFieldsAreNotEmpty()) {
+    if (event.target.value.length === 14) {
         $.ajax({
             url: `/clients/findByPhoneNumber`,
             type: 'GET',

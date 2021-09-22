@@ -276,6 +276,21 @@ public class OrderServiceImpl implements OrderService {
         if (result.isEmpty()) {
             throw new IllegalStateException(CANNOT_CHANGE_STATE);
         }
+        final String regex = "-";
+        List<String> splitOrderDepartureLocation = Arrays.asList(foundOrder.getCurrentLocation().getLocation().split(regex));
+        List<String> splitOrderDestinationLocation = Arrays.asList(foundOrder.getDestinationPlace().getLocation().split(regex));
+        List<String> splitWorkerLocation = Arrays.asList(foundWorker.getWorkingPlace().getLocation().split(regex));
+        Set<String> checkingDepartureLocationSet = splitOrderDepartureLocation.stream()
+                .distinct()
+                .filter(splitWorkerLocation::contains)
+                .collect(Collectors.toSet());
+        Set<String> checkingDestinationLocationSet = splitOrderDestinationLocation.stream()
+                .distinct()
+                .filter(splitWorkerLocation::contains)
+                .collect(Collectors.toSet());
+        if (checkingDepartureLocationSet.isEmpty() && checkingDestinationLocationSet.isEmpty()) {
+            throw new IllegalStateException(CANNOT_CHANGE_STATE_IN_CURRENT_TIME);
+        }
         foundOrder.setState(foundState);
         foundOrder.setCurrentLocation(foundWorker.getWorkingPlace());
         foundOrder.getHistory().add(getNewHistory(foundOrder, foundState, orderNumber, foundWorker));
