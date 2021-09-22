@@ -39,8 +39,20 @@ document.getElementById('parcelWeight').oninput = (event) => {
     calculatePrice();
 };
 
+function checkIfRecipientFieldsAreNotEmpty() {
+    return document.getElementById('recipientName').value.length === 0 &&
+        document.getElementById('recipientSurname').value.length === 0 &&
+        document.getElementById('recipientPassportId').value.length === 0;
+}
+
+function checkIfSenderFieldsAreNotEmpty() {
+    return document.getElementById('senderName').value.length === 0 &&
+        document.getElementById('senderSurname').value.length === 0 &&
+        document.getElementById('senderPassportId').value.length === 0;
+}
+
 document.getElementById('recipientPhoneNumber').oninput = (event) => {
-    if (event.target.value.length === 14) {
+    if (event.target.value.length === 14 && checkIfRecipientFieldsAreNotEmpty() && checkIfSenderFieldsAreNotEmpty()) {
         $.ajax({
             url: `/clients/findByPhoneNumber`,
             type: 'GET',

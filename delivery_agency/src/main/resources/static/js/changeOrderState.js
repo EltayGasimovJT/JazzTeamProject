@@ -136,7 +136,8 @@ function getAllOrders() {
                 icon: "info",
                 showConfirmButton: false,
                 timer: 5000
-            });;
+            });
+            ;
         }
     });
 }
@@ -165,11 +166,10 @@ $('#changeOrderState').submit(function (event) {
                 title: "Статус успешно обновлен",
                 text: `Для заказа с номером #${order.orderTrackNumber} был успешно установлен новый статус - ${state}`,
                 icon: 'success',
+                showConfirmButton: false,
                 timer: 7000
-            }).then((willDelete) => {
-                if (willDelete.isConfirmed) {
-                    window.location.reload();
-                }
+            }).then(() => {
+                window.location.reload();
             })
         },
         error: function () {
