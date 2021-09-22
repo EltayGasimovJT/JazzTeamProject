@@ -32,7 +32,6 @@ class WarehouseServiceTest {
         warehouseToTest.setLocation(expected);
         warehouseToTest.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
-        warehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
         Warehouse savedWarehouse = warehouseService.save(warehouseToTest);
 
         String actual = warehouseService.findOne(savedWarehouse.getId()).getLocation();
@@ -66,7 +65,6 @@ class WarehouseServiceTest {
         firstWarehouseToTest.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        firstWarehouseToTest.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
         firstWarehouseToTest.setLocation("Belarus");
         firstWarehouseToTest.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
@@ -74,7 +72,6 @@ class WarehouseServiceTest {
         secondWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        secondWarehouse.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
         secondWarehouse.setLocation("Moscow");
         secondWarehouse.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
@@ -82,7 +79,6 @@ class WarehouseServiceTest {
         thirdWarehouse.setOrderProcessingPoints(Collections.singletonList(
                 new OrderProcessingPointDto()
         ));
-        thirdWarehouse.setConnectedWarehouses(Arrays.asList(new WarehouseDto(), new WarehouseDto()));
         thirdWarehouse.setLocation("London");
         thirdWarehouse.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
