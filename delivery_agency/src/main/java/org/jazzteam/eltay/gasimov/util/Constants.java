@@ -6,7 +6,6 @@ public class Constants {
 
     }
 
-
     public static final int INITIAL_WEIGHT = 50000;
     public static final double PRICE_FOR_PACKAGE = 1.9;
     public static final double COEFFICIENT_FOR_KILOGRAMS_CONVERT = 1000;
@@ -73,5 +72,7 @@ public class Constants {
     public static final String ROLE_PICKUP_WORKER = "Pick up Worker";
     public static final String READY_TO_SEND = "Готов к отправке";
     public static final String WAREHOUSE_NOT_ALLOWED_STATE_CHANGING_MESSAGE = "Вданный момент вы не можете установить статус для этого заказа";
+    public static final String CANNOT_CANCEL_ORDER = "Заказ невозможно отменить, т.к. он был отправлен на промежуточный склад";
+    public static final String CANNOT_CHANGE_STATE = "Вы не можете установить это состояние, под своей ролью";
 
 }

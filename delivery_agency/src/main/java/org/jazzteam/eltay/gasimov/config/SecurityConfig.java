@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, CREATE_ORDER_URL).hasAnyRole(ADMIN_ROLE, PROCESSING_POINT_WORKER_ROLE)
                 .antMatchers(HttpMethod.POST, ORDERS_URL).hasRole(ADMIN_ROLE)
                 .antMatchers("/processingPointActionPageRedirect/**").hasRole(ADMIN_ROLE)
-                .antMatchers(HttpMethod.DELETE, ORDERS_URL).hasRole(ADMIN_ROLE)
+                .antMatchers(HttpMethod.DELETE, ORDERS_URL).hasAnyRole(ADMIN_ROLE, PROCESSING_POINT_WORKER_ROLE)
                 .antMatchers(HttpMethod.PUT, ORDERS_URL).hasRole(ADMIN_ROLE)
                 .antMatchers(HttpMethod.GET, ORDERS_URL).permitAll()
                 .and()

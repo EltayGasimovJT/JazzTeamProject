@@ -37,7 +37,7 @@ public class WorkerController {
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public @ResponseBody
     Worker changeWorkingPlace(@PathVariable Long id, @RequestBody AbstractBuildingDto newWorkingPlace) {
-        return workerService.changeWorkingPlace(id, newWorkingPlace);
+        return workerService.changeWorkingPlace(id, newWorkingPlace.getId());
     }
 
     @GetMapping(path = WORKERS_URL)
@@ -57,7 +57,7 @@ public class WorkerController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     WorkerDto findById(@PathVariable Long id) {
-        return CustomModelMapper.mapUserToDto(workerService.findOne(id));
+        return CustomModelMapper.mapWorkerToDto(workerService.findOne(id));
     }
 
     @GetMapping(path = WORKERS_FIND_ROLES_URL)
@@ -74,7 +74,7 @@ public class WorkerController {
     @GetMapping(path = WORKERS_GET_STATES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    String getStatesByRole(@RequestParam String orderNumber) {
+    String getStatesByOrderNumber(@RequestParam String orderNumber) {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundByName = workerService.findByName(currentUserFromContext.getUsername());
         return workerService.findStatesByRole(foundByName, orderNumber);
@@ -85,13 +85,13 @@ public class WorkerController {
     public @ResponseBody
     WorkerDto getCurrentWorker() {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
-        return CustomModelMapper.mapUserToDto(workerService.findByName(currentUserFromContext.getUsername()));
+        return CustomModelMapper.mapWorkerToDto(workerService.findByName(currentUserFromContext.getUsername()));
     }
 
 
     @PutMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public Worker updateUser(@RequestBody WorkerDto newUser) {
+    public Worker updateWorker(@RequestBody WorkerDto newUser) {
         return workerService.update(newUser);
     }
 }

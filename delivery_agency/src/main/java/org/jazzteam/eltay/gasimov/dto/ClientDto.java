@@ -26,6 +26,5 @@ public class ClientDto {
     @NotBlank(message = "Client phoneNumber cannot be empty")
     @Size(min = 1, max = 100, message = "Client phoneNumber must be between 1 and 100 characters")
     private String phoneNumber;
-
     private ClientsCodeDto code;
 }

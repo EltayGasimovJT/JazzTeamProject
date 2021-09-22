@@ -1,8 +1,12 @@
 jQuery('document').ready(function () {
+    if (sessionStorage.getItem('workersToken') === null) {
+        window.location.href = "/homePage.html";
+    }
     let idFromUrl = getIdFromUrl();
-    swal({
+    Swal.fire({
         title: "Заказ успешно создан",
         icon: "success",
+        showConfirmButton: false
     });
     if (sessionStorage.getItem('workersToken') !== null) {
         insertWorkerInfo();
@@ -16,7 +20,7 @@ jQuery('document').ready(function () {
         checkSession()
         let docInfo = {
             info: {
-                title: 'Ticket №' + idFromUrl.ticketNumber,
+                title: 'Чек №' + idFromUrl.ticketNumber,
                 author: 'Eltay',
                 subject: 'Theme',
                 keywords: 'Keywords',
@@ -42,13 +46,13 @@ jQuery('document').ready(function () {
             ],
             content: [
                 {
-                    text: 'Ticket #' + idFromUrl.ticketNumber,
+                    text: 'Чек #' + idFromUrl.ticketNumber,
                     fontSize: 20
                 },
                 {
                     text: 'Номер трекера: #' + order.orderTrackNumber + '\n' +
                         'Фамилия и имя отправителя: ' + order.sender.name + " " + order.sender.surname + '\n' +
-                        'Фамилия и имя адресата: ' + order.recipient.name + " " + order.recipient.surname + '\n' +
+                        'Фамилия и имя получателя: ' + order.recipient.name + " " + order.recipient.surname + '\n' +
                         'Место отправки: ' + order.departurePoint.location + '\n' +
                         'Место назначения: ' + order.destinationPlace.location + '\n' +
                         'Время отправки: ' + getTimeFormat(order.sendingTime) + '\n' +
@@ -84,10 +88,11 @@ function getOrder(orderId) {
     }).done(function (data) {
         order = data;
         insetValuesIntoTicket(data);
-    }).fail(function (exception) {
-        swal({
-            title: `${exception.message}`,
-            icons: 'error'
+    }).fail(function () {
+        Swal.fire({
+            text: 'Что-то пошло не так',
+            title: `Данного заказа не существует`,
+            icons: 'info'
         })
     });
 }
@@ -119,16 +124,12 @@ function insetValuesIntoTicket(data) {
 }
 
 function getTimeFormat(time) {
-    let date = new Date(time);
-    date.setDate(date.getDate() + 20);
-    return ('0' + date.getDate()).slice(-2) + '.'
-        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
-        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+    return moment(time).format("YYYY-MM-DD HH:mm:ss z");
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getHours()
+    if ((new Date().getHours() - sessionTimeMinutes) > 1) {
         sessionStorage.removeItem('workersToken');
         sessionStorage.removeItem('workerSession');
         window.location.href = `/homePage.html`;
@@ -164,16 +165,23 @@ function insertWorkerInfo() {
             }
         },
     }).done(function (data) {
-        console.log(data)
-        console.log(data.name)
         name.innerHTML = `Имя: ${data.name}`
         surname.innerHTML = `Фамилия: ${data.surname}`
-        roles.innerHTML = `Роль: ${data.role}`
+        if (data.role === "ROLE_ADMIN") {
+            roles.innerHTML = `Роль: Администратор`
+        }
+        if (data.role === "ROLE_WAREHOUSE_WORKER") {
+            roles.innerHTML = `Роль: Работник промежуточного склада`
+        }
+        if (data.role === "ROLE_PROCESSING_POINT_WORKER") {
+            roles.innerHTML = `Роль: Работник пункта отправки/выдачи`
+        }
     }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
-            icon: "error",
+            icon: "info",
+            showConfirmButton: false
         });
     });
 }

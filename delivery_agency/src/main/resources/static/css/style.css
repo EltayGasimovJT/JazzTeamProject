@@ -629,7 +629,6 @@ input:invalid:not(:placeholder-shown) + .form__error {
     color: red;
     text-align: left;
     font-size: 12px;
-    display: block;
     margin-top: 3px;
     display: none;
 }
@@ -662,7 +661,6 @@ input:invalid:not(:placeholder-shown) {
 }
 
 input:invalid:not(:placeholder-shown) + .form__error {
-    display: block;
 }
 
 .inputFieldForValidation {
@@ -697,7 +695,7 @@ input:invalid:not(:placeholder-shown) + .form__error {
 
 .backToTheOrdersButton {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     margin-right: 5%;
 }
 
@@ -712,7 +710,7 @@ input:invalid:not(:placeholder-shown) + .form__error {
 
 .input-numberForm {
     width: 400px;
-    height: 200px;
+    height: 250px;
     background-color: white;
     border-radius: 10px;
     display: flex;
@@ -785,7 +783,6 @@ input:invalid:not(:placeholder-shown) + .form__error {
 }
 
 .input-field {
-    padding-left: 1%;
 }
 
 .client-nav {
@@ -812,4 +809,27 @@ input:invalid:not(:placeholder-shown) + .form__error {
 
 .order-info-text {
     color: #5176FA;
+}
+
+.icon-location {
+    margin: 0 25px;
+    vertical-align: middle;
+    width: 15%;
+    height: 15%;
+}
+
+.icons-location {
+
+    border: none;
+    vertical-align: middle;
+}
+
+.create-cancel-btn-margin {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cancel-order-style {
+    align-self: self-end;
+    margin-right: 16%;
 }
