@@ -110,20 +110,19 @@ class OrderStateServiceTest {
 
     @Test
     void update() {
-        OrderStateDto expected = OrderStateDto
+        OrderStateDto expectedDto = OrderStateDto
                 .builder()
                 .state("Готов")
                 .prefix("Заказ ")
                 .suffix(" к выдаче.")
                 .build();
 
-        OrderState foundState = orderStateService.save(expected);
-        foundState.setId(foundState.getId());
-        foundState.setState("На пути");
+        OrderState expected = orderStateService.save(expectedDto);
+        expected.setId(expected.getId());
+        expected.setState("На пути");
 
-        OrderStateDto actual = modelMapper.map(orderStateService.update(modelMapper.map(foundState, OrderStateDto.class)), OrderStateDto.class);
-        String expectedState = "На пути";
-        Assertions.assertEquals(expectedState, actual.getState());
+        OrderState actual = orderStateService.update(modelMapper.map(expected, OrderStateDto.class));
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test

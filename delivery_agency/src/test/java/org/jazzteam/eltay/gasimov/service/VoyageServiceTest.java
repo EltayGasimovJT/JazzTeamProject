@@ -9,13 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -28,15 +29,12 @@ class VoyageServiceTest {
 
     @Test
     void addVoyage() {
-        VoyageDto voyageToTest = new VoyageDto();
-        voyageToTest.setDeparturePoint("Minsk");
-        String expected = "Moscow";
-        voyageToTest.setDestinationPoint(expected);
+        VoyageDto expected = new VoyageDto();
+        expected.setDeparturePoint("Minsk");
+        expected.setDestinationPoint("Moscow");
 
-        Voyage savedVoyage = voyageService.save(voyageToTest);
-
-        String actual = savedVoyage.getDestinationPoint();
-
+        VoyageDto actual = modelMapper.map(voyageService.save(expected), VoyageDto.class);
+        expected.setId(actual.getId());
         Assertions.assertEquals(expected, actual);
     }
 
@@ -53,15 +51,13 @@ class VoyageServiceTest {
         thirdVoyageToTest.setDeparturePoint("Pskov");
 
         Voyage firstToDelete = voyageService.save(firstVoyageToTest);
-        voyageService.save(secondVoyageToTest);
-        voyageService.save(thirdVoyageToTest);
+        Voyage savedSecond = voyageService.save(secondVoyageToTest);
+        Voyage savedThird = voyageService.save(thirdVoyageToTest);
 
         voyageService.delete(firstToDelete.getId());
+        List<Voyage> actual = voyageService.findAll();
 
-        int expected = 2;
-        int actual = voyageService.findAll().size();
-
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(Arrays.asList(savedSecond, savedThird), actual);
     }
 
     @Test
@@ -76,15 +72,13 @@ class VoyageServiceTest {
         thirdVoyage.setDestinationPoint("Moskov");
         thirdVoyage.setDeparturePoint("Pskov");
 
-        voyageService.save(firstVoyage);
-        voyageService.save(secondVoyage);
-        voyageService.save(thirdVoyage);
+        Voyage savedFirst = voyageService.save(firstVoyage);
+        Voyage savedSecond = voyageService.save(secondVoyage);
+        Voyage savedThird = voyageService.save(thirdVoyage);
 
-        int expected = 3;
+        List<Voyage> actual = voyageService.findAll();
 
-        int actual = voyageService.findAll().size();
-
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
@@ -111,22 +105,20 @@ class VoyageServiceTest {
 
     @Test
     void update() {
-        VoyageDto expectedVoyage = new VoyageDto();
-        expectedVoyage.setDestinationPoint("Moskov");
-        expectedVoyage.setDeparturePoint("Pskov");
+        VoyageDto expectedVoyageDto = new VoyageDto();
+        expectedVoyageDto.setDestinationPoint("Moskov");
+        expectedVoyageDto.setDeparturePoint("Pskov");
         GregorianCalendar sentAt = new GregorianCalendar();
         sentAt.set(Calendar.HOUR_OF_DAY, 12);
         sentAt.set(Calendar.MINUTE, 30);
 
-        Voyage savedVoyage = voyageService.save(expectedVoyage);
+        Voyage expectedVoyage = voyageService.save(expectedVoyageDto);
 
         String expected = "Poland";
-        savedVoyage.setDestinationPoint(expected);
+        expectedVoyage.setDestinationPoint(expected);
 
-        Voyage actualVoyage = voyageService.update(modelMapper.map(savedVoyage, VoyageDto.class));
+        Voyage actualVoyage = voyageService.update(modelMapper.map(expectedVoyage, VoyageDto.class));
 
-        VoyageDto actualDto = modelMapper.map(actualVoyage, VoyageDto.class);
-
-        Assertions.assertEquals(expected, actualDto.getDestinationPoint());
+        Assertions.assertEquals(expectedVoyage, actualVoyage);
     }
 }

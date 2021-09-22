@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -52,26 +51,26 @@ class OrderProcessingPointServiceTest {
         thirdProcessingPointToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
 
         return Stream.of(
-                Arguments.of(firstProcessingPointToTest, "Minsk-Belarus"),
-                Arguments.of(secondProcessingPointToTest, "Moscow-Belarus"),
-                Arguments.of(thirdProcessingPointToTest, "Grodno-Belarus")
+                Arguments.of(firstProcessingPointToTest),
+                Arguments.of(secondProcessingPointToTest),
+                Arguments.of(thirdProcessingPointToTest)
         );
     }
 
     @ParameterizedTest
     @MethodSource("testOrderProcessingPoints")
-    void addOrderProcessingPoint(OrderProcessingPointDto orderProcessingPoint, String expectedLocation) {
+    void addOrderProcessingPoint(OrderProcessingPointDto expected) {
         WarehouseDto warehouseToSave = new WarehouseDto();
         warehouseToSave.setLocation("Belarus");
         warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
         warehouseToSave.setExpectedOrders(new ArrayList<>());
         warehouseToSave.setDispatchedOrders(new ArrayList<>());
         Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
-        orderProcessingPoint.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
-        OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(orderProcessingPoint);
-
-        String actualLocation = orderProcessingPointService.findOne(savedProcessingPoint.getId()).getLocation();
-        Assertions.assertEquals(expectedLocation, actualLocation);
+        expected.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
+        OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(expected);
+        expected.setId(savedProcessingPoint.getId());
+        OrderProcessingPointDto actual = modelMapper.map(orderProcessingPointService.findOne(savedProcessingPoint.getId()), OrderProcessingPointDto.class);
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test

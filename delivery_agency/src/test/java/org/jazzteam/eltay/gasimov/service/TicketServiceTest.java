@@ -36,8 +36,6 @@ class TicketServiceTest {
     private OrderStateService orderStateService;
     @Autowired
     private WorkerService workerService;
-    @Autowired
-    private CoefficientForPriceCalculationService coefficientForPriceCalculationService;
 
     @Test
     void findById() {

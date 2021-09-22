@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -49,16 +50,14 @@ class WarehouseServiceTest {
         secondWarehouseToTest.setLocation("Moscow");
         secondWarehouseToTest.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
-        warehouseService.save(firstWarehouseToTest);
+        Warehouse savedFirst = warehouseService.save(firstWarehouseToTest);
         Warehouse savedWarehouse = warehouseService.save(secondWarehouseToTest);
 
         warehouseService.delete(savedWarehouse.getId());
 
-        int expected = 1;
+        List<Warehouse> actual = warehouseService.findAll();
 
-        int actual = warehouseService.findAll().size();
-
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(Collections.singletonList(savedFirst), actual);
     }
 
     @Test
@@ -87,27 +86,23 @@ class WarehouseServiceTest {
         thirdWarehouse.setLocation("London");
         thirdWarehouse.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
-        warehouseService.save(firstWarehouseToTest);
-        warehouseService.save(secondWarehouse);
-        warehouseService.save(thirdWarehouse);
+        Warehouse savedFirst = warehouseService.save(firstWarehouseToTest);
+        Warehouse savedSecond = warehouseService.save(secondWarehouse);
+        Warehouse savedThird = warehouseService.save(thirdWarehouse);
 
-        int expected = 3;
+        List<Warehouse> actual = warehouseService.findAll();
 
-        int actual = warehouseService.findAll().size();
-
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
-    void getWarehouseId() {
-        WarehouseDto warehouseToTest = new WarehouseDto();
-        String expected = "Vitebsk";
-        warehouseToTest.setLocation(expected);
-        warehouseToTest.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
+    void getWarehouseById() {
+        WarehouseDto expectedDto = new WarehouseDto();
+        expectedDto.setLocation("Vitebsk");
+        expectedDto.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
 
-        Warehouse savedWarehouse = warehouseService.save(warehouseToTest);
-
-        String actual = warehouseService.findOne(savedWarehouse.getId()).getLocation();
+        Warehouse expected = warehouseService.save(expectedDto);
+        Warehouse actual = warehouseService.findOne(expected.getId());
 
         Assertions.assertEquals(expected, actual);
     }

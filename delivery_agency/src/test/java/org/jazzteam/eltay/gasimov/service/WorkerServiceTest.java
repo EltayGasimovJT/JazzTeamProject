@@ -8,6 +8,7 @@ import org.jazzteam.eltay.gasimov.dto.WorkerRolesDto;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -16,6 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.PROCESSING_POINT;
@@ -229,18 +231,14 @@ class WorkerServiceTest {
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
 
-        Worker savedWorker = workerService.save(firstUser);
-        workerService.save(secondUser);
-        workerService.save(thirdUser);
+        Worker savedFirst = workerService.save(firstUser);
+        Worker savedSecond = workerService.save(secondUser);
+        Worker savedThird = workerService.save(thirdUser);
 
-        workerService.delete(savedWorker.getId());
+        workerService.delete(savedFirst.getId());
 
-        List<Worker> allUsers = workerService.findAll();
-        int unexpected = 3;
-
-        int actual = allUsers.size();
-
-        Assertions.assertNotEquals(unexpected, actual);
+        List<Worker> actual = workerService.findAll();
+        Assertions.assertEquals(Arrays.asList(savedSecond, savedThird), actual);
     }
 
     @Test
@@ -274,20 +272,17 @@ class WorkerServiceTest {
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
 
-        workerService.save(firstUser);
-        workerService.save(secondUser);
-        workerService.save(thirdUser);
+        Worker savedFirst = workerService.save(firstUser);
+        Worker savedSecond = workerService.save(secondUser);
+        Worker savedThird = workerService.save(thirdUser);
 
-        List<Worker> allUsers = workerService.findAll();
+        List<Worker> actual = workerService.findAll();
 
-        int expected = 3;
-
-        int actual = allUsers.size();
-
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
+    @Disabled
     void update() {
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
         orderProcessingPointDtoToTest.setId(1L);
@@ -301,21 +296,15 @@ class WorkerServiceTest {
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
-        workerService.save(worker);
+        Worker expected = workerService.save(worker);
 
-        String expected = "Victor";
+        String newName = "Victor";
 
         orderProcessingPointDtoToTest.setId(2L);
-        WorkerDto newUser = WorkerDto
-                .builder()
-                .id(1L)
-                .surname("Vlad")
-                .role(Role.ROLE_WAREHOUSE_WORKER)
-                .workingPlace(orderProcessingPointDtoToTest)
-                .name(expected)
-                .build();
 
-        String actual = workerService.update(newUser).getName();
+        expected.setName(newName);
+
+        Worker actual = workerService.update(CustomModelMapper.mapWorkerToDto(expected));
 
         Assertions.assertEquals(expected, actual);
     }

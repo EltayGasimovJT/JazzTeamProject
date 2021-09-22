@@ -153,11 +153,12 @@ class OrderServiceTest {
 
         Order expectedOrder = orderService.createOrder(expectedOrderDto);
 
-        Order actual = orderService.findOne(expectedOrder.getId());
+        Order actualOrder = orderService.findOne(expectedOrder.getId());
 
         String expected = "Готов к отправке";
 
-        Assertions.assertEquals(expected, actual.getState().getState());
+        final String actual = orderService.getState(actualOrder.getId());
+        Assertions.assertEquals(expected, actual);
     }
 
     @Test

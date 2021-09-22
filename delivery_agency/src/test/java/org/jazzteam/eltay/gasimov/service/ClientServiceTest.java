@@ -99,7 +99,7 @@ class ClientServiceTest {
                 .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
                 .collect(Collectors.toList());
 
-         Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest), actualClientDtos);
+        Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest), actualClientDtos);
     }
 
     @Test
@@ -124,17 +124,15 @@ class ClientServiceTest {
                 .build();
 
 
-        firstClientToTest.setId(clientService.save(firstClientToTest).getId());
-        secondClientToTest.setId(clientService.save(secondClientToTest).getId());
-        thirdClientToTest.setId(clientService.save(thirdClientToTest).getId());
+        Client savedFirst = clientService.save(firstClientToTest);
+        Client savedSecond = clientService.save(secondClientToTest);
+        Client savedThird = clientService.save(thirdClientToTest);
+        firstClientToTest.setId(savedFirst.getId());
+        secondClientToTest.setId(savedSecond.getId());
+        thirdClientToTest.setId(savedThird.getId());
 
-        List<Client> actualClients = clientService.findAll();
-
-        List<ClientDto> actualClientDtos = actualClients.stream()
-                .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
-                .collect(Collectors.toList());
-        final int expectedCount = 3;
-        Assertions.assertEquals(expectedCount, actualClientDtos.size());
+        List<Client> actual = clientService.findAll();
+        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
