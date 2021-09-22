@@ -1,10 +1,12 @@
 package org.jazzteam.eltay.gasimov.controller.security.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 
 @Data
+@Builder
 public class RegistrationRequest {
     @NotEmpty
     private String login;

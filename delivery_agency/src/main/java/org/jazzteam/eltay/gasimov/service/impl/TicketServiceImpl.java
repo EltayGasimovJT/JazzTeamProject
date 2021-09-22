@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
+import javassist.tools.rmi.ObjectNotFoundException;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jazzteam.eltay.gasimov.dto.TicketDto;
 import org.jazzteam.eltay.gasimov.entity.Order;
@@ -24,8 +25,8 @@ public class TicketServiceImpl implements TicketService {
     private OrderService orderService;
 
     @Override
-    public Ticket findByOrderId(Order clientFroFind) {
-        return ticketRepository.findByOrderId(clientFroFind.getId());
+    public Ticket findByOrderId(Long id) {
+        return ticketRepository.findByOrderId(id);
     }
 
     @Override
@@ -40,8 +41,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void delete(String id) {
-        ticketRepository.deleteByTicketNumber(id);
+    public void delete(Long id) {
+        ticketRepository.deleteById(id);
     }
 
     @Override
@@ -55,14 +56,15 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket generateTicket(Long orderId) {
+    public Ticket generateTicket(Long orderId) throws ObjectNotFoundException {
         int randomStringLength = 7;
         String charset = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZ";
+        Order foundOrder = orderService.findOne(orderId);
         Ticket generatedTicket = Ticket.builder()
-                .order(orderService.findOne(orderId))
+                .order(foundOrder)
                 .ticketNumber(RandomStringUtils.random(randomStringLength, charset))
                 .build();
-        ticketRepository.save(generatedTicket);
-        return generatedTicket;
+        foundOrder.setTicket(generatedTicket);
+        return ticketRepository.save(generatedTicket);
     }
 }

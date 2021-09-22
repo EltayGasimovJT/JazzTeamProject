@@ -17,7 +17,6 @@ public class Ticket {
     private Long id;
     @Column(name = "generated_ticket_number")
     private String ticketNumber;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.REMOVE, CascadeType.MERGE}, orphanRemoval = true)
     private Order order;
 }

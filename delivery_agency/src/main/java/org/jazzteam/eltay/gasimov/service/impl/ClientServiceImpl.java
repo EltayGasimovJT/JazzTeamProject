@@ -7,7 +7,6 @@ import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.ClientsCode;
-import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.repository.ClientRepository;
 import org.jazzteam.eltay.gasimov.repository.CodeRepository;
 import org.jazzteam.eltay.gasimov.service.ClientService;
@@ -60,7 +59,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException, ObjectNotFoundException {
+    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException {
         return clientRepository.findByPassportId(passportIdForSearch);
     }
 
@@ -96,11 +95,6 @@ public class ClientServiceImpl implements ClientService {
                 .build();
 
         return clientRepository.save(clientToUpdate);
-    }
-
-    @Override
-    public OrderProcessingPoint determineCurrentDestinationPlace(String destinationPlace) {
-        return orderProcessingPointService.findByLocation(destinationPlace);
     }
 
     @Override

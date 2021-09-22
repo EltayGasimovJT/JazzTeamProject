@@ -59,9 +59,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     @Override
     public OrderProcessingPoint findOne(long idForSearch) throws IllegalArgumentException {
         Optional<OrderProcessingPoint> foundClientFromRepository = orderProcessingPointRepository.findById(idForSearch);
-        OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
-        OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
-        return foundProcessingPoint;
+        return foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
     }
 
     @Override
@@ -69,21 +67,19 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
         Optional<OrderProcessingPoint> foundClientFromRepository = orderProcessingPointRepository.findById(processingPointDtoToUpdate.getId());
         OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
         OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
-        OrderProcessingPoint orderProcessingPointUpdate = new OrderProcessingPoint();
-        orderProcessingPointUpdate.setId(processingPointDtoToUpdate.getId());
-        orderProcessingPointUpdate.setLocation(processingPointDtoToUpdate.getLocation());
-        orderProcessingPointUpdate.setWarehouse(modelMapper.map(warehouseService.findOne(processingPointDtoToUpdate.getWarehouseId()), Warehouse.class));
+        foundProcessingPoint.setLocation(processingPointDtoToUpdate.getLocation());
+        foundProcessingPoint.setWarehouse(modelMapper.map(warehouseService.findOne(processingPointDtoToUpdate.getWarehouse().getId()), Warehouse.class));
         if (processingPointDtoToUpdate.getExpectedOrders() != null) {
-            orderProcessingPointUpdate.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
+            foundProcessingPoint.setExpectedOrders(processingPointDtoToUpdate.getExpectedOrders().stream()
                     .map(CustomModelMapper::mapDtoToOrder)
                     .collect(Collectors.toList()));
         }
         if (processingPointDtoToUpdate.getDispatchedOrders() != null) {
-            orderProcessingPointUpdate.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
+            foundProcessingPoint.setDispatchedOrders(processingPointDtoToUpdate.getDispatchedOrders().stream()
                     .map(CustomModelMapper::mapDtoToOrder)
                     .collect(Collectors.toList()));
         }
-        return orderProcessingPointRepository.save(orderProcessingPointUpdate);
+        return orderProcessingPointRepository.save(foundProcessingPoint);
     }
 
     @Override

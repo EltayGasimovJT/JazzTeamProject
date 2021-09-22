@@ -22,12 +22,16 @@ public class VoyageServiceImpl implements VoyageService {
     public Voyage save(VoyageDto voyageDtoToSave) throws IllegalArgumentException {
         Voyage voyageToSave = new Voyage();
         voyageToSave.setId(voyageDtoToSave.getId());
-        voyageToSave.setExpectedOrders(voyageDtoToSave.getExpectedOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList()));
-        voyageToSave.setDispatchedOrders(voyageDtoToSave.getDispatchedOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList()));
+        if (voyageDtoToSave.getExpectedOrders() != null) {
+            voyageToSave.setExpectedOrders(voyageDtoToSave.getExpectedOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toList()));
+        }
+        if (voyageDtoToSave.getDispatchedOrders() != null) {
+            voyageToSave.setDispatchedOrders(voyageDtoToSave.getDispatchedOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toList()));
+        }
         voyageToSave.setDeparturePoint(voyageDtoToSave.getDeparturePoint());
         voyageToSave.setDestinationPoint(voyageDtoToSave.getDestinationPoint());
         voyageToSave.setSendingTime(voyageDtoToSave.getSendingTime());

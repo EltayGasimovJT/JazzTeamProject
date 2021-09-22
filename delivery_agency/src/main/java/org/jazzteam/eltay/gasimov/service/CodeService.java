@@ -1,25 +1,22 @@
 package org.jazzteam.eltay.gasimov.service;
 
 
+import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.ClientsCodeDto;
-import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.ClientsCode;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CodeService {
-    ClientsCode findByClientId(Client clientFroFind);
+    ClientsCode findByClient(ClientDto clientFroFind);
 
-    Optional<ClientsCode> findById(Long idForFind);
+    ClientsCode findById(Long idForFind);
 
-    List<ClientsCode> findAll(Long idForFind);
+    List<ClientsCode> findAll();
 
     void delete(String code);
 
     ClientsCode save(ClientsCodeDto clientsCode);
 
     ClientsCode findByCode(String code);
-
-    void clear();
 }

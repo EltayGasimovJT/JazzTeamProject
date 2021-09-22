@@ -3,6 +3,8 @@ jQuery('document').ready(function () {
     if (sessionStorage.getItem('clientPhone') !== null) {
         insertClientInfo();
         insertLogoutButton();
+    } else if (sessionStorage.getItem('clientPhone') === null && sessionStorage.getItem('workersToken') === null) {
+        window.location.href = "/homePage.html";
     }
 })
 
@@ -36,10 +38,12 @@ function getUsersOrders() {
                     $.get(`/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json').done(function (data) {
                         window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderId}`;
                     }).fail(function () {
-                        swal({
+                        Swal.fire({
                             title: "Ошибка ввода",
                             text: "Данного заказа не существует",
-                            icon: "error",
+                            icon: "info",
+                            showConfirmButton: false,
+                            timer: 5000
                         });
 
                     });
@@ -69,8 +73,8 @@ function getIdFromUrl() {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getHours()
+    if ((new Date().getHours() - sessionTimeMinutes) > 1) {
         sessionStorage.removeItem('clientPhone');
         sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;
@@ -80,18 +84,12 @@ function checkSession() {
 }
 
 function addBackToOrderListButton() {
-    return '<button class="customHiddenBtn buttonText additionalInfoButton" type="button">'
+    return '<button class="btn btn-primary buttonText additionalInfoButton" type="button">'
         + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';
 }
 
 function getTimeFormat(time) {
-    let date = new Date(time);
-
-    date.setDate(date.getDate() + 20);
-
-    return ('0' + date.getDate()).slice(-2) + '.'
-        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
-        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+    return moment(time).format("YYYY-MM-DD HH:mm:ss z");
 }
 
 function insertClientInfo() {
@@ -104,10 +102,12 @@ function insertClientInfo() {
             name.innerHTML = `Имя: ${data.name}`
             surname.innerHTML = `Фамилия: ${data.surname}`
         }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
+            showConfirmButton: false,
+            timer: 5000
         });
     });
 }

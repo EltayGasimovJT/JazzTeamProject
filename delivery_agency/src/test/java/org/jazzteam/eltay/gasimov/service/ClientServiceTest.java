@@ -11,7 +11,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -23,7 +22,6 @@ import java.util.stream.Stream;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@AutoConfigureMockMvc
 @Transactional
 class ClientServiceTest {
     @Autowired
@@ -71,21 +69,18 @@ class ClientServiceTest {
     @Test
     void deleteClient() throws ObjectNotFoundException {
         ClientDto firstClientToTest = ClientDto.builder()
-                .id(1L)
                 .name("firstClient")
                 .surname("igor")
                 .phoneNumber("4")
                 .passportId("4")
                 .build();
         ClientDto secondClientToTest = ClientDto.builder()
-                .id(2L)
                 .name("secondClient")
                 .surname("igor")
                 .phoneNumber("5")
                 .passportId("5")
                 .build();
         ClientDto thirdClientToTest = ClientDto.builder()
-                .id(3L)
                 .name("thirdClient")
                 .surname("igor")
                 .phoneNumber("6")
@@ -129,17 +124,15 @@ class ClientServiceTest {
                 .build();
 
 
-        firstClientToTest.setId(clientService.save(firstClientToTest).getId());
-        secondClientToTest.setId(clientService.save(secondClientToTest).getId());
-        thirdClientToTest.setId(clientService.save(thirdClientToTest).getId());
+        Client savedFirst = clientService.save(firstClientToTest);
+        Client savedSecond = clientService.save(secondClientToTest);
+        Client savedThird = clientService.save(thirdClientToTest);
+        firstClientToTest.setId(savedFirst.getId());
+        secondClientToTest.setId(savedSecond.getId());
+        thirdClientToTest.setId(savedThird.getId());
 
-        List<Client> actualClients = clientService.findAll();
-
-        List<ClientDto> actualClientDtos = actualClients.stream()
-                .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
-                .collect(Collectors.toList());
-        final int expectedCount = 3;
-        Assertions.assertEquals(expectedCount, actualClientDtos.size());
+        List<Client> actual = clientService.findAll();
+        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
@@ -152,12 +145,44 @@ class ClientServiceTest {
                 .build();
 
         Client savedClient = clientService.save(expectedClientDto);
-
+        expectedClientDto.setId(savedClient.getId());
         Client actualClient = clientService.findById(savedClient.getId());
+        ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
+
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
+    }
+
+    @Test
+    void findByPhoneNumber() throws ObjectNotFoundException {
+        ClientDto expectedClientDto = ClientDto.builder()
+                .name("firstClient")
+                .surname("Vasya")
+                .phoneNumber("10")
+                .passportId("10")
+                .build();
+
+        Client savedClient = clientService.save(expectedClientDto);
+        expectedClientDto.setId(savedClient.getId());
+        Client actualClient = clientService.findByPhoneNumber(savedClient.getPhoneNumber());
 
         ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
 
-        Assertions.assertEquals(actualClientDto, actualClientDto);
+        Assertions.assertEquals(expectedClientDto, actualClientDto);
+    }
+
+    @Test
+    void generateCodeForClient() throws ObjectNotFoundException {
+        ClientDto expectedClientDto = ClientDto.builder()
+                .name("firstClient")
+                .surname("Vasya")
+                .phoneNumber("10")
+                .passportId("10")
+                .build();
+
+        Client savedClient = clientService.save(expectedClientDto);
+        expectedClientDto.setId(savedClient.getId());
+        Client actualClient = clientService.generateCodeForClient(savedClient.getPhoneNumber());
+        Assertions.assertNotNull(actualClient.getCode().getGeneratedCode());
     }
 
     @Test
@@ -204,3 +229,4 @@ class ClientServiceTest {
         Assertions.assertEquals(expectedClientDto, actualClientDto);
     }
 }
+

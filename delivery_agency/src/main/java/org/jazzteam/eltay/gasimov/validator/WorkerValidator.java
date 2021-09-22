@@ -15,15 +15,15 @@ public class WorkerValidator {
         if (workerToValidate.getName() == null) {
             throw new IllegalArgumentException("Worker must have name");
         }
-        /*if (workerToValidate.getSurname() == null) {
+        if (workerToValidate.getSurname() == null) {
             throw new IllegalArgumentException("Worker must have surname");
-        }*/
+        }
         if (workerToValidate.getWorkingPlace() == null) {
             throw new IllegalArgumentException("Worker must have working place");
         }
-        /*if (workerToValidate.getRoles().isEmpty()){
+        if (workerToValidate.getRoles().isEmpty()) {
             throw new IllegalArgumentException("Worker must have any role");
-        }*/
+        }
     }
 
     public static void validateOnSave(Worker workerToValidate) throws IllegalArgumentException {

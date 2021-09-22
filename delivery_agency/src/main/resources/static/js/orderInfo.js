@@ -67,8 +67,8 @@ function getOrder(idFromUrl) {
                 getTimeFormat(result.sendingTime) + '</td><td>' + result.price +
                 '</td><td>' + result.state.state + '</td><td>' + result.departurePoint.location + '</td><td>' +
                 result.currentLocation.location + '</td><td>' + result.destinationPlace.location +
-                '</td><td>' + result.parcelParameters.width + '</td><td>' + result.parcelParameters.height +
-                '</td><td>' + result.parcelParameters.weight + '</td><td>' + result.parcelParameters.length +
+                '</td><td>' + result.parcelParameters.weight + '</td><td>' + result.parcelParameters.height +
+                '</td><td>' + result.parcelParameters.width + '</td><td>' + result.parcelParameters.length +
                 '</td></tr>';
             $('#orderInfo').append(row);
         }
@@ -77,18 +77,12 @@ function getOrder(idFromUrl) {
 
 
 function getTimeFormat(time) {
-    let date = new Date(time);
-
-    date.setDate(date.getDate() + 20);
-
-    return ('0' + date.getDate()).slice(-2) + '.'
-        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
-        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+    return moment(time).format("YYYY-MM-DD HH:mm:ss z");
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getSeconds()
-    if (Math.abs((new Date()).getSeconds() - sessionTimeMinutes) > 30) {
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getHours()
+    if (Math.abs((new Date()).getHours() - sessionTimeMinutes) > 1) {
         sessionStorage.removeItem('clientPhone');
         sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;
@@ -119,10 +113,32 @@ function insertClientInfo() {
             name.innerHTML = `Имя: ${data.name}`
             surname.innerHTML = `Фамилия: ${data.surname}`
         }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
-            icon: "error",
+            icon: "info",
+            showConfirmButton: false,
+            timer: 5000
         });
     });
+}
+
+function sortTable(){
+    const getSort = ({ target }) => {
+        const order = (target.dataset.order = -(target.dataset.order || -1));
+        const index = [...target.parentNode.cells].indexOf(target);
+        const collator = new Intl.Collator(['en', 'ru'], { numeric: true });
+        const comparator = (index, order) => (a, b) => order * collator.compare(
+            a.children[index].innerHTML,
+            b.children[index].innerHTML
+        );
+
+        for(const tBody of target.closest('table').tBodies)
+            tBody.append(...[...tBody.rows].sort(comparator(index, order)));
+
+        for(const cell of target.parentNode.cells)
+            cell.classList.toggle('sorted', cell === target);
+    };
+
+    document.querySelectorAll('.table_sort thead').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
 }
