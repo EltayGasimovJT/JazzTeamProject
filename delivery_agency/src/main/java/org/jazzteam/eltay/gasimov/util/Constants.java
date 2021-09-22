@@ -6,8 +6,6 @@ public class Constants {
 
     }
 
-
-
     public static final int INITIAL_WEIGHT = 50000;
     public static final double PRICE_FOR_PACKAGE = 1.9;
     public static final double COEFFICIENT_FOR_KILOGRAMS_CONVERT = 1000;

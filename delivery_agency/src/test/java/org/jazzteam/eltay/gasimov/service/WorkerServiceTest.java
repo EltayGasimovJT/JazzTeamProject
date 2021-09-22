@@ -319,5 +319,4 @@ class WorkerServiceTest {
 
         Assertions.assertEquals(expected, actual);
     }
-
 }

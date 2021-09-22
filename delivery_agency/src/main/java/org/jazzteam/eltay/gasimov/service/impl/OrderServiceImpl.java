@@ -286,10 +286,12 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void deleteByTrackNumber(String orderNumber) {
         Order foundOrder = orderRepository.findByTrackNumber(orderNumber);
-        if (foundOrder.getState().getId() >= THREE) {
+        if (foundOrder.getState().getState().equals(OrderStates.READY_TO_SEND.getState()) ||
+                foundOrder.getState().getState().equals(OrderStates.ON_THE_PROCESSING_POINT_STORAGE.getState())) {
+            ticketService.delete(foundOrder.getTicket().getId());
+        } else {
             throw new IllegalStateException(CANNOT_CANCEL_ORDER);
         }
-        ticketService.delete(foundOrder.getTicket().getId());
     }
 
     private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber, Worker foundWorker) {
