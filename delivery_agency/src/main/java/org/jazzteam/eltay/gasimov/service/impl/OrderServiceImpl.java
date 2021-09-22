@@ -297,7 +297,11 @@ public class OrderServiceImpl implements OrderService {
         newHistory.setSentAt(foundOrder.getHistory().iterator().next().getSentAt());
         newHistory.setWorker(foundWorker);
         newHistory.setChangedAt(LocalDateTime.now());
-        newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation());
+        if (orderState.getState().equals(OrderStates.ORDER_COMPLETE.getState())) {
+            newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix());
+        } else {
+            newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation());
+        }
         newHistory.setChangedTypeEnum(OrderStateChangeType.READY_TO_SEND.name());
         return newHistory;
     }

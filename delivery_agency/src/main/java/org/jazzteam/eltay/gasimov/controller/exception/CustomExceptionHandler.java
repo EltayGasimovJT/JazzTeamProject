@@ -1,3 +1,4 @@
+/*
 package org.jazzteam.eltay.gasimov.controller.exception;
 
 import lombok.extern.java.Log;
@@ -43,4 +44,4 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         CustomResponseError apiError = new CustomResponseError(HttpStatus.BAD_REQUEST, ex.getMessage(), ex);
         return new ResponseEntity<>(apiError, status);
     }
-}
+}*/

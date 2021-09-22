@@ -2,15 +2,13 @@ package org.jazzteam.eltay.gasimov.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
-import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
-import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
-import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.dto.WorkerDto;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.WorkerRepository;
 import org.jazzteam.eltay.gasimov.service.*;
 import org.jazzteam.eltay.gasimov.validator.WorkerValidator;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +39,8 @@ public class WorkerServiceImpl implements WorkerService {
     private OrderStateService orderStateService;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     @Transactional
@@ -81,25 +81,17 @@ public class WorkerServiceImpl implements WorkerService {
     }
 
     @Override
-    public Worker changeWorkingPlace(Long id, AbstractBuildingDto newWorkingPlace) throws IllegalArgumentException {
+    public Worker changeWorkingPlace(Long id, Long newWorkingPlaceId) throws IllegalArgumentException {
         Optional<Worker> foundUser = workerRepository.findById(id);
         Worker workerFromOptional = foundUser.orElseGet(Worker::new);
-
-        if (newWorkingPlace instanceof OrderProcessingPointDto) {
-            AbstractBuilding abstractBuildingToUpdate = new OrderProcessingPoint();
-            abstractBuildingToUpdate.setId(newWorkingPlace.getId());
-            abstractBuildingToUpdate.setLocation(newWorkingPlace.getLocation());
-            abstractBuildingToUpdate.setWorkingPlaceType(newWorkingPlace.getWorkingPlaceType().toString());
-            workerFromOptional.setWorkingPlace(abstractBuildingToUpdate);
-        } else if (newWorkingPlace instanceof WarehouseDto) {
-            AbstractBuilding abstractBuildingToUpdate = new Warehouse();
-            abstractBuildingToUpdate.setId(newWorkingPlace.getId());
-            abstractBuildingToUpdate.setLocation(newWorkingPlace.getLocation());
-            abstractBuildingToUpdate.setWorkingPlaceType(newWorkingPlace.getWorkingPlaceType().toString());
-            workerFromOptional.setWorkingPlace(abstractBuildingToUpdate);
+        Warehouse foundWarehouse = warehouseService.findOne(newWorkingPlaceId);
+        OrderProcessingPoint foundProcessingPoint = processingPointService.findOne(newWorkingPlaceId);
+        if (foundWarehouse != null) {
+            workerFromOptional.setWorkingPlace(foundWarehouse);
+        } else if (foundProcessingPoint !=null) {
+            workerFromOptional.setWorkingPlace(foundProcessingPoint);
         }
-
-        return update(CustomModelMapper.mapUserToDto(workerFromOptional));
+        return update(CustomModelMapper.mapWorkerToDto(workerFromOptional));
     }
 
     @Override

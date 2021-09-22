@@ -64,7 +64,6 @@ document.getElementById('senderPhoneNumber').oninput = (event) => {
             contentType: 'application/json',
             data: {phoneNumber: event.target.value},
             success: function (result) {
-                console.log(result)
                 document.getElementById('senderName').value = result.name;
                 document.getElementById('senderSurname').value = result.surname;
                 document.getElementById('senderPassportId').value = result.passportId;

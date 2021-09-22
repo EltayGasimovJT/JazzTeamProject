@@ -1,6 +1,7 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import lombok.extern.java.Log;
+import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.ClientsCodeDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.ClientsCode;
@@ -22,8 +23,8 @@ public class CodeServiceImpl implements CodeService {
     private ModelMapper modelMapper;
 
     @Override
-    public ClientsCode findByClientId(Client clientFroFind) {
-        return codeRepository.findByClient(clientFroFind);
+    public ClientsCode findByClient(ClientDto clientFroFind) {
+        return codeRepository.findByClient(modelMapper.map(clientFroFind, Client.class));
     }
 
     @Override

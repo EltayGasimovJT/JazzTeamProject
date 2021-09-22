@@ -5,7 +5,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.jazzteam.eltay.gasimov.dto.TicketDto;
 import org.jazzteam.eltay.gasimov.entity.Order;
 import org.jazzteam.eltay.gasimov.entity.Ticket;
-import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.TicketRepository;
 import org.jazzteam.eltay.gasimov.service.OrderService;
 import org.jazzteam.eltay.gasimov.service.TicketService;
@@ -26,8 +25,8 @@ public class TicketServiceImpl implements TicketService {
     private OrderService orderService;
 
     @Override
-    public Ticket findByOrderId(Order clientFroFind) {
-        return ticketRepository.findByOrderId(clientFroFind.getId());
+    public Ticket findByOrderId(Long id) {
+        return ticketRepository.findByOrderId(id);
     }
 
     @Override

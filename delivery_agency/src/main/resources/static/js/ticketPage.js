@@ -20,7 +20,7 @@ jQuery('document').ready(function () {
         checkSession()
         let docInfo = {
             info: {
-                title: 'Ticket №' + idFromUrl.ticketNumber,
+                title: 'Чек №' + idFromUrl.ticketNumber,
                 author: 'Eltay',
                 subject: 'Theme',
                 keywords: 'Keywords',
@@ -46,7 +46,7 @@ jQuery('document').ready(function () {
             ],
             content: [
                 {
-                    text: 'Ticket #' + idFromUrl.ticketNumber,
+                    text: 'Чек #' + idFromUrl.ticketNumber,
                     fontSize: 20
                 },
                 {

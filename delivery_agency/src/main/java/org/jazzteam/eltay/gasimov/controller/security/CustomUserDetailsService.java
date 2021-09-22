@@ -19,6 +19,6 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Transactional
     public CustomUserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
         Worker workerEntity = workerService.findByName(name);
-        return CustomUserDetails.fromUserEntityToCustomUserDetails(CustomModelMapper.mapUserToDto(workerEntity));
+        return CustomUserDetails.fromUserEntityToCustomUserDetails(CustomModelMapper.mapWorkerToDto(workerEntity));
     }
 }

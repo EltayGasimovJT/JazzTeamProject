@@ -12,7 +12,8 @@ public enum OrderStates {
     ON_THE_RECEPTION_STORE("Заказ находится на складе пункта выдачи"),
     READY_TO_TAKE("Заказ готов к выдаче"),
     ORDER_LOCKED("Заказ заблокирован"),
-    ORDER_COMPLETE("Заказ выдан клиенту");
+    ORDER_WAS_GIVEN_TO_THE_CLIENT("Заказ выдан клиенту"),
+    ORDER_COMPLETE("Заказ выполнен");
 
     private final String state;
 

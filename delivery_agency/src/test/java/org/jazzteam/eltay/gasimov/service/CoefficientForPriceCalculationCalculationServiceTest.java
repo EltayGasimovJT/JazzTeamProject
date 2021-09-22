@@ -30,6 +30,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     private CoefficientForPriceCalculationService priceCalculationRuleService;
     @Autowired
     private ModelMapper modelMapper;
+    public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto destinationPlaceToTest = new OrderProcessingPointDto();
@@ -102,6 +103,58 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         );
     }
 
+    private static Stream<Arguments> testNegativeData() {
+        OrderProcessingPointDto destinationPlaceToTest = new OrderProcessingPointDto();
+        destinationPlaceToTest.setLocation("Russia");
+        OrderDto firstOrder = OrderDto.builder()
+                .id(1L)
+                .parcelParameters(
+                        ParcelParametersDto.builder()
+                                .height(132325.0)
+                                .width(13232.0)
+                                .length(1333.0)
+                                .weight(2032.0).build()
+                )
+                .destinationPlace(destinationPlaceToTest)
+                .build();
+
+        CoefficientForPriceCalculationDto firstCoefficientToTest = CoefficientForPriceCalculationDto
+                .builder()
+                .id(1L)
+                .countryCoefficient(1.6)
+                .country("Russia")
+                .parcelSizeLimit(50)
+                .build();
+
+        destinationPlaceToTest.setLocation("Poland");
+        destinationPlaceToTest.setId(2L);
+        OrderDto secondOrder = OrderDto.builder()
+                .id(2L)
+                .parcelParameters(
+                        ParcelParametersDto.builder()
+                                .height(432.0)
+                                .width(130.0)
+                                .length(211.0)
+                                .weight(224124120.0).build()
+                )
+                .destinationPlace(destinationPlaceToTest)
+                .build();
+
+        CoefficientForPriceCalculationDto secondCoefficientToTest = CoefficientForPriceCalculationDto
+                .builder()
+                .id(2L)
+                .countryCoefficient(1.8)
+                .country("Poland")
+                .parcelSizeLimit(40)
+                .build();
+        destinationPlaceToTest.setLocation("Ukraine");
+
+        return Stream.of(
+                Arguments.of(firstOrder, firstCoefficientToTest),
+                Arguments.of(secondOrder, secondCoefficientToTest)
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("testDataForCalculate")
     void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) throws ObjectNotFoundException {
@@ -128,6 +181,19 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         int actualSize = priceCalculationRuleService.findAll().size();
 
         Assertions.assertEquals(expectedSize, actualSize);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("testNegativeData")
+    void testNegativeCalculate(OrderDto order, CoefficientForPriceCalculationDto rule) throws ObjectNotFoundException {
+        priceCalculationRuleService.save(rule);
+        try {
+            priceCalculationRuleService.calculatePrice(order.getParcelParameters(), rule.getCountry());
+            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
+        } catch (IllegalArgumentException thrown) {
+            Assertions.assertNotEquals("", thrown.getMessage());
+        }
     }
 
     @Test

@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode(exclude = "orderProcessingPoints")
 @ToString(exclude = "orderProcessingPoints")
+@Embeddable
 @Table(name = "warehouse")
 public class Warehouse extends AbstractBuilding {
     @OneToMany(mappedBy = "warehouse", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

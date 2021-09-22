@@ -129,8 +129,14 @@ function getAllOrders() {
                 }
             )
         },
-        error: function (exception) {
-            alert(exception.message);
+        error: function () {
+            Swal.fire({
+                title: "Не удалось загрузить список заказов",
+                text: "В базе данных больше нет заказов",
+                icon: "info",
+                showConfirmButton: false,
+                timer: 5000
+            });;
         }
     });
 }
@@ -168,8 +174,8 @@ $('#changeOrderState').submit(function (event) {
         },
         error: function () {
             Swal.fire({
-                title: 'Что-то пошло не так',
-                text: `Не удалось обновить состояние заказа`,
+                title: 'Нет прав',
+                text: `У вас нет прав устанавливать данное состояние заказа`,
                 icon: 'info',
                 showConfirmButton: false,
                 timer: 5000

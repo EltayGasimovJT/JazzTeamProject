@@ -72,7 +72,7 @@ public class CustomModelMapper {
         return convertedToOrder;
     }
 
-    public static WorkerDto mapUserToDto(Worker workerToConvert) {
+    public static WorkerDto mapWorkerToDto(Worker workerToConvert) {
         WorkerRoles roleToMap = workerToConvert.getRoles().iterator().next();
 
         WorkerDto convertedToDto = WorkerDto.builder()
@@ -187,7 +187,7 @@ public class CustomModelMapper {
                 .sentAt(orderHistory.getSentAt())
                 .comment(orderHistory.getComment())
                 .changedTypeEnum(OrderStateChangeType.valueOf(orderHistory.getChangedTypeEnum()))
-                .worker(mapUserToDto(orderHistory.getWorker()))
+                .worker(mapWorkerToDto(orderHistory.getWorker()))
                 .build();
     }
 

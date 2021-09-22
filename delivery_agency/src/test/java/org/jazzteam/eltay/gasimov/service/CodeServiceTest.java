@@ -1,5 +1,7 @@
 package org.jazzteam.eltay.gasimov.service;
 
+import javassist.tools.rmi.ObjectNotFoundException;
+import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.ClientsCodeDto;
 import org.jazzteam.eltay.gasimov.entity.ClientsCode;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -25,6 +26,8 @@ class CodeServiceTest {
     private CodeService codeService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private ClientService clientService;
 
     @Test
     void findById() {
@@ -38,13 +41,31 @@ class CodeServiceTest {
     }
 
     @Test
+    void findByClientId() throws ObjectNotFoundException {
+        ClientDto expectedClientDto = ClientDto.builder()
+                .name("firstClient")
+                .surname("Vasya")
+                .phoneNumber("10")
+                .passportId("10")
+                .build();
+
+        ClientDto savedClient = modelMapper.map(clientService.save(expectedClientDto), ClientDto.class);
+        expectedClientDto.setId(savedClient.getId());
+        ClientsCodeDto clientsCodeDto = ClientsCodeDto.builder()
+                .generatedCode("12412qw")
+                .client(savedClient)
+                .build();
+        ClientsCodeDto expected = modelMapper.map(codeService.save(clientsCodeDto), ClientsCodeDto.class);
+        ClientsCodeDto actual = modelMapper.map(codeService.findByClient(expectedClientDto), ClientsCodeDto.class);
+        Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
     void findAll() {
-        ClientsCodeDto firstCode = ClientsCodeDto.
-                builder()
+        ClientsCodeDto firstCode = ClientsCodeDto.builder()
                 .generatedCode("12412qw")
                 .build();
-        ClientsCodeDto secondCode = ClientsCodeDto.
-                builder()
+        ClientsCodeDto secondCode = ClientsCodeDto.builder()
                 .generatedCode("12412qw")
                 .build();
         ClientsCode firstSavedCode = codeService.save(firstCode);

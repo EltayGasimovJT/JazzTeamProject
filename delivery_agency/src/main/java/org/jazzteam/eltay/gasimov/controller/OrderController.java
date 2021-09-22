@@ -47,7 +47,7 @@ public class OrderController {
     OrderResponseDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         CustomUserDetails principal = contextService.getCurrentUserFromContext();
         Worker foundWorker = workerService.findByName(principal.getUsername());
-        requestOrder.setWorkerDto(CustomModelMapper.mapUserToDto(foundWorker));
+        requestOrder.setWorkerDto(CustomModelMapper.mapWorkerToDto(foundWorker));
         OrderDto createdOrder = CustomModelMapper.mapOrderToDto(orderService.createOrder(requestOrder));
         return OrderResponseDto.builder()
                 .orderDto(createdOrder)

@@ -97,6 +97,18 @@ class OrderServiceTest {
     }
 
     @Test
+    @Disabled("Transactional error")
+    void deleteByTrackNumber() throws ObjectNotFoundException {
+        CreateOrderRequestDto expectedOrder = getOrder();
+
+        Order expected = orderService.createOrder(expectedOrder);
+
+        orderService.deleteByTrackNumber(expected.getTrackNumber());
+
+        Assertions.assertTrue(orderService.findAll().isEmpty());
+    }
+
+    @Test
     void findById() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrderDto = getOrder();
 
@@ -197,7 +209,7 @@ class OrderServiceTest {
 
         workerService.save(workerToSave);
 
-        CreateOrderRequestDto expectedOrder = CreateOrderRequestDto.builder()
+        return CreateOrderRequestDto.builder()
                 .destinationPoint("Минск-Беларусь")
                 .parcelParameters(
                         ParcelParametersDto.builder()
@@ -226,6 +238,5 @@ class OrderServiceTest {
                 )
                 .workerDto(workerToSave)
                 .build();
-        return expectedOrder;
     }
 }

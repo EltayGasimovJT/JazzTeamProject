@@ -141,7 +141,7 @@ class TicketServiceTest {
 
         workerService.save(workerToSave);
 
-        CreateOrderRequestDto expectedOrder = CreateOrderRequestDto.builder()
+        return CreateOrderRequestDto.builder()
                 .destinationPoint("Минск-Беларусь")
                 .parcelParameters(
                         ParcelParametersDto.builder()
@@ -170,6 +170,5 @@ class TicketServiceTest {
                 )
                 .workerDto(workerToSave)
                 .build();
-        return expectedOrder;
     }
 }

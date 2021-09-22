@@ -59,9 +59,7 @@ public class OrderProcessingPointServiceImpl implements OrderProcessingPointServ
     @Override
     public OrderProcessingPoint findOne(long idForSearch) throws IllegalArgumentException {
         Optional<OrderProcessingPoint> foundClientFromRepository = orderProcessingPointRepository.findById(idForSearch);
-        OrderProcessingPoint foundProcessingPoint = foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
-        OrderProcessingPointValidator.validateProcessingPoint(foundProcessingPoint);
-        return foundProcessingPoint;
+        return foundClientFromRepository.orElseGet(OrderProcessingPoint::new);
     }
 
     @Override
