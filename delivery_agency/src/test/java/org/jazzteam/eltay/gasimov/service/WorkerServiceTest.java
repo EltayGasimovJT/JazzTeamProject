@@ -8,7 +8,6 @@ import org.jazzteam.eltay.gasimov.dto.WorkerRolesDto;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -282,30 +281,44 @@ class WorkerServiceTest {
     }
 
     @Test
-    @Disabled
     void update() {
+        WorkerRolesDto rolesDto = WorkerRolesDto.builder()
+                .role(Role.ROLE_ADMIN.name())
+                .build();
+        modelMapper.map(workerRolesService.save(rolesDto), WorkerRolesDto.class);
+        WarehouseDto warehouseToSave = new WarehouseDto();
+        warehouseToSave.setLocation("Belarus");
+        warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
+        Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
         OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
-        orderProcessingPointDtoToTest.setId(1L);
+        orderProcessingPointDtoToTest.setLocation("Minsk-Belarus");
         orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
-        WorkerDto worker = WorkerDto
+        orderProcessingPointDtoToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
+        OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(orderProcessingPointDtoToTest);
+        WorkerDto expectedDto = WorkerDto
                 .builder()
-                .id(1L)
                 .surname("Vlad")
                 .role(Role.ROLE_ADMIN)
                 .name("Vlad")
-                .workingPlace(orderProcessingPointDtoToTest)
+                .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
-
-        Worker expected = workerService.save(worker);
-
+        RegistrationRequest expected = RegistrationRequest.builder()
+                .login(expectedDto.getName())
+                .surname(expectedDto.getSurname())
+                .password("Eltay1")
+                .role(Role.ROLE_ADMIN.name())
+                .workingPlaceId(savedProcessingPoint.getId())
+                .workingPlaceType(PROCESSING_POINT.name())
+                .build();
+        Worker savedWorker = workerService.saveForRegistration(expected);
+        expectedDto.setId(savedWorker.getId());
+        expectedDto.setPassword(savedWorker.getPassword());
         String newName = "Victor";
 
-        orderProcessingPointDtoToTest.setId(2L);
+        savedWorker.setName(newName);
 
-        expected.setName(newName);
+        Worker actual = workerService.update(CustomModelMapper.mapWorkerToDto(savedWorker));
 
-        Worker actual = workerService.update(CustomModelMapper.mapWorkerToDto(expected));
-
-        Assertions.assertEquals(expected, actual);
+        Assertions.assertEquals(savedWorker, actual);
     }
 }

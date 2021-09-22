@@ -73,6 +73,7 @@ public class WorkerServiceImpl implements WorkerService {
     @Override
     public Worker update(WorkerDto workerDtoToUpdate) {
         Worker workerToUpdate = CustomModelMapper.mapDtoToWorker(workerDtoToUpdate);
+        workerToUpdate.setRoles(Stream.of(workerRolesService.findByRole(workerDtoToUpdate.getRole().name())).collect(Collectors.toSet()));
         WorkerValidator.validateUser(workerToUpdate);
         return workerRepository.save(workerToUpdate);
     }
