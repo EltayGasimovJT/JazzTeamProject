@@ -80,34 +80,6 @@ class WorkerServiceTest {
     }
 
     @Test
-    void changeWorkingPlace() {
-        WarehouseDto warehouseToSave = new WarehouseDto();
-        warehouseToSave.setLocation("Belarus");
-        warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
-        WarehouseDto newWorkingPlace = new WarehouseDto();
-        newWorkingPlace.setLocation("Moscow");
-        newWorkingPlace.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
-        Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
-        Warehouse newPlaceSaved = warehouseService.save(newWorkingPlace);
-        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
-        orderProcessingPointDtoToTest.setLocation("Minsk-Belarus");
-        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
-        orderProcessingPointDtoToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
-        OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(orderProcessingPointDtoToTest);
-        WorkerDto expectedDto = WorkerDto
-                .builder()
-                .surname("Vlad")
-                .role(Role.ROLE_ADMIN)
-                .name("Vlad")
-                .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
-                .build();
-        Worker expected = userService.save(expectedDto);
-        Worker actual = userService.changeWorkingPlace(expected.getId(), newPlaceSaved.getId());
-
-        Assertions.assertEquals(expected, actual);
-    }
-
-    @Test
     void deleteUser() {
         WarehouseDto warehouseToSave = new WarehouseDto();
         warehouseToSave.setLocation("Belarus");
