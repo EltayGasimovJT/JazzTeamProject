@@ -160,6 +160,15 @@ class OrderServiceTest {
         Assertions.assertEquals(expected, actual.getState().getState());
     }
 
+    @Test
+    @Disabled("Transactional error")
+    void findAll() throws ObjectNotFoundException {
+        CreateOrderRequestDto expectedOrderDto = getOrder();
+        orderService.createOrder(expectedOrderDto);
+
+        Assertions.assertFalse(orderService.findAll().isEmpty());
+    }
+
 
     @ParameterizedTest
     @MethodSource("testDataForCalculate")

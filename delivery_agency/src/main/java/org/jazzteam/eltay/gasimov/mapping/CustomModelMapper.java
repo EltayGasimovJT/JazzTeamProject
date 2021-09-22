@@ -80,8 +80,13 @@ public class CustomModelMapper {
                 .name(workerToConvert.getName())
                 .surname(workerToConvert.getSurname())
                 .password(workerToConvert.getPassword())
-                .workingPlace(modelMapper.map(workerToConvert.getWorkingPlace(), AbstractBuildingDto.class))
                 .build();
+        if (workerToConvert.getWorkingPlace() instanceof OrderProcessingPoint) {
+            convertedToDto.setWorkingPlace(modelMapper.map(workerToConvert.getWorkingPlace(), OrderProcessingPointDto.class));
+        }
+        if (workerToConvert.getWorkingPlace() instanceof Warehouse) {
+            convertedToDto.setWorkingPlace(modelMapper.map(workerToConvert.getWorkingPlace(), WarehouseDto.class));
+        }
         if (roleToMap.getRole().equals(Role.ROLE_ADMIN.toString())) {
             convertedToDto.setRole(Role.ROLE_ADMIN);
         }

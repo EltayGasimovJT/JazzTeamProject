@@ -8,7 +8,6 @@ import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.WorkerRepository;
 import org.jazzteam.eltay.gasimov.service.*;
 import org.jazzteam.eltay.gasimov.validator.WorkerValidator;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,8 +38,6 @@ public class WorkerServiceImpl implements WorkerService {
     private OrderStateService orderStateService;
     @Autowired
     private OrderService orderService;
-    @Autowired
-    private ModelMapper modelMapper;
 
     @Override
     @Transactional

@@ -1,8 +1,10 @@
 package org.jazzteam.eltay.gasimov.service;
 
+import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
 import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.dto.WorkerDto;
+import org.jazzteam.eltay.gasimov.dto.WorkerRolesDto;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
@@ -23,13 +25,15 @@ import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.PROCESSING_POIN
 @Transactional
 class WorkerServiceTest {
     @Autowired
-    private WorkerService userService;
+    private WorkerService workerService;
     @Autowired
     private OrderProcessingPointService orderProcessingPointService;
     @Autowired
     private WarehouseService warehouseService;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private WorkerRolesService workerRolesService;
 
     @Test
     void addUser() {
@@ -49,7 +53,7 @@ class WorkerServiceTest {
                 .name("Vlad")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
-        Worker actual = userService.save(expected);
+        Worker actual = workerService.save(expected);
         expected.setId(actual.getId());
 
         Assertions.assertEquals(CustomModelMapper.mapDtoToWorker(expected), actual);
@@ -73,10 +77,122 @@ class WorkerServiceTest {
                 .name("Vlad")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
-        Worker expected = userService.save(expectedDto);
-        Worker actual = userService.findOne(expected.getId());
+        Worker expected = workerService.save(expectedDto);
+        Worker actual = workerService.findOne(expected.getId());
 
         Assertions.assertEquals(expected, actual);
+    }
+
+    @Test
+    void findByPassword() {
+        WorkerRolesDto rolesDto = WorkerRolesDto.builder()
+                .role(Role.ROLE_ADMIN.name())
+                .build();
+        modelMapper.map(workerRolesService.save(rolesDto), WorkerRolesDto.class);
+        WarehouseDto warehouseToSave = new WarehouseDto();
+        warehouseToSave.setLocation("Belarus");
+        warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
+        Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
+        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
+        orderProcessingPointDtoToTest.setLocation("Minsk-Belarus");
+        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
+        orderProcessingPointDtoToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
+        OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(orderProcessingPointDtoToTest);
+        WorkerDto expectedDto = WorkerDto
+                .builder()
+                .surname("Vlad")
+                .role(Role.ROLE_ADMIN)
+                .password("Eltay1")
+                .name("Vlad")
+                .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
+                .build();
+        RegistrationRequest expected = RegistrationRequest.builder()
+                .login(expectedDto.getName())
+                .surname(expectedDto.getSurname())
+                .password("Eltay1")
+                .role(Role.ROLE_ADMIN.name())
+                .workingPlaceId(savedProcessingPoint.getId())
+                .workingPlaceType(PROCESSING_POINT.name())
+                .build();
+        Worker savedWorker = workerService.saveForRegistration(expected);
+        expectedDto.setId(savedWorker.getId());
+        WorkerDto actual = CustomModelMapper.mapWorkerToDto(workerService.findByPassword(savedWorker.getPassword()));
+        expectedDto.setPassword(savedWorker.getPassword());
+        Assertions.assertEquals(expectedDto, actual);
+    }
+
+    @Test
+    void findByLoginAndPassword() {
+        WorkerRolesDto rolesDto = WorkerRolesDto.builder()
+                .role(Role.ROLE_ADMIN.name())
+                .build();
+        modelMapper.map(workerRolesService.save(rolesDto), WorkerRolesDto.class);
+        WarehouseDto warehouseToSave = new WarehouseDto();
+        warehouseToSave.setLocation("Belarus");
+        warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
+        Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
+        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
+        orderProcessingPointDtoToTest.setLocation("Minsk-Belarus");
+        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
+        orderProcessingPointDtoToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
+        OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(orderProcessingPointDtoToTest);
+        WorkerDto expectedDto = WorkerDto
+                .builder()
+                .surname("Vlad")
+                .role(Role.ROLE_ADMIN)
+                .password("Eltay1")
+                .name("Vlad")
+                .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
+                .build();
+        RegistrationRequest expected = RegistrationRequest.builder()
+                .login(expectedDto.getName())
+                .surname(expectedDto.getSurname())
+                .password("Eltay1")
+                .role(Role.ROLE_ADMIN.name())
+                .workingPlaceId(savedProcessingPoint.getId())
+                .workingPlaceType(PROCESSING_POINT.name())
+                .build();
+        Worker savedWorker = workerService.saveForRegistration(expected);
+        expectedDto.setId(savedWorker.getId());
+        WorkerDto actual = CustomModelMapper.mapWorkerToDto(workerService.findByLoginAndPassword(expectedDto.getName(), expectedDto.getPassword()));
+        expectedDto.setPassword(savedWorker.getPassword());
+        Assertions.assertEquals(expectedDto, actual);
+    }
+
+    @Test
+    void saveForRegistrationTest() {
+        WorkerRolesDto rolesDto = WorkerRolesDto.builder()
+                .role(Role.ROLE_ADMIN.name())
+                .build();
+        modelMapper.map(workerRolesService.save(rolesDto), WorkerRolesDto.class);
+        WarehouseDto warehouseToSave = new WarehouseDto();
+        warehouseToSave.setLocation("Belarus");
+        warehouseToSave.setWorkingPlaceType(WorkingPlaceType.WAREHOUSE);
+        Warehouse savedWarehouse = warehouseService.save(warehouseToSave);
+        OrderProcessingPointDto orderProcessingPointDtoToTest = new OrderProcessingPointDto();
+        orderProcessingPointDtoToTest.setLocation("Minsk-Belarus");
+        orderProcessingPointDtoToTest.setWorkingPlaceType(PROCESSING_POINT);
+        orderProcessingPointDtoToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(savedWarehouse));
+        OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(orderProcessingPointDtoToTest);
+        WorkerDto expectedDto = WorkerDto
+                .builder()
+                .surname("Vlad")
+                .role(Role.ROLE_ADMIN)
+                .name("Vlad")
+                .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
+                .build();
+        RegistrationRequest expected = RegistrationRequest.builder()
+                .login(expectedDto.getName())
+                .surname(expectedDto.getSurname())
+                .password("Eltay1")
+                .role(Role.ROLE_ADMIN.name())
+                .workingPlaceId(savedProcessingPoint.getId())
+                .workingPlaceType(PROCESSING_POINT.name())
+                .build();
+        Worker actual = workerService.saveForRegistration(expected);
+        expectedDto.setId(actual.getId());
+        expectedDto.setPassword(actual.getPassword());
+        Assertions.assertEquals(expectedDto, CustomModelMapper.mapWorkerToDto(actual));
     }
 
     @Test
@@ -113,13 +229,13 @@ class WorkerServiceTest {
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
 
-        Worker savedWorker = userService.save(firstUser);
-        userService.save(secondUser);
-        userService.save(thirdUser);
+        Worker savedWorker = workerService.save(firstUser);
+        workerService.save(secondUser);
+        workerService.save(thirdUser);
 
-        userService.delete(savedWorker.getId());
+        workerService.delete(savedWorker.getId());
 
-        List<Worker> allUsers = userService.findAll();
+        List<Worker> allUsers = workerService.findAll();
         int unexpected = 3;
 
         int actual = allUsers.size();
@@ -158,11 +274,11 @@ class WorkerServiceTest {
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
 
-        userService.save(firstUser);
-        userService.save(secondUser);
-        userService.save(thirdUser);
+        workerService.save(firstUser);
+        workerService.save(secondUser);
+        workerService.save(thirdUser);
 
-        List<Worker> allUsers = userService.findAll();
+        List<Worker> allUsers = workerService.findAll();
 
         int expected = 3;
 
@@ -185,7 +301,7 @@ class WorkerServiceTest {
                 .workingPlace(orderProcessingPointDtoToTest)
                 .build();
 
-        userService.save(worker);
+        workerService.save(worker);
 
         String expected = "Victor";
 
@@ -199,7 +315,7 @@ class WorkerServiceTest {
                 .name(expected)
                 .build();
 
-        String actual = userService.update(newUser).getName();
+        String actual = workerService.update(newUser).getName();
 
         Assertions.assertEquals(expected, actual);
     }
