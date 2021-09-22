@@ -33,7 +33,6 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private ModelMapper modelMapper;
 
-
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException, ObjectNotFoundException {
         Optional<Client> foundClientFromRepository = clientRepository.findById(idForDelete);
