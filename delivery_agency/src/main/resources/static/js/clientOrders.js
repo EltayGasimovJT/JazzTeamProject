@@ -50,8 +50,14 @@ function getUsersOrders() {
                 }
             )
         },
-        error: function (exception) {
-            swal(exception.message);
+        error: function () {
+            Swal.fire({
+                title: "Не удалось загрузить список заказов",
+                text: "В базе данных больше нет заказов",
+                icon: "info",
+                showConfirmButton: false,
+                timer: 5000
+            });
         }
     });
 }

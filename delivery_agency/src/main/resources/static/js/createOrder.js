@@ -222,12 +222,13 @@ $('#createOrderForm').submit(function (e) {
         parcelParameters: parcelParameters,
         price: price.innerText
     })
-    if (validateParams(config) !== true) {
+    if (validateParams(config) !== true ) {
         swal({
             title: "Ошибка ввода",
             text: "Введенные вами данные не верны, пожалуйста попробуйте еще раз",
             icon: "info",
         });
+
     } else {
         $.ajax({
             type: 'POST',
@@ -242,10 +243,10 @@ $('#createOrderForm').submit(function (e) {
             data: JSON.stringify(dataForSend)
         }).done(function (data) {
             window.location.href = `/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
-        }).fail(function () {
+        }).fail(function (exception) {
             Swal.fire({
-                title: "Что-то пошло не так",
-                text: "Не удалось создать заказ",
+                title: "Не удалось создать заказ",
+                text: `${exception.responseJSON.message}`,
                 icon: "info",
             });
         });

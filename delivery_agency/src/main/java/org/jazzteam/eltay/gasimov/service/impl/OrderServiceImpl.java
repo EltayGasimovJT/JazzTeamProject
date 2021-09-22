@@ -265,6 +265,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Object changeOrderState(String orderNumber, String orderState) {
+        final String regex = "-";
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         Order foundOrder = findByTrackNumber(orderNumber);
@@ -276,7 +277,6 @@ public class OrderServiceImpl implements OrderService {
         if (result.isEmpty()) {
             throw new IllegalStateException(CANNOT_CHANGE_STATE);
         }
-        final String regex = "-";
         List<String> splitOrderDepartureLocation = Arrays.asList(foundOrder.getCurrentLocation().getLocation().split(regex));
         List<String> splitOrderDestinationLocation = Arrays.asList(foundOrder.getDestinationPlace().getLocation().split(regex));
         List<String> splitWorkerLocation = Arrays.asList(foundWorker.getWorkingPlace().getLocation().split(regex));

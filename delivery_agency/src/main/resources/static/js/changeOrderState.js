@@ -137,7 +137,6 @@ function getAllOrders() {
                 showConfirmButton: false,
                 timer: 5000
             });
-            ;
         }
     });
 }
