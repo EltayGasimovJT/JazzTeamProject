@@ -40,6 +40,7 @@ function getOrderHistories(idFromUrl) {
                     '</td></tr>';
                 $('#orderHistory').append(row);
             }
+            findTable("orderHistory")
         }
     });
 }
@@ -123,22 +124,56 @@ function insertClientInfo() {
     });
 }
 
-function sortTable(){
-    const getSort = ({ target }) => {
-        const order = (target.dataset.order = -(target.dataset.order || -1));
-        const index = [...target.parentNode.cells].indexOf(target);
-        const collator = new Intl.Collator(['en', 'ru'], { numeric: true });
-        const comparator = (index, order) => (a, b) => order * collator.compare(
-            a.children[index].innerHTML,
-            b.children[index].innerHTML
-        );
+function findTable(tableId) {
+    let table = document.getElementById(tableId);
+    table.addEventListener('click', (e) => {
+        const element = e.target;
+        if (element.nodeName !== 'TH') {
+            return;
+        }
+        const index = element.cellIndex;
+        const type = element.getAttribute('datatype');
+        sortTable(index, table, type)
+    })
+}
 
-        for(const tBody of target.closest('table').tBodies)
-            tBody.append(...[...tBody.rows].sort(comparator(index, order)));
+const sortTable = function (index, table, type) {
+    const tbody = table.querySelector('tbody');
 
-        for(const cell of target.parentNode.cells)
-            cell.classList.toggle('sorted', cell === target);
-    };
+    const compare = function (rowA, rowB) {
+        const rowDataA = rowA.cells[index].innerHTML;
+        const rowDataB = rowB.cells[index].innerHTML;
+        switch (type) {
+            case 'integer': {
+                return rowDataA - rowDataB;
+                break;
+            }
+            case 'date': {
+                return new Date(rowA).getTime() - new Date(rowDataB).getTime()
+                break;
+            }
+            case 'text': {
+                if (rowDataA < rowDataB) {
+                    return -1;
+                } else if (rowDataA > rowDataB) {
+                    return 1;
+                } else return 0;
+                break;
+            }
+            default:
+                break;
+        }
+    }
 
-    document.querySelectorAll('.table_sort thead').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
+    let rows = [].slice.call(tbody.rows);
+
+    rows.sort(compare);
+
+    table.removeChild(tbody);
+
+    for (let i = 0; i < rows.length; i++) {
+        tbody.appendChild(rows[i]);
+    }
+
+    table.appendChild(tbody);
 }
