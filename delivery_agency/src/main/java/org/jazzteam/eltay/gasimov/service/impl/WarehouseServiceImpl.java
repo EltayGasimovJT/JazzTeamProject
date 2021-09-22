@@ -1,7 +1,6 @@
 package org.jazzteam.eltay.gasimov.service.impl;
 
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
-import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.repository.WarehouseRepository;
@@ -77,11 +76,6 @@ public class WarehouseServiceImpl implements WarehouseService {
         if (warehouseDtoToUpdate.getDispatchedOrders() != null) {
             warehouseToUpdate.setDispatchedOrders(warehouseDtoToUpdate.getDispatchedOrders().stream()
                     .map(CustomModelMapper::mapDtoToOrder)
-                    .collect(Collectors.toList()));
-        }
-        if (warehouseDtoToUpdate.getConnectedWarehouses() != null) {
-            warehouseToUpdate.setOrderProcessingPoints(warehouseDtoToUpdate.getOrderProcessingPoints().stream().
-                    map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto, OrderProcessingPoint.class))
                     .collect(Collectors.toList()));
         }
         return warehouseRepository.save(warehouseToUpdate);
