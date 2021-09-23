@@ -1,6 +1,6 @@
 getAllOrders();
 jQuery('document').ready(function () {
-    if (sessionStorage.getItem('workersToken') === null) {
+    if (sessionStorage.getItem('workersToken') === null || currentRole === "ROLE_WAREHOUSE_WORKER") {
         window.location.href = "/homePage.html";
     }
 
@@ -9,7 +9,7 @@ jQuery('document').ready(function () {
         insertLogoutButton();
     }
 })
-
+let currentRole;
 const backgroundModal = document.querySelector('.backGround-modal');
 backgroundModal.addEventListener('click', () => {
     backgroundModal.style.visibility = 'hidden';
@@ -210,6 +210,7 @@ function insertWorkerInfo() {
         if (data.role === "ROLE_PROCESSING_POINT_WORKER") {
             roles.innerHTML = `Роль: Работник пункта отправки/выдачи`
         }
+        currentRole = data.role
     }).fail(function () {
         Swal.fire({
             title: "Что-то пошло не так",
