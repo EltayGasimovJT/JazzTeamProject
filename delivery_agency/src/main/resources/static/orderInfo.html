@@ -1,86 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF8">
-    <title>GasDel general</title>
-    <style>
-        table {
-            font-family: "Calibri Light", Helvetica, Arial, sans-serif;
-        }
-    </style>
-    <link href="css/style.css" rel="stylesheet" type="text/css">
-    <link rel="shortcut icon" href="icons/waterFall.png"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="js/moment.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <meta charset="UTF8">
+  <title>GasDel general</title>
+  <style>
+    table {
+      font-family: "Calibri Light", Helvetica, Arial, sans-serif;
+    }
+  </style>
+  <link href="css/style.css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="icons/waterFall.png"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="js/moment.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="defaultBar">
-    <a href="homePage.html" class="defaultLogo">GasDel</a>
-    <div class="nav-info-div">
-        <div class="createOrderText order-info-text" >Список заказов клиента</div>
-        <div id="client-nav-info" class="client-nav">
-            <div id="client-name-nav"></div>
-            <div id="client-surname-nav"></div>
-        </div>
-        <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
+  <a href="homePage.html" class="defaultLogo">GasDel</a>
+  <div class="nav-info-div">
+    <div class="createOrderText order-info-text">Список заказов клиента</div>
+    <div id="client-nav-info" class="client-nav">
+      <div id="client-name-nav"></div>
+      <div id="client-surname-nav"></div>
     </div>
+    <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
+  </div>
 </div>
 <div id="orderId" class="clientOrder">Заказ №</div>
 <div id="backToTheClientsOrdersButton" class="backToTheOrdersButton">
 
 </div>
 <div class="block-wrap">
-    <div class="table-wrap">
-        <div class="tableName"><h2><b>Информация о заказе</b></h2></div>
-        <table id="orderInfo" style="" class="custom-table table table-bordered table-sm table">
-            <tr>
-                <th>Имя получателя</th>
-                <th>Фамилия получателя</th>
-                <th>Время отправки</th>
-                <th>Стоимость, BYN</th>
-                <th>Состояние заказа</th>
-                <th>Точка отправки</th>
-                <th>Местоположение посылки</th>
-                <th>Место назначения</th>
-                <th>Вес, грамм</th>
-                <th>Высота, мм</th>
-                <th>Ширина, мм</th>
-                <th>Длина, мм</th>
-            </tr>
-        </table>
-    </div>
+  <div class="table-wrap">
+    <div class="tableName"><h2><b>Информация о заказе</b></h2></div>
+    <table id="orderInfo" style="" class="custom-table table table-bordered table-sm table">
+      <thead>
+      <tr>
+        <th datatype="text">Имя получателя</th>
+        <th datatype="text">Фамилия получателя</th>
+        <th datatype="date">Время отправки</th>
+        <th datatype="double">Стоимость, BYN</th>
+        <th datatype="text">Состояние заказа</th>
+        <th datatype="text">Точка отправки</th>
+        <th datatype="text">Местоположение посылки</th>
+        <th datatype="text">Место назначения</th>
+        <th datatype="integer">Вес, грамм</th>
+        <th datatype="integer">Высота, мм</th>
+        <th datatype="integer">Ширина, мм</th>
+        <th datatype="integer">Длина, мм</th>
+      </tr>
+      </thead>
+      <tbody id="orderInfoBody">
+
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div class="block-wrap">
-    <div class="table-wrap">
-        <div class="tableName"><h2><b>История заказа</b></h2></div>
-        <table id="orderHistory" class="table_sort custom-table table table-bordered table-sm table">
-            <tr>
-                <th datatype="date">Дата изменения</th>
-                <th datatype="date">Был отправлен</th>
-                <th datatype="text">Комментарий</th>
-                <th datatype="text">Имя сотрудника</th>
-                <th datatype="text">Фамилия сотрудника</th>
-            </tr>
-        </table>
-    </div>
+  <div class="table-wrap">
+    <div class="tableName"><h2><b>История заказа</b></h2></div>
+    <table id="orderHistory" class="table_sort custom-table table table-bordered table-sm table">
+      <thead>
+      <tr style="vertical-align: middle">
+        <th data-type="date">Дата изменения</th>
+        <th data-type="date">Был отправлен</th>
+        <th data-type="text">Комментарий</th>
+        <th data-type="text">Имя сотрудника</th>
+        <th data-type="text">Фамилия сотрудника</th>
+      </tr>
+      </thead>
+      <tbody id="orderHistoryBody"></tbody>
+    </table>
+  </div>
 </div>
 <div class="backGround-modal">
-    <div class="modal-custom">
-        <form id="passportIdEnterForm" action="/clients/byPassport" autocomplete="off">
-            <span>Пожалуйста введите ваш номер паспорта</span>
-            <span for="passportId"><b>Passport Id</b></span>
-            <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
-            <button type="submit" class="enter-passportId">Login</button>
-            <button class="modal-close">Х</button>
-        </form>
-    </div>
+  <div class="modal-custom">
+    <form id="passportIdEnterForm" action="/clients/byPassport" autocomplete="off">
+      <span>Пожалуйста введите ваш номер паспорта</span>
+      <span for="passportId"><b>Passport Id</b></span>
+      <input id="passportId" type="text" placeholder="Вход" name="passportId" required>
+      <button type="submit" class="enter-passportId">Login</button>
+      <button class="modal-close">Х</button>
+    </form>
+  </div>
 </div>
 
 <script type="text/javascript" src="js/orderInfo.js"></script>

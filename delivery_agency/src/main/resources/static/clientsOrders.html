@@ -1,55 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="shortcut icon" href="icons/waterFall.png"/>
-    <title>Clients orders</title>
-    <meta charset="UTF8">
-    <style> a {
-        text-decoration: none;
-    } </style>
-    <link rel="stylesheet" href="css/style.css" type="text/css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
-    <script src="js/moment.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link rel="shortcut icon" href="icons/waterFall.png"/>
+  <title>Clients orders</title>
+  <meta charset="UTF8">
+  <style> a {
+    text-decoration: none;
+  } </style>
+  <link rel="stylesheet" href="css/style.css" type="text/css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script type="text/javascript" src="js/jquery-3.6.0.min.js"></script>
+  <script src="js/moment.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="defaultBar">
-    <a href="homePage.html" class="defaultLogo">GasDel</a>
-    <div class="nav-info-div">
-        <div class="createOrderText">Список заказов клиента</div>
-        <div id="client-nav-info" class="client-nav">
-            <div id="client-name-nav"></div>
-            <div id="client-surname-nav"></div>
-        </div>
-        <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
+  <a href="homePage.html" class="defaultLogo">GasDel</a>
+  <div class="nav-info-div">
+    <div class="createOrderText">Список заказов клиента</div>
+    <div id="client-nav-info" class="client-nav">
+      <div id="client-name-nav"></div>
+      <div id="client-surname-nav"></div>
     </div>
+    <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
+  </div>
 
 </div>
 
 <div class="backToTheActionPageBtn">
-    <button id="backToTheActionPageBtnId" class="customBtn buttonText">Вернуться на домашнюю страницу</button>
+  <button id="backToTheActionPageBtnId" class="customBtn buttonText">Вернуться на домашнюю страницу</button>
 </div>
 
 <div class="table-wrap">
-    <table id="orders" class="custom-table table table-bordered table-sm table">
-        <tr onclick="">
-            <td>Номер заказа</td>
-            <td>Имя получателя</td>
-            <td>Фамилия получателя</td>
-            <td>Время отправки заказа</td>
-            <td>Стоимость, BYN</td>
-            <td>Состояние заказа</td>
-            <td>Пункт отправки</td>
-            <td>Местоположение посылки</td>
-            <td>Пункт назначения</td>
-            <td>Доп. информация</td>
-        </tr>
-    </table>
+  <table id="orders" class="custom-table table table-bordered table-sm table">
+    <thead>
+    <tr>
+      <th data-type="text">Номер заказа</th>
+      <th data-type="text">Имя получателя</th>
+      <th data-type="text">Фамилия получателя</th>
+      <th data-type="date">Время отправки заказа</td>
+      <th data-type="double">Стоимость, BYN</th>
+      <th data-type="text">Состояние заказа</th>
+      <th data-type="text">Пункт отправки</th>
+      <th data-type="text">Местоположение посылки</th>
+      <th data-type="text">Пункт назначения</th>
+      <th>Доп. информация</td>
+    </tr>
+    </thead>
+    <tbody id="ordersBody"></tbody>
+  </table>
 </div>
 
 <script type="text/javascript" src="js/clientOrders.js"></script>

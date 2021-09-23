@@ -34,13 +34,13 @@ function getOrderHistories(idFromUrl) {
         contentType: 'application/json',
         success: function (result) {
             for (let key = 0, size = result.length; key < size; key++) {
-                let row = '<tr class="text"><td>' + getTimeFormat(result[key].changedAt) +
+                let row = '<tr class="text" style="font-weight: normal"><td>' + getTimeFormat(result[key].changedAt) +
                     '</td><td>' + getTimeFormat(result[key].sentAt) + '</td><td>' + result[key].comment +
                     '</td><td>' + result[key].worker.name + '</td><td>' + result[key].worker.surname +
                     '</td></tr>';
-                $('#orderHistory').append(row);
+                $('#orderHistoryBody').append(row);
             }
-            findTable("orderHistory")
+            findTableForSort("orderHistory")
         }
     });
 }
@@ -63,7 +63,7 @@ function getOrder(idFromUrl) {
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
-            let row = '<tr class="text"><td>' + result.recipient.name +
+            let row = '<tr class="text" style="font-weight: normal"><td>' + result.recipient.name +
                 '</td><td>' + result.recipient.surname + '</td><td>' +
                 getTimeFormat(result.sendingTime) + '</td><td>' + result.price +
                 '</td><td>' + result.state.state + '</td><td>' + result.departurePoint.location + '</td><td>' +
@@ -71,7 +71,8 @@ function getOrder(idFromUrl) {
                 '</td><td>' + result.parcelParameters.weight + '</td><td>' + result.parcelParameters.height +
                 '</td><td>' + result.parcelParameters.width + '</td><td>' + result.parcelParameters.length +
                 '</td></tr>';
-            $('#orderInfo').append(row);
+            $('#orderInfoBody').append(row);
+            findTableForSort('orderInfo')
         }
     });
 }
@@ -124,7 +125,7 @@ function insertClientInfo() {
     });
 }
 
-function findTable(tableId) {
+function findTableForSort(tableId) {
     let table = document.getElementById(tableId);
     table.addEventListener('click', (e) => {
         const element = e.target;
@@ -132,14 +133,13 @@ function findTable(tableId) {
             return;
         }
         const index = element.cellIndex;
-        const type = element.getAttribute('datatype');
+        const type = element.getAttribute('data-type');
         sortTable(index, table, type)
     })
 }
 
 const sortTable = function (index, table, type) {
     const tbody = table.querySelector('tbody');
-
     const compare = function (rowA, rowB) {
         const rowDataA = rowA.cells[index].innerHTML;
         const rowDataB = rowB.cells[index].innerHTML;
@@ -149,7 +149,7 @@ const sortTable = function (index, table, type) {
                 break;
             }
             case 'date': {
-                return new Date(rowA).getTime() - new Date(rowDataB).getTime()
+                return new Date(rowA) - new Date(rowDataB)
                 break;
             }
             case 'text': {
@@ -158,6 +158,10 @@ const sortTable = function (index, table, type) {
                 } else if (rowDataA > rowDataB) {
                     return 1;
                 } else return 0;
+                break;
+            }
+            case 'double': {
+                return rowDataA - rowDataB;
                 break;
             }
             default:
