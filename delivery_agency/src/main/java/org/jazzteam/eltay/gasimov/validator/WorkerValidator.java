@@ -10,32 +10,32 @@ public class WorkerValidator {
 
     public static void validateUser(Worker workerToValidate) throws IllegalArgumentException {
         if (workerToValidate == null) {
-            throw new IllegalArgumentException("There is no worker with such id");
+            throw new IllegalArgumentException("В базе данных нет такого сотрудника");
         }
         if (workerToValidate.getName() == null) {
-            throw new IllegalArgumentException("Worker must have name");
+            throw new IllegalArgumentException("Значение имени сотрудника должно быть заполнено");
         }
         if (workerToValidate.getSurname() == null) {
-            throw new IllegalArgumentException("Worker must have surname");
+            throw new IllegalArgumentException("Значение фамилии сотрудника должно быть заполнено");
         }
         if (workerToValidate.getWorkingPlace() == null) {
-            throw new IllegalArgumentException("Worker must have working place");
+            throw new IllegalArgumentException("Значение места работы сотрудника должно быть заполнено");
         }
         if (workerToValidate.getRoles().isEmpty()) {
-            throw new IllegalArgumentException("Worker must have any role");
+            throw new IllegalArgumentException("Значение роли у сотрудника должно быть заполнено");
         }
     }
 
     public static void validateOnSave(Worker workerToValidate) throws IllegalArgumentException {
         if (workerToValidate == null) {
-            throw new IllegalArgumentException("Worker cannot be null");
+            throw new IllegalArgumentException("Введенные данные о сотруднике не верны");
         }
         validateUser(workerToValidate);
     }
 
     public static void validateUsersList(List<Worker> usersToValidate) throws IllegalArgumentException {
         if (usersToValidate.isEmpty()) {
-            throw new IllegalArgumentException("There is no users on the database");
+            throw new IllegalArgumentException("В базе данных нет сотрудников");
         }
     }
 }

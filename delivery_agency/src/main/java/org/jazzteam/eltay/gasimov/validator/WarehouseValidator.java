@@ -11,23 +11,23 @@ public class WarehouseValidator {
 
     public static void validateOnSave(Warehouse warehouseToValidate) throws IllegalArgumentException {
         if (warehouseToValidate == null) {
-            throw new IllegalArgumentException("Cannot save warehouseId because its null");
+            throw new IllegalArgumentException("Введенные данные о промежуточном складе не верны");
         }
         validateWarehouse(warehouseToValidate);
     }
 
     public static void validateWarehouse(Warehouse warehouseToValidate) throws IllegalArgumentException {
         if (warehouseToValidate == null) {
-            throw new IllegalArgumentException("There is now warehouseId with such id");
+            throw new IllegalArgumentException("В базе нет промежуточного склада с таким id: ");
         }
         if (warehouseToValidate.getLocation() == null) {
-            throw new IllegalArgumentException("Warehouse must have location");
+            throw new IllegalArgumentException("Значение местоположения промежуточного склада должно быть заполнено");
         }
     }
 
     public static void validateWarehouseList(List<Warehouse> warehousesToValidate) throws IllegalArgumentException {
         if (warehousesToValidate.isEmpty()) {
-            throw new IllegalArgumentException("There is no warehouses in org.jazzteam.eltay.gasimov.repository");
+            throw new IllegalArgumentException("В базе данных нет промежуточных складов");
         }
     }
 }

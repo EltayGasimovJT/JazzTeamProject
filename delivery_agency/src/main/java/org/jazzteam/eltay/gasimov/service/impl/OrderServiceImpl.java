@@ -270,6 +270,9 @@ public class OrderServiceImpl implements OrderService {
         Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         Order foundOrder = findByTrackNumber(orderNumber);
         OrderState foundState = orderStateService.findByState(orderState);
+        if (foundState == null) {
+            throw new IllegalStateException(NO_SUCH_STATE);
+        }
         Set<WorkerRoles> result = foundState.getRolesAllowedPutToState().stream()
                 .distinct()
                 .filter(foundWorker.getRoles()::contains)

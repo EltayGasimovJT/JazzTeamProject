@@ -8,6 +8,7 @@ public class Constants {
 
 
 
+
     public static final int INITIAL_WEIGHT = 50000;
     public static final double PRICE_FOR_PACKAGE = 1.9;
     public static final double COEFFICIENT_FOR_KILOGRAMS_CONVERT = 1000;
@@ -78,5 +79,6 @@ public class Constants {
     public static final String CANNOT_CHANGE_STATE = "У вас нет прав для смены состояния у этого заказа";
     public static final String CANNOT_CHANGE_STATE_IN_CURRENT_TIME = "В данный момент вы не можете изменить состояние заказа";
     public static final String CANNOT_CREATE_ORDER = "Нельзя отправить заказ в этот же пункт отправки, пожалуйста введите пункт назначения еще раз";
+    public static final String NO_SUCH_STATE = "Данного состояния не существует";
 
 }

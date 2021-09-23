@@ -12,44 +12,44 @@ public class OrderValidator {
 
     public static void validateOrder(Order orderToValidate) throws IllegalArgumentException {
         if (orderToValidate == null) {
-            throw new IllegalArgumentException("There is not Order with this Id");
+            throw new IllegalArgumentException("Не удалось найти заказ, так как его не существует в базе");
         }
         if (orderToValidate.getSender() == null && orderToValidate.getRecipient() == null) {
-            throw new IllegalArgumentException("The order must have recipient and sender");
+            throw new IllegalArgumentException("Значение данных об отправителе должно быть заполнено");
         }
         if (orderToValidate.getPrice().doubleValue() < 0) {
-            throw new IllegalArgumentException("Order price cannot be negative" + orderToValidate.getPrice().doubleValue());
+            throw new IllegalArgumentException("Значение стоимости заказа не может быть меньше нуля: " + orderToValidate.getPrice().doubleValue());
         }
         if (orderToValidate.getDestinationPlace() == null) {
-            throw new IllegalArgumentException("The order must have a destination place");
+            throw new IllegalArgumentException("Значение данных о метсте назначения должно быть заполнено");
         }
         if (orderToValidate.getState() == null) {
-            throw new IllegalArgumentException("Order must have state");
+            throw new IllegalArgumentException("Значение данных о состоянии заказа должно быть заполнено");
         }
         if (orderToValidate.getParcelParameters() == null) {
-            throw new IllegalArgumentException("The order must have parameters");
+            throw new IllegalArgumentException("Значение данных о габаритах посылки должно быть заполнено");
         }
         if (orderToValidate.getCurrentLocation() == null) {
-            throw new IllegalArgumentException("The order must have current location");
+            throw new IllegalArgumentException("Значение данных отекущем местоположении заказа должно быть заполнено");
         }
     }
 
     public static void validateOrders(List<Order> orders) throws IllegalArgumentException {
         if (orders.isEmpty()) {
-            throw new IllegalArgumentException("There is no orders on the org.jazzteam.eltay.gasimov.repository");
+            throw new IllegalArgumentException("В базе данных нет заказов");
         }
     }
 
     public static void validateOnSave(Order orderToValidate) throws IllegalArgumentException {
         if (orderToValidate == null) {
-            throw new IllegalArgumentException("Order cannot be null");
+            throw new IllegalArgumentException("Введенные данные заказа не верны");
         }
         validateOrder(orderToValidate);
     }
 
     public static void validateOrdersOnTheWay(List<List<Order>> ordersOnTheWayToValidate) throws IllegalArgumentException {
         if(ordersOnTheWayToValidate.isEmpty()){
-            throw new IllegalArgumentException("There is no orders on the way");
+            throw new IllegalArgumentException("На данный момент нет заказов в пути");
         }
     }
 }

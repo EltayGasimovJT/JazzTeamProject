@@ -81,7 +81,7 @@ jQuery('document').ready(function () {
             sessionStorage.removeItem('sessionTime');
         }
         if (sessionStorage.getItem('workersToken') !== null) {
-            window.location.href = "/processingPointWorkerActionPage.html";
+            window.location.href = "/workerActionPage.html";
         } else {
             backgroundModal.style.visibility = 'visible';
         }
@@ -162,7 +162,7 @@ jQuery('document').ready(function () {
         }).done(function (data) {
             sessionStorage.setItem('workersToken', data.token)
             sessionStorage.setItem('workerSession', (new Date()).toString())
-            window.location.href = "/processingPointWorkerActionPage.html";
+            window.location.href = "/workerActionPage.html";
         }).fail(function () {
             Swal.fire({
                 title: "Неправильный логин или пароль",
