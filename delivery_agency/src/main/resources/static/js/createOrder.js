@@ -52,7 +52,7 @@ function checkIfSenderFieldsAreNotEmpty() {
 }
 
 document.getElementById('recipientPhoneNumber').oninput = (event) => {
-    if (event.target.value.length === 14) {
+    if (event.target.value.length === 14 && checkIfRecipientFieldsAreNotEmpty()) {
         $.ajax({
             url: `/clients/findByPhoneNumber`,
             type: 'GET',
@@ -69,7 +69,7 @@ document.getElementById('recipientPhoneNumber').oninput = (event) => {
 };
 
 document.getElementById('senderPhoneNumber').oninput = (event) => {
-    if (event.target.value.length === 14) {
+    if (event.target.value.length === 14 && checkIfSenderFieldsAreNotEmpty()) {
         $.ajax({
             url: `/clients/findByPhoneNumber`,
             type: 'GET',
@@ -222,7 +222,7 @@ $('#createOrderForm').submit(function (e) {
         parcelParameters: parcelParameters,
         price: price.innerText
     })
-    if (validateParams(config) !== true ) {
+    if (validateParams(config) !== true) {
         swal({
             title: "Ошибка ввода",
             text: "Введенные вами данные не верны, пожалуйста попробуйте еще раз",
