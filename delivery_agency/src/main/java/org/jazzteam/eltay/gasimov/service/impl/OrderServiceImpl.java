@@ -373,7 +373,6 @@ public class OrderServiceImpl implements OrderService {
     private Client getClientToSave(ClientDto client) throws ObjectNotFoundException {
         Client foundSender = clientService.findClientByPassportId(client.getPassportId());
         if (foundSender != null) {
-
             return foundSender;
         }
         return Client.builder()

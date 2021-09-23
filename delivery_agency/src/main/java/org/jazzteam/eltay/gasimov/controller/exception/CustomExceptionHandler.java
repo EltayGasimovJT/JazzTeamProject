@@ -1,4 +1,4 @@
-package org.jazzteam.eltay.gasimov.controller.exception;
+/*package org.jazzteam.eltay.gasimov.controller.exception;
 
 import lombok.extern.java.Log;
 import org.hibernate.ObjectNotFoundException;
@@ -44,3 +44,4 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiError, status);
     }
 }
+*/

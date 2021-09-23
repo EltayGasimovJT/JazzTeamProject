@@ -52,7 +52,7 @@ function checkIfSenderFieldsAreNotEmpty() {
 }
 
 document.getElementById('recipientPhoneNumber').oninput = (event) => {
-    if (event.target.value.length === 14) {
+    if (event.target.value.length === 14 && checkIfRecipientFieldsAreNotEmpty()) {
         $.ajax({
             url: `/clients/findByPhoneNumber`,
             type: 'GET',
@@ -69,7 +69,7 @@ document.getElementById('recipientPhoneNumber').oninput = (event) => {
 };
 
 document.getElementById('senderPhoneNumber').oninput = (event) => {
-    if (event.target.value.length === 14) {
+    if (event.target.value.length === 14 && checkIfSenderFieldsAreNotEmpty()) {
         $.ajax({
             url: `/clients/findByPhoneNumber`,
             type: 'GET',
