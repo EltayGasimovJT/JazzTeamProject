@@ -80,8 +80,8 @@ function getIdFromUrl() {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getHours()
-    if ((new Date().getHours() - sessionTimeMinutes) > 1) {
+    let sessionTime = new Date(sessionStorage.getItem('sessionTime')).getSeconds()
+    if (Math.abs(new Date().getSeconds() - sessionTime) > 30) {
         sessionStorage.removeItem('clientPhone');
         sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;

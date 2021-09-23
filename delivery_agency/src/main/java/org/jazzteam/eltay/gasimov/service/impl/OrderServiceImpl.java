@@ -317,7 +317,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderState.getState().equals(OrderStates.ORDER_COMPLETE.getState())) {
             newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix());
         } else {
-            newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation());
+            newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation() + ".");
         }
         newHistory.setChangedTypeEnum(OrderStateChangeType.READY_TO_SEND.name());
         return newHistory;
