@@ -140,11 +140,11 @@ function findTableForSort(tableId) {
         }
         const index = element.cellIndex;
         const type = element.getAttribute('data-type');
-        sortTable(index, table, type)
+        sortTable(index, table, type, element)
     })
 }
 
-const sortTable = function (index, table, type) {
+const sortTable = function (index, table, type, element) {
     const tbody = table.querySelector('tbody');
 
     const compare = function (rowA, rowB) {
@@ -156,6 +156,7 @@ const sortTable = function (index, table, type) {
                 break;
             }
             case 'date': {
+                element.style.backgroundColor = '#FFD700'
                 if (moment(rowDataA).isBefore(rowDataB)) {
                     return 1;
                 } else if (moment(rowDataA).isAfter(rowDataB)) {
