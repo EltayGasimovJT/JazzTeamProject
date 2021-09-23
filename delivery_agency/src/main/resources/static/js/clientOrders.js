@@ -4,7 +4,14 @@ jQuery('document').ready(function () {
         insertClientInfo();
         insertLogoutButton();
     } else if (sessionStorage.getItem('clientPhone') === null && sessionStorage.getItem('workersToken') === null) {
-        window.location.href = "/homePage.html";
+        Swal.fire({
+            icon: 'info',
+            title: "У вас нет доступа к этой странице, пожалуйста пройдите аутентификацию",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "/homePage.html";
+        })
     }
 })
 
@@ -172,7 +179,7 @@ const sortTable = function (index, table, type, element) {
                 } else return 0;
                 break;
             }
-            case 'double':{
+            case 'double': {
                 return rowDataA - rowDataB;
                 break;
             }

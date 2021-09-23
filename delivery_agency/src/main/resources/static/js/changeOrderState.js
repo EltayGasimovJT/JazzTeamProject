@@ -1,7 +1,15 @@
 getAllOrders();
 jQuery('document').ready(function () {
-    if (sessionStorage.getItem('workersToken') === null || currentRole === "ROLE_WAREHOUSE_WORKER") {
-        window.location.href = "/homePage.html";
+    if (sessionStorage.getItem('workersToken') === null) {
+        Swal.fire({
+            icon: 'info',
+            title: "У вас нет доступа к этой странице, пожалуйста пройдите аутентификацию",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "/homePage.html";
+
+        })
     }
 
     if (sessionStorage.getItem('workersToken') !== null) {
@@ -9,7 +17,6 @@ jQuery('document').ready(function () {
         insertLogoutButton();
     }
 })
-let currentRole;
 const backgroundModal = document.querySelector('.backGround-modal');
 backgroundModal.addEventListener('click', () => {
     backgroundModal.style.visibility = 'hidden';

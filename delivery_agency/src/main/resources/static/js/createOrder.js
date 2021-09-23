@@ -1,11 +1,11 @@
 let $form;
 init()
-
 jQuery("#backToTheActionPageBtnId").on('click', function () {
     checkSession();
     location.href = "homePage.html";
 })
 
+let currentRole;
 let allCoefficients;
 
 let config = {
@@ -167,7 +167,15 @@ function validateParams(params) {
 
 function init() {
     if (sessionStorage.getItem('workersToken') === null) {
-        window.location.href = "/homePage.html";
+        Swal.fire({
+            icon: 'info',
+            title: "У вас нет доступа к этой странице, пожалуйста пройдите аутентификацию",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "/homePage.html";
+
+        })
     }
 
     if (sessionStorage.getItem('workersToken') !== null) {
@@ -222,7 +230,7 @@ $('#createOrderForm').submit(function (e) {
         parcelParameters: parcelParameters,
         price: price.innerText
     })
-    if (validateParams(config) !== true ) {
+    if (validateParams(config) !== true) {
         swal({
             title: "Ошибка ввода",
             text: "Введенные вами данные не верны, пожалуйста попробуйте еще раз",
@@ -490,6 +498,7 @@ function insertWorkerInfo() {
         if (data.role === "ROLE_PROCESSING_POINT_WORKER") {
             roles.innerHTML = `Роль: Работник пункта отправки/выдачи`
         }
+        currentRole = data.role
     }).fail(function () {
         Swal.fire({
             title: "Что-то пошло не так",
