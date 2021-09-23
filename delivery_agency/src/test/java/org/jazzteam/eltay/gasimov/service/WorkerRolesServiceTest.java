@@ -32,7 +32,7 @@ class WorkerRolesServiceTest {
                 .role(Role.ROLE_ADMIN.name())
                 .build();
         WorkerRolesDto actual = modelMapper.map(workerRolesService.save(expected), WorkerRolesDto.class);
-        expected.setId(actual.getId());
+        //expected.setId(actual.getId());
         Assertions.assertEquals(expected, actual);
     }
 
