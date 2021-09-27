@@ -116,7 +116,7 @@ public class ClientServiceImpl implements ClientService {
     public Client generateCodeForClient(String phoneNumber) throws ObjectNotFoundException {
         Client foundClient = clientRepository.findByPhoneNumber(phoneNumber);
         ClientValidator.validateOnFindByPhoneNumber(foundClient, phoneNumber);
-        String generatedCode = generateNewCode();
+        String generatedCode = generatePersonalCode();
         ClientsCode generatedCodeObject = ClientsCode.builder()
                 .client(foundClient)
                 .generatedCode(generatedCode)
@@ -125,7 +125,7 @@ public class ClientServiceImpl implements ClientService {
         return foundClient;
     }
 
-    private String generateNewCode() {
+    private String generatePersonalCode() {
         int randomStringLength = 4;
         String charset = "0123456789";
         return RandomStringUtils.random(randomStringLength, charset);

@@ -2,7 +2,7 @@ jQuery('document').ready(function () {
     if (sessionStorage.getItem('workersToken') === null) {
         Swal.fire({
             icon: 'info',
-            title: "У вас нет доступа к этой странице, пожалуйста пройдите аутентификацию",
+            title: "У вас нет доступа к этой странице, п                        ожалуйста пройдите аутентификацию",
             showConfirmButton: false,
             timer: 2000
         }).then(() => {

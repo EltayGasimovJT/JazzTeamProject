@@ -17,7 +17,6 @@ public class ClientsCode {
     private Long id;
     @Column(name = "generated_code")
     private String generatedCode;
-
     @OneToOne
     private Client client;
 }

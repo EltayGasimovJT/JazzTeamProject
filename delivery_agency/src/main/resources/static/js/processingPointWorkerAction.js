@@ -23,7 +23,7 @@ function init() {
     if (sessionStorage.getItem('workersToken') === null) {
         Swal.fire({
             icon: 'info',
-            title: "У вас нет доступа к этой странице, пожалуйста пройдите аутентификацию",
+            title: "У вас нет доступа к этой странице. Пожалуйста пройдите аутентификацию",
             showConfirmButton: false,
             timer: 2000
         }).then(() => {

@@ -8,9 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
-    Client findByPassportId(String passportID) throws IllegalArgumentException;
+    Client findByPassportId(String passportID);
 
-    Optional<Client> findById(Long id);
+    Optional<Client> findById(Long clientId);
 
     void deleteById(Long idForDelete);
 

@@ -40,7 +40,7 @@ function getOrderHistories(idFromUrl) {
                     '</td></tr>';
                 $('#orderHistoryBody').append(row);
             }
-            findTableForSort("orderHistory")
+            sortOnLoad("orderHistory")
         }
     });
 }
@@ -185,4 +185,12 @@ const sortTable = function (index, table, type, element) {
     }
 
     table.appendChild(tbody);
+}
+
+function sortOnLoad(tableId) {
+    let table = document.getElementById(tableId);
+    const element = document.getElementById('changedAt');
+    const index = element.cellIndex;
+    const type = element.getAttribute('data-type');
+    sortTable(index, table, type, element);
 }
