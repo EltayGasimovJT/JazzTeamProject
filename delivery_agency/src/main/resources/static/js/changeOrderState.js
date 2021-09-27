@@ -79,7 +79,7 @@ function getAllOrders() {
                     '</td><td>' + result[key].destinationPlace.location + '</td><td class="icons-location">' + addEditPanel() + insertCancelButton() + '</td></tr>';
                 $('#ordersBody').append(row);
             }
-            findTableForSort('orders');
+            sortOnLoad('orders');
 
             $(".change-state-button").click(function (event) {
                     checkSession();
@@ -325,4 +325,12 @@ const sortTable = function (index, table, type, element) {
     }
 
     table.appendChild(tbody);
+}
+
+function sortOnLoad(tableId) {
+    let table = document.getElementById(tableId);
+    const element = document.getElementById('changedAt');
+    const index = element.cellIndex;
+    const type = element.getAttribute('datatype');
+    sortTable(index, table, type, element);
 }

@@ -38,7 +38,7 @@ function getUsersOrders() {
                     '</td></tr>';
                 $('#ordersBody').append(row);
             }
-            findTableForSort("orders")
+            sortOnLoad("orders")
 
             $(".additionalInfoButton").click(function (event) {
                     checkSession();
@@ -199,4 +199,12 @@ const sortTable = function (index, table, type, element) {
     }
 
     table.appendChild(tbody);
+}
+
+function sortOnLoad(tableId) {
+    let table = document.getElementById(tableId);
+    const element = document.getElementById('changedAt');
+    const index = element.cellIndex;
+    const type = element.getAttribute('data-type');
+    sortTable(index, table, type, element);
 }

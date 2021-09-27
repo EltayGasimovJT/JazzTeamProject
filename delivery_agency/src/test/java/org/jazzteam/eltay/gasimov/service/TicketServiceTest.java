@@ -36,6 +36,8 @@ class TicketServiceTest {
     private OrderStateService orderStateService;
     @Autowired
     private WorkerService workerService;
+    @Autowired
+    private ClientService clientService;
 
     @Test
     void findById() {
@@ -106,7 +108,7 @@ class TicketServiceTest {
         Assertions.assertNotNull(ticket);
     }
 
-    private CreateOrderRequestDto getOrder() {
+    private CreateOrderRequestDto getOrder() throws ObjectNotFoundException {
         WarehouseDto warehouseToSave = new WarehouseDto();
         final String location = "Беларусь";
         warehouseToSave.setLocation(location);
@@ -139,33 +141,31 @@ class TicketServiceTest {
 
         workerService.save(workerToSave);
 
+        ClientDto recipient = ClientDto.builder()
+                .name("Олег")
+                .surname("Голубев")
+                .phoneNumber("124125")
+                .passportId("124241")
+                .build();
+        ClientDto sender = ClientDto.builder()
+                .name("Эльтай")
+                .surname("Гасымов")
+                .phoneNumber("44234242")
+                .passportId("23535121")
+                .build();
+        Client savedSender = clientService.save(sender);
+        Client savedRecipient = clientService.save(recipient);
         return CreateOrderRequestDto.builder()
                 .destinationPoint("Минск-Беларусь")
-                .parcelParameters(
-                        ParcelParametersDto.builder()
-                                .length(50.0)
-                                .weight(50.0)
-                                .width(50.0)
-                                .height(50.0)
-                                .build()
-                )
+                .parcelParameters(ParcelParametersDto.builder()
+                        .length(50.0)
+                        .weight(50.0)
+                        .width(50.0)
+                        .height(50.0)
+                        .build())
                 .price(BigDecimal.valueOf(30.0))
-                .recipient(
-                        ClientDto.builder()
-                                .name("Олег")
-                                .surname("Голубев")
-                                .phoneNumber("124125")
-                                .passportId("124241")
-                                .build()
-                )
-                .sender(
-                        ClientDto.builder()
-                                .name("Эльтай")
-                                .surname("Гасымов")
-                                .phoneNumber("44234242")
-                                .passportId("23535121")
-                                .build()
-                )
+                .recipient(modelMapper.map(savedRecipient, ClientDto.class))
+                .sender(modelMapper.map(savedSender, ClientDto.class))
                 .workerDto(workerToSave)
                 .build();
     }
