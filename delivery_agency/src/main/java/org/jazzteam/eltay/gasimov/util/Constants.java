@@ -1,14 +1,9 @@
 package org.jazzteam.eltay.gasimov.util;
 
 public class Constants {
-
     private Constants(){
 
     }
-
-
-
-
     public static final int INITIAL_WEIGHT = 50000;
     public static final double PRICE_FOR_PACKAGE = 1.9;
     public static final double COEFFICIENT_FOR_KILOGRAMS_CONVERT = 1000;
@@ -69,7 +64,6 @@ public class Constants {
     public static final String WAREHOUSES_URL = "/warehouses";
     public static final String WAREHOUSES_BY_ID_URL = WAREHOUSES_URL + ID;
     public static final String CODE_FIND_URL = "/codes/findCode";
-
     public static final String ROLE_ADMIN = "Admin";
     public static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     public static final String ROLE_PICKUP_WORKER = "Pick up Worker";
@@ -80,5 +74,4 @@ public class Constants {
     public static final String CANNOT_CHANGE_STATE_IN_CURRENT_TIME = "В данный момент вы не можете изменить состояние заказа";
     public static final String CANNOT_CREATE_ORDER = "Нельзя отправить заказ в этот же пункт отправки, пожалуйста введите пункт назначения еще раз";
     public static final String NO_SUCH_STATE = "Данного состояния не существует";
-
 }
