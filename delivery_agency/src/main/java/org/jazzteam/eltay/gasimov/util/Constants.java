@@ -74,4 +74,7 @@ public class Constants {
     public static final String CANNOT_CHANGE_STATE_IN_CURRENT_TIME = "В данный момент вы не можете изменить состояние заказа";
     public static final String CANNOT_CREATE_ORDER = "Нельзя отправить заказ в этот же пункт отправки, пожалуйста введите пункт назначения еще раз";
     public static final String NO_SUCH_STATE = "Данного состояния не существует";
+    public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
+    public static final String OBJECT_NOT_FOUND_EXCEPTION = "Expected ObjectNotFoundException";
+    public static final String ILLEGAL_STATE_EXCEPTION = "Expected IllegalStateException";
 }

@@ -32,7 +32,7 @@ public class CoefficientForPriseCalculationValidator {
     }
 
     public static void validateCoefficientList(List<CoefficientForPriceCalculation> coefficientsForValidate) throws IllegalArgumentException, ObjectNotFoundException {
-        if(coefficientsForValidate.isEmpty()){
+        if(coefficientsForValidate == null){
             throw new ObjectNotFoundException("В базе данных нет коэффициентов");
         }
     }

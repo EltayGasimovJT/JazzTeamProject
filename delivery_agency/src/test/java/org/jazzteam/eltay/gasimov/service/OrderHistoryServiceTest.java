@@ -150,6 +150,7 @@ class OrderHistoryServiceTest {
         WorkerDto expectedWorker = WorkerDto
                 .builder()
                 .surname("Vlad")
+                .password("awqwrr")
                 .role(Role.ROLE_ADMIN)
                 .name("Vlad")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))

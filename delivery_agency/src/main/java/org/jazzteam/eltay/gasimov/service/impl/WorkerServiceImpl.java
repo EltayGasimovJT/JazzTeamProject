@@ -51,14 +51,14 @@ public class WorkerServiceImpl implements WorkerService {
     public void delete(Long idForDelete) throws IllegalArgumentException {
         Optional<Worker> foundClientFromRepository = workerRepository.findById(idForDelete);
         Worker orderToUpdate = foundClientFromRepository.orElseGet(Worker::new);
-        WorkerValidator.validateUser(orderToUpdate);
+        WorkerValidator.validateWorker(orderToUpdate);
         workerRepository.deleteById(idForDelete);
     }
 
     @Override
     public List<Worker> findAll() throws IllegalArgumentException {
         List<Worker> usersFromRepository = workerRepository.findAll();
-        WorkerValidator.validateUsersList(usersFromRepository);
+        WorkerValidator.validateWorkersList(usersFromRepository);
         return usersFromRepository;
     }
 
@@ -66,7 +66,7 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker findOne(long idForSearch) throws IllegalArgumentException {
         Optional<Worker> foundWorkerFromRepository = workerRepository.findById(idForSearch);
         Worker foundWorker = foundWorkerFromRepository.orElseGet(Worker::new);
-        WorkerValidator.validateUser(foundWorker);
+        WorkerValidator.validateWorker(foundWorker);
         return foundWorker;
     }
 
@@ -74,7 +74,7 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker update(WorkerDto workerDtoToUpdate) {
         Worker workerToUpdate = CustomModelMapper.mapDtoToWorker(workerDtoToUpdate);
         workerToUpdate.setRoles(Stream.of(workerRolesService.findByRole(workerDtoToUpdate.getRole().name())).collect(Collectors.toSet()));
-        WorkerValidator.validateUser(workerToUpdate);
+        WorkerValidator.validateWorker(workerToUpdate);
         return workerRepository.save(workerToUpdate);
     }
 
@@ -96,7 +96,7 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker findByName(String name) {
         Optional<Worker> foundClientFromRepository = workerRepository.findByName(name);
         Worker foundWorker = foundClientFromRepository.orElseGet(Worker::new);
-        WorkerValidator.validateUser(foundWorker);
+        WorkerValidator.validateWorker(foundWorker);
         return foundWorker;
     }
 
@@ -115,7 +115,7 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker findByPassword(String password) {
         Optional<Worker> foundClientFromRepository = workerRepository.findByPassword(password);
         Worker foundWorker = foundClientFromRepository.orElseGet(Worker::new);
-        WorkerValidator.validateUser(foundWorker);
+        WorkerValidator.validateWorker(foundWorker);
         return foundWorker;
     }
 

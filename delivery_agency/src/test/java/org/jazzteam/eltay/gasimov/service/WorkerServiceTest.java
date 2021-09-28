@@ -50,6 +50,7 @@ class WorkerServiceTest {
         WorkerDto expected = WorkerDto
                 .builder()
                 .surname("Vlad")
+                .password("qweqw")
                 .role(Role.ROLE_ADMIN)
                 .name("Vlad")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
@@ -74,6 +75,7 @@ class WorkerServiceTest {
         WorkerDto expectedDto = WorkerDto
                 .builder()
                 .surname("Vlad")
+                .password("wqewe")
                 .role(Role.ROLE_ADMIN)
                 .name("Vlad")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
@@ -212,12 +214,14 @@ class WorkerServiceTest {
                 .builder()
                 .name("Vlad")
                 .surname("Vlad")
+                .password("wqeqw")
                 .role(Role.ROLE_ADMIN)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
         WorkerDto secondUser = WorkerDto
                 .builder()
                 .name("Vlad")
+                .password("q1241q")
                 .surname("Vlad")
                 .role(Role.ROLE_WAREHOUSE_WORKER)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
@@ -226,6 +230,7 @@ class WorkerServiceTest {
                 .builder()
                 .name("Vlad")
                 .surname("Vlad")
+                .password("124wqrsa")
                 .role(Role.ROLE_PROCESSING_POINT_WORKER)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
@@ -256,17 +261,20 @@ class WorkerServiceTest {
                 .name("Vlad")
                 .surname("Vlad")
                 .role(Role.ROLE_ADMIN)
+                .password("qwr1wq3521")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
         WorkerDto secondUser = WorkerDto.builder()
                 .name("Vlad")
                 .surname("Vlad")
+                .password("qwqt121tqsfa")
                 .role(Role.ROLE_PROCESSING_POINT_WORKER)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
         WorkerDto thirdUser = WorkerDto.builder()
                 .name("Vlad")
                 .surname("Vlad")
+                .password("asfqwr12r42")
                 .role(Role.ROLE_WAREHOUSE_WORKER)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();

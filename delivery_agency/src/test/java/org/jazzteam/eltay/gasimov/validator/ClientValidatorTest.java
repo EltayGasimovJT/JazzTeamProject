@@ -11,9 +11,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Collections;
 import java.util.stream.Stream;
 
+import static org.jazzteam.eltay.gasimov.util.Constants.*;
+
 class ClientValidatorTest {
-    public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
-    public static final String OBJECT_NOT_FOUND_EXCEPTION = "Expected ObjectNotFoundException";
 
     private static Stream<Arguments> testDataForValidate() {
         Client firstClient = Client.builder()
@@ -65,34 +65,53 @@ class ClientValidatorTest {
     }
 
     @Test
-    void validateClientList() {
+    void validateClient() {
         try {
-            ClientValidator.validateClient(null);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
-        } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
+            ClientValidator.validateOnSave(null);
+            Assertions.fail(ILLEGAL_STATE_EXCEPTION);
+        } catch (IllegalStateException | ObjectNotFoundException thrown) {
             Assertions.assertNotEquals("", thrown.getMessage());
         }
     }
 
     @Test
-    void validateOnSave() {
+    void validateClientList() {
         try {
             ClientValidator.validateClientList(Collections.emptyList());
             Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
-        } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
+            Assertions.fail(ILLEGAL_STATE_EXCEPTION);
+        } catch (IllegalStateException | ObjectNotFoundException thrown) {
             Assertions.assertNotEquals("", thrown.getMessage());
         }
     }
 
     @Test
     void validateOnFindById() {
+        try {
+            ClientValidator.validateOnFindById(null, 1L);
+            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
+            Assertions.assertNotEquals("", thrown.getMessage());
+        }
     }
 
     @Test
     void validateOnFindByPhoneNumber() {
+        try {
+            ClientValidator.validateOnFindByPassport(null, "1244");
+            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
+            Assertions.assertNotEquals("", thrown.getMessage());
+        }
     }
 
     @Test
     void validateOnFindByPassport() {
+        try {
+            ClientValidator.validateOnFindByPhoneNumber(null, "1244");
+            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
+            Assertions.assertNotEquals("", thrown.getMessage());
+        }
     }
 }

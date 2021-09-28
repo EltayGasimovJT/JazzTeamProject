@@ -8,7 +8,7 @@ public class WorkerValidator {
     private WorkerValidator() {
     }
 
-    public static void validateUser(Worker workerToValidate) throws IllegalArgumentException {
+    public static void validateWorker(Worker workerToValidate) throws IllegalArgumentException {
         if (workerToValidate == null) {
             throw new IllegalArgumentException("В базе данных нет такого сотрудника");
         }
@@ -21,7 +21,10 @@ public class WorkerValidator {
         if (workerToValidate.getWorkingPlace() == null) {
             throw new IllegalArgumentException("Значение места работы сотрудника должно быть заполнено");
         }
-        if (workerToValidate.getRoles().isEmpty()) {
+        if (workerToValidate.getPassword() == null) {
+            throw new IllegalArgumentException("Значение пароля сотрудника должно быть заполнено");
+        }
+        if (workerToValidate.getRoles() == null) {
             throw new IllegalArgumentException("Значение роли у сотрудника должно быть заполнено");
         }
     }
@@ -30,11 +33,11 @@ public class WorkerValidator {
         if (workerToValidate == null) {
             throw new IllegalArgumentException("Введенные данные о сотруднике не верны");
         }
-        validateUser(workerToValidate);
+        validateWorker(workerToValidate);
     }
 
-    public static void validateUsersList(List<Worker> usersToValidate) throws IllegalArgumentException {
-        if (usersToValidate.isEmpty()) {
+    public static void validateWorkersList(List<Worker> workersToValidate) throws IllegalArgumentException {
+        if (workersToValidate == null) {
             throw new IllegalArgumentException("В базе данных нет сотрудников");
         }
     }
