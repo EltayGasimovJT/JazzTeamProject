@@ -216,7 +216,6 @@ class ClientControllerTest {
                 .phoneNumber("11214")
                 .passportId("1eqw12124")
                 .build();
-
         MvcResult mvcResult = mockMvc.perform(
                         post(CLIENTS_URL)
                                 .content(objectMapper.writeValueAsString(firstClient))
