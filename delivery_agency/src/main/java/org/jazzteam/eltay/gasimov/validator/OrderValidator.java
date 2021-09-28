@@ -35,7 +35,7 @@ public class OrderValidator {
     }
 
     public static void validateOrders(List<Order> orders) throws IllegalArgumentException {
-        if (orders.isEmpty()) {
+        if (orders == null) {
             throw new IllegalArgumentException("В базе данных нет заказов");
         }
     }
@@ -48,7 +48,7 @@ public class OrderValidator {
     }
 
     public static void validateOrdersOnTheWay(List<List<Order>> ordersOnTheWayToValidate) throws IllegalArgumentException {
-        if(ordersOnTheWayToValidate.isEmpty()){
+        if(ordersOnTheWayToValidate == null){
             throw new IllegalArgumentException("На данный момент нет заказов в пути");
         }
     }

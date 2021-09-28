@@ -125,6 +125,11 @@ public class ClientServiceImpl implements ClientService {
         return foundClient;
     }
 
+    @Override
+    public void deleteAll() {
+        clientRepository.deleteAll();
+    }
+
     private String generatePersonalCode() {
         int randomStringLength = 4;
         String charset = "0123456789";

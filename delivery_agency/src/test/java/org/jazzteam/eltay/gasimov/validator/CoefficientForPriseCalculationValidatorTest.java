@@ -2,7 +2,6 @@ package org.jazzteam.eltay.gasimov.validator;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.entity.CoefficientForPriceCalculation;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -12,6 +11,8 @@ import java.util.stream.Stream;
 
 import static org.jazzteam.eltay.gasimov.util.Constants.ILLEGAL_ARGUMENT_EXCEPTION;
 import static org.jazzteam.eltay.gasimov.util.Constants.OBJECT_NOT_FOUND_EXCEPTION;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class CoefficientForPriseCalculationValidatorTest {
     private static Stream<Arguments> testDataForValidate() {
@@ -46,10 +47,10 @@ class CoefficientForPriseCalculationValidatorTest {
     void validateCoefficient(CoefficientForPriceCalculation coefficient) {
         try {
             CoefficientForPriseCalculationValidator.validateCoefficient(coefficient);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -57,10 +58,10 @@ class CoefficientForPriseCalculationValidatorTest {
     void validateOnSave() {
         try {
             CoefficientForPriseCalculationValidator.validateOnSave(null);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -68,10 +69,10 @@ class CoefficientForPriseCalculationValidatorTest {
     void validateCoefficientList() {
         try {
             CoefficientForPriseCalculationValidator.validateCoefficientList(null);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -79,10 +80,10 @@ class CoefficientForPriseCalculationValidatorTest {
     void validateOnFindById() {
         try {
             CoefficientForPriseCalculationValidator.validateOnFindById(null, 1L);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -90,10 +91,10 @@ class CoefficientForPriseCalculationValidatorTest {
     void validateOnFindByCountry() {
         try {
             CoefficientForPriseCalculationValidator.validateOnFindByCountry(null, "qwrwq");
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 }

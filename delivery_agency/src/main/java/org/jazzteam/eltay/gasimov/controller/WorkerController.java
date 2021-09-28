@@ -8,6 +8,7 @@ import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.jazzteam.eltay.gasimov.entity.WorkerRoles;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.service.ContextService;
+import org.jazzteam.eltay.gasimov.service.OrderStateService;
 import org.jazzteam.eltay.gasimov.service.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ public class WorkerController {
     private WorkerService workerService;
     @Autowired
     private ContextService contextService;
+    @Autowired
+    private OrderStateService orderStateService;
 
     @PostMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.CREATED)
@@ -77,7 +80,7 @@ public class WorkerController {
     String getStatesByOrderNumber(@RequestParam String orderNumber) {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundByName = workerService.findByName(currentUserFromContext.getUsername());
-        return workerService.findStatesByRole(foundByName, orderNumber);
+        return orderStateService.findStatesByRole(foundByName, orderNumber);
     }
 
     @GetMapping(path = WORKERS_GET_CURRENT_WORKER_URL)

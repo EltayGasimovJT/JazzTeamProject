@@ -30,6 +30,4 @@ public interface WorkerService {
     Worker saveForRegistration(RegistrationRequest registrationRequest);
 
     Set<WorkerRoles> findWorkerRoles(String username);
-
-    String findStatesByRole(Worker foundByName, String orderNumber);
 }

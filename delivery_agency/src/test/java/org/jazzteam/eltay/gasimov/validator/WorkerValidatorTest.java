@@ -3,7 +3,6 @@ package org.jazzteam.eltay.gasimov.validator;
 import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.jazzteam.eltay.gasimov.entity.WorkerRoles;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -13,6 +12,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.jazzteam.eltay.gasimov.util.Constants.ILLEGAL_ARGUMENT_EXCEPTION;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class WorkerValidatorTest {
 
@@ -69,9 +70,9 @@ class WorkerValidatorTest {
     void validateWorker(Worker worker) {
         try {
             WorkerValidator.validateWorker(worker);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
         } catch (IllegalArgumentException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -79,9 +80,9 @@ class WorkerValidatorTest {
     void validateOnSave() {
         try {
             WorkerValidator.validateOnSave(null);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
         } catch (IllegalArgumentException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -89,9 +90,9 @@ class WorkerValidatorTest {
     void validateUsersList() {
         try {
             WorkerValidator.validateWorkersList(null);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
         } catch (IllegalArgumentException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 }

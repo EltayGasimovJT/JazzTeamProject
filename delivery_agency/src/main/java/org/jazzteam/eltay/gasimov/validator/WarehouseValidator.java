@@ -26,7 +26,7 @@ public class WarehouseValidator {
     }
 
     public static void validateWarehouseList(List<Warehouse> warehousesToValidate) throws IllegalArgumentException {
-        if (warehousesToValidate.isEmpty()) {
+        if (warehousesToValidate == null) {
             throw new IllegalArgumentException("В базе данных нет промежуточных складов");
         }
     }

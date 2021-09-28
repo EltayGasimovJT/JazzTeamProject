@@ -28,7 +28,7 @@ public class OrderProcessingPointValidator {
     }
 
     public static void validateProcessingPointList(List<OrderProcessingPoint> orderProcessingPointsToValidate) throws IllegalArgumentException {
-        if (orderProcessingPointsToValidate.isEmpty()) {
+        if (orderProcessingPointsToValidate == null) {
             throw new IllegalArgumentException("В базе данных нет пунктов отправки/выдачи");
         }
     }

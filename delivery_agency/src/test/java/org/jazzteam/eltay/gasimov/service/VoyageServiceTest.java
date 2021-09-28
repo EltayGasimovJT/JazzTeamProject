@@ -4,7 +4,6 @@ import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
 import org.jazzteam.eltay.gasimov.dto.VoyageDto;
 import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.entity.Voyage;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -17,6 +16,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -35,7 +36,7 @@ class VoyageServiceTest {
 
         VoyageDto actual = modelMapper.map(voyageService.save(expected), VoyageDto.class);
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -57,7 +58,7 @@ class VoyageServiceTest {
         voyageService.delete(firstToDelete.getId());
         List<Voyage> actual = voyageService.findAll();
 
-        Assertions.assertEquals(Arrays.asList(savedSecond, savedThird), actual);
+        assertEquals(Arrays.asList(savedSecond, savedThird), actual);
     }
 
     @Test
@@ -78,7 +79,7 @@ class VoyageServiceTest {
 
         List<Voyage> actual = voyageService.findAll();
 
-        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
+        assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
@@ -100,7 +101,7 @@ class VoyageServiceTest {
 
         Voyage actual = voyageService.findOne(expected.getId());
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -119,6 +120,6 @@ class VoyageServiceTest {
 
         Voyage actualVoyage = voyageService.update(modelMapper.map(expectedVoyage, VoyageDto.class));
 
-        Assertions.assertEquals(expectedVoyage, actualVoyage);
+        assertEquals(expectedVoyage, actualVoyage);
     }
 }

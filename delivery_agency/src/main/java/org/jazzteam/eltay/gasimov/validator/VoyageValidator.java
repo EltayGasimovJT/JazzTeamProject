@@ -29,7 +29,7 @@ public class VoyageValidator {
     }
 
     public static void validateVoyageList(List<Voyage> voyagesToValidate) throws IllegalArgumentException {
-        if (voyagesToValidate.isEmpty()) {
+        if (voyagesToValidate == null) {
             throw new IllegalArgumentException("В базе данныех нет маршрутов");
         }
     }

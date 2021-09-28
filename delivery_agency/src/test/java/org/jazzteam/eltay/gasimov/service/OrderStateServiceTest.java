@@ -2,7 +2,6 @@ package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.OrderStateDto;
 import org.jazzteam.eltay.gasimov.entity.OrderState;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -15,6 +14,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -37,7 +38,7 @@ class OrderStateServiceTest {
 
         OrderState actual = orderStateService.save(expected);
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, modelMapper.map(actual, OrderStateDto.class));
+        assertEquals(expected, modelMapper.map(actual, OrderStateDto.class));
     }
 
     @Test
@@ -65,7 +66,7 @@ class OrderStateServiceTest {
                 .collect(Collectors.toList());
 
 
-        Assertions.assertEquals(Collections.singletonList(savedSecondState), actual);
+        assertEquals(Collections.singletonList(savedSecondState), actual);
     }
 
     @Test
@@ -90,7 +91,7 @@ class OrderStateServiceTest {
                 .map(orderState -> modelMapper.map(orderState, OrderStateDto.class))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(savedFirstState,savedSecondState), actual);
+        assertEquals(Arrays.asList(savedFirstState,savedSecondState), actual);
     }
 
     @Test
@@ -105,7 +106,7 @@ class OrderStateServiceTest {
         OrderState foundState = orderStateService.save(expected);
         expected.setId(foundState.getId());
         OrderStateDto actual = modelMapper.map(orderStateService.findOne(foundState.getId()), OrderStateDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -122,7 +123,7 @@ class OrderStateServiceTest {
         expected.setState("На пути");
 
         OrderState actual = orderStateService.update(modelMapper.map(expected, OrderStateDto.class));
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -137,6 +138,6 @@ class OrderStateServiceTest {
         OrderState foundState = orderStateService.save(expected);
         expected.setId(foundState.getId());
         OrderStateDto actual = modelMapper.map(orderStateService.findByState(foundState.getState()), OrderStateDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }

@@ -21,6 +21,8 @@ import java.math.BigDecimal;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Transactional
@@ -92,7 +94,7 @@ class OrderServiceTest {
 
         Order actual = orderService.findOne(expected.getId());
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -115,7 +117,7 @@ class OrderServiceTest {
 
         Order actual = orderService.findOne(expectedOrder.getId());
 
-        Assertions.assertEquals(expectedOrder, actual);
+        assertEquals(expectedOrder, actual);
     }
 
     @Test
@@ -129,7 +131,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findByRecipient(modelMapper.map(actual.getRecipient(), ClientDto.class));
 
-        Assertions.assertEquals(expectedOrder, actualOrder);
+        assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
@@ -143,7 +145,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findBySender(modelMapper.map(actual.getRecipient(), ClientDto.class));
 
-        Assertions.assertEquals(expectedOrder, actualOrder);
+        assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
@@ -157,7 +159,7 @@ class OrderServiceTest {
         String expected = "Готов к отправке";
 
         final String actual = orderService.getState(actualOrder.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -182,7 +184,7 @@ class OrderServiceTest {
         coefficientForPriceCalculationService.save(coefficientToTest);
         BigDecimal actualPrice = orderService.calculatePrice(order);
 
-        Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
+        assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
 
     private CreateOrderRequestDto getOrder() throws ObjectNotFoundException {

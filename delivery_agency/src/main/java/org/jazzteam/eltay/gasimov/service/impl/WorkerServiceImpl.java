@@ -145,21 +145,4 @@ public class WorkerServiceImpl implements WorkerService {
         return foundWorker.getRoles();
     }
 
-    @Override
-    public String findStatesByRole(Worker foundByName, String orderNumber) {
-        List<OrderState> allStatesFromRepository = orderStateService.findAll();
-        Order foundOrder = orderService.findByTrackNumber(orderNumber);
-
-        for (OrderState orderState : allStatesFromRepository) {
-            if (foundOrder.getState().equals(orderState)) {
-                if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_WAREHOUSE_WORKER.name())
-                        && (foundOrder.getState().getId() > SEVEN && foundOrder.getState().getId() < FOUR)) {
-                    throw new IllegalStateException(WAREHOUSE_NOT_ALLOWED_STATE_CHANGING_MESSAGE);
-                }
-                final OrderState one = orderStateService.findOne(foundOrder.getState().getNextStateId());
-                return one.getState();
-            }
-        }
-        return null;
-    }
 }

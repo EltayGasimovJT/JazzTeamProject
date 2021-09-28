@@ -2,12 +2,10 @@ package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.dto.ParcelParametersDto;
 import org.jazzteam.eltay.gasimov.entity.ParcelParameters;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -16,6 +14,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -40,7 +40,7 @@ class ParcelParametersServiceTest {
         expected.setId(savedParcelParameters.getId());
         ParcelParameters byId = parcelParametersService.findById(savedParcelParameters.getId());
         ParcelParametersDto actual = modelMapper.map(byId, ParcelParametersDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -64,7 +64,7 @@ class ParcelParametersServiceTest {
         List<ParcelParametersDto> actual = parcelParametersService.findAll().stream()
                 .map(parcelParameters -> modelMapper.map(parcelParameters, ParcelParametersDto.class))
                 .collect(Collectors.toList());
-        Assertions.assertEquals(Arrays.asList(firstSaved, secondSaved), actual);
+        assertEquals(Arrays.asList(firstSaved, secondSaved), actual);
     }
 
     @Test
@@ -89,7 +89,7 @@ class ParcelParametersServiceTest {
         List<ParcelParametersDto> actual = parcelParametersService.findAll().stream()
                 .map(parcelParameters -> modelMapper.map(parcelParameters, ParcelParametersDto.class))
                 .collect(Collectors.toList());
-        Assertions.assertEquals(Collections.singletonList(firstSaved), actual);
+        assertEquals(Collections.singletonList(firstSaved), actual);
     }
 
     @Test
@@ -103,6 +103,6 @@ class ParcelParametersServiceTest {
                 .build();
         ParcelParametersDto actual = modelMapper.map(parcelParametersService.save(expected), ParcelParametersDto.class);
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }

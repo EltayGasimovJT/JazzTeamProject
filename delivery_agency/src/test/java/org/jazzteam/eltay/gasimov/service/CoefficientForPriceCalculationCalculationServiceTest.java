@@ -25,6 +25,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Transactional
@@ -163,7 +165,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
     void calculatePrice(OrderDto order, CoefficientForPriceCalculationDto rule, BigDecimal expected) throws ObjectNotFoundException {
         priceCalculationRuleService.save(rule);
         BigDecimal actual = priceCalculationRuleService.calculatePrice(order.getParcelParameters(), rule.getCountry());
-        Assertions.assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
+        assertEquals(expected.doubleValue(), actual.doubleValue(), 0.001);
     }
 
     @Test
@@ -187,7 +189,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         List<CoefficientForPriceCalculation> actual = priceCalculationRuleService.findAll();
 
-        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond), actual);
+        assertEquals(Arrays.asList(savedFirst, savedSecond), actual);
     }
 
 
@@ -217,7 +219,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(savedCoefficient.getId());
 
-        Assertions.assertEquals(savedCoefficient, actualCoefficient);
+        assertEquals(savedCoefficient, actualCoefficient);
     }
 
     @SneakyThrows
@@ -244,7 +246,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         List<CoefficientForPriceCalculation> actual = priceCalculationRuleService.findAll();
 
-        Assertions.assertEquals(Collections.singletonList(savedSecond), actual);
+        assertEquals(Collections.singletonList(savedSecond), actual);
     }
 
     @Test
@@ -260,7 +262,7 @@ class CoefficientForPriceCalculationCalculationServiceTest {
 
         CoefficientForPriceCalculation actualCoefficient = priceCalculationRuleService.findOne(savedCoefficient.getId());
 
-        Assertions.assertEquals(savedCoefficient, actualCoefficient);
+        assertEquals(savedCoefficient, actualCoefficient);
     }
 
     @Test
@@ -281,6 +283,6 @@ class CoefficientForPriceCalculationCalculationServiceTest {
         CoefficientForPriceCalculationDto actual = modelMapper.map(updatedCoefficient, CoefficientForPriceCalculationDto.class);
         expected.setId(savedCoefficient.getId());
         expected.setParcelSizeLimit(newParcelSizeLimit);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }

@@ -6,7 +6,6 @@ import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.dto.WorkerDto;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.PROCESSING_POINT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -51,7 +51,7 @@ class OrderHistoryServiceTest {
                 .build();
         OrderHistoryDto actual = CustomModelMapper.mapHistoryToDto(orderHistoryService.save(expected));
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -72,7 +72,7 @@ class OrderHistoryServiceTest {
         List<OrderHistoryDto> actual = orderHistoryService.findAll().stream()
                 .map(CustomModelMapper::mapHistoryToDto)
                 .collect(Collectors.toList());
-        Assertions.assertEquals(Collections.singletonList(expectedHistory), actual);
+        assertEquals(Collections.singletonList(expectedHistory), actual);
     }
 
     @Test
@@ -100,7 +100,7 @@ class OrderHistoryServiceTest {
         List<OrderHistoryDto> actual = orderHistoryService.findAll().stream()
                 .map(CustomModelMapper::mapHistoryToDto)
                 .collect(Collectors.toList());
-        Assertions.assertEquals(Arrays.asList(firstSaved, secondSaved), actual);
+        assertEquals(Arrays.asList(firstSaved, secondSaved), actual);
     }
 
     @Test
@@ -117,7 +117,7 @@ class OrderHistoryServiceTest {
         OrderHistory savedHistory = orderHistoryService.save(expected);
         OrderHistoryDto actual = CustomModelMapper.mapHistoryToDto(orderHistoryService.findOne(savedHistory.getId()));
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -134,7 +134,7 @@ class OrderHistoryServiceTest {
         OrderHistoryDto expected = CustomModelMapper.mapHistoryToDto(orderHistoryService.save(toUpdate));
         expected.setChangedAt(LocalDateTime.now());
         OrderHistoryDto actual = CustomModelMapper.mapHistoryToDto(orderHistoryService.update(expected));
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     private Worker getSavedWorker() {

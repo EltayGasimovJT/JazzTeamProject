@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Transactional
@@ -70,7 +72,7 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(expected);
         expected.setId(savedProcessingPoint.getId());
         OrderProcessingPointDto actual = modelMapper.map(orderProcessingPointService.findOne(savedProcessingPoint.getId()), OrderProcessingPointDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -132,7 +134,7 @@ class OrderProcessingPointServiceTest {
         List<OrderProcessingPoint> actualOrderProcessingPoints = orderProcessingPointService.findAll();
 
         int expectedSize = 3;
-        Assertions.assertEquals(expectedSize, actualOrderProcessingPoints.size());
+        assertEquals(expectedSize, actualOrderProcessingPoints.size());
     }
 
     @SneakyThrows
@@ -157,7 +159,7 @@ class OrderProcessingPointServiceTest {
         OrderProcessingPoint actual = orderProcessingPointService.findOne(savedProcessingPoint.getId());
 
         OrderProcessingPoint expected = modelMapper.map(firstProcessingPointToTest, OrderProcessingPoint.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -188,6 +190,6 @@ class OrderProcessingPointServiceTest {
 
         actualProcessingPointDto.setWarehouse(CustomModelMapper.mapWarehouseToDto(actual.getWarehouse()));
 
-        Assertions.assertEquals(expectedProcessingPointDto, actualProcessingPointDto);
+        assertEquals(expectedProcessingPointDto, actualProcessingPointDto);
     }
 }

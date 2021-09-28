@@ -2,7 +2,6 @@ package org.jazzteam.eltay.gasimov.validator;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.entity.Client;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -12,6 +11,8 @@ import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.jazzteam.eltay.gasimov.util.Constants.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class ClientValidatorTest {
 
@@ -57,10 +58,10 @@ class ClientValidatorTest {
     void validateClient(Client clientDto) {
         try {
             ClientValidator.validateClient(clientDto);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -68,9 +69,9 @@ class ClientValidatorTest {
     void validateClient() {
         try {
             ClientValidator.validateOnSave(null);
-            Assertions.fail(ILLEGAL_STATE_EXCEPTION);
+            fail(ILLEGAL_STATE_EXCEPTION);
         } catch (IllegalStateException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -78,10 +79,10 @@ class ClientValidatorTest {
     void validateClientList() {
         try {
             ClientValidator.validateClientList(Collections.emptyList());
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
-            Assertions.fail(ILLEGAL_STATE_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(ILLEGAL_STATE_EXCEPTION);
         } catch (IllegalStateException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -89,9 +90,9 @@ class ClientValidatorTest {
     void validateOnFindById() {
         try {
             ClientValidator.validateOnFindById(null, 1L);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -99,9 +100,9 @@ class ClientValidatorTest {
     void validateOnFindByPhoneNumber() {
         try {
             ClientValidator.validateOnFindByPassport(null, "1244");
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
@@ -109,9 +110,9 @@ class ClientValidatorTest {
     void validateOnFindByPassport() {
         try {
             ClientValidator.validateOnFindByPhoneNumber(null, "1244");
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException | ObjectNotFoundException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 }

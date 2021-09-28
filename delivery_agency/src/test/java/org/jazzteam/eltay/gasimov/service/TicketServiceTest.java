@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Transactional
@@ -46,7 +48,7 @@ class TicketServiceTest {
                 .build();
         TicketDto expected = modelMapper.map(ticketService.save(expectedDto), TicketDto.class);
         TicketDto actual = modelMapper.map(ticketService.findById(expected.getId()), TicketDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -60,7 +62,7 @@ class TicketServiceTest {
         Ticket savedFirst = ticketService.save(firstTicket);
         Ticket savedSecond = ticketService.save(secondTicket);
         List<Ticket> actual = ticketService.findAll();
-        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond), actual);
+        assertEquals(Arrays.asList(savedFirst, savedSecond), actual);
     }
 
     @Test
@@ -75,7 +77,7 @@ class TicketServiceTest {
         Ticket savedSecond = ticketService.save(secondTicket);
         ticketService.delete(savedFirst.getId());
         List<Ticket> actual = ticketService.findAll();
-        Assertions.assertEquals(Collections.singletonList(savedSecond), actual);
+        assertEquals(Collections.singletonList(savedSecond), actual);
     }
 
     @Test
@@ -85,7 +87,7 @@ class TicketServiceTest {
                 .build();
         TicketDto actual = modelMapper.map(ticketService.save(expected), TicketDto.class);
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -95,7 +97,7 @@ class TicketServiceTest {
                 .build();
         TicketDto expected = modelMapper.map(ticketService.save(expectedDto), TicketDto.class);
         TicketDto actual = modelMapper.map(ticketService.findByTicketNumber(expected.getTicketNumber()), TicketDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test

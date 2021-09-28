@@ -1,7 +1,6 @@
 package org.jazzteam.eltay.gasimov.controller;
 
 import javassist.tools.rmi.ObjectNotFoundException;
-import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
@@ -16,7 +15,6 @@ import java.util.Set;
 import static org.jazzteam.eltay.gasimov.util.Constants.*;
 
 @RestController
-@Log
 public class ClientController {
     @Autowired
     private ClientService clientService;

@@ -1,7 +1,6 @@
 package org.jazzteam.eltay.gasimov.validator;
 
 import org.jazzteam.eltay.gasimov.entity.*;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -12,6 +11,8 @@ import java.util.stream.Stream;
 
 import static org.jazzteam.eltay.gasimov.util.Constants.ILLEGAL_ARGUMENT_EXCEPTION;
 import static org.jazzteam.eltay.gasimov.util.Constants.OBJECT_NOT_FOUND_EXCEPTION;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class OrderValidatorTest {
     private static Stream<Arguments> testDataForValidate() {
@@ -83,22 +84,62 @@ class OrderValidatorTest {
     void validateOrder(Order order) {
         try {
             OrderValidator.validateOrder(order);
-            Assertions.fail(ILLEGAL_ARGUMENT_EXCEPTION);
-            Assertions.fail(OBJECT_NOT_FOUND_EXCEPTION);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
         } catch (IllegalArgumentException thrown) {
-            Assertions.assertNotEquals("", thrown.getMessage());
+            assertNotEquals("", thrown.getMessage());
         }
     }
 
     @Test
     void validateOrders() {
+        try {
+            OrderValidator.validateOrders(null);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException thrown) {
+            assertNotEquals("", thrown.getMessage());
+        }
     }
 
     @Test
-    void validateOnSave() {
+    void validateOnSaveNull() {
+        try {
+            OrderValidator.validateOnSave(null);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException thrown) {
+            assertNotEquals("", thrown.getMessage());
+        }
+    }
+
+    @Test
+    void validateOnSaveNotNull() {
+        Order firstOrder = Order.builder()
+                .sender(null)
+                .price(BigDecimal.valueOf(-1))
+                .destinationPlace(new OrderProcessingPoint())
+                .state(new OrderState())
+                .parcelParameters(new ParcelParameters())
+                .currentLocation(new OrderProcessingPoint())
+                .build();
+        try {
+            OrderValidator.validateOnSave(firstOrder);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException thrown) {
+            assertNotEquals("", thrown.getMessage());
+        }
     }
 
     @Test
     void validateOrdersOnTheWay() {
+        try {
+            OrderValidator.validateOrdersOnTheWay(null);
+            fail(ILLEGAL_ARGUMENT_EXCEPTION);
+            fail(OBJECT_NOT_FOUND_EXCEPTION);
+        } catch (IllegalArgumentException thrown) {
+            assertNotEquals("", thrown.getMessage());
+        }
     }
 }

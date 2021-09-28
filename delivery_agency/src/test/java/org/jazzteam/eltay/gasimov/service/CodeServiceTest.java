@@ -4,7 +4,6 @@ import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.ClientsCodeDto;
 import org.jazzteam.eltay.gasimov.entity.ClientsCode;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -17,6 +16,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -37,7 +38,7 @@ class CodeServiceTest {
                 .build();
         ClientsCodeDto expected = modelMapper.map(codeService.save(clientsCodeDto), ClientsCodeDto.class);
         ClientsCodeDto actual = modelMapper.map(codeService.findById(expected.getId()), ClientsCodeDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -57,7 +58,7 @@ class CodeServiceTest {
                 .build();
         ClientsCodeDto expected = modelMapper.map(codeService.save(clientsCodeDto), ClientsCodeDto.class);
         ClientsCodeDto actual = modelMapper.map(codeService.findByClient(expectedClientDto), ClientsCodeDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -73,7 +74,7 @@ class CodeServiceTest {
         firstCode.setId(firstSavedCode.getId());
         secondCode.setId(secondSavedCode.getId());
         List<ClientsCodeDto> actual = codeService.findAll().stream().map(clientsCode -> modelMapper.map(clientsCode, ClientsCodeDto.class)).collect(Collectors.toList());
-        Assertions.assertEquals(Arrays.asList(firstCode, secondCode), actual);
+        assertEquals(Arrays.asList(firstCode, secondCode), actual);
     }
 
     @Test
@@ -91,7 +92,7 @@ class CodeServiceTest {
         firstCode.setId(savedFirstCode.getId());
         codeService.delete(secondCode.getGeneratedCode());
         List<ClientsCodeDto> actual = codeService.findAll().stream().map(clientsCode -> modelMapper.map(clientsCode, ClientsCodeDto.class)).collect(Collectors.toList());
-        Assertions.assertEquals(Collections.singletonList(firstCode), actual);
+        assertEquals(Collections.singletonList(firstCode), actual);
     }
 
     @Test
@@ -102,7 +103,7 @@ class CodeServiceTest {
                 .build();
         ClientsCodeDto actual = modelMapper.map(codeService.save(expected), ClientsCodeDto.class);
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -113,6 +114,6 @@ class CodeServiceTest {
                 .build();
         ClientsCodeDto expected = modelMapper.map(codeService.save(clientsCodeDto), ClientsCodeDto.class);
         ClientsCodeDto actual = modelMapper.map(codeService.findByCode(clientsCodeDto.getGeneratedCode()), ClientsCodeDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }
