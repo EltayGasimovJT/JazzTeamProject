@@ -5,7 +5,6 @@ import org.jazzteam.eltay.gasimov.entity.Order;
 import java.util.List;
 
 public class OrderValidator {
-
     private OrderValidator() {
 
     }

@@ -32,7 +32,7 @@ public class WorkerController {
     @PostMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    Worker addNewUser(@RequestBody WorkerDto workerDtoToSave) {
+    Worker save(@RequestBody WorkerDto workerDtoToSave) {
         return workerService.save(workerDtoToSave);
     }
 
@@ -46,13 +46,13 @@ public class WorkerController {
     @GetMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<Worker> findAllUsers() {
+    Iterable<Worker> findAll() {
         return workerService.findAll();
     }
 
     @DeleteMapping(path = WORKERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         workerService.delete(id);
     }
 
@@ -94,7 +94,7 @@ public class WorkerController {
 
     @PutMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public Worker updateWorker(@RequestBody WorkerDto newUser) {
+    public Worker update(@RequestBody WorkerDto newUser) {
         return workerService.update(newUser);
     }
 }

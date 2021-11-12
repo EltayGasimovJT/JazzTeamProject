@@ -3,7 +3,6 @@ package org.jazzteam.eltay.gasimov.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import lombok.extern.java.Log;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.service.ClientService;
@@ -35,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 @Transactional
 @AutoConfigureMockMvc
-@Log
 class ClientControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
@@ -198,10 +196,10 @@ class ClientControllerTest {
         String responseBody = mvcResult.getResponse().getContentAsString();
         Type itemsListType = new TypeToken<List<ClientDto>>() {
         }.getType();
-        List<ClientDto> listItemsDes = new Gson().fromJson(responseBody, itemsListType);
-        firstClient.setId(listItemsDes.get(0).getId());
-        secondClient.setId(listItemsDes.get(1).getId());
-        assertEquals(Arrays.asList(firstClient, secondClient), listItemsDes);
+        List<ClientDto> actual = new Gson().fromJson(responseBody, itemsListType);
+        firstClient.setId(actual.get(0).getId());
+        secondClient.setId(actual.get(1).getId());
+        assertEquals(Arrays.asList(firstClient, secondClient), actual);
     }
 
     @Test

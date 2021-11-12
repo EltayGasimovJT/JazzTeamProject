@@ -27,7 +27,7 @@ public class CoefficientForPriceCalculationController {
     @PostMapping(path = COEFFICIENTS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    CoefficientForPriceCalculationDto addNewCoefficient(@RequestBody @Valid CoefficientForPriceCalculationDto coefficientToSave) throws ObjectNotFoundException {
+    CoefficientForPriceCalculationDto save(@RequestBody @Valid CoefficientForPriceCalculationDto coefficientToSave) throws ObjectNotFoundException {
         return modelMapper.map(calculationService.save(coefficientToSave), CoefficientForPriceCalculationDto.class);
     }
 
@@ -55,13 +55,13 @@ public class CoefficientForPriceCalculationController {
 
     @DeleteMapping(path = COEFFICIENTS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCoefficient(@PathVariable Long id) throws ObjectNotFoundException {
+    public void delete(@PathVariable Long id) throws ObjectNotFoundException {
         calculationService.delete(id);
     }
 
     @PutMapping(path = COEFFICIENTS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public CoefficientForPriceCalculationDto updateCoefficient(@RequestBody CoefficientForPriceCalculationDto newCoefficient) throws ObjectNotFoundException {
+    public CoefficientForPriceCalculationDto update(@RequestBody CoefficientForPriceCalculationDto newCoefficient) throws ObjectNotFoundException {
         return modelMapper.map(calculationService.update(newCoefficient), CoefficientForPriceCalculationDto.class);
     }
 }

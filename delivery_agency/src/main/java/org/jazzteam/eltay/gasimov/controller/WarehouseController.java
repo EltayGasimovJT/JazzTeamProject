@@ -23,14 +23,14 @@ public class WarehouseController {
 
     @PostMapping(path = WAREHOUSES_URL)
     public @ResponseBody
-    WarehouseDto addNewWarehouse(@RequestBody WarehouseDto warehouseDto) {
+    WarehouseDto save(@RequestBody WarehouseDto warehouseDto) {
         return modelMapper.map(warehouseService.save(warehouseDto), WarehouseDto.class);
     }
 
     @GetMapping(path = WAREHOUSES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<Long> findAllWarehouses() {
+    Iterable<Long> findAll() {
         List<Long> listOfWarehousesId = new ArrayList<>();
         for (Warehouse warehouse : warehouseService.findAll()) {
             listOfWarehousesId.add(warehouse.getId());
@@ -40,13 +40,13 @@ public class WarehouseController {
 
     @DeleteMapping(path = WAREHOUSES_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteWarehouse(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         warehouseService.delete(id);
     }
 
     @PutMapping(path = WAREHOUSES_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public WarehouseDto updateWarehouse(@RequestBody WarehouseDto newWarehouse) {
+    public WarehouseDto update(@RequestBody WarehouseDto newWarehouse) {
         return modelMapper.map(warehouseService.update(newWarehouse), WarehouseDto.class);
     }
 

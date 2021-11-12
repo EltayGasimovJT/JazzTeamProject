@@ -24,7 +24,7 @@ public class ClientController {
     @PostMapping(path = CLIENTS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    Client addNewClient(@RequestBody ClientDto clientToSave) throws ObjectNotFoundException {
+    Client save(@RequestBody ClientDto clientToSave) throws ObjectNotFoundException {
         return clientService.save(clientToSave);
     }
 
@@ -66,19 +66,19 @@ public class ClientController {
     @GetMapping(path = CLIENTS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<Client> findAllClients() throws ObjectNotFoundException {
+    Iterable<Client> findAll() throws ObjectNotFoundException {
         return clientService.findAll();
     }
 
     @DeleteMapping(path = CLIENTS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteClient(@PathVariable Long id) throws ObjectNotFoundException {
+    public void delete(@PathVariable Long id) throws ObjectNotFoundException {
         clientService.delete(id);
     }
 
     @PutMapping(path = CLIENTS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public Client updateClient(@RequestBody ClientDto newClient) throws ObjectNotFoundException {
+    public Client update(@RequestBody ClientDto newClient) throws ObjectNotFoundException {
         return clientService.update(newClient);
     }
 }
