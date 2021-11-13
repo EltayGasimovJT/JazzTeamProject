@@ -32,6 +32,8 @@ public class ClientServiceImpl implements ClientService {
     private CodeRepository codeRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private MailServiceImpl mailService;
 
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException, ObjectNotFoundException {
@@ -121,6 +123,7 @@ public class ClientServiceImpl implements ClientService {
                 .client(foundClient)
                 .generatedCode(generatedCode)
                 .build();
+        mailService.sendCodeMail(generatedCodeObject);
         foundClient.setCode(codeRepository.save(generatedCodeObject));
         return foundClient;
     }

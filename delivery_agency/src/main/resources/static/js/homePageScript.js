@@ -98,17 +98,9 @@ jQuery('document').ready(function () {
         geting.done(function (data) {
             Swal.fire({
                 icon: 'info',
-                title: "На ваш номер телефона был выслан четырехзначный код подтверждения",
+                title: "На вашу почту email был выслан четырехзначный код подтверждения",
                 showConfirmButton: false,
                 timer: 5000
-            }).then(function () {
-                Swal.fire({
-                    text: data.code.generatedCode,
-                    icon: 'info',
-                    title: "Четырехзначный код из смс",
-                    showConfirmButton: false,
-                    timer: 7000
-                })
             });
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';

@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String START_PAGE_URL = "/";
     private static final String CREATE_ORDER_URL = "/createOrder";
     private static final String ORDERS_URL = "/orders/**";
+    private static final String PROCESSING_POINT_WORKER_URL = "/processingPointActionPageRedirect/**";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(START_PAGE_URL).permitAll()
                 .antMatchers(HttpMethod.POST, CREATE_ORDER_URL).hasAnyRole(ADMIN_ROLE, PROCESSING_POINT_WORKER_ROLE)
                 .antMatchers(HttpMethod.POST, ORDERS_URL).hasRole(ADMIN_ROLE)
-                .antMatchers("/processingPointActionPageRedirect/**").hasRole(ADMIN_ROLE)
+                .antMatchers(PROCESSING_POINT_WORKER_URL).hasRole(ADMIN_ROLE)
                 .antMatchers(HttpMethod.DELETE, ORDERS_URL).hasAnyRole(ADMIN_ROLE, PROCESSING_POINT_WORKER_ROLE)
                 .antMatchers(HttpMethod.PUT, ORDERS_URL).hasRole(ADMIN_ROLE)
                 .antMatchers(HttpMethod.GET, ORDERS_URL).permitAll()
