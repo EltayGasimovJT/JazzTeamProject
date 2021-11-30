@@ -5,7 +5,6 @@ import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.entity.Warehouse;
 import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,8 @@ import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -36,7 +37,7 @@ class WarehouseServiceTest {
 
         String actual = warehouseService.findOne(savedWarehouse.getId()).getLocation();
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -56,7 +57,7 @@ class WarehouseServiceTest {
 
         List<Warehouse> actual = warehouseService.findAll();
 
-        Assertions.assertEquals(Collections.singletonList(savedFirst), actual);
+        assertEquals(Collections.singletonList(savedFirst), actual);
     }
 
     @Test
@@ -88,7 +89,7 @@ class WarehouseServiceTest {
 
         List<Warehouse> actual = warehouseService.findAll();
 
-        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
+        assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
@@ -100,7 +101,7 @@ class WarehouseServiceTest {
         Warehouse expected = warehouseService.save(expectedDto);
         Warehouse actual = warehouseService.findOne(expected.getId());
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -119,6 +120,6 @@ class WarehouseServiceTest {
         expectedDto.setId(savedWarehouse.getId());
         WarehouseDto actualDto = CustomModelMapper.mapWarehouseToDto(actual);
 
-        Assertions.assertEquals(expectedDto, actualDto);
+        assertEquals(expectedDto, actualDto);
     }
 }

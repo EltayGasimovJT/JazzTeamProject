@@ -18,6 +18,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @Transactional
@@ -36,6 +38,8 @@ class TicketServiceTest {
     private OrderStateService orderStateService;
     @Autowired
     private WorkerService workerService;
+    @Autowired
+    private ClientService clientService;
 
     @Test
     void findById() {
@@ -44,7 +48,7 @@ class TicketServiceTest {
                 .build();
         TicketDto expected = modelMapper.map(ticketService.save(expectedDto), TicketDto.class);
         TicketDto actual = modelMapper.map(ticketService.findById(expected.getId()), TicketDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -58,7 +62,7 @@ class TicketServiceTest {
         Ticket savedFirst = ticketService.save(firstTicket);
         Ticket savedSecond = ticketService.save(secondTicket);
         List<Ticket> actual = ticketService.findAll();
-        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond), actual);
+        assertEquals(Arrays.asList(savedFirst, savedSecond), actual);
     }
 
     @Test
@@ -73,7 +77,7 @@ class TicketServiceTest {
         Ticket savedSecond = ticketService.save(secondTicket);
         ticketService.delete(savedFirst.getId());
         List<Ticket> actual = ticketService.findAll();
-        Assertions.assertEquals(Collections.singletonList(savedSecond), actual);
+        assertEquals(Collections.singletonList(savedSecond), actual);
     }
 
     @Test
@@ -83,7 +87,7 @@ class TicketServiceTest {
                 .build();
         TicketDto actual = modelMapper.map(ticketService.save(expected), TicketDto.class);
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -93,7 +97,7 @@ class TicketServiceTest {
                 .build();
         TicketDto expected = modelMapper.map(ticketService.save(expectedDto), TicketDto.class);
         TicketDto actual = modelMapper.map(ticketService.findByTicketNumber(expected.getTicketNumber()), TicketDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -106,7 +110,7 @@ class TicketServiceTest {
         Assertions.assertNotNull(ticket);
     }
 
-    private CreateOrderRequestDto getOrder() {
+    private CreateOrderRequestDto getOrder() throws ObjectNotFoundException {
         WarehouseDto warehouseToSave = new WarehouseDto();
         final String location = "Беларусь";
         warehouseToSave.setLocation(location);
@@ -139,33 +143,31 @@ class TicketServiceTest {
 
         workerService.save(workerToSave);
 
+        ClientDto recipient = ClientDto.builder()
+                .name("Олег")
+                .surname("Голубев")
+                .phoneNumber("124125")
+                .passportId("124241")
+                .build();
+        ClientDto sender = ClientDto.builder()
+                .name("Эльтай")
+                .surname("Гасымов")
+                .phoneNumber("44234242")
+                .passportId("23535121")
+                .build();
+        Client savedSender = clientService.save(sender);
+        Client savedRecipient = clientService.save(recipient);
         return CreateOrderRequestDto.builder()
                 .destinationPoint("Минск-Беларусь")
-                .parcelParameters(
-                        ParcelParametersDto.builder()
-                                .length(50.0)
-                                .weight(50.0)
-                                .width(50.0)
-                                .height(50.0)
-                                .build()
-                )
+                .parcelParameters(ParcelParametersDto.builder()
+                        .length(50.0)
+                        .weight(50.0)
+                        .width(50.0)
+                        .height(50.0)
+                        .build())
                 .price(BigDecimal.valueOf(30.0))
-                .recipient(
-                        ClientDto.builder()
-                                .name("Олег")
-                                .surname("Голубев")
-                                .phoneNumber("124125")
-                                .passportId("124241")
-                                .build()
-                )
-                .sender(
-                        ClientDto.builder()
-                                .name("Эльтай")
-                                .surname("Гасымов")
-                                .phoneNumber("44234242")
-                                .passportId("23535121")
-                                .build()
-                )
+                .recipient(modelMapper.map(savedRecipient, ClientDto.class))
+                .sender(modelMapper.map(savedSender, ClientDto.class))
                 .workerDto(workerToSave)
                 .build();
     }

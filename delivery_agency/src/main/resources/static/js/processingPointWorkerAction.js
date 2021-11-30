@@ -21,7 +21,14 @@ changeOrderStateBtn.addEventListener('click', (event) => {
 
 function init() {
     if (sessionStorage.getItem('workersToken') === null) {
-        window.location.href = "/homePage.html";
+        Swal.fire({
+            icon: 'info',
+            title: "У вас нет доступа к этой странице. Пожалуйста пройдите аутентификацию",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "/homePage.html";
+        })
     }
 }
 
@@ -72,7 +79,7 @@ function insertWorkerInfo() {
     });
 }
 
-function checkSession(){
+function checkSession() {
     let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getHours()
     if ((new Date().getHours() - sessionTimeMinutes) > 1) {
         sessionStorage.removeItem('workersToken');

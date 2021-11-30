@@ -78,7 +78,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
 
     @Override
     public BigDecimal calculatePrice(ParcelParametersDto parcelParametersDto, String country) throws IllegalArgumentException {
-        BigDecimal volume = BigDecimal.valueOf(getSize(parcelParametersDto));
+        BigDecimal volume = BigDecimal.valueOf(getVolume(parcelParametersDto));
         CoefficientForPriceCalculation foundCoefficient = priceCalculationRuleRepository.findByCountry(country);
         if (volume.doubleValue() > foundCoefficient.getParcelSizeLimit()) {
             throw new IllegalArgumentException("Размер посылки не может быть больше чем " + foundCoefficient.getParcelSizeLimit() + " кубических метров для одного заказа");
@@ -97,7 +97,7 @@ public class CoefficientForPriceCalculationServiceImpl implements CoefficientFor
         return foundCoefficient;
     }
 
-    private double getSize(ParcelParametersDto parcelParametersDto) {
+    private double getVolume(ParcelParametersDto parcelParametersDto) {
         return ((parcelParametersDto.getLength()
                 * parcelParametersDto.getHeight()
                 * parcelParametersDto.getWidth()) + parcelParametersDto.getWeight()) / COEFFICIENT_FOR_VOLUME_CALCULATION;

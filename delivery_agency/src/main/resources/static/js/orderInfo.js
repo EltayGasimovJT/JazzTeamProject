@@ -34,12 +34,13 @@ function getOrderHistories(idFromUrl) {
         contentType: 'application/json',
         success: function (result) {
             for (let key = 0, size = result.length; key < size; key++) {
-                let row = '<tr class="text"><td>' + getTimeFormat(result[key].changedAt) +
+                let row = '<tr class="text" style="font-weight: normal"><td>' + getTimeFormat(result[key].changedAt) +
                     '</td><td>' + getTimeFormat(result[key].sentAt) + '</td><td>' + result[key].comment +
                     '</td><td>' + result[key].worker.name + '</td><td>' + result[key].worker.surname +
                     '</td></tr>';
-                $('#orderHistory').append(row);
+                $('#orderHistoryBody').append(row);
             }
+            sortOnLoad("orderHistory")
         }
     });
 }
@@ -62,7 +63,7 @@ function getOrder(idFromUrl) {
         type: 'GET',
         contentType: 'application/json',
         success: function (result) {
-            let row = '<tr class="text"><td>' + result.recipient.name +
+            let row = '<tr class="text" style="font-weight: normal"><td>' + result.recipient.name +
                 '</td><td>' + result.recipient.surname + '</td><td>' +
                 getTimeFormat(result.sendingTime) + '</td><td>' + result.price +
                 '</td><td>' + result.state.state + '</td><td>' + result.departurePoint.location + '</td><td>' +
@@ -70,7 +71,8 @@ function getOrder(idFromUrl) {
                 '</td><td>' + result.parcelParameters.weight + '</td><td>' + result.parcelParameters.height +
                 '</td><td>' + result.parcelParameters.width + '</td><td>' + result.parcelParameters.length +
                 '</td></tr>';
-            $('#orderInfo').append(row);
+            $('#orderInfoBody').append(row);
+            findTableForSort('orderInfo')
         }
     });
 }
@@ -123,22 +125,72 @@ function insertClientInfo() {
     });
 }
 
-function sortTable(){
-    const getSort = ({ target }) => {
-        const order = (target.dataset.order = -(target.dataset.order || -1));
-        const index = [...target.parentNode.cells].indexOf(target);
-        const collator = new Intl.Collator(['en', 'ru'], { numeric: true });
-        const comparator = (index, order) => (a, b) => order * collator.compare(
-            a.children[index].innerHTML,
-            b.children[index].innerHTML
-        );
+function findTableForSort(tableId) {
+    let table = document.getElementById(tableId);
+    table.addEventListener('click', (e) => {
+        const element = e.target;
+        if (element.nodeName !== 'TH') {
+            return;
+        }
+        const index = element.cellIndex;
+        const type = element.getAttribute('data-type');
+        sortTable(index, table, type, element)
+    })
+}
 
-        for(const tBody of target.closest('table').tBodies)
-            tBody.append(...[...tBody.rows].sort(comparator(index, order)));
+const sortTable = function (index, table, type, element) {
+    const tbody = table.querySelector('tbody');
+    const compare = function (rowA, rowB) {
+        const rowDataA = rowA.cells[index].innerHTML;
+        const rowDataB = rowB.cells[index].innerHTML;
+        switch (type) {
+            case 'integer': {
+                return rowDataA - rowDataB;
+                break;
+            }
+            case 'date': {
+                element.style.backgroundColor = '#FFD700'
+                if (moment(rowDataA).isBefore(rowDataB)) {
+                    return 1;
+                } else if (moment(rowDataA).isAfter(rowDataB)) {
+                    return -1;
+                } else return 0;
+                break;
+            }
+            case 'text': {
+                if (rowDataA < rowDataB) {
+                    return -1;
+                } else if (rowDataA > rowDataB) {
+                    return 1;
+                } else return 0;
+                break;
+            }
+            case 'double': {
+                return rowDataA - rowDataB;
+                break;
+            }
+            default:
+                break;
+        }
+    }
 
-        for(const cell of target.parentNode.cells)
-            cell.classList.toggle('sorted', cell === target);
-    };
+    let rows = [].slice.call(tbody.rows);
 
-    document.querySelectorAll('.table_sort thead').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
+    rows.sort(compare);
+
+    table.removeChild(tbody);
+
+    for (let i = 0; i < rows.length; i++) {
+        tbody.appendChild(rows[i]);
+    }
+
+    table.appendChild(tbody);
+}
+
+function sortOnLoad(tableId) {
+    let table = document.getElementById(tableId);
+    const element = document.getElementById('changedAt');
+    const index = element.cellIndex;
+    const type = element.getAttribute('data-type');
+    sortTable(index, table, type, element);
 }

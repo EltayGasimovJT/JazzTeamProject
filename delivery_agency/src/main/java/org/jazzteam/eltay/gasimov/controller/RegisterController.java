@@ -31,7 +31,7 @@ public class RegisterController {
     }
 
     @PostMapping(AUTHORIZATION_URL)
-    public AuthResponse auth(@RequestBody AuthRequest request) {
+    public AuthResponse authUser(@RequestBody AuthRequest request) {
         Worker workerEntity = workerService.findByLoginAndPassword(request.getLogin(), request.getPassword());
         String token = jwtProvider.generateToken(workerEntity.getName());
         return new AuthResponse(token);

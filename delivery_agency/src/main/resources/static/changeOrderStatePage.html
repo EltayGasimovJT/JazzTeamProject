@@ -1,69 +1,74 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF8">
-    <style> a {
-        text-decoration: none;
-    } </style>
-    <title>GasDel general</title>
+  <meta charset="UTF8">
+  <style> a {
+    text-decoration: none;
+  } </style>
+  <title>GasDel general</title>
 
-    <link href="css/style.css" rel="stylesheet" type="text/css">
-    <link rel="shortcut icon" href="icons/waterFall.png"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="js/moment.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <link href="css/style.css" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="icons/waterFall.png"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="js/moment.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="defaultBar">
-    <a href="homePage.html" class="defaultLogo">GasDel</a>
-    <div id="worker-nav-info" class="worker-nav">
-        <div id="worker-name-nav"></div>
-        <div id="worker-surname-nav"></div>
-        <div id="worker-role-nav"></div>
-    </div>
-    <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
+  <a href="homePage.html" class="defaultLogo">GasDel</a>
+  <div id="worker-nav-info" class="worker-nav">
+    <div id="worker-name-nav"></div>
+    <div id="worker-surname-nav"></div>
+    <div id="worker-role-nav"></div>
+  </div>
+  <div id="logoutButtonToInsert" class="logoutButtonDiv"></div>
 </div>
 
 <div class="table-wrap">
-    <table id="orders" class="custom-table table table-bordered table-sm table">
-        <tr onclick="">
-            <td>Номер заказа</td>
-            <td>Имя получателя</td>
-            <td>Фамилия получателя</td>
-            <td>Время отправки заказа</td>
-            <td>Стоимость, BYN</td>
-            <td>Состояние заказа</td>
-            <td>Пункт отправки</td>
-            <td>Местоположение посылки</td>
-            <td>Пункт назначения</td>
-            <td>Редактировать</td>
-        </tr>
-    </table>
+  <table id="orders" class="custom-table table table-bordered table-sm table">
+    <thead class="table-header-style">
+    <tr>
+      <th style="vertical-align: middle">Номер заказа</th>
+      <th style="vertical-align: middle">Имя получателя</th>
+      <th style="vertical-align: middle">Фамилия получателя</th>
+      <th id="changedAt" datatype="date" style="vertical-align: middle">Время отправки заказа</th>
+      <th style="vertical-align: middle">Стоимость, BYN</th>
+      <th style="vertical-align: middle">Состояние заказа</th>
+      <th style="vertical-align: middle">Пункт отправки</th>
+      <th style="vertical-align: middle">Местоположение посылки</th>
+      <th style="vertical-align: middle">Пункт назначения</th>
+      <th style="vertical-align: middle">Редактировать</th>
+    </tr>
+    </thead>
+    <tbody id="ordersBody">
+
+    </tbody>
+  </table>
 </div>
 
 <div class="backGround-modal">
-    <div class="modal-redirect">
-        <form id="changeOrderState" autocomplete="off">
-            <div class="change-state-form">
-                <div class="change-state-span">
-                    <span class="createOrderTextField general-name">Выберите новое состояние заказа: </span>
-                </div>
-                <div class="change-state-div">
-                    <input class="change-state-datalist" list="states" id="newOrderState" required name="newState">
-                    <datalist id="states" class="listMargin"></datalist>
-                </div>
-            </div>
-            <div class="worker-actions-with-order-modal">
-                <button id="processingPointWorker" type="submit" class="btn btn-primary open-modal changeStateBtn">
-                    Подтвердить
-                </button>
-            </div>
-        </form>
-    </div>
+  <div class="modal-redirect">
+    <form id="changeOrderState" autocomplete="off">
+      <div class="change-state-form">
+        <div class="change-state-span">
+          <span class="createOrderTextField general-name">Выберите новое состояние заказа: </span>
+        </div>
+        <div class="change-state-div">
+          <input class="change-state-datalist" list="states" id="newOrderState" required name="newState">
+          <datalist id="states" class="listMargin"></datalist>
+        </div>
+      </div>
+      <div class="worker-actions-with-order-modal">
+        <button id="processingPointWorker" type="submit" class="btn btn-primary open-modal changeStateBtn">
+          Подтвердить
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
 
 

@@ -2,10 +2,7 @@ package org.jazzteam.eltay.gasimov.service;
 
 import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.dto.*;
-import org.jazzteam.eltay.gasimov.entity.Order;
-import org.jazzteam.eltay.gasimov.entity.OrderStates;
-import org.jazzteam.eltay.gasimov.entity.Role;
-import org.jazzteam.eltay.gasimov.entity.WorkingPlaceType;
+import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
@@ -23,6 +20,8 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,6 +41,8 @@ class OrderServiceTest {
     private WorkerService workerService;
     @Autowired
     private CoefficientForPriceCalculationService coefficientForPriceCalculationService;
+    @Autowired
+    private ClientService clientService;
 
     private static Stream<Arguments> testDataForCalculate() {
         OrderProcessingPointDto processingPointToTest = new OrderProcessingPointDto();
@@ -89,15 +90,15 @@ class OrderServiceTest {
     void create() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrder = getOrder();
 
-        Order expected = orderService.createOrder(expectedOrder);
+         Order expected = orderService.createOrder(expectedOrder);
 
         Order actual = orderService.findOne(expected.getId());
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    @Disabled("Transactional error")
+    @Disabled
     void deleteByTrackNumber() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrder = getOrder();
 
@@ -116,11 +117,11 @@ class OrderServiceTest {
 
         Order actual = orderService.findOne(expectedOrder.getId());
 
-        Assertions.assertEquals(expectedOrder, actual);
+        assertEquals(expectedOrder, actual);
     }
 
     @Test
-    @Disabled("Transactional error")
+    @Disabled
     void findByRecipient() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrderDto = getOrder();
 
@@ -130,11 +131,11 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findByRecipient(modelMapper.map(actual.getRecipient(), ClientDto.class));
 
-        Assertions.assertEquals(expectedOrder, actualOrder);
+        assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
-    @Disabled("Transactional error")
+    @Disabled
     void findBySender() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrderDto = getOrder();
 
@@ -144,7 +145,7 @@ class OrderServiceTest {
 
         Order actualOrder = orderService.findBySender(modelMapper.map(actual.getRecipient(), ClientDto.class));
 
-        Assertions.assertEquals(expectedOrder, actualOrder);
+        assertEquals(expectedOrder, actualOrder);
     }
 
     @Test
@@ -158,11 +159,11 @@ class OrderServiceTest {
         String expected = "Готов к отправке";
 
         final String actual = orderService.getState(actualOrder.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
-    @Disabled("Transactional error")
+    @Disabled
     void findAll() throws ObjectNotFoundException {
         CreateOrderRequestDto expectedOrderDto = getOrder();
         orderService.createOrder(expectedOrderDto);
@@ -183,10 +184,10 @@ class OrderServiceTest {
         coefficientForPriceCalculationService.save(coefficientToTest);
         BigDecimal actualPrice = orderService.calculatePrice(order);
 
-        Assertions.assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
+        assertEquals(expectedPrice.doubleValue(), actualPrice.doubleValue(), 0.001);
     }
 
-    private CreateOrderRequestDto getOrder() {
+    private CreateOrderRequestDto getOrder() throws ObjectNotFoundException {
         WarehouseDto warehouseToSave = new WarehouseDto();
         final String location = "Беларусь";
         warehouseToSave.setLocation(location);
@@ -198,54 +199,48 @@ class OrderServiceTest {
                 .suffix(" weq")
                 .build();
         orderStateService.save(stateDtoToSave);
-
-        AbstractBuildingDto currentLocationToTest = new OrderProcessingPointDto();
-        currentLocationToTest.setLocation("Полоцк-Беларусь");
-
         OrderProcessingPointDto destinationPlaceToTest = new OrderProcessingPointDto();
         destinationPlaceToTest.setLocation("Минск-Беларусь");
         destinationPlaceToTest.setWorkingPlaceType(WorkingPlaceType.PROCESSING_POINT);
         destinationPlaceToTest.setWarehouse(CustomModelMapper.mapWarehouseToDto(warehouseService.findByLocation(location)));
 
-        orderProcessingPointService.save(destinationPlaceToTest);
+        OrderProcessingPoint savedProcessingPoint = orderProcessingPointService.save(destinationPlaceToTest);
 
         WorkerDto workerToSave = WorkerDto.builder()
                 .name("Вася")
                 .surname("Васильев")
                 .role(Role.ROLE_ADMIN)
                 .password("rqweqwqwe")
-                .workingPlace(modelMapper.map(orderProcessingPointService.findByLocation("Минск-Беларусь"), OrderProcessingPointDto.class))
+                .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
 
         workerService.save(workerToSave);
 
+        ClientDto recipient = ClientDto.builder()
+                .name("Олег")
+                .surname("Голубев")
+                .phoneNumber("124125")
+                .passportId("124241")
+                .build();
+        ClientDto sender = ClientDto.builder()
+                .name("Эльтай")
+                .surname("Гасымов")
+                .phoneNumber("44234242")
+                .passportId("23535121")
+                .build();
+        Client savedSender = clientService.save(sender);
+        Client savedRecipient = clientService.save(recipient);
         return CreateOrderRequestDto.builder()
                 .destinationPoint("Минск-Беларусь")
-                .parcelParameters(
-                        ParcelParametersDto.builder()
+                .parcelParameters(ParcelParametersDto.builder()
                                 .length(50.0)
                                 .weight(50.0)
                                 .width(50.0)
                                 .height(50.0)
-                                .build()
-                )
+                                .build())
                 .price(BigDecimal.valueOf(30.0))
-                .recipient(
-                        ClientDto.builder()
-                                .name("Олег")
-                                .surname("Голубев")
-                                .phoneNumber("124125")
-                                .passportId("124241")
-                                .build()
-                )
-                .sender(
-                        ClientDto.builder()
-                                .name("Эльтай")
-                                .surname("Гасымов")
-                                .phoneNumber("44234242")
-                                .passportId("23535121")
-                                .build()
-                )
+                .recipient(modelMapper.map(savedRecipient, ClientDto.class))
+                .sender(modelMapper.map(savedSender, ClientDto.class))
                 .workerDto(workerToSave)
                 .build();
     }

@@ -1,11 +1,11 @@
 let $form;
 init()
-
 jQuery("#backToTheActionPageBtnId").on('click', function () {
     checkSession();
     location.href = "homePage.html";
 })
 
+let currentRole;
 let allCoefficients;
 
 let config = {
@@ -39,8 +39,20 @@ document.getElementById('parcelWeight').oninput = (event) => {
     calculatePrice();
 };
 
+function checkIfRecipientFieldsAreNotEmpty() {
+    return document.getElementById('recipientName').value.length === 0 &&
+        document.getElementById('recipientSurname').value.length === 0 &&
+        document.getElementById('recipientPassportId').value.length === 0;
+}
+
+function checkIfSenderFieldsAreNotEmpty() {
+    return document.getElementById('senderName').value.length === 0 &&
+        document.getElementById('senderSurname').value.length === 0 &&
+        document.getElementById('senderPassportId').value.length === 0;
+}
+
 document.getElementById('recipientPhoneNumber').oninput = (event) => {
-    if (event.target.value.length === 14) {
+    if (event.target.value.length === 14 && checkIfRecipientFieldsAreNotEmpty()) {
         $.ajax({
             url: `/clients/findByPhoneNumber`,
             type: 'GET',
@@ -57,7 +69,7 @@ document.getElementById('recipientPhoneNumber').oninput = (event) => {
 };
 
 document.getElementById('senderPhoneNumber').oninput = (event) => {
-    if (event.target.value.length === 14) {
+    if (event.target.value.length === 14 && checkIfSenderFieldsAreNotEmpty()) {
         $.ajax({
             url: `/clients/findByPhoneNumber`,
             type: 'GET',
@@ -155,7 +167,15 @@ function validateParams(params) {
 
 function init() {
     if (sessionStorage.getItem('workersToken') === null) {
-        window.location.href = "/homePage.html";
+        Swal.fire({
+            icon: 'info',
+            title: "У вас нет доступа к этой странице. Пожалуйста пройдите аутентификацию",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "/homePage.html";
+
+        })
     }
 
     if (sessionStorage.getItem('workersToken') !== null) {
@@ -216,6 +236,7 @@ $('#createOrderForm').submit(function (e) {
             text: "Введенные вами данные не верны, пожалуйста попробуйте еще раз",
             icon: "info",
         });
+
     } else {
         $.ajax({
             type: 'POST',
@@ -230,10 +251,10 @@ $('#createOrderForm').submit(function (e) {
             data: JSON.stringify(dataForSend)
         }).done(function (data) {
             window.location.href = `/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
-        }).fail(function () {
+        }).fail(function (exception) {
             Swal.fire({
-                title: "Что-то пошло не так",
-                text: "Не удалось создать заказ",
+                title: "Не удалось создать заказ",
+                text: `${exception.responseJSON.message}`,
                 icon: "info",
             });
         });
@@ -477,6 +498,7 @@ function insertWorkerInfo() {
         if (data.role === "ROLE_PROCESSING_POINT_WORKER") {
             roles.innerHTML = `Роль: Работник пункта отправки/выдачи`
         }
+        currentRole = data.role
     }).fail(function () {
         Swal.fire({
             title: "Что-то пошло не так",

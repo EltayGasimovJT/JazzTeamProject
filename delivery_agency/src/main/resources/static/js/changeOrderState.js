@@ -1,7 +1,15 @@
 getAllOrders();
 jQuery('document').ready(function () {
     if (sessionStorage.getItem('workersToken') === null) {
-        window.location.href = "/homePage.html";
+        Swal.fire({
+            icon: 'info',
+            title: "У вас нет доступа к этой странице. Пожалуйста пройдите аутентификацию",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "/homePage.html";
+
+        })
     }
 
     if (sessionStorage.getItem('workersToken') !== null) {
@@ -9,7 +17,6 @@ jQuery('document').ready(function () {
         insertLogoutButton();
     }
 })
-
 const backgroundModal = document.querySelector('.backGround-modal');
 backgroundModal.addEventListener('click', () => {
     backgroundModal.style.visibility = 'hidden';
@@ -64,14 +71,15 @@ function getAllOrders() {
         contentType: 'application/json',
         success: function (result) {
             for (let key = 0, size = result.length; key < size; key++) {
-                let row = '<tr class="text"><td>' + result[key].orderTrackNumber +
+                let row = '<tr class="text" style="font-weight: normal"><td>' + result[key].orderTrackNumber +
                     '</td><td class="orderNum">' + result[key].recipient.name + '</td><td>' +
                     result[key].recipient.surname + '</td><td>' + getTimeFormat(result[key].sendingTime) +
                     '</td><td>' + result[key].price + '</td><td>' + result[key].state.state + '</td><td>' +
                     result[key].departurePoint.location + '</td><td>' + result[key].currentLocation.location +
                     '</td><td>' + result[key].destinationPlace.location + '</td><td class="icons-location">' + addEditPanel() + insertCancelButton() + '</td></tr>';
-                $('#orders').append(row);
+                $('#ordersBody').append(row);
             }
+            sortOnLoad('orders');
 
             $(".change-state-button").click(function (event) {
                     checkSession();
@@ -136,7 +144,7 @@ function getAllOrders() {
                 icon: "info",
                 showConfirmButton: false,
                 timer: 5000
-            });;
+            });
         }
     });
 }
@@ -165,17 +173,16 @@ $('#changeOrderState').submit(function (event) {
                 title: "Статус успешно обновлен",
                 text: `Для заказа с номером #${order.orderTrackNumber} был успешно установлен новый статус - ${state}`,
                 icon: 'success',
+                showConfirmButton: false,
                 timer: 7000
-            }).then((willDelete) => {
-                if (willDelete.isConfirmed) {
-                    window.location.reload();
-                }
+            }).then(() => {
+                window.location.reload();
             })
         },
-        error: function () {
+        error: function (exception) {
             Swal.fire({
                 title: 'Нет прав',
-                text: `У вас нет прав устанавливать данное состояние заказа`,
+                text: `${exception.responseJSON.message}`,
                 icon: 'info',
                 showConfirmButton: false,
                 timer: 5000
@@ -210,6 +217,7 @@ function insertWorkerInfo() {
         if (data.role === "ROLE_PROCESSING_POINT_WORKER") {
             roles.innerHTML = `Роль: Работник пункта отправки/выдачи`
         }
+        currentRole = data.role
     }).fail(function () {
         Swal.fire({
             title: "Что-то пошло не так",
@@ -253,5 +261,76 @@ function checkSession() {
 }
 
 function getTimeFormat(time) {
-    return moment(time).format('DD.MM.YYYY') + " " + moment(time).format('hh:mm:ss');
+    return moment(time).format("YYYY-MM-DD HH:mm:ss z");
+}
+
+function findTableForSort(tableId) {
+    let table = document.getElementById(tableId);
+    table.addEventListener('click', (e) => {
+        const element = e.target;
+        if (element.nodeName !== 'TH') {
+            return;
+        }
+        const index = element.cellIndex;
+        const type = element.getAttribute('datatype');
+        sortTable(index, table, type, element)
+    })
+}
+
+const sortTable = function (index, table, type, element) {
+    const tbody = table.querySelector('tbody');
+
+    const compare = function (rowA, rowB) {
+        const rowDataA = rowA.cells[index].innerHTML;
+        const rowDataB = rowB.cells[index].innerHTML;
+        switch (type) {
+            case 'integer': {
+                return rowDataA - rowDataB;
+                break;
+            }
+            case 'date': {
+                element.style.backgroundColor = '#FFD700'
+                if (moment(rowDataA).isBefore(rowDataB)) {
+                    return 1;
+                } else if (moment(rowDataA).isAfter(rowDataB)) {
+                    return -1;
+                } else return 0;
+                break;
+            }
+            case 'text': {
+                if (rowDataA < rowDataB) {
+                    return -1;
+                } else if (rowDataA > rowDataB) {
+                    return 1;
+                } else return 0;
+                break;
+            }
+            case 'double':{
+                return rowDataA - rowDataB;
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    let rows = [].slice.call(tbody.rows);
+
+    rows.sort(compare);
+
+    table.removeChild(tbody);
+
+    for (let i = 0; i < rows.length; i++) {
+        tbody.appendChild(rows[i]);
+    }
+
+    table.appendChild(tbody);
+}
+
+function sortOnLoad(tableId) {
+    let table = document.getElementById(tableId);
+    const element = document.getElementById('changedAt');
+    const index = element.cellIndex;
+    const type = element.getAttribute('datatype');
+    sortTable(index, table, type, element);
 }

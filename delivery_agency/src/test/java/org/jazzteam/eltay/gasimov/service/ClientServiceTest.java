@@ -13,12 +13,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -63,7 +65,7 @@ class ClientServiceTest {
         Client actualClient = clientService.findClientByPassportId(expectedPassportId);
         ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
         ClientDto savedClientDto = modelMapper.map(savedClient, ClientDto.class);
-        Assertions.assertEquals(savedClientDto, actualClientDto);
+        assertEquals(savedClientDto, actualClientDto);
     }
 
     @Test
@@ -99,7 +101,7 @@ class ClientServiceTest {
                 .map(actualClientDto -> modelMapper.map(actualClientDto, ClientDto.class))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(Arrays.asList(firstClientToTest, secondClientToTest), actualClientDtos);
+        assertEquals(Arrays.asList(firstClientToTest, secondClientToTest), actualClientDtos);
     }
 
     @Test
@@ -132,7 +134,7 @@ class ClientServiceTest {
         thirdClientToTest.setId(savedThird.getId());
 
         List<Client> actual = clientService.findAll();
-        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
+        assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
@@ -149,7 +151,7 @@ class ClientServiceTest {
         Client actualClient = clientService.findById(savedClient.getId());
         ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
 
-        Assertions.assertEquals(expectedClientDto, actualClientDto);
+        assertEquals(expectedClientDto, actualClientDto);
     }
 
     @Test
@@ -167,7 +169,7 @@ class ClientServiceTest {
 
         ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
 
-        Assertions.assertEquals(expectedClientDto, actualClientDto);
+        assertEquals(expectedClientDto, actualClientDto);
     }
 
     @Test
@@ -205,7 +207,7 @@ class ClientServiceTest {
 
         ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
 
-        Assertions.assertEquals(expectedClientDto, actualClientDto);
+        assertEquals(expectedClientDto, actualClientDto);
     }
 
     @Test
@@ -226,7 +228,7 @@ class ClientServiceTest {
 
         ClientDto actualClientDto = modelMapper.map(actualClient, ClientDto.class);
 
-        Assertions.assertEquals(expectedClientDto, actualClientDto);
+        assertEquals(expectedClientDto, actualClientDto);
     }
 }
 

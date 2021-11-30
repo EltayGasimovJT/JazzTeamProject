@@ -7,7 +7,6 @@ import org.jazzteam.eltay.gasimov.dto.WorkerDto;
 import org.jazzteam.eltay.gasimov.dto.WorkerRolesDto;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -20,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.jazzteam.eltay.gasimov.entity.WorkingPlaceType.PROCESSING_POINT;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -50,6 +50,7 @@ class WorkerServiceTest {
         WorkerDto expected = WorkerDto
                 .builder()
                 .surname("Vlad")
+                .password("qweqw")
                 .role(Role.ROLE_ADMIN)
                 .name("Vlad")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
@@ -57,7 +58,7 @@ class WorkerServiceTest {
         Worker actual = workerService.save(expected);
         expected.setId(actual.getId());
 
-        Assertions.assertEquals(CustomModelMapper.mapDtoToWorker(expected), actual);
+        assertEquals(CustomModelMapper.mapDtoToWorker(expected), actual);
     }
 
     @Test
@@ -74,6 +75,7 @@ class WorkerServiceTest {
         WorkerDto expectedDto = WorkerDto
                 .builder()
                 .surname("Vlad")
+                .password("wqewe")
                 .role(Role.ROLE_ADMIN)
                 .name("Vlad")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
@@ -81,7 +83,7 @@ class WorkerServiceTest {
         Worker expected = workerService.save(expectedDto);
         Worker actual = workerService.findOne(expected.getId());
 
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -119,7 +121,7 @@ class WorkerServiceTest {
         expectedDto.setId(savedWorker.getId());
         WorkerDto actual = CustomModelMapper.mapWorkerToDto(workerService.findByPassword(savedWorker.getPassword()));
         expectedDto.setPassword(savedWorker.getPassword());
-        Assertions.assertEquals(expectedDto, actual);
+        assertEquals(expectedDto, actual);
     }
 
     @Test
@@ -157,7 +159,7 @@ class WorkerServiceTest {
         expectedDto.setId(savedWorker.getId());
         WorkerDto actual = CustomModelMapper.mapWorkerToDto(workerService.findByLoginAndPassword(expectedDto.getName(), expectedDto.getPassword()));
         expectedDto.setPassword(savedWorker.getPassword());
-        Assertions.assertEquals(expectedDto, actual);
+        assertEquals(expectedDto, actual);
     }
 
     @Test
@@ -193,7 +195,7 @@ class WorkerServiceTest {
         Worker actual = workerService.saveForRegistration(expected);
         expectedDto.setId(actual.getId());
         expectedDto.setPassword(actual.getPassword());
-        Assertions.assertEquals(expectedDto, CustomModelMapper.mapWorkerToDto(actual));
+        assertEquals(expectedDto, CustomModelMapper.mapWorkerToDto(actual));
     }
 
     @Test
@@ -212,12 +214,14 @@ class WorkerServiceTest {
                 .builder()
                 .name("Vlad")
                 .surname("Vlad")
+                .password("wqeqw")
                 .role(Role.ROLE_ADMIN)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
         WorkerDto secondUser = WorkerDto
                 .builder()
                 .name("Vlad")
+                .password("q1241q")
                 .surname("Vlad")
                 .role(Role.ROLE_WAREHOUSE_WORKER)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
@@ -226,6 +230,7 @@ class WorkerServiceTest {
                 .builder()
                 .name("Vlad")
                 .surname("Vlad")
+                .password("124wqrsa")
                 .role(Role.ROLE_PROCESSING_POINT_WORKER)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
@@ -237,7 +242,7 @@ class WorkerServiceTest {
         workerService.delete(savedFirst.getId());
 
         List<Worker> actual = workerService.findAll();
-        Assertions.assertEquals(Arrays.asList(savedSecond, savedThird), actual);
+        assertEquals(Arrays.asList(savedSecond, savedThird), actual);
     }
 
     @Test
@@ -256,17 +261,20 @@ class WorkerServiceTest {
                 .name("Vlad")
                 .surname("Vlad")
                 .role(Role.ROLE_ADMIN)
+                .password("qwr1wq3521")
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
         WorkerDto secondUser = WorkerDto.builder()
                 .name("Vlad")
                 .surname("Vlad")
+                .password("qwqt121tqsfa")
                 .role(Role.ROLE_PROCESSING_POINT_WORKER)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
         WorkerDto thirdUser = WorkerDto.builder()
                 .name("Vlad")
                 .surname("Vlad")
+                .password("asfqwr12r42")
                 .role(Role.ROLE_WAREHOUSE_WORKER)
                 .workingPlace(modelMapper.map(savedProcessingPoint, OrderProcessingPointDto.class))
                 .build();
@@ -277,7 +285,7 @@ class WorkerServiceTest {
 
         List<Worker> actual = workerService.findAll();
 
-        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
+        assertEquals(Arrays.asList(savedFirst, savedSecond, savedThird), actual);
     }
 
     @Test
@@ -319,6 +327,6 @@ class WorkerServiceTest {
 
         Worker actual = workerService.update(CustomModelMapper.mapWorkerToDto(savedWorker));
 
-        Assertions.assertEquals(savedWorker, actual);
+        assertEquals(savedWorker, actual);
     }
 }

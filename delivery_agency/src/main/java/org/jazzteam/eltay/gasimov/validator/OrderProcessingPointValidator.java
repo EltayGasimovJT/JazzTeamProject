@@ -10,26 +10,26 @@ public class OrderProcessingPointValidator {
 
     public static void validateProcessingPoint(OrderProcessingPoint orderProcessingPointToValidate) throws IllegalArgumentException {
         if (orderProcessingPointToValidate == null) {
-            throw new IllegalArgumentException("There is no processing point with such Id");
+            throw new IllegalArgumentException("В базе данных нет такого пункта отправки/выдачи");
         }
         if (orderProcessingPointToValidate.getLocation() == null){
-            throw new IllegalArgumentException("Processing point must have Location");
+            throw new IllegalArgumentException("Значение места положения пункта отправки/выдачи должно быть заполнено");
         }
         if (orderProcessingPointToValidate.getWarehouse() == null){
-            throw new IllegalArgumentException("Processing point must have Warehouse connected with");
+            throw new IllegalArgumentException("Значение зарегистрированного промежуточного склада связанным с пунктом отправки/выдачи должно быть заполнено");
         }
     }
 
     public static void validateOnSave(OrderProcessingPoint orderProcessingPointToValidate) throws IllegalArgumentException {
         if (orderProcessingPointToValidate == null) {
-            throw new IllegalArgumentException("Processing point cannot be null");
+            throw new IllegalArgumentException("Введенные данные пункта отправки/выдачи не верны");
         }
         validateProcessingPoint(orderProcessingPointToValidate);
     }
 
     public static void validateProcessingPointList(List<OrderProcessingPoint> orderProcessingPointsToValidate) throws IllegalArgumentException {
-        if (orderProcessingPointsToValidate.isEmpty()) {
-            throw new IllegalArgumentException("There is no processing points on the org.jazzteam.eltay.gasimov.repository");
+        if (orderProcessingPointsToValidate == null) {
+            throw new IllegalArgumentException("В базе данных нет пунктов отправки/выдачи");
         }
     }
 }

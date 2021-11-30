@@ -833,3 +833,12 @@ input:invalid:not(:placeholder-shown) + .form__error {
     align-self: self-end;
     margin-right: 16%;
 }
+
+.table-header-style {
+    height: 80px;
+    text-align: center;
+}
+
+.th-custom-style {
+    vertical-align: middle;
+}

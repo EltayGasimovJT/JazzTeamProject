@@ -3,7 +3,6 @@ package org.jazzteam.eltay.gasimov.service;
 import org.jazzteam.eltay.gasimov.dto.WorkerRolesDto;
 import org.jazzteam.eltay.gasimov.entity.Role;
 import org.jazzteam.eltay.gasimov.entity.WorkerRoles;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.modelmapper.ModelMapper;
@@ -15,6 +14,8 @@ import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,7 +34,7 @@ class WorkerRolesServiceTest {
                 .build();
         WorkerRolesDto actual = modelMapper.map(workerRolesService.save(expected), WorkerRolesDto.class);
         expected.setId(actual.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -50,7 +51,7 @@ class WorkerRolesServiceTest {
 
         List<WorkerRoles> actual = workerRolesService.findAll();
 
-        Assertions.assertEquals(Collections.singletonList(savedSecond), actual);
+        assertEquals(Collections.singletonList(savedSecond), actual);
     }
 
     @Test
@@ -64,7 +65,7 @@ class WorkerRolesServiceTest {
         WorkerRoles savedFirst = workerRolesService.save(firstRole);
         WorkerRoles savedSecond = workerRolesService.save(secondRole);
         List<WorkerRoles> actual = workerRolesService.findAll();
-        Assertions.assertEquals(Arrays.asList(savedFirst, savedSecond), actual);
+        assertEquals(Arrays.asList(savedFirst, savedSecond), actual);
     }
 
     @Test
@@ -74,7 +75,7 @@ class WorkerRolesServiceTest {
                 .build();
         WorkerRoles expected = workerRolesService.save(expectedDto);
         WorkerRoles actual = workerRolesService.findOne(expected.getId());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -85,7 +86,7 @@ class WorkerRolesServiceTest {
         WorkerRolesDto expected = modelMapper.map(workerRolesService.save(expectedDto), WorkerRolesDto.class);
         expected.setRole(Role.ROLE_PROCESSING_POINT_WORKER.name());
         WorkerRolesDto actual = modelMapper.map(workerRolesService.update(expected), WorkerRolesDto.class);
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -95,6 +96,6 @@ class WorkerRolesServiceTest {
                 .build();
         WorkerRoles expected = workerRolesService.save(expectedDto);
         WorkerRoles actual = workerRolesService.findByRole(expected.getRole());
-        Assertions.assertEquals(expected, actual);
+        assertEquals(expected, actual);
     }
 }

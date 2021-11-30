@@ -1,11 +1,9 @@
 package org.jazzteam.eltay.gasimov.util;
 
 public class Constants {
-
     private Constants(){
 
     }
-
     public static final int INITIAL_WEIGHT = 50000;
     public static final double PRICE_FOR_PACKAGE = 1.9;
     public static final double COEFFICIENT_FOR_KILOGRAMS_CONVERT = 1000;
@@ -66,13 +64,17 @@ public class Constants {
     public static final String WAREHOUSES_URL = "/warehouses";
     public static final String WAREHOUSES_BY_ID_URL = WAREHOUSES_URL + ID;
     public static final String CODE_FIND_URL = "/codes/findCode";
-
     public static final String ROLE_ADMIN = "Admin";
     public static final String ROLE_WAREHOUSE_WORKER = "Warehouse Worker";
     public static final String ROLE_PICKUP_WORKER = "Pick up Worker";
     public static final String READY_TO_SEND = "Готов к отправке";
     public static final String WAREHOUSE_NOT_ALLOWED_STATE_CHANGING_MESSAGE = "Вданный момент вы не можете установить статус для этого заказа";
     public static final String CANNOT_CANCEL_ORDER = "Заказ невозможно отменить, т.к. он был отправлен на промежуточный склад";
-    public static final String CANNOT_CHANGE_STATE = "Вы не можете установить это состояние, под своей ролью";
-
+    public static final String CANNOT_CHANGE_STATE = "У вас нет прав для смены состояния у этого заказа";
+    public static final String CANNOT_CHANGE_STATE_IN_CURRENT_TIME = "В данный момент вы не можете изменить состояние заказа";
+    public static final String CANNOT_CREATE_ORDER = "Нельзя отправить заказ в этот же пункт отправки, пожалуйста введите пункт назначения еще раз";
+    public static final String NO_SUCH_STATE = "Данного состояния не существует";
+    public static final String ILLEGAL_ARGUMENT_EXCEPTION = "Expected IllegalArgumentException";
+    public static final String OBJECT_NOT_FOUND_EXCEPTION = "Expected ObjectNotFoundException";
+    public static final String ILLEGAL_STATE_EXCEPTION = "Expected IllegalStateException";
 }

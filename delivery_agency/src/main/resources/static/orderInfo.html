@@ -23,7 +23,7 @@
 <div class="defaultBar">
     <a href="homePage.html" class="defaultLogo">GasDel</a>
     <div class="nav-info-div">
-        <div class="createOrderText order-info-text" >Список заказов клиента</div>
+        <div class="createOrderText order-info-text">Список заказов клиента</div>
         <div id="client-nav-info" class="client-nav">
             <div id="client-name-nav"></div>
             <div id="client-surname-nav"></div>
@@ -39,20 +39,24 @@
     <div class="table-wrap">
         <div class="tableName"><h2><b>Информация о заказе</b></h2></div>
         <table id="orderInfo" style="" class="custom-table table table-bordered table-sm table">
+            <thead class="table-header-style">
             <tr>
-                <td>Имя получателя</td>
-                <td>Фамилия получателя</td>
-                <td>Время отправки</td>
-                <td>Стоимость, BYN</td>
-                <td>Состояние заказа</td>
-                <td>Точка отправки</td>
-                <td>Местоположение посылки</td>
-                <td>Место назначения</td>
-                <td>Вес, грамм</td>
-                <td>Высота, мм</td>
-                <td>Ширина, мм</td>
-                <td>Длина, мм</td>
+                <th datatype="text" style="vertical-align: middle">Имя получателя</th>
+                <th style="vertical-align: middle">Фамилия получателя</th>
+                <th datatype="date" style="vertical-align: middle">Время отправки</th>
+                <th style="vertical-align: middle">Стоимость, BYN</th>
+                <th style="vertical-align: middle">Состояние заказа</th>
+                <th style="vertical-align: middle">Точка отправки</th>
+                <th style="vertical-align: middle">Местоположение посылки</th>
+                <th style="vertical-align: middle">Место назначения</th>
+                <th style="vertical-align: middle">Вес, грамм</th>
+                <th style="vertical-align: middle">Высота, мм</th>
+                <th style="vertical-align: middle">Ширина, мм</th>
+                <th style="vertical-align: middle">Длина, мм</th>
             </tr>
+            </thead>
+            <tbody id="orderInfoBody">
+            </tbody>
         </table>
     </div>
 </div>
@@ -61,13 +65,16 @@
     <div class="table-wrap">
         <div class="tableName"><h2><b>История заказа</b></h2></div>
         <table id="orderHistory" class="table_sort custom-table table table-bordered table-sm table">
+            <thead class="table-header-style">
             <tr>
-                <td>Дата изменения</td>
-                <td>Был отправлен</td>
-                <td>Комментарий</td>
-                <td>Имя сотрудника</td>
-                <td>Фамилия сотрудника</td>
+                <th id="changedAt" data-type="date" style="vertical-align: middle">Дата изменения</th>
+                <th style="vertical-align: middle">Был отправлен</th>
+                <th style="vertical-align: middle">Комментарий</th>
+                <th style="vertical-align: middle">Имя сотрудника</th>
+                <th style="vertical-align: middle">Фамилия сотрудника</th>
             </tr>
+            </thead>
+            <tbody id="orderHistoryBody"></tbody>
         </table>
     </div>
 </div>

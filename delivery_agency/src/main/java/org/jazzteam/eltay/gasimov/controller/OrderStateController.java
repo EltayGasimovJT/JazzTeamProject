@@ -22,7 +22,7 @@ public class OrderStateController {
     @PostMapping(path = ORDER_STATES_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    OrderStateDto addNewState(@RequestBody OrderStateDto orderStateToSave) {
+    OrderStateDto save(@RequestBody OrderStateDto orderStateToSave) {
         return modelMapper.map(orderStateService.save(orderStateToSave), OrderStateDto.class);
     }
 
@@ -36,7 +36,7 @@ public class OrderStateController {
     @GetMapping(path = ORDER_STATES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<OrderStateDto> findAllStates() {
+    Iterable<OrderStateDto> findAll() {
         return orderStateService.findAll()
                 .stream()
                 .map(orderState -> modelMapper.map(orderState, OrderStateDto.class))
@@ -45,13 +45,13 @@ public class OrderStateController {
 
     @DeleteMapping(path = ORDER_STATES_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteState(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         orderStateService.delete(id);
     }
 
     @PutMapping(ORDER_STATES_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public OrderStateDto updateState(@RequestBody OrderStateDto orderStateDto) {
+    public OrderStateDto update(@RequestBody OrderStateDto orderStateDto) {
         return modelMapper.map(orderStateService.update(orderStateDto), OrderStateDto.class);
     }
 }

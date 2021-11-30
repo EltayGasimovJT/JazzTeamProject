@@ -265,16 +265,34 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Object changeOrderState(String orderNumber, String orderState) {
+        final String regex = "-";
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         Order foundOrder = findByTrackNumber(orderNumber);
         OrderState foundState = orderStateService.findByState(orderState);
+        if (foundState == null) {
+            throw new IllegalStateException(NO_SUCH_STATE);
+        }
         Set<WorkerRoles> result = foundState.getRolesAllowedPutToState().stream()
                 .distinct()
                 .filter(foundWorker.getRoles()::contains)
                 .collect(Collectors.toSet());
         if (result.isEmpty()) {
             throw new IllegalStateException(CANNOT_CHANGE_STATE);
+        }
+        List<String> splitOrderDepartureLocation = Arrays.asList(foundOrder.getCurrentLocation().getLocation().split(regex));
+        List<String> splitOrderDestinationLocation = Arrays.asList(foundOrder.getDestinationPlace().getLocation().split(regex));
+        List<String> splitWorkerLocation = Arrays.asList(foundWorker.getWorkingPlace().getLocation().split(regex));
+        Set<String> checkingDepartureLocationSet = splitOrderDepartureLocation.stream()
+                .distinct()
+                .filter(splitWorkerLocation::contains)
+                .collect(Collectors.toSet());
+        Set<String> checkingDestinationLocationSet = splitOrderDestinationLocation.stream()
+                .distinct()
+                .filter(splitWorkerLocation::contains)
+                .collect(Collectors.toSet());
+        if (checkingDepartureLocationSet.isEmpty() && checkingDestinationLocationSet.isEmpty()) {
+            throw new IllegalStateException(CANNOT_CHANGE_STATE_IN_CURRENT_TIME);
         }
         foundOrder.setState(foundState);
         foundOrder.setCurrentLocation(foundWorker.getWorkingPlace());
@@ -302,7 +320,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderState.getState().equals(OrderStates.ORDER_COMPLETE.getState())) {
             newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix());
         } else {
-            newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation());
+            newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation() + ".");
         }
         newHistory.setChangedTypeEnum(OrderStateChangeType.READY_TO_SEND.name());
         return newHistory;
@@ -358,7 +376,6 @@ public class OrderServiceImpl implements OrderService {
     private Client getClientToSave(ClientDto client) throws ObjectNotFoundException {
         Client foundSender = clientService.findClientByPassportId(client.getPassportId());
         if (foundSender != null) {
-
             return foundSender;
         }
         return Client.builder()
