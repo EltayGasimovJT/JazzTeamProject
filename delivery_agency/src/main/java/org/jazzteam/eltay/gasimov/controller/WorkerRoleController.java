@@ -22,7 +22,7 @@ public class WorkerRoleController {
     @PostMapping(path = WORKER_ROLES_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    WorkerRolesDto addNewUserRole(@RequestBody WorkerRolesDto newRoles) {
+    WorkerRolesDto save(@RequestBody WorkerRolesDto newRoles) {
         return modelMapper.map(workerRolesService.save(newRoles), WorkerRolesDto.class);
     }
 
@@ -36,7 +36,7 @@ public class WorkerRoleController {
     @GetMapping(path = WORKER_ROLES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<WorkerRolesDto> findAllUserRoles() {
+    Iterable<WorkerRolesDto> findAll() {
         return workerRolesService.findAll()
                 .stream()
                 .map(userRoles -> modelMapper.map(userRoles, WorkerRolesDto.class))
@@ -45,13 +45,13 @@ public class WorkerRoleController {
 
     @DeleteMapping(path = WORKER_ROLES_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRole(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         workerRolesService.delete(id);
     }
 
     @PutMapping(WORKER_ROLES_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public WorkerRolesDto updateUserRole(@RequestBody WorkerRolesDto newUserRole) {
+    public WorkerRolesDto update(@RequestBody WorkerRolesDto newUserRole) {
         return modelMapper.map(workerRolesService.update(newUserRole), WorkerRolesDto.class);
     }
 }

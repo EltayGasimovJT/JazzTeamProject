@@ -1,14 +1,17 @@
 package org.jazzteam.eltay.gasimov.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.*;
 
 @Data
 @Builder
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = "client")
+@ToString(exclude = "client")
 @NoArgsConstructor
 public class ClientsCodeDto {
+    private Long id;
     private String generatedCode;
+    @JsonBackReference
+    private ClientDto client;
 }

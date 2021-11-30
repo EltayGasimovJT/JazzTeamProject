@@ -8,34 +8,37 @@ public class WorkerValidator {
     private WorkerValidator() {
     }
 
-    public static void validateUser(Worker workerToValidate) throws IllegalArgumentException {
+    public static void validateWorker(Worker workerToValidate) throws IllegalArgumentException {
         if (workerToValidate == null) {
-            throw new IllegalArgumentException("There is no worker with such id");
+            throw new IllegalArgumentException("В базе данных нет такого сотрудника");
         }
         if (workerToValidate.getName() == null) {
-            throw new IllegalArgumentException("Worker must have name");
+            throw new IllegalArgumentException("Значение имени сотрудника должно быть заполнено");
         }
-        /*if (workerToValidate.getSurname() == null) {
-            throw new IllegalArgumentException("Worker must have surname");
-        }*/
+        if (workerToValidate.getSurname() == null) {
+            throw new IllegalArgumentException("Значение фамилии сотрудника должно быть заполнено");
+        }
         if (workerToValidate.getWorkingPlace() == null) {
-            throw new IllegalArgumentException("Worker must have working place");
+            throw new IllegalArgumentException("Значение места работы сотрудника должно быть заполнено");
         }
-        /*if (workerToValidate.getRoles().isEmpty()){
-            throw new IllegalArgumentException("Worker must have any role");
-        }*/
+        if (workerToValidate.getPassword() == null) {
+            throw new IllegalArgumentException("Значение пароля сотрудника должно быть заполнено");
+        }
+        if (workerToValidate.getRoles() == null) {
+            throw new IllegalArgumentException("Значение роли у сотрудника должно быть заполнено");
+        }
     }
 
     public static void validateOnSave(Worker workerToValidate) throws IllegalArgumentException {
         if (workerToValidate == null) {
-            throw new IllegalArgumentException("Worker cannot be null");
+            throw new IllegalArgumentException("Введенные данные о сотруднике не верны");
         }
-        validateUser(workerToValidate);
+        validateWorker(workerToValidate);
     }
 
-    public static void validateUsersList(List<Worker> usersToValidate) throws IllegalArgumentException {
-        if (usersToValidate.isEmpty()) {
-            throw new IllegalArgumentException("There is no users on the database");
+    public static void validateWorkersList(List<Worker> workersToValidate) throws IllegalArgumentException {
+        if (workersToValidate == null) {
+            throw new IllegalArgumentException("В базе данных нет сотрудников");
         }
     }
 }

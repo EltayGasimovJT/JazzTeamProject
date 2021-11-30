@@ -3,6 +3,15 @@ jQuery('document').ready(function () {
     if (sessionStorage.getItem('clientPhone') !== null) {
         insertClientInfo();
         insertLogoutButton();
+    } else if (sessionStorage.getItem('clientPhone') === null && sessionStorage.getItem('workersToken') === null) {
+        Swal.fire({
+            icon: 'info',
+            title: "У вас нет доступа к этой странице. Пожалуйста пройдите аутентификацию",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "/homePage.html";
+        })
     }
 })
 
@@ -20,15 +29,16 @@ function getUsersOrders() {
         data: {phoneNumber: phoneNumber},
         success: function (result) {
             for (let key = 0, size = result.length; key < size; key++) {
-                let row = '<tr class="text"><td>' + result[key].orderTrackNumber +
+                let row = '<tr class="text" style="font-weight: normal"><td>' + result[key].orderTrackNumber +
                     '</td><td class="orderNum">' + result[key].recipient.name + '</td><td>' +
                     result[key].recipient.surname + '</td><td>' + getTimeFormat(result[key].sendingTime) +
                     '</td><td>' + result[key].price + '</td><td>' + result[key].state.state + '</td><td>' +
                     result[key].departurePoint.location + '</td><td>' + result[key].currentLocation.location +
                     '</td><td>' + result[key].destinationPlace.location + '</td><td>' + addBackToOrderListButton() +
                     '</td></tr>';
-                $('#orders').append(row);
+                $('#ordersBody').append(row);
             }
+            sortOnLoad("orders")
 
             $(".additionalInfoButton").click(function (event) {
                     checkSession();
@@ -36,18 +46,26 @@ function getUsersOrders() {
                     $.get(`/orders/findByTrackNumber`, {orderNumber: orderId}, 'application/json').done(function (data) {
                         window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderId}`;
                     }).fail(function () {
-                        swal({
+                        Swal.fire({
                             title: "Ошибка ввода",
                             text: "Данного заказа не существует",
-                            icon: "error",
+                            icon: "info",
+                            showConfirmButton: false,
+                            timer: 5000
                         });
 
                     });
                 }
             )
         },
-        error: function (exception) {
-            swal(exception.message);
+        error: function () {
+            Swal.fire({
+                title: "Не удалось загрузить список заказов",
+                text: "В базе данных больше нет заказов",
+                icon: "info",
+                showConfirmButton: false,
+                timer: 5000
+            });
         }
     });
 }
@@ -69,8 +87,8 @@ function getIdFromUrl() {
 }
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 1) {
+    let sessionTime = new Date(sessionStorage.getItem('sessionTime')).getSeconds()
+    if (Math.abs(new Date().getSeconds() - sessionTime) > 30) {
         sessionStorage.removeItem('clientPhone');
         sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;
@@ -80,18 +98,12 @@ function checkSession() {
 }
 
 function addBackToOrderListButton() {
-    return '<button class="customHiddenBtn buttonText additionalInfoButton" type="button">'
+    return '<button class="btn btn-primary buttonText additionalInfoButton" type="button">'
         + '<span class="glyphicon glyphicon-pencil"></span>Дополнительная информация</button>';
 }
 
 function getTimeFormat(time) {
-    let date = new Date(time);
-
-    date.setDate(date.getDate() + 20);
-
-    return ('0' + date.getDate()).slice(-2) + '.'
-        + ('0' + (date.getMonth() + 1)).slice(-2) + '.'
-        + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+    return moment(time).format("YYYY-MM-DD HH:mm:ss z");
 }
 
 function insertClientInfo() {
@@ -104,10 +116,12 @@ function insertClientInfo() {
             name.innerHTML = `Имя: ${data.name}`
             surname.innerHTML = `Фамилия: ${data.surname}`
         }).fail(function () {
-        swal({
+        Swal.fire({
             title: "Что-то пошло не так",
             text: "Ошибка при поиске сотрудника",
             icon: "error",
+            showConfirmButton: false,
+            timer: 5000
         });
     });
 }
@@ -122,4 +136,75 @@ function insertLogoutButton() {
             window.location.href = `/homePage.html`;
         }
     )
+}
+
+function findTableForSort(tableId) {
+    let table = document.getElementById(tableId);
+    table.addEventListener('click', (e) => {
+        const element = e.target;
+        if (element.nodeName !== 'TH') {
+            return;
+        }
+        const index = element.cellIndex;
+        const type = element.getAttribute('data-type');
+        sortTable(index, table, type, element)
+    })
+}
+
+const sortTable = function (index, table, type, element) {
+    const tbody = table.querySelector('tbody');
+
+    const compare = function (rowA, rowB) {
+        const rowDataA = rowA.cells[index].innerHTML;
+        const rowDataB = rowB.cells[index].innerHTML;
+        switch (type) {
+            case 'integer': {
+                return rowDataA - rowDataB;
+                break;
+            }
+            case 'date': {
+                element.style.backgroundColor = '#FFD700'
+                if (moment(rowDataA).isBefore(rowDataB)) {
+                    return 1;
+                } else if (moment(rowDataA).isAfter(rowDataB)) {
+                    return -1;
+                } else return 0;
+                break;
+            }
+            case 'text': {
+                if (rowDataA < rowDataB) {
+                    return -1;
+                } else if (rowDataA > rowDataB) {
+                    return 1;
+                } else return 0;
+                break;
+            }
+            case 'double': {
+                return rowDataA - rowDataB;
+                break;
+            }
+            default:
+                break;
+        }
+    }
+
+    let rows = [].slice.call(tbody.rows);
+
+    rows.sort(compare);
+
+    table.removeChild(tbody);
+
+    for (let i = 0; i < rows.length; i++) {
+        tbody.appendChild(rows[i]);
+    }
+
+    table.appendChild(tbody);
+}
+
+function sortOnLoad(tableId) {
+    let table = document.getElementById(tableId);
+    const element = document.getElementById('changedAt');
+    const index = element.cellIndex;
+    const type = element.getAttribute('data-type');
+    sortTable(index, table, type, element);
 }

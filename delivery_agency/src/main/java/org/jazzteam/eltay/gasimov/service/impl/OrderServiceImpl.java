@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,6 +50,8 @@ public class OrderServiceImpl implements OrderService {
     private ContextService contextService;
     @Autowired
     private WorkerService workerService;
+    @Autowired
+    private TicketService ticketService;
 
     @Override
     public Order updateOrderCurrentLocation(long idForLocationUpdate, AbstractBuildingDto newLocation) throws IllegalArgumentException {
@@ -74,8 +73,8 @@ public class OrderServiceImpl implements OrderService {
 
     private String generateNewTrackNumber() {
         int randomStringLength = 9;
-        String charset = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZ";
-        return RandomStringUtils.random(randomStringLength, charset);
+        String trackerGenerationCharset = "0123456789ABCDEFGHIJKLMOPQRSTUVWXYZ";
+        return RandomStringUtils.random(randomStringLength, trackerGenerationCharset);
     }
 
     @Override
@@ -87,15 +86,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order findByRecipient(ClientDto recipientForSearch) throws IllegalArgumentException {
-        Order foundOrder = orderRepository.findByRecipient(modelMapper.map(recipientForSearch, Client.class));
+        Order foundOrder = orderRepository.findByRecipientId(recipientForSearch.getId());
         OrderValidator.validateOrder(foundOrder);
         return foundOrder;
     }
 
     @Override
+    @Transactional
     public Order findBySender(ClientDto senderForSearch) throws IllegalArgumentException {
-        Order foundOrder = orderRepository.findByRecipient(modelMapper.map(senderForSearch, Client.class));
+        Order foundOrder = orderRepository.findBySenderId(senderForSearch.getId());
         OrderValidator.validateOrder(foundOrder);
         return foundOrder;
     }
@@ -239,6 +240,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public Order createOrder(CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         OrderState orderState = orderStateService.findByState(OrderStates.READY_TO_SEND.getState());
         OrderHistoryDto orderHistoryForSave = OrderHistoryDto.builder()
@@ -263,13 +265,37 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Object changeOrderState(String orderNumber, String orderState) {
+        final String regex = "-";
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundWorker = workerService.findByName(currentUserFromContext.getUsername());
         Order foundOrder = findByTrackNumber(orderNumber);
         OrderState foundState = orderStateService.findByState(orderState);
+        if (foundState == null) {
+            throw new IllegalStateException(NO_SUCH_STATE);
+        }
+        Set<WorkerRoles> result = foundState.getRolesAllowedPutToState().stream()
+                .distinct()
+                .filter(foundWorker.getRoles()::contains)
+                .collect(Collectors.toSet());
+        if (result.isEmpty()) {
+            throw new IllegalStateException(CANNOT_CHANGE_STATE);
+        }
+        List<String> splitOrderDepartureLocation = Arrays.asList(foundOrder.getCurrentLocation().getLocation().split(regex));
+        List<String> splitOrderDestinationLocation = Arrays.asList(foundOrder.getDestinationPlace().getLocation().split(regex));
+        List<String> splitWorkerLocation = Arrays.asList(foundWorker.getWorkingPlace().getLocation().split(regex));
+        Set<String> checkingDepartureLocationSet = splitOrderDepartureLocation.stream()
+                .distinct()
+                .filter(splitWorkerLocation::contains)
+                .collect(Collectors.toSet());
+        Set<String> checkingDestinationLocationSet = splitOrderDestinationLocation.stream()
+                .distinct()
+                .filter(splitWorkerLocation::contains)
+                .collect(Collectors.toSet());
+        if (checkingDepartureLocationSet.isEmpty() && checkingDestinationLocationSet.isEmpty()) {
+            throw new IllegalStateException(CANNOT_CHANGE_STATE_IN_CURRENT_TIME);
+        }
         foundOrder.setState(foundState);
         foundOrder.setCurrentLocation(foundWorker.getWorkingPlace());
-        orderRepository.save(foundOrder);
         foundOrder.getHistory().add(getNewHistory(foundOrder, foundState, orderNumber, foundWorker));
         return orderRepository.save(foundOrder);
     }
@@ -277,7 +303,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     public void deleteByTrackNumber(String orderNumber) {
-        orderRepository.deleteByTrackNumber(orderNumber);
+        Order foundOrder = orderRepository.findByTrackNumber(orderNumber);
+        if (foundOrder.getState().getState().equals(OrderStates.READY_TO_SEND.getState()) ||
+                foundOrder.getState().getState().equals(OrderStates.ON_THE_PROCESSING_POINT_STORAGE.getState())) {
+            ticketService.delete(foundOrder.getTicket().getId());
+        } else {
+            throw new IllegalStateException(CANNOT_CANCEL_ORDER);
+        }
     }
 
     private OrderHistory getNewHistory(Order foundOrder, OrderState orderState, String orderNumber, Worker foundWorker) {
@@ -285,7 +317,11 @@ public class OrderServiceImpl implements OrderService {
         newHistory.setSentAt(foundOrder.getHistory().iterator().next().getSentAt());
         newHistory.setWorker(foundWorker);
         newHistory.setChangedAt(LocalDateTime.now());
-        newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation());
+        if (orderState.getState().equals(OrderStates.ORDER_COMPLETE.getState())) {
+            newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix());
+        } else {
+            newHistory.setComment(orderState.getPrefix() + orderNumber + orderState.getSuffix() + foundWorker.getWorkingPlace().getLocation() + ".");
+        }
         newHistory.setChangedTypeEnum(OrderStateChangeType.READY_TO_SEND.name());
         return newHistory;
     }
@@ -298,7 +334,8 @@ public class OrderServiceImpl implements OrderService {
         orderDtoToSave.setPrice(price);
         orderDtoToSave.setState(modelMapper.map(orderStateService.findByState(READY_TO_SEND), OrderStateDto.class));
 
-        OrderHistory savedHistory = orderHistoryService.save(modelMapper.map(orderDtoToSave.getHistory().iterator().next(), OrderHistoryDto.class));
+        OrderHistory savedHistory = CustomModelMapper.mapDtoToHistory(orderDtoToSave.getHistory().iterator().next());
+        savedHistory.setWorker(workerService.findByName(orderDtoToSave.getHistory().iterator().next().getWorker().getName()));
         savedHistory.setSentAt(LocalDateTime.now());
         Set<OrderHistory> orderHistories = new HashSet<>();
         orderHistories.add(savedHistory);
@@ -309,7 +346,7 @@ public class OrderServiceImpl implements OrderService {
 
         OrderProcessingPoint destinationPlaceToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDestinationPlace().getLocation());
         OrderProcessingPoint departurePointToSave = orderProcessingPointService.findByLocation(orderDtoToSave.getDeparturePoint().getLocation());
-        ParcelParameters savedParameters = parcelParametersService.save(orderDtoToSave.getParcelParameters());
+        ParcelParameters savedParameters = modelMapper.map(orderDtoToSave.getParcelParameters(), ParcelParameters.class);
 
         Order orderToSave = Order.builder()
                 .sender(senderToSave)
@@ -324,7 +361,11 @@ public class OrderServiceImpl implements OrderService {
                 .trackNumber(generateNewTrackNumber())
                 .sendingTime(savedHistory.getSentAt())
                 .build();
-
+        if (senderToSave.getOrders() != null) {
+            senderToSave.getOrders().add(orderToSave);
+        } else {
+            senderToSave.setOrders(Stream.of(CustomModelMapper.mapDtoToOrder(orderDtoToSave)).collect(Collectors.toSet()));
+        }
         return orderRepository.save(orderToSave);
     }
 
@@ -333,26 +374,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private Client getClientToSave(ClientDto client) throws ObjectNotFoundException {
-        Client clientToSave;
         Client foundSender = clientService.findClientByPassportId(client.getPassportId());
         if (foundSender != null) {
-            clientToSave = Client.builder()
-                    .id(foundSender.getId())
-                    .name(foundSender.getName())
-                    .surname(foundSender.getSurname())
-                    .passportId(foundSender.getPassportId())
-                    .phoneNumber(foundSender.getPhoneNumber())
-                    .build();
-        } else {
-            clientToSave = Client.builder()
-                    .name(client.getName())
-                    .surname(client.getSurname())
-                    .passportId(client.getPassportId())
-                    .phoneNumber(client.getPhoneNumber())
-                    .build();
-            Client savedClient = clientService.save(modelMapper.map(clientToSave, ClientDto.class));
-            clientToSave.setId(savedClient.getId());
+            return foundSender;
         }
-        return clientToSave;
+        return Client.builder()
+                .name(client.getName())
+                .surname(client.getSurname())
+                .passportId(client.getPassportId())
+                .phoneNumber(client.getPhoneNumber())
+                .build();
     }
 }

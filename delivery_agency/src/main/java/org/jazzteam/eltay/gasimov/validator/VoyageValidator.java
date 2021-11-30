@@ -11,26 +11,26 @@ public class VoyageValidator {
 
     public static void validateOnSave(Voyage voyageToValidate) throws IllegalArgumentException {
         if (voyageToValidate == null) {
-            throw new IllegalArgumentException("Cannot save Voyage, because its null");
+            throw new IllegalArgumentException("Введенные данные о маршруте не верны");
         }
         validateVoyage(voyageToValidate);
     }
 
     public static void validateVoyage(Voyage voyageToValidate) throws IllegalArgumentException {
         if (voyageToValidate == null) {
-            throw new IllegalArgumentException("There is no voyage with such Id");
+            throw new IllegalArgumentException("В базе нет данного маршрута");
         }
         if (voyageToValidate.getDeparturePoint() == null) {
-            throw new IllegalArgumentException("Voyage must have departure point");
+            throw new IllegalArgumentException("Значение пункта отправки у маршрута должно быть заполнено");
         }
         if (voyageToValidate.getDestinationPoint() == null) {
-            throw new IllegalArgumentException("Voyage must have destination point");
+            throw new IllegalArgumentException("Значение пункта назначения у маршрута должно быть заполнено");
         }
     }
 
     public static void validateVoyageList(List<Voyage> voyagesToValidate) throws IllegalArgumentException {
-        if (voyagesToValidate.isEmpty()) {
-            throw new IllegalArgumentException("There is no voyages on the org.jazzteam.eltay.gasimov.repository");
+        if (voyagesToValidate == null) {
+            throw new IllegalArgumentException("В базе данныех нет маршрутов");
         }
     }
 }

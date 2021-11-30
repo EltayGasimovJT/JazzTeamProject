@@ -22,14 +22,14 @@ public class OrderProcessingPointController {
     @PostMapping(path = PROCESSING_POINTS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    OrderProcessingPointDto addNewProcessingPoint(@RequestBody OrderProcessingPointDto processingPointDto) {
+    OrderProcessingPointDto save(@RequestBody OrderProcessingPointDto processingPointDto) {
         return modelMapper.map(processingPointService.save(processingPointDto), OrderProcessingPointDto.class);
     }
 
     @GetMapping(path = PROCESSING_POINTS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<OrderProcessingPointDto> findAllProcessingPoints() {
+    Iterable<OrderProcessingPointDto> findAll() {
         return processingPointService.findAll()
                 .stream()
                 .map(orderProcessingPoint -> modelMapper.map(orderProcessingPoint, OrderProcessingPointDto.class))
@@ -37,7 +37,7 @@ public class OrderProcessingPointController {
     }
 
     @DeleteMapping(path = PROCESSING_POINTS_BY_ID_URL)
-    public void deleteProcessingPoint(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         processingPointService.delete(id);
     }
 
@@ -50,7 +50,7 @@ public class OrderProcessingPointController {
 
     @PutMapping(PROCESSING_POINTS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public OrderProcessingPointDto updateProcessingPoint(@RequestBody OrderProcessingPointDto newProcessingPoint) {
+    public OrderProcessingPointDto update(@RequestBody OrderProcessingPointDto newProcessingPoint) {
         return modelMapper.map(processingPointService.update(newProcessingPoint), OrderProcessingPointDto.class);
     }
 }

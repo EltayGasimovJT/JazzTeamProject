@@ -8,6 +8,7 @@ import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.jazzteam.eltay.gasimov.entity.WorkerRoles;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
 import org.jazzteam.eltay.gasimov.service.ContextService;
+import org.jazzteam.eltay.gasimov.service.OrderStateService;
 import org.jazzteam.eltay.gasimov.service.WorkerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,11 +26,13 @@ public class WorkerController {
     private WorkerService workerService;
     @Autowired
     private ContextService contextService;
+    @Autowired
+    private OrderStateService orderStateService;
 
     @PostMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    Worker addNewUser(@RequestBody WorkerDto workerDtoToSave) {
+    Worker save(@RequestBody WorkerDto workerDtoToSave) {
         return workerService.save(workerDtoToSave);
     }
 
@@ -37,19 +40,19 @@ public class WorkerController {
     @ResponseStatus(HttpStatus.RESET_CONTENT)
     public @ResponseBody
     Worker changeWorkingPlace(@PathVariable Long id, @RequestBody AbstractBuildingDto newWorkingPlace) {
-        return workerService.changeWorkingPlace(id, newWorkingPlace);
+        return workerService.changeWorkingPlace(id, newWorkingPlace.getId());
     }
 
     @GetMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<Worker> findAllUsers() {
+    Iterable<Worker> findAll() {
         return workerService.findAll();
     }
 
     @DeleteMapping(path = WORKERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteUser(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         workerService.delete(id);
     }
 
@@ -57,7 +60,7 @@ public class WorkerController {
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
     WorkerDto findById(@PathVariable Long id) {
-        return CustomModelMapper.mapUserToDto(workerService.findOne(id));
+        return CustomModelMapper.mapWorkerToDto(workerService.findOne(id));
     }
 
     @GetMapping(path = WORKERS_FIND_ROLES_URL)
@@ -74,10 +77,10 @@ public class WorkerController {
     @GetMapping(path = WORKERS_GET_STATES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    String getStatesByRole(@RequestParam String orderNumber) {
+    String getStatesByOrderNumber(@RequestParam String orderNumber) {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
         Worker foundByName = workerService.findByName(currentUserFromContext.getUsername());
-        return workerService.findStatesByRole(foundByName, orderNumber);
+        return orderStateService.findStatesByRole(foundByName, orderNumber);
     }
 
     @GetMapping(path = WORKERS_GET_CURRENT_WORKER_URL)
@@ -85,13 +88,13 @@ public class WorkerController {
     public @ResponseBody
     WorkerDto getCurrentWorker() {
         CustomUserDetails currentUserFromContext = contextService.getCurrentUserFromContext();
-        return CustomModelMapper.mapUserToDto(workerService.findByName(currentUserFromContext.getUsername()));
+        return CustomModelMapper.mapWorkerToDto(workerService.findByName(currentUserFromContext.getUsername()));
     }
 
 
     @PutMapping(path = WORKERS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public Worker updateUser(@RequestBody WorkerDto newUser) {
+    public Worker update(@RequestBody WorkerDto newUser) {
         return workerService.update(newUser);
     }
 }

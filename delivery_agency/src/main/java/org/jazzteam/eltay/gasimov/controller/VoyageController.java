@@ -22,14 +22,14 @@ public class VoyageController {
     @PostMapping(path = VOYAGES_URL)
     @ResponseStatus(HttpStatus.CREATED)
     public @ResponseBody
-    VoyageDto addNewVoyage(@RequestBody VoyageDto voyageDto) {
+    VoyageDto save(@RequestBody VoyageDto voyageDto) {
         return modelMapper.map(voyageService.save(voyageDto), VoyageDto.class);
     }
 
     @GetMapping(path = VOYAGES_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<VoyageDto> findAllVoyages() {
+    Iterable<VoyageDto> findAll() {
         return voyageService.findAll().stream()
                 .map(orderProcessingPoint -> modelMapper.map(orderProcessingPoint, VoyageDto.class))
                 .collect(Collectors.toSet());
@@ -37,7 +37,7 @@ public class VoyageController {
 
     @DeleteMapping(path = VOYAGES_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteVoyage(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         voyageService.delete(id);
     }
 
@@ -50,7 +50,7 @@ public class VoyageController {
 
     @PutMapping(path = VOYAGES_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public VoyageDto updateVoyage(@RequestBody VoyageDto newVoyage) {
+    public VoyageDto update(@RequestBody VoyageDto newVoyage) {
         return modelMapper.map(voyageService.save(newVoyage), VoyageDto.class);
     }
 }

@@ -1,5 +1,5 @@
 jQuery('document').ready(function () {
-    if (localStorage.getItem('clientsPhone') !== null) {
+    if (sessionStorage.getItem('clientsPhone') !== null) {
         checkSession();
     }
 
@@ -43,10 +43,24 @@ jQuery('document').ready(function () {
     })
 
     asClientModal.addEventListener('click', () => {
-        if (localStorage.getItem('workersToken') !== null) {
-            localStorage.removeItem('workersToken');
+        if (sessionStorage.getItem('workersToken') !== null) {
+            Swal.fire({
+                title: "Вы уверены, что хотите выйти из рабочей учетной записи?",
+                icon: "warning",
+                showDenyButton: true,
+                confirmButtonText: 'Выйти',
+                denyButtonText: `Отмена`,
+            })
+                .then((willDelete) => {
+                    if (willDelete.isConfirmed) {
+                        sessionStorage.removeItem('workersToken');
+                        sessionStorage.removeItem('workerSession');
+                    } else if (willDelete.isDenied) {
+                        window.location.href = "/homePage.html";
+                    }
+                });
         }
-        if (localStorage.getItem('clientPhone') !== null) {
+        if (sessionStorage.getItem('clientPhone') !== null) {
             window.location.href = "/clientsOrders.html";
         } else {
             clientBackgroundModal.style.visibility = 'visible';
@@ -62,12 +76,12 @@ jQuery('document').ready(function () {
     })
 
     asUserModal.addEventListener('click', () => {
-        if (localStorage.getItem('clientPhone') !== null) {
-            localStorage.removeItem('clientPhone');
-            localStorage.removeItem('sessionTime');
+        if (sessionStorage.getItem('clientPhone') !== null) {
+            sessionStorage.removeItem('clientPhone');
+            sessionStorage.removeItem('sessionTime');
         }
-        if (localStorage.getItem('workersToken') !== null) {
-            window.location.href = "/processingPointWorkerActionPage.html";
+        if (sessionStorage.getItem('workersToken') !== null) {
+            window.location.href = "/workerActionPage.html";
         } else {
             backgroundModal.style.visibility = 'visible';
         }
@@ -80,12 +94,32 @@ jQuery('document').ready(function () {
         let $form = $(this),
             phoneNumber = $form.find("input[name='phoneNumber']").val(),
             url = $form.attr("action");
-        $.get(url, {phoneNumber: phoneNumber}, 'application/json').done(function (data) {
-            swal(data.code.generatedCode)
+        let geting = $.get(url, {phoneNumber: phoneNumber}, 'application/json');
+        geting.done(function (data) {
+            Swal.fire({
+                icon: 'info',
+                title: "На ваш номер телефона был выслан четырехзначный код подтверждения",
+                showConfirmButton: false,
+                timer: 5000
+            }).then(function () {
+                Swal.fire({
+                    text: data.code.generatedCode,
+                    icon: 'info',
+                    title: "Четырехзначный код из смс",
+                    showConfirmButton: false,
+                    timer: 7000
+                })
+            });
             clientPhoneNumber = phoneNumber;
             codeBackgroundModal.style.visibility = 'visible';
         }).fail(function () {
-            swal("Неверный номер телефона", "Пользователь с таким номером не зарегистрирован", 'error');
+            Swal.fire({
+                text: "Пользователь с таким номером не зарегистрирован",
+                title: "Неверный номер телефона",
+                icon: 'info',
+                showConfirmButton: false,
+                timer: 5000
+            })
         });
     })
 
@@ -94,15 +128,18 @@ jQuery('document').ready(function () {
         let $form = $(this),
             code = $form.find("input[name='code']").val(),
             url = $form.attr("action");
-        $.get(url, {code: code}, 'application/json').done(function () {
-            localStorage.setItem('clientPhone', clientPhoneNumber);
-            localStorage.setItem('sessionTime', (new Date()).toString())
+        let geting = $.get(url, {code: code}, 'application/json');
+        geting.done(function () {
+            sessionStorage.setItem('clientPhone', clientPhoneNumber);
+            sessionStorage.setItem('sessionTime', (new Date()).toString())
             window.location.href = `/clientsOrders.html`;
         }).fail(function () {
-            swal({
+            Swal.fire({
                 title: "Неверный код, повторите попытку",
                 text: "Введенный вами четырехзначный код неправильный, пожалуйста повторите попытку",
-                icon: "error",
+                icon: "info",
+                showConfirmButton: false,
+                timer: 5000
             });
         });
     })
@@ -123,13 +160,16 @@ jQuery('document').ready(function () {
                 password: `${password}`
             })
         }).done(function (data) {
-            localStorage.setItem('workersToken', data.token)
-            window.location.href = "/processingPointWorkerActionPage.html";
+            sessionStorage.setItem('workersToken', data.token)
+            sessionStorage.setItem('workerSession', (new Date()).toString())
+            window.location.href = "/workerActionPage.html";
         }).fail(function () {
-            swal({
+            Swal.fire({
                 title: "Неправильный логин или пароль",
                 text: "Пожалуйста попробуйте ввести данные сотрудника еще раз",
-                icon: "error",
+                icon: "info",
+                showConfirmButton: false,
+                timer: 5000
             });
         });
     })
@@ -142,10 +182,10 @@ jQuery('document').ready(function () {
         $.get(url, {orderNumber: orderNumber}, 'application/json').done(function (data) {
             window.location.href = `/orderInfo.html?orderId=${data.id}&orderNumber=${orderNumber}`;
         }).fail(function () {
-            swal({
+            Swal.fire({
                 title: "Ошибка ввода",
                 text: "Данного заказа не существует",
-                icon: "error",
+                icon: "info",
             });
 
         });
@@ -153,12 +193,12 @@ jQuery('document').ready(function () {
 })
 
 function checkSession() {
-    let sessionTimeMinutes = new Date(localStorage.getItem('sessionTime')).getMinutes()
-    if ((new Date().getMinutes() - sessionTimeMinutes) > 5) {
-        localStorage.removeItem('clientPhone');
-        localStorage.removeItem('sessionTime');
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('sessionTime')).getHours()
+    if ((new Date().getHours() - sessionTimeMinutes) > 1) {
+        sessionStorage.removeItem('clientPhone');
+        sessionStorage.removeItem('sessionTime');
         window.location.href = `/homePage.html`;
     } else {
-        localStorage.setItem('sessionTime', (new Date()).toString())
+        sessionStorage.setItem('sessionTime', (new Date()).toString())
     }
 }

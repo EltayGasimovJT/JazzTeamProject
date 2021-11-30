@@ -7,7 +7,6 @@ import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
 import org.jazzteam.eltay.gasimov.entity.ClientsCode;
-import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 import org.jazzteam.eltay.gasimov.repository.ClientRepository;
 import org.jazzteam.eltay.gasimov.repository.CodeRepository;
 import org.jazzteam.eltay.gasimov.service.ClientService;
@@ -34,7 +33,6 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     private ModelMapper modelMapper;
 
-
     @Override
     public void delete(Long idForDelete) throws IllegalArgumentException, ObjectNotFoundException {
         Optional<Client> foundClientFromRepository = clientRepository.findById(idForDelete);
@@ -60,7 +58,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException, ObjectNotFoundException {
+    public Client findClientByPassportId(String passportIdForSearch) throws IllegalArgumentException {
         return clientRepository.findByPassportId(passportIdForSearch);
     }
 
@@ -99,11 +97,6 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public OrderProcessingPoint determineCurrentDestinationPlace(String destinationPlace) {
-        return orderProcessingPointService.findByLocation(destinationPlace);
-    }
-
-    @Override
     public Client findByPhoneNumber(String phoneNumber) throws ObjectNotFoundException {
         Client foundClient = clientRepository.findByPhoneNumber(phoneNumber);
         ClientValidator.validateOnFindByPhoneNumber(foundClient, phoneNumber);
@@ -122,7 +115,7 @@ public class ClientServiceImpl implements ClientService {
     public Client generateCodeForClient(String phoneNumber) throws ObjectNotFoundException {
         Client foundClient = clientRepository.findByPhoneNumber(phoneNumber);
         ClientValidator.validateOnFindByPhoneNumber(foundClient, phoneNumber);
-        String generatedCode = generateNewCode();
+        String generatedCode = generatePersonalCode();
         ClientsCode generatedCodeObject = ClientsCode.builder()
                 .client(foundClient)
                 .generatedCode(generatedCode)
@@ -131,7 +124,12 @@ public class ClientServiceImpl implements ClientService {
         return foundClient;
     }
 
-    private String generateNewCode() {
+    @Override
+    public void deleteAll() {
+        clientRepository.deleteAll();
+    }
+
+    private String generatePersonalCode() {
         int randomStringLength = 4;
         String charset = "0123456789";
         return RandomStringUtils.random(randomStringLength, charset);

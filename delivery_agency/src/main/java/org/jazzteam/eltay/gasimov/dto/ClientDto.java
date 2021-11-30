@@ -1,5 +1,6 @@
 package org.jazzteam.eltay.gasimov.dto;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,6 @@ public class ClientDto {
     @NotBlank(message = "Client phoneNumber cannot be empty")
     @Size(min = 1, max = 100, message = "Client phoneNumber must be between 1 and 100 characters")
     private String phoneNumber;
-
+    @JsonManagedReference
     private ClientsCodeDto code;
 }

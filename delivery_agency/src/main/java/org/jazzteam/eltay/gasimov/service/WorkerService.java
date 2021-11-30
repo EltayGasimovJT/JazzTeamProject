@@ -1,7 +1,6 @@
 package org.jazzteam.eltay.gasimov.service;
 
 import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
-import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
 import org.jazzteam.eltay.gasimov.dto.WorkerDto;
 import org.jazzteam.eltay.gasimov.entity.Worker;
 import org.jazzteam.eltay.gasimov.entity.WorkerRoles;
@@ -20,7 +19,7 @@ public interface WorkerService {
 
     Worker update(WorkerDto workerDtoToUpdate);
 
-    Worker changeWorkingPlace(Long userId, AbstractBuildingDto newWorkingPlace);
+    Worker changeWorkingPlace(Long userId, Long newWorkingPlaceId);
 
     Worker findByName(String name);
 
@@ -31,6 +30,4 @@ public interface WorkerService {
     Worker saveForRegistration(RegistrationRequest registrationRequest);
 
     Set<WorkerRoles> findWorkerRoles(String username);
-
-    String findStatesByRole(Worker foundByName, String orderNumber);
 }

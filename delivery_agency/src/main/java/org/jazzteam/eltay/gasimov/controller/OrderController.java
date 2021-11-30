@@ -47,7 +47,10 @@ public class OrderController {
     OrderResponseDto createOrder(@RequestBody CreateOrderRequestDto requestOrder) throws ObjectNotFoundException {
         CustomUserDetails principal = contextService.getCurrentUserFromContext();
         Worker foundWorker = workerService.findByName(principal.getUsername());
-        requestOrder.setWorkerDto(CustomModelMapper.mapUserToDto(foundWorker));
+        if(requestOrder.getDestinationPoint().equals(foundWorker.getWorkingPlace().getLocation())){
+            throw new IllegalArgumentException(CANNOT_CREATE_ORDER);
+        }
+        requestOrder.setWorkerDto(CustomModelMapper.mapWorkerToDto(foundWorker));
         OrderDto createdOrder = CustomModelMapper.mapOrderToDto(orderService.createOrder(requestOrder));
         return OrderResponseDto.builder()
                 .orderDto(createdOrder)
@@ -92,7 +95,7 @@ public class OrderController {
     @GetMapping(path = ORDERS_URL)
     @ResponseStatus(HttpStatus.OK)
     public @ResponseBody
-    Iterable<OrderDto> findAllOrders() {
+    Iterable<OrderDto> findAll() {
         return orderService.findAll()
                 .stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
@@ -101,8 +104,7 @@ public class OrderController {
 
     @DeleteMapping(path = ORDERS_BY_ID_URL)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteOrder(@PathVariable Long id) {
-        log.severe(id.toString());
+    public void delete(@PathVariable Long id) {
         orderService.delete(id);
     }
 
@@ -120,7 +122,7 @@ public class OrderController {
 
     @PutMapping(path = ORDERS_URL)
     @ResponseStatus(HttpStatus.RESET_CONTENT)
-    public OrderDto updateOrder(@RequestBody OrderDto newOrder) {
+    public OrderDto update(@RequestBody OrderDto newOrder) {
         return modelMapper.map(orderService.update(newOrder), OrderDto.class);
     }
 }

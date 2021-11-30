@@ -4,7 +4,6 @@ import javassist.tools.rmi.ObjectNotFoundException;
 import org.jazzteam.eltay.gasimov.dto.ClientDto;
 import org.jazzteam.eltay.gasimov.dto.OrderDto;
 import org.jazzteam.eltay.gasimov.entity.Client;
-import org.jazzteam.eltay.gasimov.entity.OrderProcessingPoint;
 
 import java.util.List;
 import java.util.Set;
@@ -22,11 +21,11 @@ public interface ClientService {
 
     Client update(ClientDto newClient) throws IllegalArgumentException, ObjectNotFoundException;
 
-    OrderProcessingPoint determineCurrentDestinationPlace(String destinationPlace);
-
     Client findByPhoneNumber(String phoneNumber) throws ObjectNotFoundException;
 
     Set<OrderDto> findOrdersByClientPhoneNumber(String phoneNumber);
 
     Client generateCodeForClient(String phoneNumber) throws ObjectNotFoundException;
+
+    void deleteAll();
 }

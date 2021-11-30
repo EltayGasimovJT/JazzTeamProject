@@ -2,9 +2,6 @@ package org.jazzteam.eltay.gasimov.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.jazzteam.eltay.gasimov.controller.security.model.RegistrationRequest;
-import org.jazzteam.eltay.gasimov.dto.AbstractBuildingDto;
-import org.jazzteam.eltay.gasimov.dto.OrderProcessingPointDto;
-import org.jazzteam.eltay.gasimov.dto.WarehouseDto;
 import org.jazzteam.eltay.gasimov.dto.WorkerDto;
 import org.jazzteam.eltay.gasimov.entity.*;
 import org.jazzteam.eltay.gasimov.mapping.CustomModelMapper;
@@ -15,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -42,10 +40,10 @@ public class WorkerServiceImpl implements WorkerService {
     private OrderService orderService;
 
     @Override
+    @Transactional
     public Worker save(WorkerDto workerDtoToSave) {
         Worker workerToSave = CustomModelMapper.mapDtoToWorker(workerDtoToSave);
         WorkerValidator.validateOnSave(workerToSave);
-
         return workerRepository.save(workerToSave);
     }
 
@@ -53,14 +51,14 @@ public class WorkerServiceImpl implements WorkerService {
     public void delete(Long idForDelete) throws IllegalArgumentException {
         Optional<Worker> foundClientFromRepository = workerRepository.findById(idForDelete);
         Worker orderToUpdate = foundClientFromRepository.orElseGet(Worker::new);
-        WorkerValidator.validateUser(orderToUpdate);
+        WorkerValidator.validateWorker(orderToUpdate);
         workerRepository.deleteById(idForDelete);
     }
 
     @Override
     public List<Worker> findAll() throws IllegalArgumentException {
         List<Worker> usersFromRepository = workerRepository.findAll();
-        WorkerValidator.validateUsersList(usersFromRepository);
+        WorkerValidator.validateWorkersList(usersFromRepository);
         return usersFromRepository;
     }
 
@@ -68,44 +66,37 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker findOne(long idForSearch) throws IllegalArgumentException {
         Optional<Worker> foundWorkerFromRepository = workerRepository.findById(idForSearch);
         Worker foundWorker = foundWorkerFromRepository.orElseGet(Worker::new);
-        WorkerValidator.validateUser(foundWorker);
+        WorkerValidator.validateWorker(foundWorker);
         return foundWorker;
     }
 
     @Override
     public Worker update(WorkerDto workerDtoToUpdate) {
         Worker workerToUpdate = CustomModelMapper.mapDtoToWorker(workerDtoToUpdate);
-        WorkerValidator.validateUser(workerToUpdate);
+        workerToUpdate.setRoles(Stream.of(workerRolesService.findByRole(workerDtoToUpdate.getRole().name())).collect(Collectors.toSet()));
+        WorkerValidator.validateWorker(workerToUpdate);
         return workerRepository.save(workerToUpdate);
     }
 
     @Override
-    public Worker changeWorkingPlace(Long id, AbstractBuildingDto newWorkingPlace) throws IllegalArgumentException {
+    public Worker changeWorkingPlace(Long id, Long newWorkingPlaceId) throws IllegalArgumentException {
         Optional<Worker> foundUser = workerRepository.findById(id);
         Worker workerFromOptional = foundUser.orElseGet(Worker::new);
-
-        if (newWorkingPlace instanceof OrderProcessingPointDto) {
-            AbstractBuilding abstractBuildingToUpdate = new OrderProcessingPoint();
-            abstractBuildingToUpdate.setId(newWorkingPlace.getId());
-            abstractBuildingToUpdate.setLocation(newWorkingPlace.getLocation());
-            abstractBuildingToUpdate.setWorkingPlaceType(newWorkingPlace.getWorkingPlaceType().toString());
-            workerFromOptional.setWorkingPlace(abstractBuildingToUpdate);
-        } else if (newWorkingPlace instanceof WarehouseDto) {
-            AbstractBuilding abstractBuildingToUpdate = new Warehouse();
-            abstractBuildingToUpdate.setId(newWorkingPlace.getId());
-            abstractBuildingToUpdate.setLocation(newWorkingPlace.getLocation());
-            abstractBuildingToUpdate.setWorkingPlaceType(newWorkingPlace.getWorkingPlaceType().toString());
-            workerFromOptional.setWorkingPlace(abstractBuildingToUpdate);
+        Warehouse foundWarehouse = warehouseService.findOne(newWorkingPlaceId);
+        OrderProcessingPoint foundProcessingPoint = processingPointService.findOne(newWorkingPlaceId);
+        if (foundWarehouse != null) {
+            workerFromOptional.setWorkingPlace(foundWarehouse);
+        } else if (foundProcessingPoint !=null) {
+            workerFromOptional.setWorkingPlace(foundProcessingPoint);
         }
-
-        return update(CustomModelMapper.mapUserToDto(workerFromOptional));
+        return update(CustomModelMapper.mapWorkerToDto(workerFromOptional));
     }
 
     @Override
     public Worker findByName(String name) {
         Optional<Worker> foundClientFromRepository = workerRepository.findByName(name);
         Worker foundWorker = foundClientFromRepository.orElseGet(Worker::new);
-        WorkerValidator.validateUser(foundWorker);
+        WorkerValidator.validateWorker(foundWorker);
         return foundWorker;
     }
 
@@ -124,7 +115,7 @@ public class WorkerServiceImpl implements WorkerService {
     public Worker findByPassword(String password) {
         Optional<Worker> foundClientFromRepository = workerRepository.findByPassword(password);
         Worker foundWorker = foundClientFromRepository.orElseGet(Worker::new);
-        WorkerValidator.validateUser(foundWorker);
+        WorkerValidator.validateWorker(foundWorker);
         return foundWorker;
     }
 
@@ -154,20 +145,4 @@ public class WorkerServiceImpl implements WorkerService {
         return foundWorker.getRoles();
     }
 
-    @Override
-    public String findStatesByRole(Worker foundByName, String orderNumber) {
-        List<OrderState> allStatesFromRepository = orderStateService.findAll();
-        Order foundOrder = orderService.findByTrackNumber(orderNumber);
-
-        for (OrderState orderState : allStatesFromRepository) {
-            if (foundOrder.getState().equals(orderState)) {
-                if (foundByName.getRoles().iterator().next().getRole().equals(Role.ROLE_WAREHOUSE_WORKER.name())
-                        && (foundOrder.getState().getId() > SEVEN && foundOrder.getState().getId() < FOUR)) {
-                    throw new IllegalStateException(WAREHOUSE_NOT_ALLOWED_STATE_CHANGING_MESSAGE);
-                }
-                return orderStateService.findOne(foundOrder.getState().getNextStateId()).getState();
-            }
-        }
-        return null;
-    }
 }

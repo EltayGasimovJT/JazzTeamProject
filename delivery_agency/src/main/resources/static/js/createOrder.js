@@ -1,10 +1,11 @@
 let $form;
 init()
-
 jQuery("#backToTheActionPageBtnId").on('click', function () {
+    checkSession();
     location.href = "homePage.html";
 })
 
+let currentRole;
 let allCoefficients;
 
 let config = {
@@ -38,6 +39,52 @@ document.getElementById('parcelWeight').oninput = (event) => {
     calculatePrice();
 };
 
+function checkIfRecipientFieldsAreNotEmpty() {
+    return document.getElementById('recipientName').value.length === 0 &&
+        document.getElementById('recipientSurname').value.length === 0 &&
+        document.getElementById('recipientPassportId').value.length === 0;
+}
+
+function checkIfSenderFieldsAreNotEmpty() {
+    return document.getElementById('senderName').value.length === 0 &&
+        document.getElementById('senderSurname').value.length === 0 &&
+        document.getElementById('senderPassportId').value.length === 0;
+}
+
+document.getElementById('recipientPhoneNumber').oninput = (event) => {
+    if (event.target.value.length === 14 && checkIfRecipientFieldsAreNotEmpty()) {
+        $.ajax({
+            url: `/clients/findByPhoneNumber`,
+            type: 'GET',
+            contentType: 'application/json',
+            data: {phoneNumber: event.target.value},
+            success: function (result) {
+                document.getElementById('recipientName').value = result.name;
+                document.getElementById('recipientSurname').value = result.surname;
+                document.getElementById('recipientPassportId').value = result.passportId;
+
+            }
+        });
+    }
+};
+
+document.getElementById('senderPhoneNumber').oninput = (event) => {
+    if (event.target.value.length === 14 && checkIfSenderFieldsAreNotEmpty()) {
+        $.ajax({
+            url: `/clients/findByPhoneNumber`,
+            type: 'GET',
+            contentType: 'application/json',
+            data: {phoneNumber: event.target.value},
+            success: function (result) {
+                document.getElementById('senderName').value = result.name;
+                document.getElementById('senderSurname').value = result.surname;
+                document.getElementById('senderPassportId').value = result.passportId;
+
+            }
+        });
+    }
+};
+
 function calculatePrice() {
     if (config.parcelWeight !== null && config.parcelHeight !== null && config.parcelLength !== null && config.parcelWidth !== null && config.destinationPoint !== null) {
         let parcelParameters = new ParcelParametersDto(
@@ -55,20 +102,24 @@ function calculatePrice() {
             data: JSON.stringify(parcelParameters),
             success: function (result) {
                 if (validateParams(config) !== true) {
-                    swal({
+                    Swal.fire({
+                        icon: 'info',
                         title: "Введенные вами данные не соответствуют требованиям",
-                        icon: "error",
+                        showConfirmButton: false,
+                        timer: 5000
                     })
                 } else {
                     price.innerHTML = " " + result.toFixed(2);
                 }
             },
             error: function (exception) {
-                swal({
+                Swal.fire({
+                    icon: 'info',
                     title: "Ошибка подсчета суммы",
                     text: exception.responseJSON.message,
-                    icon: "error",
-                });
+                    showConfirmButton: false,
+                    timer: 5000
+                })
             }
         });
     }
@@ -76,42 +127,59 @@ function calculatePrice() {
 
 function validateParams(params) {
     if (params.parcelWidth < 0) {
-        swal({
+        Swal.fire({
+            icon: 'info',
             title: "Ширина не может быть меньше нуля",
-            icon: "error",
-        });
+            showConfirmButton: false,
+            timer: 2000
+        })
         return false;
     }
     if (params.parcelLength < 0) {
-        swal({
+        Swal.fire({
+            icon: 'info',
             title: "Длина не может быть меньше нуля",
-            icon: "error",
-        });
+            showConfirmButton: false,
+            timer: 2000
+        })
         return false;
     }
     if (params.parcelHeight < 0) {
-        swal({
+        Swal.fire({
+            icon: 'info',
             title: "Высота не может быть меньше нуля",
-            icon: "error",
-        });
+            showConfirmButton: false,
+            timer: 2000
+        })
         return false;
     }
     if (params.parcelWeight < 0) {
-        swal({
+        Swal.fire({
+            icon: 'info',
             title: "Вес не может быть меньше нуля",
-            icon: "error",
-        });
+            showConfirmButton: false,
+            timer: 2000
+        })
         return false;
     }
     return true;
 }
 
 function init() {
-    if (localStorage.getItem('workersToken') === null) {
-        window.location.href = "/homePage.html";
+    if (sessionStorage.getItem('workersToken') === null) {
+        Swal.fire({
+            icon: 'info',
+            title: "У вас нет доступа к этой странице. Пожалуйста пройдите аутентификацию",
+            showConfirmButton: false,
+            timer: 2000
+        }).then(() => {
+            window.location.href = "/homePage.html";
+
+        })
     }
 
-    if (localStorage.getItem('workersToken') !== null) {
+    if (sessionStorage.getItem('workersToken') !== null) {
+        insertWorkerInfo();
         insertLogoutButton();
     }
 
@@ -130,6 +198,8 @@ function init() {
 }
 
 $('#createOrderForm').submit(function (e) {
+    checkSession()
+
     let sender = new ClientDto({
         name: `${document.getElementById('senderName').value}`,
         surname: `${document.getElementById('senderSurname').value}`,
@@ -164,15 +234,16 @@ $('#createOrderForm').submit(function (e) {
         swal({
             title: "Ошибка ввода",
             text: "Введенные вами данные не верны, пожалуйста попробуйте еще раз",
-            icon: "error",
+            icon: "info",
         });
+
     } else {
         $.ajax({
             type: 'POST',
             url: `/createOrder`,
             contentType: 'application/json; charset=utf-8',
             beforeSend: function (xhr) {
-                let jwtToken = localStorage.getItem('workersToken');
+                let jwtToken = sessionStorage.getItem('workersToken');
                 if (jwtToken !== null) {
                     xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
                 }
@@ -181,24 +252,34 @@ $('#createOrderForm').submit(function (e) {
         }).done(function (data) {
             window.location.href = `/ticketPage.html?ticketNumber=${data.ticketDto.ticketNumber}&orderId=${data.orderDto.id}`;
         }).fail(function (exception) {
-            swal({
+            Swal.fire({
                 title: "Не удалось создать заказ",
-                text: exception.responseJSON.message,
-                icon: "error",
+                text: `${exception.responseJSON.message}`,
+                icon: "info",
             });
         });
 
         e.preventDefault();
     }
 });
+$('#cancel-order-on-create').click(function () {
+    Swal.fire({
+        title: "Создание заказа было отменено",
+        icon: "info",
+        timer: 2000,
+        showConfirmButton: false
+    }).then(() => {
+        window.location.reload();
+    });
+})
 
 function insertLogoutButton() {
     let logoutButtonDiv = document.getElementById("logoutButtonToInsert");
     logoutButtonDiv.innerHTML = '<button type="button" class="btn btn-danger logout-button-margin">Выйти</button>';
-    const hiddenButton = document.querySelector('.logout-button-margin');
-    hiddenButton.addEventListener(
+    document.querySelector('.logout-button-margin').addEventListener(
         'click', () => {
-            localStorage.removeItem('workersToken');
+            sessionStorage.removeItem('workersToken');
+            sessionStorage.removeItem('workerSession');
             window.location.href = `/homePage.html`;
         }
     )
@@ -386,8 +467,56 @@ export class ParcelParametersDto {
 
 function setupCountries(countries) {
     for (let key = 0, size = countries.length; key < size; key++) {
-        let row = '<option>' + countries[key].country +
-            '</option>';
+        let row = '<option>' + countries[key].country + '</option>';
         $('#towns').append(row);
+    }
+}
+
+function insertWorkerInfo() {
+    let name = document.getElementById("worker-name-nav");
+    let surname = document.getElementById("worker-surname-nav");
+    let roles = document.getElementById("worker-role-nav");
+    $.ajax({
+        type: 'GET',
+        url: `/users/getCurrentWorker`,
+        contentType: 'application/json; charset=utf-8',
+        beforeSend: function (xhr) {
+            let jwtToken = sessionStorage.getItem('workersToken');
+            if (jwtToken !== null) {
+                xhr.setRequestHeader("Authorization", 'Bearer ' + jwtToken);
+            }
+        },
+    }).done(function (data) {
+        name.innerHTML = `Имя: ${data.name}`
+        surname.innerHTML = `Фамилия: ${data.surname}`
+        if (data.role === "ROLE_ADMIN") {
+            roles.innerHTML = `Роль: Администратор`
+        }
+        if (data.role === "ROLE_WAREHOUSE_WORKER") {
+            roles.innerHTML = `Роль: Работник промежуточного склада`
+        }
+        if (data.role === "ROLE_PROCESSING_POINT_WORKER") {
+            roles.innerHTML = `Роль: Работник пункта отправки/выдачи`
+        }
+        currentRole = data.role
+    }).fail(function () {
+        Swal.fire({
+            title: "Что-то пошло не так",
+            text: "Ошибка при поиске сотрудника",
+            icon: "info",
+            showConfirmButton: false,
+            timer: 5000
+        });
+    });
+}
+
+function checkSession() {
+    let sessionTimeMinutes = new Date(sessionStorage.getItem('workerSession')).getHours()
+    if ((new Date().getHours() - sessionTimeMinutes) > 3) {
+        sessionStorage.removeItem('workersToken');
+        sessionStorage.removeItem('workerSession');
+        window.location.href = `/homePage.html`;
+    } else {
+        sessionStorage.setItem('workerSession', (new Date()).toString())
     }
 }

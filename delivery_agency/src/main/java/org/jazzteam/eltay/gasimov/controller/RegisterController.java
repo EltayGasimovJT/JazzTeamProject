@@ -27,11 +27,11 @@ public class RegisterController {
 
     @PostMapping(REGISTRATION_URL)
     public WorkerDto registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
-        return CustomModelMapper.mapUserToDto(workerService.saveForRegistration(registrationRequest));
+        return CustomModelMapper.mapWorkerToDto(workerService.saveForRegistration(registrationRequest));
     }
 
     @PostMapping(AUTHORIZATION_URL)
-    public AuthResponse auth(@RequestBody AuthRequest request) {
+    public AuthResponse authUser(@RequestBody AuthRequest request) {
         Worker workerEntity = workerService.findByLoginAndPassword(request.getLogin(), request.getPassword());
         String token = jwtProvider.generateToken(workerEntity.getName());
         return new AuthResponse(token);

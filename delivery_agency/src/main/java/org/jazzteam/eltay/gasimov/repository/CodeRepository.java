@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CodeRepository extends JpaRepository<ClientsCode, Long> {
     ClientsCode findByClient(Client clientForFind);
+
     ClientsCode save(ClientsCode code);
 
     ClientsCode findByGeneratedCode(String code);

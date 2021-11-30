@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service(value =  "warehouseService")
+@Service(value = "warehouseService")
 public class WarehouseServiceImpl implements WarehouseService {
     @Autowired
     private WarehouseRepository warehouseRepository;
@@ -56,7 +56,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public Warehouse findByLocation(String locationForSearch){
+    public Warehouse findByLocation(String locationForSearch) {
         Warehouse foundWarehouseFromRepository = warehouseRepository.findByLocation(locationForSearch);
         WarehouseValidator.validateWarehouse(foundWarehouseFromRepository);
         return foundWarehouseFromRepository;
@@ -69,16 +69,21 @@ public class WarehouseServiceImpl implements WarehouseService {
 
         WarehouseValidator.validateWarehouse(warehouseToUpdate);
 
-        warehouseToUpdate.setExpectedOrders(warehouseDtoToUpdate.getExpectedOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList()));
-        warehouseToUpdate.setDispatchedOrders(warehouseDtoToUpdate.getDispatchedOrders().stream()
-                .map(CustomModelMapper::mapDtoToOrder)
-                .collect(Collectors.toList()));
-        warehouseToUpdate.setOrderProcessingPoints(warehouseDtoToUpdate.getOrderProcessingPoints().stream().
-                map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto, OrderProcessingPoint.class))
-                .collect(Collectors.toList()));
-
+        if (warehouseDtoToUpdate.getExpectedOrders() != null) {
+            warehouseToUpdate.setExpectedOrders(warehouseDtoToUpdate.getExpectedOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toList()));
+        }
+        if (warehouseDtoToUpdate.getDispatchedOrders() != null) {
+            warehouseToUpdate.setDispatchedOrders(warehouseDtoToUpdate.getDispatchedOrders().stream()
+                    .map(CustomModelMapper::mapDtoToOrder)
+                    .collect(Collectors.toList()));
+        }
+        if (warehouseDtoToUpdate.getConnectedWarehouses() != null) {
+            warehouseToUpdate.setOrderProcessingPoints(warehouseDtoToUpdate.getOrderProcessingPoints().stream().
+                    map(orderProcessingPointDto -> modelMapper.map(orderProcessingPointDto, OrderProcessingPoint.class))
+                    .collect(Collectors.toList()));
+        }
         return warehouseRepository.save(warehouseToUpdate);
     }
 }

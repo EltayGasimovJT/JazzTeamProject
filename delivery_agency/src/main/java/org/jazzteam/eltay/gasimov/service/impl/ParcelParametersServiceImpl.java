@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ParcelParametersServiceImpl implements ParcelParametersService {
@@ -19,7 +20,8 @@ public class ParcelParametersServiceImpl implements ParcelParametersService {
 
     @Override
     public ParcelParameters findById(Long idForFind) {
-        return modelMapper.map(parcelParametersRepository.findById(idForFind), ParcelParameters.class);
+        Optional<ParcelParameters> foundOptional = parcelParametersRepository.findById(idForFind);
+        return foundOptional.orElseGet(ParcelParameters::new);
     }
 
     @Override
